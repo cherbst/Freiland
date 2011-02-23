@@ -49,8 +49,42 @@ function smwimport_tools_page() {
       wp_die( __('You do not have sufficient permissions to access this page.') );
     }
 
-
     echo "<h2>" . __( 'SMW Import', 'menu-smwimport' ) . "</h2>";
+    $hidden_field_name = 'smwimport_submit_hidden';
+
+// See if the user has posted us some information
+    // If they did, this hidden field will be set to 'Y'
+    if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
+
+	$ret = smwimport_import_all();
+
+	if ( $ret == 0 ) $message = 'successfully imported.';
+	else $message = 'not yet implemented.';
+        // Put an import done  message on the screen
+
+?>
+<div class="imported"><p><strong><?php _e($message, 'menu-smwimport' ); ?></strong></p></div>
+<?php
+
+    }
+
+
+    // tools form
+    
+    ?>
+
+<form name="form1" method="post" action="">
+<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
+
+<p class="submit">
+<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Import from SMW') ?>" />
+</p>
+
+</form>
+</div>
+
+<?php
+
 }
 
 
@@ -118,5 +152,9 @@ function smwimport_settings_page() {
  
 }
 
+
+function smwimport_import_all() {
+	return 1;
+}
 
 ?>
