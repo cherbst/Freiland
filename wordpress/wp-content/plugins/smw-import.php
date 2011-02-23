@@ -24,6 +24,12 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+global $events_option_name;
+global $press_option_name;
+global $news_option_name;
+$events_option_name = 'smwimport_category_events';
+$news_option_name = 'smwimport_category_news';
+$press_option_name = 'smwimport_category_press';
 
 // Hook for adding admin menus
 add_action('admin_menu', 'smwimport_add_pages');
@@ -90,7 +96,7 @@ function smwimport_tools_page() {
 
 // smw_import_page() displays the page content for the Test tools submenu
 function smwimport_settings_page() {
-
+    global $events_option_name, $news_option_name, $press_option_name;
     //must check that the user has the required capability 
     if (!current_user_can('manage_options'))
     {
@@ -98,21 +104,32 @@ function smwimport_settings_page() {
     }
 
     // variables for the field and option names 
-    $opt_name = 'smwimport_smw_host';
+    $host_opt['name'] = 'smwimport_smw_host';
+    $categories_opt['events']['name'] = $events_option_name;
+    $categories_opt['news']['name'] = $news_option_name;
+    $categories_opt['press']['name'] = $press_option_name;
     $hidden_field_name = 'smwimport_submit_hidden';
-    $data_field_name = 'smwimport_smw_host';
 
     // Read in existing option value from database
-    $opt_val = get_option( $opt_name );
+    $host_opt['val'] = get_option( $host_opt['name'] );
+    foreach ( $categories_opt as $key => $opt )
+    	$categories_opt[$key]['val'] = get_option( $opt['name'] );
+
 
     // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
-        $opt_val = $_POST[ $data_field_name ];
+        $host_opt['val'] = $_POST[ $host_opt['name'] ];
+
+        foreach ( $categories_opt as $key => $opt )
+    	    $categories_opt[$key]['val'] = $_POST[ $opt['name'] ];
 
         // Save the posted value in the database
-        update_option( $opt_name, $opt_val );
+        update_option( $host_opt['name'], $host_opt['val'] );
+
+        foreach ( $categories_opt as $key => $opt )
+    	    update_option( $opt['name'], $opt['val'] );
 
         // Put an settings updated message on the screen
 
@@ -138,8 +155,14 @@ function smwimport_settings_page() {
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
 <p><?php _e("SMW Host name:", 'menu-smwimport' ); ?> 
-<input type="text" name="<?php echo $data_field_name; ?>" value="<?php echo $opt_val; ?>" size="20">
-</p><hr />
+<input type="text" name="<?php echo $host_opt['name']; ?>" value="<?php echo $host_opt['val']; ?>" size="20">
+</p>
+
+<p><?php _e("Category to import events:", 'menu-smwimport' ); ?> 
+<?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $categories_opt['events']['name'], 'orderby' => 'name', 'selected' => $categories_opt['events']['val'], 'hierarchical' => true)); ?>
+
+</p>
+<hr />
 
 <p class="submit">
 <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
@@ -154,7 +177,19 @@ function smwimport_settings_page() {
 
 
 function smwimport_import_all() {
-	return 1;
+	$ret = smwimport_import_events();
+	return $ret;
 }
 
+function smwimport_import_events() {
+	global $events_option_name;
+	$ret = 0;
+	
+	$postarr['post_status'] = 'publish';
+	$postarr['post_title'] = 'SMW Post';
+	$postarr['post_content'] = 'New imported post';
+	$postarr['post_category'] = array( get_option( $events_option_name ));
+	wp_insert_post($postarr);
+	return $ret;
+}
 ?>
