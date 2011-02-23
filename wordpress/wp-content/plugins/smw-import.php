@@ -158,10 +158,11 @@ function smwimport_settings_page() {
 <input type="text" name="<?php echo $host_opt['name']; ?>" value="<?php echo $host_opt['val']; ?>" size="20">
 </p>
 
-<p><?php _e("Category to import events:", 'menu-smwimport' ); ?> 
-<?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $categories_opt['events']['name'], 'orderby' => 'name', 'selected' => $categories_opt['events']['val'], 'hierarchical' => true)); ?>
-
+<?php foreach ( $categories_opt as $key => $opt ){ ?>
+<p><?php _e("Category to import $key:", 'menu-smwimport' ); ?> 
+<?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $opt['name'], 'orderby' => 'name', 'selected' => $opt['val'], 'hierarchical' => true)); ?>
 </p>
+<?php } ?>
 <hr />
 
 <p class="submit">
