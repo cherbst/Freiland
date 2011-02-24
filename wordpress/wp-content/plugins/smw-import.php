@@ -179,7 +179,16 @@ function smwimport_settings_page() {
 
 function smwimport_import_all() {
 	$ret = smwimport_import_events();
+	$ret = smwimport_import_links();
 	return $ret;
+}
+
+function smwimport_import_links() {
+	$linkdata['link_name'] = 'smwimport link';
+	$linkdata['link_url'] = 'http://www.smwimport.org';
+	$linkdata['link_description'] = 'This is a link automtically added by smwimport.';
+	wp_insert_link($linkdata);
+	return 0;
 }
 
 function smwimport_import_events() {
