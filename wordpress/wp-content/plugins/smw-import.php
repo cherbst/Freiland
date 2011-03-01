@@ -179,10 +179,15 @@ function smwimport_settings_page() {
 
 
 function smwimport_import_all() {
-	$ret = smwimport_import_events();
-	if ( is_wp_error($ret) )
-		return $ret;
-	$ret = smwimport_import_links();
+	$importers = array( smwimport_import_links,
+		smwimport_import_events,
+		smwimport_import_news,
+		smwimport_import_press);
+	foreach( $importers as $importer ){
+		$ret = $importer();
+		if ( is_wp_error($ret) )
+			break;
+	}
 	return $ret;
 }
 
@@ -234,12 +239,14 @@ function smwimport_import_post($postarr, $category_option ) {
 	$posts = smwimport_get_post($postarr['post_title'],$category_option);
 	if ( !empty($posts) )
 		$postarr['ID'] = $posts[0]->ID;
-	return wp_insert_post($postarr,true);
+
+	$ID = wp_insert_post($postarr,true);
+	if ( is_wp_error($ID) ) return $ID;
+	add_post_meta($ID,"_prim_key",$postarr['post_title']);
 }
 
 function smwimport_import_events() {
 	global $events_option_name;
-	$ret = 0;
 	
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = 'SMW Post';
@@ -253,7 +260,29 @@ function smwimport_import_events() {
 	add_post_meta($ID,"house","Big house");
 	add_post_meta($ID,"genre","Rock");
 	add_post_meta($ID,"type","concert");
-	add_post_meta($ID,"_prim_key",$postarr['post_title']);
-	return $ret;
+	return $ID;
 }
+
+function smwimport_import_news() {
+	global $news_option_name;
+
+	$postarr['post_status'] = 'publish';
+	$postarr['post_title'] = 'SMW News';
+	$postarr['post_excerpt'] = 'A new news entry';
+	$postarr['post_content'] = '<strong>Imported news content</strong>';
+	$ID = smwimport_import_post($postarr,$news_option_name);
+	return $ID;
+}
+
+function smwimport_import_press() {
+	global $press_option_name;
+
+	$postarr['post_status'] = 'publish';
+	$postarr['post_title'] = 'SMW Press';
+	$postarr['post_excerpt'] = 'A new press entry';
+	$postarr['post_content'] = '<strong>Imported press content</strong>';
+	$ID = smwimport_import_post($postarr,$press_option_name);
+	return $ID;
+}
+
 ?>
