@@ -184,18 +184,83 @@ function smwimport_settings_page() {
  
 }
 
+function smwimport_get_links(){
+	$data = array( 'SMW Test Link' => array(
+		'short_description' => 'This is a link automtically added by smwimport.',
+		'website' => 'http://www.smwimport.org')
+	);
+	return $data;
+}
+
+function smwimport_get_events(){
+	$data = array( 'SMW Test Event' => array(
+		'title' => 'SMW Post',
+		'type'  => 'concert',
+		'date_begin' => '1.1.2011',
+		'date_end' => '2.1.2011',
+		'short_description' => 'SMW imported event',
+		'long_description' => '<strong>Newer imported event content</strong>',
+		'genre' => 'rock',
+		'link1' => 'www.test1.de',
+		'link2' => 'www.test2.de',
+		'link3' => 'www.test3.de',
+		'location' => 'Potsdam',
+		'house' => 'big house',
+		'room' => '203',
+		'age' => '18')
+	);
+	return $data;
+}
+
+function smwimport_get_news(){
+	$data = array( 'SMW Test News' => array(
+		'topic' => 'SMW News',
+		'short_description' => 'SMW imported news',
+		'long_description' => '<strong>New imported news content</strong>',
+		'link' => 'www.test1.de')
+	);
+	return $data;
+}
+
+function smwimport_get_press(){
+	$data = array( 'SMW Test Press' => array(
+		'topic' => 'SMW Press',
+		'date'  => '1.1.2011',
+		'media' => 'Bild am Sonntag',
+		'short_description' => 'SMW imported press',
+		'long_description' => '<strong>New imported press content</strong>',
+		'link' => 'www.test1.de')
+	);
+	return $data;
+}
+
+function smwimport_get_images(){
+	$data = array( 'SMW Test Image' => array(
+		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
+		'title' => 'New imported image3')
+	);
+	return $data;
+}
 
 function smwimport_import_all() {
-	$importers = array( smwimport_import_links,
-		smwimport_import_events,
-		smwimport_import_news,
-		smwimport_import_press,
-		smwimport_import_image);
-	foreach( $importers as $importer ){
-		$ret = $importer();
-		if ( is_wp_error($ret) )
-			break;
-	}
+	smwimport_delete_links();
+
+	$source_importer_map = array(
+		smwimport_get_links => smwimport_import_link,
+		smwimport_get_events => smwimport_import_event,
+		smwimport_get_news => smwimport_import_news,
+		smwimport_get_press => smwimport_import_press,
+		smwimport_get_images => smwimport_import_image
+	);
+
+	$ret = 0;
+	foreach( $source_importer_map as $source => $importer )
+		foreach( $source() as $key => $data){
+			$ret = $importer($key,$data);
+			if ( is_wp_error($ret) )
+				return $ret;
+		}
+
 	return $ret;
 }
 
@@ -216,11 +281,10 @@ function smwimport_delete_links() {
 		wp_delete_link($link->link_id);
 }
 
-function smwimport_import_links() {
-	smwimport_delete_links();
-	$linkdata['link_name'] = 'smwimport link';
-	$linkdata['link_url'] = 'http://www.smwimport.org';
-	$linkdata['link_description'] = 'This is a link automtically added by smwimport.';
+function smwimport_import_link($key,$data) {
+	$linkdata['link_name'] = $key;
+	$linkdata['link_url'] = $data['website'];
+	$linkdata['link_description'] = $data['short_description'];
 	$cat = smwimport_get_link_category();
 	if ( is_wp_error($cat) )
 		return $cat;
@@ -247,68 +311,61 @@ function smwimport_get_post($prim_key, $category_option){
 	return get_posts($args);
 }
 
-function smwimport_get_post_content($category){
-
-}
-
-function smwimport_import_post($postarr, $category_option ) {
+function smwimport_import_post($prim_key,$postarr, $category_option ) {
 	$postarr['post_category'] = array( get_option( $category_option ));
-	$posts = smwimport_get_post($postarr['post_title'],$category_option);
+	$posts = smwimport_get_post($prim_key,$category_option);
 	if ( !empty($posts) )
 		$postarr['ID'] = $posts[0]->ID;
 
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
-	add_post_meta($ID,"_prim_key",$postarr['post_title'],true);
+	add_post_meta($ID,"_prim_key",$prim_key,true);
 }
 
-function smwimport_import_events() {
+function smwimport_import_event($prim_key,$data) {
 	global $events_option_name;
 	
 	$postarr['post_status'] = 'publish';
-	$postarr['post_title'] = 'SMW Post';
-	$postarr['post_excerpt'] = 'A new event';
-	$postarr['post_content'] = '<strong>Newer imported event content</strong>';
-	$ID = smwimport_import_post($postarr,$events_option_name);
+	$postarr['post_title'] = $data['title'];
+	$postarr['post_excerpt'] = $data['short_description'];
+	$postarr['post_content'] = $data['long_description'];
+	$ID = smwimport_import_post($prim_key,$postarr,$events_option_name);
 	if ( is_wp_error($ID) ) return $ID;
-	add_post_meta($ID,"age",18,true);
-	add_post_meta($ID,"place","freiland",true);
-	add_post_meta($ID,"room","Big room",true);
-	add_post_meta($ID,"house","Big house",true);
-	add_post_meta($ID,"genre","Rock",true);
-	add_post_meta($ID,"type","concert",true);
+	$metadata = array('age','location','room','house','genre','type');
+	foreach( $metadata as $key )
+		add_post_meta($ID,$key,$data[$key],true);
 	return $ID;
 }
 
-function smwimport_import_news() {
+function smwimport_import_news($prim_key,$data) {
 	global $news_option_name;
 
 	$postarr['post_status'] = 'publish';
-	$postarr['post_title'] = 'SMW News';
-	$postarr['post_excerpt'] = 'A new news entry';
-	$postarr['post_content'] = '<strong>Imported news content</strong>';
-	$ID = smwimport_import_post($postarr,$news_option_name);
+	$postarr['post_title'] = $data['topic'];
+	$postarr['post_excerpt'] = $data['short_description'];
+	$postarr['post_content'] = $data['long_description'];
+	$ID = smwimport_import_post($prim_key,$postarr,$news_option_name);
 	return $ID;
 }
 
-function smwimport_import_press() {
+function smwimport_import_press($prim_key,$data) {
 	global $press_option_name;
 
 	$postarr['post_status'] = 'publish';
-	$postarr['post_title'] = 'SMW Press';
-	$postarr['post_excerpt'] = 'A new press entry';
-	$postarr['post_content'] = '<strong>Imported press content</strong>';
-	$ID = smwimport_import_post($postarr,$press_option_name);
+	$postarr['post_title'] = $data['topic'];
+	$postarr['post_excerpt'] = $data['short_description'];
+	$postarr['post_content'] = $data['long_description'];
+	$ID = smwimport_import_post($prim_key,$postarr,$press_option_name);
 	return $ID;
 }
 
-function smwimport_import_image() {
+function smwimport_import_image($prim_key,$data) {
 	global $images_page_option_name;
-	$remotefile = 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png';
-	$title = 'New imported image3';
+	$remotefile = $data['file'];
+	$title = $data['title'];
 	$localfile = basename($remotefile);
 
-	$posts = smwimport_get_post($title,'image');
+	$posts = smwimport_get_post($prim_key,'image');
 	if ( !empty($posts) ){
 		//XXX: update the image? then we need a hash or something
 		error_log('Image already exists:'. $posts[0]->ID);
@@ -335,7 +392,7 @@ function smwimport_import_image() {
 	require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 	$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
 	wp_update_attachment_metadata( $attach_id,  $attach_data );
-	add_post_meta($attach_id,"_prim_key",$title,true);
+	add_post_meta($attach_id,"_prim_key",$prim_key,true);
 }
 
 ?>
