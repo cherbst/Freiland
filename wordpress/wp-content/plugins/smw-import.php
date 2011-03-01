@@ -182,7 +182,8 @@ function smwimport_import_all() {
 	$importers = array( smwimport_import_links,
 		smwimport_import_events,
 		smwimport_import_news,
-		smwimport_import_press);
+		smwimport_import_press,
+		smwimport_import_image);
 	foreach( $importers as $importer ){
 		$ret = $importer();
 		if ( is_wp_error($ret) )
@@ -221,8 +222,17 @@ function smwimport_import_links() {
 }
 
 function smwimport_get_post($prim_key, $category_option){
+	if ( $category_option=='image'){
+		$cat = null;
+		$type = 'attachment';
+	}else{
+		$cat = get_option( $category_option );
+		$type = 'post';
+	}
+
 	$args = array(
-		'category' => get_option( $category_option ),
+		'category' => $cat,
+		'post_type' => $type,
 		'numberposts' => 1,
 		'meta_key' => '_prim_key',
 		'meta_value' => $prim_key
@@ -283,6 +293,41 @@ function smwimport_import_press() {
 	$postarr['post_content'] = '<strong>Imported press content</strong>';
 	$ID = smwimport_import_post($postarr,$press_option_name);
 	return $ID;
+}
+
+function smwimport_import_image() {
+	$remotefile = 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png';
+	$title = 'New imported image3';
+	$localfile = basename($remotefile);
+
+	$posts = smwimport_get_post($title,'image');
+	if ( !empty($posts) ){
+		//XXX: update the image? then we need a hash or something
+		error_log('Image already exists:'. $posts[0]->ID);
+		return 0;
+	}
+
+	$contents = file_get_contents($remotefile);
+	if ( $contents == FALSE )
+		return new WP_Error('download_failed', __("Could not get file:".$remotefile));
+	$upload = wp_upload_bits($localfile,null,$contents);
+	if ( $upload['error'] != false )
+		return new WP_Error('upload_failed', $upload['error']);
+	$filename = $upload['file'];
+	$wp_filetype = wp_check_filetype(basename($filename), null );
+	$attachment = array(
+		'post_mime_type' => $wp_filetype['type'],
+		'post_title' => $title,
+		'post_content' => '',
+		'post_status' => 'inherit'
+	);
+	$attach_id = wp_insert_attachment( $attachment, $filename );
+	// you must first include the image.php file
+	// for the function wp_generate_attachment_metadata() to work
+	require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+	$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+	wp_update_attachment_metadata( $attach_id,  $attach_data );
+	add_post_meta($attach_id,"_prim_key",$title,true);
 }
 
 ?>
