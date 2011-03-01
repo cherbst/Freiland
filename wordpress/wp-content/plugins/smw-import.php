@@ -64,8 +64,9 @@ function smwimport_tools_page() {
 
 	$ret = smwimport_import_all();
 
-	if ( $ret == 0 ) $message = 'successfully imported.';
-	else $message = 'not yet implemented.';
+	if ( is_wp_error($ret) )
+		$message = $ret->get_error_message();
+	else $message = 'successfully imported.';
         // Put an import done  message on the screen
 
 ?>
@@ -179,19 +180,24 @@ function smwimport_settings_page() {
 
 function smwimport_import_all() {
 	$ret = smwimport_import_events();
-	$ret += smwimport_import_links();
+	if ( is_wp_error($ret) )
+		return $ret;
+	$ret = smwimport_import_links();
 	return $ret;
 }
 
 function smwimport_get_link_category() {
 	$link_categories = get_terms('link_category', 'fields=ids&slug=smwimport&hide_empty=0');
 	if (empty($link_categories)) 
-		return 0;
+		return new WP_Error('no_link_category', __("Link category 'smwimport' does not exist!"));
 	return $link_categories[0];
 }
 
 function smwimport_delete_links() {
-	$args = array( 'category' => (string)smwimport_get_link_category() );
+	$cat = smwimport_get_link_category();
+	if ( is_wp_error($cat) )
+		return $cat;
+	$args = array( 'category' => (string)$cat );
 	$links = get_bookmarks($args);
 	foreach($links as $link)
 		wp_delete_link($link->link_id);
@@ -202,9 +208,11 @@ function smwimport_import_links() {
 	$linkdata['link_name'] = 'smwimport link';
 	$linkdata['link_url'] = 'http://www.smwimport.org';
 	$linkdata['link_description'] = 'This is a link automtically added by smwimport.';
-	$linkdata['link_category'] = array( smwimport_get_link_category() );
-	wp_insert_link($linkdata);
-	return 0;
+	$cat = smwimport_get_link_category();
+	if ( is_wp_error($cat) )
+		return $cat;
+	$linkdata['link_category'] = (string)$cat;
+	return wp_insert_link($linkdata,true);
 }
 
 function smwimport_get_post($prim_key, $category_option){
@@ -224,12 +232,9 @@ function smwimport_get_post_content($category){
 function smwimport_import_post($postarr, $category_option ) {
 	$postarr['post_category'] = array( get_option( $category_option ));
 	$posts = smwimport_get_post($postarr['post_title'],$category_option);
-	if ( !empty($posts) ){
+	if ( !empty($posts) )
 		$postarr['ID'] = $posts[0]->ID;
-		$ID = wp_update_post($postarr);
-	}else
-		$ID = wp_insert_post($postarr);
-	return $ID;
+	return wp_insert_post($postarr,true);
 }
 
 function smwimport_import_events() {
@@ -241,7 +246,7 @@ function smwimport_import_events() {
 	$postarr['post_excerpt'] = 'A new event';
 	$postarr['post_content'] = '<strong>Newer imported event content</strong>';
 	$ID = smwimport_import_post($postarr,$events_option_name);
-	if ( $ID == 0 ) return 1;
+	if ( is_wp_error($ID) ) return $ID;
 	add_post_meta($ID,"age",18);
 	add_post_meta($ID,"place","freiland");
 	add_post_meta($ID,"room","Big room");
