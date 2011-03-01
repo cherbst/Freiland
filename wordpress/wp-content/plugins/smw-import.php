@@ -179,7 +179,7 @@ function smwimport_settings_page() {
 
 function smwimport_import_all() {
 	$ret = smwimport_import_events();
-	$ret = smwimport_import_links();
+	$ret += smwimport_import_links();
 	return $ret;
 }
 
@@ -191,15 +191,38 @@ function smwimport_import_links() {
 	return 0;
 }
 
+function smwimport_get_event($prim_key){
+	global $events_option_name;
+	$args = array(
+		'category' => get_option( $events_option_name ),
+		'numberposts' => 1,
+		'meta_key' => '_prim_key',
+		'meta_value' => $prim_key
+	);
+	return get_posts($args);
+}
+
 function smwimport_import_events() {
 	global $events_option_name;
 	$ret = 0;
 	
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = 'SMW Post';
-	$postarr['post_content'] = 'New imported post';
+	$postarr['post_excerpt'] = 'A new event';
+	$postarr['post_content'] = '<strong>New imported event content</strong>';
 	$postarr['post_category'] = array( get_option( $events_option_name ));
-	wp_insert_post($postarr);
+	$posts = smwimport_get_event($postarr['post_title']);
+	if ( !empty($posts) )
+		return 1;
+	$ID = wp_insert_post($postarr);
+	if ( $ID == 0 ) return 1;
+	add_post_meta($ID,"age",18);
+	add_post_meta($ID,"place","freiland");
+	add_post_meta($ID,"room","Big room");
+	add_post_meta($ID,"house","Big house");
+	add_post_meta($ID,"genre","Rock");
+	add_post_meta($ID,"type","concert");
+	add_post_meta($ID,"_prim_key",$postarr['post_title']);
 	return $ret;
 }
 ?>
