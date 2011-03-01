@@ -183,10 +183,26 @@ function smwimport_import_all() {
 	return $ret;
 }
 
+function smwimport_get_link_category() {
+	$link_categories = get_terms('link_category', 'fields=ids&slug=smwimport&hide_empty=0');
+	if (empty($link_categories)) 
+		return 0;
+	return $link_categories[0];
+}
+
+function smwimport_delete_links() {
+	$args = array( 'category' => (string)smwimport_get_link_category() );
+	$links = get_bookmarks($args);
+	foreach($links as $link)
+		wp_delete_link($link->link_id);
+}
+
 function smwimport_import_links() {
+	smwimport_delete_links();
 	$linkdata['link_name'] = 'smwimport link';
 	$linkdata['link_url'] = 'http://www.smwimport.org';
 	$linkdata['link_description'] = 'This is a link automtically added by smwimport.';
+	$linkdata['link_category'] = array( smwimport_get_link_category() );
 	wp_insert_link($linkdata);
 	return 0;
 }
