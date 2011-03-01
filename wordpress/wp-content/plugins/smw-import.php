@@ -242,7 +242,7 @@ function smwimport_import_post($postarr, $category_option ) {
 
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
-	add_post_meta($ID,"_prim_key",$postarr['post_title']);
+	add_post_meta($ID,"_prim_key",$postarr['post_title'],true);
 }
 
 function smwimport_import_events() {
@@ -254,12 +254,12 @@ function smwimport_import_events() {
 	$postarr['post_content'] = '<strong>Newer imported event content</strong>';
 	$ID = smwimport_import_post($postarr,$events_option_name);
 	if ( is_wp_error($ID) ) return $ID;
-	add_post_meta($ID,"age",18);
-	add_post_meta($ID,"place","freiland");
-	add_post_meta($ID,"room","Big room");
-	add_post_meta($ID,"house","Big house");
-	add_post_meta($ID,"genre","Rock");
-	add_post_meta($ID,"type","concert");
+	add_post_meta($ID,"age",18,true);
+	add_post_meta($ID,"place","freiland",true);
+	add_post_meta($ID,"room","Big room",true);
+	add_post_meta($ID,"house","Big house",true);
+	add_post_meta($ID,"genre","Rock",true);
+	add_post_meta($ID,"type","concert",true);
 	return $ID;
 }
 
