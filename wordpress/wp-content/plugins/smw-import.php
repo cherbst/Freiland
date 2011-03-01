@@ -27,9 +27,11 @@ License: GPL2
 global $events_option_name;
 global $press_option_name;
 global $news_option_name;
+global $images_page_option_name;
 $events_option_name = 'smwimport_category_events';
 $news_option_name = 'smwimport_category_news';
 $press_option_name = 'smwimport_category_press';
+$images_page_option_name = 'smwimport_page_images';
 
 // Hook for adding admin menus
 add_action('admin_menu', 'smwimport_add_pages');
@@ -97,7 +99,7 @@ function smwimport_tools_page() {
 
 // smw_import_page() displays the page content for the Test tools submenu
 function smwimport_settings_page() {
-    global $events_option_name, $news_option_name, $press_option_name;
+    global $events_option_name, $news_option_name, $press_option_name, $images_page_option_name;
     //must check that the user has the required capability 
     if (!current_user_can('manage_options'))
     {
@@ -105,31 +107,33 @@ function smwimport_settings_page() {
     }
 
     // variables for the field and option names 
-    $host_opt['name'] = 'smwimport_smw_host';
-    $categories_opt['events']['name'] = $events_option_name;
-    $categories_opt['news']['name'] = $news_option_name;
-    $categories_opt['press']['name'] = $press_option_name;
+    $options['host']['name'] = 'smwimport_smw_host';
+    $options['events']['name'] = $events_option_name;
+    $options['news']['name'] = $news_option_name;
+    $options['press']['name'] = $press_option_name;
+    $options['images']['name'] = $images_page_option_name;
     $hidden_field_name = 'smwimport_submit_hidden';
 
+    $categories_opt = array(
+	'Events' => &$options['events'],
+	'News' => &$options['news'],
+	'Press' => &$options['press']);
     // Read in existing option value from database
     $host_opt['val'] = get_option( $host_opt['name'] );
-    foreach ( $categories_opt as $key => $opt )
-    	$categories_opt[$key]['val'] = get_option( $opt['name'] );
+    foreach ( $options as $key => $opt )
+    	$options[$key]['val'] = get_option( $opt['name'] );
 
 
     // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
-        $host_opt['val'] = $_POST[ $host_opt['name'] ];
 
-        foreach ( $categories_opt as $key => $opt )
-    	    $categories_opt[$key]['val'] = $_POST[ $opt['name'] ];
+        foreach ( $options as $key => $opt )
+    	    $options[$key]['val'] = $_POST[ $opt['name'] ];
 
         // Save the posted value in the database
-        update_option( $host_opt['name'], $host_opt['val'] );
-
-        foreach ( $categories_opt as $key => $opt )
+        foreach ( $options as $key => $opt )
     	    update_option( $opt['name'], $opt['val'] );
 
         // Put an settings updated message on the screen
@@ -156,7 +160,7 @@ function smwimport_settings_page() {
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
 <p><?php _e("SMW Host name:", 'menu-smwimport' ); ?> 
-<input type="text" name="<?php echo $host_opt['name']; ?>" value="<?php echo $host_opt['val']; ?>" size="20">
+<input type="text" name="<?php echo $options['host']['name']; ?>" value="<?php echo $options['host']['val']; ?>" size="20">
 </p>
 
 <?php foreach ( $categories_opt as $key => $opt ){ ?>
@@ -164,6 +168,9 @@ function smwimport_settings_page() {
 <?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $opt['name'], 'orderby' => 'name', 'selected' => $opt['val'], 'hierarchical' => true)); ?>
 </p>
 <?php } ?>
+<p><?php _e("Page to import Images:", 'menu-smwimport' ); ?> 
+<?php wp_dropdown_pages(array('hide_empty' => 0, 'name' => $options['images']['name'], 'orderby' => 'name', 'selected' => $options['images']['val'], 'hierarchical' => true)); ?>
+</p>
 <hr />
 
 <p class="submit">
@@ -296,6 +303,7 @@ function smwimport_import_press() {
 }
 
 function smwimport_import_image() {
+	global $images_page_option_name;
 	$remotefile = 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png';
 	$title = 'New imported image3';
 	$localfile = basename($remotefile);
@@ -321,7 +329,7 @@ function smwimport_import_image() {
 		'post_content' => '',
 		'post_status' => 'inherit'
 	);
-	$attach_id = wp_insert_attachment( $attachment, $filename );
+	$attach_id = wp_insert_attachment( $attachment, $filename, get_option( $images_page_option_name ) );
 	// you must first include the image.php file
 	// for the function wp_generate_attachment_metadata() to work
 	require_once(ABSPATH . "wp-admin" . '/includes/image.php');
