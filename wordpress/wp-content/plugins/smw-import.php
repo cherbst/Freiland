@@ -209,12 +209,14 @@ function smwimport_import_events() {
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = 'SMW Post';
 	$postarr['post_excerpt'] = 'A new event';
-	$postarr['post_content'] = '<strong>New imported event content</strong>';
+	$postarr['post_content'] = '<strong>Newer imported event content</strong>';
 	$postarr['post_category'] = array( get_option( $events_option_name ));
 	$posts = smwimport_get_event($postarr['post_title']);
-	if ( !empty($posts) )
-		return 1;
-	$ID = wp_insert_post($postarr);
+	if ( !empty($posts) ){
+		$postarr['ID'] = $posts[0]->ID;
+		$ID = wp_update_post($postarr);
+	}else
+		$ID = wp_insert_post($postarr);
 	if ( $ID == 0 ) return 1;
 	add_post_meta($ID,"age",18);
 	add_post_meta($ID,"place","freiland");
