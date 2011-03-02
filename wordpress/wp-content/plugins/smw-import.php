@@ -196,9 +196,24 @@ function smwimport_get_events(){
 	$data = array( 'SMW Test Event' => array(
 		'title' => 'SMW Post',
 		'type'  => 'concert',
-		'date_begin' => '1.1.2011',
-		'date_end' => '2.1.2011',
+		'date_begin' => '2011-03-02 10:00',
+		'date_end' => '2011-03-06 10:00',
 		'short_description' => 'SMW imported event',
+		'long_description' => '<strong>Newer imported event content</strong>',
+		'genre' => 'rock',
+		'link1' => 'www.test1.de',
+		'link2' => 'www.test2.de',
+		'link3' => 'www.test3.de',
+		'location' => 'Potsdam',
+		'house' => 'big house',
+		'room' => '203',
+		'age' => '18'),
+	'SMW Zweites Event' => array(
+		'title' => 'SMW Post 2',
+		'type'  => 'concert',
+		'date_begin' => '2011-04-02 12:00',
+		'date_end' => '2011-04-03 15:00',
+		'short_description' => 'SMW new imported event',
 		'long_description' => '<strong>Newer imported event content</strong>',
 		'genre' => 'rock',
 		'link1' => 'www.test1.de',
@@ -311,7 +326,7 @@ function smwimport_get_post($prim_key, $category_option){
 	return get_posts($args);
 }
 
-function smwimport_import_post($prim_key,$postarr, $category_option ) {
+function smwimport_import_post($prim_key,&$postarr, $category_option ) {
 	$postarr['post_category'] = array( get_option( $category_option ));
 	$posts = smwimport_get_post($prim_key,$category_option);
 	if ( !empty($posts) )
@@ -320,6 +335,7 @@ function smwimport_import_post($prim_key,$postarr, $category_option ) {
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
 	add_post_meta($ID,"_prim_key",$prim_key,true);
+	return $ID;
 }
 
 function smwimport_import_event($prim_key,$data) {
@@ -331,6 +347,22 @@ function smwimport_import_event($prim_key,$data) {
 	$postarr['post_content'] = $data['long_description'];
 	$ID = smwimport_import_post($prim_key,$postarr,$events_option_name);
 	if ( is_wp_error($ID) ) return $ID;
+	require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
+	if ( isset($postarr['ID']) )
+		error_log("Updating:".$ID);
+	else{
+		error_log("Creating:".$ID);
+
+		$sched_entries = array( array(
+			'action' => 'create',
+			'start'  => $data['date_begin'],
+			'end'  => $data['date_end'],
+			'allday' => 0)
+		);
+
+		$ec3_admin=new ec3_Admin();
+		$ec3_admin->ec3_save_schedule($ID,$sched_entries);
+	}
 	$metadata = array('age','location','room','house','genre','type');
 	foreach( $metadata as $key )
 		add_post_meta($ID,$key,$data[$key],true);
