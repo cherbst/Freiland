@@ -220,7 +220,6 @@ class ec3_Admin
          $wpdb->query("DELETE FROM $ec3->schedule WHERE post_id=$post_ID");
       return;
     }
-
     // Find all of our parameters
     $sched_entries=array();
     $fields =array('start','end','allday','rpt');
@@ -234,7 +233,14 @@ class ec3_Admin
         $sched_entries[ $sid ][ $match[1] ] = $v;
       }
     }
+    $this->ec3_save_schedule($post_ID,$sched_entries);
+  }
 
+  function ec3_save_schedule($post_ID,$sched_entries){
+    global $ec3,$wpdb;
+    // Use this to check the DB before DELETE/UPDATE. Should use
+    // ...IGNORE, but some people insist on using ancient version of MySQL.
+    $count_where="SELECT COUNT(0) FROM $ec3->schedule WHERE";
     foreach($sched_entries as $sid => $vals)
     {
       // Bail out if the input data looks suspect.
