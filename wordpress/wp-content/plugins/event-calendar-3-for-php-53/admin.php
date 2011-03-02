@@ -79,19 +79,23 @@ class ec3_Admin
     <?php
   }
 
-
-  function event_editor_box()
-  {
-    global $ec3,$wp_version,$wpdb,$post_ID;
-    if(isset($post_ID))
-      $schedule = $wpdb->get_results(
+  function get_schedule($post_id){
+    global $ec3,$wpdb;
+    return $wpdb->get_results(
         "SELECT
            sched_id,
            DATE_FORMAT(start,'%Y-%m-%d %H:%i') AS start,
            DATE_FORMAT(end,'%Y-%m-%d %H:%i') AS end,
            allday,
            rpt
-         FROM $ec3->schedule WHERE post_id=$post_ID ORDER BY start");
+         FROM $ec3->schedule WHERE post_id=$post_id ORDER BY start");
+  }
+
+  function event_editor_box()
+  {
+    global $wp_version,$post_ID;
+    if(isset($post_ID))
+      $schedule = $this->get_schedule($post_ID);
     else
       $schedule = false;
 
