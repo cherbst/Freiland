@@ -347,22 +347,25 @@ function smwimport_import_event($prim_key,$data) {
 	$postarr['post_content'] = $data['long_description'];
 	$ID = smwimport_import_post($prim_key,$postarr,$events_option_name);
 	if ( is_wp_error($ID) ) return $ID;
+	$sched_entry = array(
+		'start'  => $data['date_begin'],
+		'end'  => $data['date_end'],
+		'allday' => 0
+	);
+
 	require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
-	if ( isset($postarr['ID']) )
+	$ec3_admin=new ec3_Admin();
+	if ( isset($postarr['ID']) ){
 		error_log("Updating:".$ID);
-	else{
+		$schedule = $ec3_admin->get_schedule($ID);
+		$sched_entry['action'] = 'update';
+		$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
+	}else{
 		error_log("Creating:".$ID);
-
-		$sched_entries = array( array(
-			'action' => 'create',
-			'start'  => $data['date_begin'],
-			'end'  => $data['date_end'],
-			'allday' => 0)
-		);
-
-		$ec3_admin=new ec3_Admin();
-		$ec3_admin->ec3_save_schedule($ID,$sched_entries);
+		$sched_entry['action'] = 'create';
+		$sched_entries = array( $sched_entry );
 	}
+	$ec3_admin->ec3_save_schedule($ID,$sched_entries);
 	$metadata = array('age','location','room','house','genre','type');
 	foreach( $metadata as $key )
 		add_post_meta($ID,$key,$data[$key],true);
