@@ -1,1 +1,2 @@
 sudo chown -R www-data:www-data wordpress
+sudo chmod -R g+w wordpress
