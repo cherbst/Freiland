@@ -43,7 +43,14 @@ class smwimport
 		'location' => 'Potsdam',
 		'house' => 'big house',
 		'room' => '203',
-		'age' => '18'),
+		'age' => '18',
+		'image_big' => array(
+			'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
+			'title' => 'Big image title'),
+		'image_small' => array(
+			'file' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
+			'title' => 'Small image title')
+		),
 	'SMW Zweites Event' => array(
 		'title' => 'SMW Post 2',
 		'type'  => 'concert',
@@ -202,6 +209,13 @@ class smwimport
 	$postarr['post_content'] = $data['long_description'];
 	$ID = $this->import_post($prim_key,$postarr,'smwimport_category_events');
 	if ( is_wp_error($ID) ) return $ID;
+	$images = array('image_big','image_small');
+	foreach( $images as $image ){
+		if ( isset($data[$image]) ){
+			$ret = $this->import_image_for_post($prim_key.$image,$data[$image],$ID);
+			if ( is_wp_error($ret) ) return $ret;
+		}
+	}
 	$action = 'create';
 	if ( isset($postarr['ID']) )
 		$action = 'update';
