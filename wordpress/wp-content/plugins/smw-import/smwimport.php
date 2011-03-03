@@ -87,7 +87,11 @@ class smwimport
 		'media' => 'Bild am Sonntag',
 		'short_description' => 'SMW imported press',
 		'long_description' => '<strong>New imported press content</strong>',
-		'link' => 'www.test1.de')
+		'link' => 'www.test1.de',
+		'image' => array(
+			'file' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
+			'title' => 'Press image title')
+		)
 	);
 	return $data;
   }
@@ -243,6 +247,11 @@ class smwimport
 	$postarr['post_excerpt'] = $data['short_description'];
 	$postarr['post_content'] = $data['long_description'];
 	$ID = $this->import_post($prim_key,$postarr,'smwimport_category_press');
+	if ( is_wp_error($ID) ) return $ID;
+	if ( isset($data['image']) ){
+		$ret = $this->import_image_for_post($prim_key.'image',$data['image'],$ID);
+		if ( is_wp_error($ret) ) return $ret;
+	}
 	return $ID;
   }
 
