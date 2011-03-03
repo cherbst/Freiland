@@ -174,33 +174,38 @@ class smwimport
 	return $ID;
   }
 
+  function import_event_dates($post_id,$action,$start,$end){
+	$sched_entry = array(
+		'action' => $action,
+		'start'  => $start,
+		'end'  => $end,
+		'allday' => 0
+	);
+
+	require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
+	$ec3_admin=new ec3_Admin();
+	if ( $action == 'update' ){
+		error_log("Updating:".$post_id);
+		$schedule = $ec3_admin->get_schedule($post_id);
+		$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
+	}else{
+		error_log("Creating:".$post_id);
+		$sched_entries = array( $sched_entry );
+	}
+	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
+  }
+
   function import_event($prim_key,$data) {
-	
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = $data['title'];
 	$postarr['post_excerpt'] = $data['short_description'];
 	$postarr['post_content'] = $data['long_description'];
 	$ID = $this->import_post($prim_key,$postarr,'smwimport_category_events');
 	if ( is_wp_error($ID) ) return $ID;
-	$sched_entry = array(
-		'start'  => $data['date_begin'],
-		'end'  => $data['date_end'],
-		'allday' => 0
-	);
-
-	require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
-	$ec3_admin=new ec3_Admin();
-	if ( isset($postarr['ID']) ){
-		error_log("Updating:".$ID);
-		$schedule = $ec3_admin->get_schedule($ID);
-		$sched_entry['action'] = 'update';
-		$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
-	}else{
-		error_log("Creating:".$ID);
-		$sched_entry['action'] = 'create';
-		$sched_entries = array( $sched_entry );
-	}
-	$ec3_admin->ec3_save_schedule($ID,$sched_entries);
+	$action = 'create';
+	if ( isset($postarr['ID']) )
+		$action = 'update';
+	$this->import_event_dates($ID,$action,$data['date_begin'], $data['date_end']);
 	$metadata = array('age','location','room','house','genre','type');
 	foreach( $metadata as $key )
 		add_post_meta($ID,$key,$data[$key],true);
@@ -228,6 +233,10 @@ class smwimport
   }
 
   function import_image($prim_key,$data) {
+	return $this->import_image_for_post($prim_key,$data,get_option( 'smwimport_page_images' ));
+  }
+
+  function import_image_for_post($prim_key,$data,$post_id) {
 	$remotefile = $data['file'];
 	$title = $data['title'];
 	$localfile = basename($remotefile);
@@ -253,7 +262,7 @@ class smwimport
 		'post_content' => '',
 		'post_status' => 'inherit'
 	);
-	$attach_id = wp_insert_attachment( $attachment, $filename, get_option( 'smwimport_page_images' ) );
+	$attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
 	// you must first include the image.php file
 	// for the function wp_generate_attachment_metadata() to work
 	require_once(ABSPATH . "wp-admin" . '/includes/image.php');
