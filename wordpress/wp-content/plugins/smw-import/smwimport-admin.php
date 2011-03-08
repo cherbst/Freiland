@@ -99,7 +99,7 @@ function smwimport_settings_page() {
     }
 
     // variables for the field and option names 
-    $options['host']['name'] = 'smwimport_smw_host';
+    $options['data']['name'] = 'smwimport_xml_data_source';
     $options['events']['name'] = 'smwimport_category_events';
     $options['news']['name'] = 'smwimport_category_news';
     $options['press']['name'] = 'smwimport_category_press';
@@ -151,8 +151,8 @@ function smwimport_settings_page() {
 <form name="form1" method="post" action="">
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
-<p><?php _e("SMW Host name:", 'menu-smwimport' ); ?> 
-<input type="text" name="<?php echo $options['host']['name']; ?>" value="<?php echo $options['host']['val']; ?>" size="20">
+<p><?php _e("SMW data source:", 'menu-smwimport' ); ?> 
+<input type="text" name="<?php echo $options['data']['name']; ?>" value="<?php echo $options['data']['val']; ?>" size="20">
 </p>
 
 <?php foreach ( $categories_opt as $key => $opt ){ ?>
