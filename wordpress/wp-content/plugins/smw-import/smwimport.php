@@ -30,7 +30,7 @@ class smwimport
 
   function get_events(){
 	$data = array( 'SMW Test Event' => array(
-		'title' => 'SMW Post',
+		'title' => 'SMW Event',
 		'type'  => 'concert',
 		'date_begin' => '2011-03-02 10:00',
 		'date_end' => '2011-03-06 10:00',
@@ -52,7 +52,7 @@ class smwimport
 			'title' => 'Small image title')
 		),
 	'SMW Zweites Event' => array(
-		'title' => 'SMW Post 2',
+		'title' => 'SMW Event 2',
 		'type'  => 'concert',
 		'date_begin' => '2011-04-02 12:00',
 		'date_end' => '2011-04-03 15:00',
@@ -108,24 +108,16 @@ class smwimport
 	return $data;
   }
 
-  function test_write_data_as_xml($source_importer_map) {
+  function test_write_data_as_xml($source_root_map) {
 	$url = get_option( 'smwimport_xml_data_source' );
 	$fh = fopen($url, 'w');
 	if ( $fh == null ) 
 		return new WP_Error('data_source_error', __("Could not open data source:").$url);
 
-	$source_root_map = array(
-		get_links => 'links',
-		get_events => 'events',
-		get_news => 'news',
-		get_press => 'press',
-		get_images => 'images'
-	);
-
 	require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
-	foreach( $source_importer_map as $source => $importer )
+	foreach( $source_root_map as $source => $root )
 		foreach( $this->$source() as $key => $data)
-			$array[$source_root_map[$source]][$key] = $data;
+			$array[$root][$key] = $data;
 
 	$content = ArrayXml::arrayToXml($array,'smwimportdata');
 	$dom = new DomDocument();
@@ -135,27 +127,46 @@ class smwimport
 	fwrite($fh,$formatedXML);
 	fclose($fh);
 
+	return 0;
+  }
+
+  function test_read_data_from_xml(){
+	$url = get_option( 'smwimport_xml_data_source' );
 	$content = file_get_contents($url);
 	if ($content === false) 
 		return new WP_Error('data_source_error', __("Could not get data source:").$url);
-
-	return 0;
+	$xml = simplexml_load_string($content);
+	require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
+	return ArrayXML::XMLToArray($xml);
   }
 
   function import_all() {
 	$this->delete_links();
 
-	$source_importer_map = array(
-		get_links => import_link,
-		get_events => import_event,
-		get_news => import_news,
-		get_press => import_press,
-		get_images => import_image
+	$source_root_map = array(
+		get_links => 'links',
+		get_events => 'events',
+		get_news => 'news',
+		get_press => 'press',
+		get_images => 'images'
 	);
 
-	$ret = $this->test_write_data_as_xml($source_importer_map);
-	foreach( $source_importer_map as $source => $importer )
-		foreach( $this->$source() as $key => $data){
+	$ret = $this->test_write_data_as_xml($source_root_map);
+	if ( is_wp_error($ret) ) return $ret;
+	$ret = $this->test_read_data_from_xml();
+	if ( is_wp_error($ret) ) return $ret;
+
+	$root_importer_map = array(
+		'links' => import_link,
+		'events' => import_event,
+		'news' => import_news,
+		'press' => import_press,
+		'images' => import_image
+	);
+
+	foreach( $ret as $root => $entities )
+		foreach( $entities as $key => $data ){
+			$importer = $root_importer_map[$root];
 			$ret = $this->$importer($key,$data);
 			if ( is_wp_error($ret) )
 				return $ret;
