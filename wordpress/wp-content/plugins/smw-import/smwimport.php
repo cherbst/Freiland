@@ -108,6 +108,40 @@ class smwimport
 	return $data;
   }
 
+  function test_write_data_as_xml($source_importer_map) {
+	$url = get_option( 'smwimport_xml_data_source' );
+	$fh = fopen($url, 'w');
+	if ( $fh == null ) 
+		return new WP_Error('data_source_error', __("Could not open data source:").$url);
+
+	$source_root_map = array(
+		get_links => 'links',
+		get_events => 'events',
+		get_news => 'news',
+		get_press => 'press',
+		get_images => 'images'
+	);
+
+	require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
+	foreach( $source_importer_map as $source => $importer )
+		foreach( $this->$source() as $key => $data)
+			$array[$source_root_map[$source]][$key] = $data;
+
+	$content = ArrayXml::arrayToXml($array,'smwimportdata');
+	$dom = new DomDocument();
+	$dom->loadXML($content);
+	$dom->formatOutput = true;
+	$formatedXML = $dom->saveXML();
+	fwrite($fh,$formatedXML);
+	fclose($fh);
+
+	$content = file_get_contents($url);
+	if ($content === false) 
+		return new WP_Error('data_source_error', __("Could not get data source:").$url);
+
+	return 0;
+  }
+
   function import_all() {
 	$this->delete_links();
 
@@ -119,7 +153,7 @@ class smwimport
 		get_images => import_image
 	);
 
-	$ret = 0;
+	$ret = $this->test_write_data_as_xml($source_importer_map);
 	foreach( $source_importer_map as $source => $importer )
 		foreach( $this->$source() as $key => $data){
 			$ret = $this->$importer($key,$data);
