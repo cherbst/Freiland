@@ -140,6 +140,35 @@ class smwimport
 	return ArrayXML::XMLToArray($xml);
   }
 
+  function get_event_content($post_content){
+	global $post;
+	$metadata = array('age','location','room','house','genre','type');
+	$return = '<table class="event_meta">';
+	foreach( $metadata as $key ){
+		$meta = get_post_meta($post->ID,$key,true);
+		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
+		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
+	}
+	$return .= '</table>';
+	$args = array( 'post_type' => 'attachment', 'numberposts' => -1, 'post_status' => null, 'post_parent' => $post->ID ); 
+	$attachments = get_posts($args);
+	if ($attachments) {
+		foreach ( $attachments as $attachment ) {
+			$return .= wp_get_attachment_image( $attachment->ID );
+		}
+	}else $return .= 'No images in this event:'.$post->ID;
+
+	return $post_content . $return;
+  }
+
+  function get_news_content($post_content){
+	return 'NEWS:'.$post_content;
+  }
+
+  function get_press_content($post_content){
+	return 'PRESS:'.$post_content;
+  }
+
   function import_all() {
 	$this->delete_links();
 
