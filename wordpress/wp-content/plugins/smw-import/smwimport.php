@@ -140,6 +140,20 @@ class smwimport
 	return ArrayXML::XMLToArray($xml);
   }
 
+  function test_write_data_as_json($data){
+  	$url = get_option( 'smwimport_xml_data_source' );
+	$url = str_replace('.xml','.json',$url);
+	$fh = fopen($url, 'w');
+	if ( $fh == null ) 
+		return new WP_Error('data_source_error', __("Could not open json file:").$url);
+
+	require_once(dirname(__FILE__) . '/json.php');
+	$json = new json();
+	$json_str = $json->indent(json_encode($data));
+	fwrite($fh,$json_str);
+	fclose($fh);
+  }
+
   function get_event_content($post_content){
 	global $post;
 	$metadata = array('age','location','room','house','genre','type');
@@ -184,6 +198,8 @@ class smwimport
 	if ( is_wp_error($ret) ) return $ret;
 	$ret = $this->test_read_data_from_xml();
 	if ( is_wp_error($ret) ) return $ret;
+
+	$this->test_write_data_as_json($ret);
 
 	$root_importer_map = array(
 		'links' => import_link,
