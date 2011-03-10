@@ -160,6 +160,7 @@ class smwimport
 	$return = '<table class="event_meta">';
 	foreach( $metadata as $key ){
 		$meta = get_post_meta($post->ID,$key,true);
+		if ( $meta == null ) continue;
 		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
 		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
 	}
