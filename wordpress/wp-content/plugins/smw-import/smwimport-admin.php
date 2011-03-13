@@ -30,6 +30,27 @@ $smwimport = new smwimport();
 // Hook for adding admin menus
 add_action('admin_menu', 'smwimport_add_pages');
 add_filter( 'the_content', 'smwimport_filter_the_content' );
+register_activation_hook( __FILE__, 'smwimport_create_categories' );
+
+function smwimport_create_categories(){
+	$categories = array( array(
+	  'cat_name' => 'Events',
+	  'category_description' => 'Events',
+	  'category_nicename' => 'events',
+	  ),
+	  array('cat_name' => 'Press',
+	  'category_description' => 'Press',
+	  'category_nicename' => 'press',
+	  ),
+	  array('cat_name' => 'News',
+	  'category_description' => 'News',
+	  'category_nicename' => 'news',
+	  )
+	);
+
+	foreach( $categories as $catarr )
+		wp_insert_category( $catarr, $wp_error );
+}
 
 function smwimport_filter_the_content( $post_content ) {
 	global $smwimport;
