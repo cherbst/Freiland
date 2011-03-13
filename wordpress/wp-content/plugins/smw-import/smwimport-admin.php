@@ -33,23 +33,57 @@ add_filter( 'the_content', 'smwimport_filter_the_content' );
 register_activation_hook( __FILE__, 'smwimport_create_categories' );
 
 function smwimport_create_categories(){
-	$categories = array( array(
-	  'cat_name' => 'Events',
+	$categories = array( 
+	  array('cat_name' => 'Events',
 	  'category_description' => 'Events',
 	  'category_nicename' => 'events',
+	  'option_name' => 'smwimport_category_events',
+	  'subcategories' => array( 
+		array('cat_name' => 'Age',
+		'category_nicename' => 'age'),
+		array('cat_name' => 'Location',
+		'category_nicename' => 'location'),
+		array('cat_name' => 'Room',
+		'category_nicename' => 'room'),
+		array('cat_name' => 'House',
+		'category_nicename' => 'house'),
+		array('cat_name' => 'Genre',
+		'category_nicename' => 'genre'),
+		array('cat_name' => 'Type',
+		'category_nicename' => 'type')
+	  	)
 	  ),
 	  array('cat_name' => 'Press',
 	  'category_description' => 'Press',
 	  'category_nicename' => 'press',
+	  'option_name' => 'smwimport_category_press'
 	  ),
 	  array('cat_name' => 'News',
 	  'category_description' => 'News',
 	  'category_nicename' => 'news',
+	  'option_name' => 'smwimport_category_news'
 	  )
 	);
 
-	foreach( $categories as $catarr )
-		wp_insert_category( $catarr, $wp_error );
+	foreach( $categories as $catarr ){
+		$id = wp_insert_category( $catarr, $wp_error );
+		if ( is_wp_error($wp_error) ){
+			error_log( $ret->get_error_message());
+			continue;
+		}
+		if ( $id == 0 ){
+			// category already exists
+			$idObj =  get_category_by_slug($catarr['category_nicename']);
+			$id = $idObj->term_id;
+		}
+    	    	update_option( $catarr['option_name'], $id );
+		if ( isset( $catarr['subcategories'] ) ){
+			foreach( $catarr['subcategories'] as $subcategory ){
+				$subcategory['category_parent'] = $id;
+				wp_insert_category( $subcategory, $wp_error );
+			}
+		}
+	}
 }
 
 function smwimport_filter_the_content( $post_content ) {
@@ -192,7 +226,7 @@ function smwimport_settings_page() {
 
 <?php foreach ( $categories_opt as $key => $opt ){ ?>
 <p><?php _e("Category to import $key:", 'menu-smwimport' ); ?> 
-<?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $opt['name'], 'orderby' => 'name', 'selected' => $opt['val'], 'hierarchical' => true)); ?>
+<?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $opt['name'], 'orderby' => 'name', 'selected' => $opt['val'], 'hierarchical' => true,'depth' => 1)); ?>
 </p>
 <?php } ?>
 <p><?php _e("Page to import Images:", 'menu-smwimport' ); ?> 
