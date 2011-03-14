@@ -53,19 +53,19 @@ class smwimport
 		),
 	'SMW Zweites Event' => array(
 		'title' => 'SMW Event 2',
-		'type'  => 'concert',
+		'type'  => 'festival',
 		'date_begin' => '2011-04-02 12:00',
 		'date_end' => '2011-04-03 15:00',
 		'short_description' => 'SMW new imported event',
 		'long_description' => '<strong>Newer imported event content</strong>',
-		'genre' => 'rock',
+		'genre' => 'pop',
 		'link1' => 'www.test1.de',
 		'link2' => 'www.test2.de',
 		'link3' => 'www.test3.de',
-		'location' => 'Potsdam',
-		'house' => 'big house',
-		'room' => '203',
-		'age' => '18')
+		'location' => 'berlin',
+		'house' => 'small house',
+		'room' => '210',
+		'age' => '16')
 	);
 	return $data;
   }
@@ -301,6 +301,30 @@ class smwimport
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
+  function import_event_meta($postarr,$data){
+        $ret = 0;
+	$metadata = array('age','location','room','house','genre','type');
+	foreach( $metadata as $key ){
+		if ( !isset($data[$key]) ) continue;
+		add_post_meta($postarr['ID'],$key,$data[$key],true);
+		$idObj =  get_category_by_slug($data[$key]);
+		$subid = $idObj->term_id;
+		if ( $idObj == null ){
+			// category does not exist 
+			$idObj =  get_category_by_slug($key);
+			error_log("XXX parent cat:".$idObj->term_id);
+			$subcategory['cat_name'] = $data[$key];
+			$subcategory['category_nicename'] = $data[$key];
+			$subcategory['category_parent'] = $idObj->term_id;
+			$subid = wp_insert_category( $subcategory, $wp_error );
+			if ( is_wp_error($wp_error) ) $ret = $wp_error;
+		}
+		$postarr['post_category'][] = $subid;
+	}
+
+	return wp_insert_post($postarr,true);
+  }
+
   function import_event($prim_key,$data) {
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = $data['title'];
@@ -319,10 +343,7 @@ class smwimport
 	if ( isset($postarr['ID']) )
 		$action = 'update';
 	$this->import_event_dates($ID,$action,$data['date_begin'], $data['date_end']);
-	$metadata = array('age','location','room','house','genre','type');
-	foreach( $metadata as $key )
-		add_post_meta($ID,$key,$data[$key],true);
-	return $ID;
+	return $this->import_event_meta($postarr,$data);
   }
 
   function import_news($prim_key,$data) {
