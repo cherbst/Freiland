@@ -184,6 +184,74 @@ class smwimport
 	return 'PRESS:'.$post_content;
   }
 
+  static function create_categories(){
+	$categories = array( 
+	  array('cat_name' => 'Events',
+	  'category_description' => 'Events',
+	  'category_nicename' => 'events',
+	  'option_name' => 'smwimport_category_events',
+	  'subcategories' => array( 
+		array('cat_name' => 'Age',
+		'category_nicename' => 'age'),
+		array('cat_name' => 'Location',
+		'category_nicename' => 'location'),
+		array('cat_name' => 'Room',
+		'category_nicename' => 'room'),
+		array('cat_name' => 'House',
+		'category_nicename' => 'house'),
+		array('cat_name' => 'Genre',
+		'category_nicename' => 'genre'),
+		array('cat_name' => 'Type',
+		'category_nicename' => 'type')
+	  	)
+	  ),
+	  array('cat_name' => 'Press',
+	  'category_description' => 'Press',
+	  'category_nicename' => 'press',
+	  'option_name' => 'smwimport_category_press'
+	  ),
+	  array('cat_name' => 'News',
+	  'category_description' => 'News',
+	  'category_nicename' => 'news',
+	  'option_name' => 'smwimport_category_news'
+	  )
+	);
+
+	foreach( $categories as $catarr ){
+		// create category
+		$id = smwimport::create_category( $catarr );
+		if ( is_wp_error($id) ){
+			error_log( $id->get_error_message());
+			continue;
+		}
+    	    	update_option( $catarr['option_name'], $id );
+		if ( isset( $catarr['subcategories'] ) ){
+			foreach( $catarr['subcategories'] as $subcategory ){
+				$subcategory['category_parent'] = $id;
+				$subid = smwimport::create_category( $subcategory );
+				if ( is_wp_error($subid) ){
+					error_log( $subid->get_error_message());
+					continue;
+				}
+			}
+		}
+	}
+  }
+
+  static function create_category($category){
+	$cat_id = wp_insert_category($category, true);
+	if ( is_wp_error( $cat_id ) ) {
+		if ( 'term_exists' == $cat_id->get_error_code() )
+			return (int) $cat_id->get_error_data();
+	} elseif ( ! $cat_id ) {
+		return(new WP_Error('category_failed', __("Sorry, the new category failed.")));
+	}
+
+	// XXX: this is needed due to a bug in wordpress category
+	delete_option('category_children'); 
+	return($cat_id);
+  }
+
   function import_all() {
 	$this->delete_links();
 
@@ -301,28 +369,22 @@ class smwimport
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
-  function import_event_meta($postarr,$data){
+  function import_event_meta($post_ID,$data){
         $ret = 0;
 	$metadata = array('age','location','room','house','genre','type');
 	foreach( $metadata as $key ){
 		if ( !isset($data[$key]) ) continue;
-		add_post_meta($postarr['ID'],$key,$data[$key],true);
-		$idObj =  get_category_by_slug($data[$key]);
-		$subid = $idObj->term_id;
-		if ( $idObj == null ){
-			// category does not exist 
-			$idObj =  get_category_by_slug($key);
-			error_log("XXX parent cat:".$idObj->term_id);
-			$subcategory['cat_name'] = $data[$key];
-			$subcategory['category_nicename'] = $data[$key];
-			$subcategory['category_parent'] = $idObj->term_id;
-			$subid = wp_insert_category( $subcategory, $wp_error );
-			if ( is_wp_error($wp_error) ) $ret = $wp_error;
-		}
-		$postarr['post_category'][] = $subid;
+		add_post_meta($post_ID,$key,$data[$key],true);
+		// get parent category
+		$idObj =  get_category_by_slug($key);
+		$category['cat_name'] = $data[$key];
+		$category['category_nicename'] = $data[$key];
+		$category['category_parent'] = $idObj->term_id;
+		$cat_id = self::create_category($category);
+		if ( is_wp_error($cat_id) ) return $cat_id;
+		$categories[] = $cat_id;
 	}
-
-	return wp_insert_post($postarr,true);
+	return wp_set_post_terms($post_ID,$categories,'category',true);
   }
 
   function import_event($prim_key,$data) {
@@ -343,7 +405,7 @@ class smwimport
 	if ( isset($postarr['ID']) )
 		$action = 'update';
 	$this->import_event_dates($ID,$action,$data['date_begin'], $data['date_end']);
-	return $this->import_event_meta($postarr,$data);
+	return $this->import_event_meta($ID,$data);
   }
 
   function import_news($prim_key,$data) {
