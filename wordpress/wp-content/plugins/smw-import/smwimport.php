@@ -252,6 +252,14 @@ class smwimport
 	return($cat_id);
   }
 
+  static function delete_all_imported(){
+	self::delete_links();
+	$posts = self::get_smwimport_posts();
+
+	foreach($posts as $post)
+		wp_delete_post($post->ID,true);
+  }
+
   function import_all() {
 	$this->delete_links();
 
@@ -289,15 +297,15 @@ class smwimport
 	return $ret;
   }
 
-  function get_link_category() {
+  static function get_link_category() {
 	$link_categories = get_terms('link_category', 'fields=ids&slug=smwimport&hide_empty=0');
 	if (empty($link_categories)) 
 		return new WP_Error('no_link_category', __("Link category 'smwimport' does not exist!"));
 	return $link_categories[0];
   }
 
-  function delete_links() {
-	$cat = $this->get_link_category();
+  static function delete_links() {
+	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
 		return $cat;
 	$args = array( 'category' => (string)$cat );
@@ -310,11 +318,20 @@ class smwimport
 	$linkdata['link_name'] = $key;
 	$linkdata['link_url'] = $data['website'];
 	$linkdata['link_description'] = $data['short_description'];
-	$cat = $this->get_link_category();
+	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
 		return $cat;
 	$linkdata['link_category'] = (string)$cat;
 	return wp_insert_link($linkdata,true);
+  }
+
+  static function get_smwimport_posts(){
+	$args = array(
+		'post_type' => 'any',
+		'meta_key' => '_post_type',
+		'meta_value' => 'smwimport'
+	);
+	return get_posts($args);
   }
 
   function get_post($prim_key, $category_option){
@@ -345,6 +362,7 @@ class smwimport
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
 	add_post_meta($ID,"_prim_key",$prim_key,true);
+	add_post_meta($ID,"_post_type",'smwimport',true);
 	return $ID;
   }
 

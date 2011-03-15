@@ -72,13 +72,19 @@ function smwimport_tools_page() {
 // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
-	$ret = $smwimport->import_all();
+	if ( $_POST['Import'] ){
+		$ret = $smwimport->import_all();
 
-	if ( is_wp_error($ret) )
-		$message = $ret->get_error_message();
-	else $message = 'successfully imported.';
-        // Put an import done  message on the screen
-
+		if ( is_wp_error($ret) )
+			$message = $ret->get_error_message();
+		else $message = 'successfully imported.';
+	}else if ( $_POST['Delete'] ){
+		$ret = smwimport::delete_all_imported();
+		if ( is_wp_error($ret) )
+			$message = $ret->get_error_message();
+		else $message = 'successfully deleted all imported posts.';
+	}
+        // Put the result  message on the screen
 ?>
 <div class="imported"><p><strong><?php _e($message, 'menu-smwimport' ); ?></strong></p></div>
 <?php
@@ -94,7 +100,10 @@ function smwimport_tools_page() {
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
 <p class="submit">
-<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Import from SMW') ?>" />
+<input type="submit" name="Import" class="button-primary" value="<?php esc_attr_e('Import from SMW') ?>" />
+</p>
+<p class="submit">
+<input type="submit" name="Delete" class="button-primary" value="<?php esc_attr_e('Delete all imported') ?>" />
 </p>
 
 </form>
