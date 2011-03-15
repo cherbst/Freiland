@@ -7,13 +7,33 @@
  * @since Twenty Ten 1.0
  */
 
+function freiland_category_header($cat_id){
+	$filtercats = get_categories( "hide_empty=0&parent=$cat_id" );
+
+	foreach( $filtercats as $filtercat ){
+		$args = array('hide_empty' => 0, 
+			'name' => 'filter_'.$filtercat->slug, 
+			'orderby' => 'name',
+			'show_option_all'    => "Show all $filtercat->name"."s" ,
+			'hierarchical' => true,
+			'parent' => $filtercat->term_id );
+	?>
+		<p><?php _e("Filter by $filtercat->name:", 'freiland-category' ); 
+			wp_dropdown_categories($args); ?>
+		</p>
+	<?php
+	}
+}
+
 get_header(); ?>
 
 		<div id="container">
 			<div id="content" role="main">
 
 				<h1 class="page-title"><?php
-					printf( __( 'Freiland category: %s', 'freiland' ), '<span>' . single_cat_title( '', false ) . '</span>' );
+					$cat = get_query_var('cat');
+					$catObj = get_category ($cat);
+					freiland_category_header($catObj->cat_ID);
 				?></h1>
 				<?php
 					$category_description = category_description();
