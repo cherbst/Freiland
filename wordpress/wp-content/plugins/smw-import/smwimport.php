@@ -282,6 +282,7 @@ class smwimport
 
 	foreach($posts as $post)
 		wp_delete_post($post->ID,true);
+	self::delete_empty_subcategories();
   }
 
   function import_all() {
@@ -351,11 +352,15 @@ class smwimport
 
   static function get_smwimport_posts(){
 	$args = array(
-		'post_type' => 'any',
 		'meta_key' => '_post_type',
 		'meta_value' => 'smwimport'
 	);
-	return get_posts($args);
+	$posts = get_posts($args);
+	$args['post_type'] = 'attachment';
+	$args['post_status'] = null;
+	$args['numberposts'] = -1;
+	$attachments = get_posts($args);
+	return array_merge($posts,$attachments);	
   }
 
   function get_post($prim_key, $category_option){
@@ -490,33 +495,40 @@ class smwimport
 	$localfile = basename($remotefile);
 
 	$posts = $this->get_post($prim_key,'image');
-	if ( !empty($posts) ){
+	if ( empty($posts) ){
+		$contents = file_get_contents($remotefile);
+		if ( $contents == FALSE )
+			return new WP_Error('download_failed', __("Could not get file:".$remotefile));
+		$upload = wp_upload_bits($localfile,null,$contents);
+		if ( $upload['error'] != false )
+			return new WP_Error('upload_failed', $upload['error']);
+		$filename = $upload['file'];
+		$wp_filetype = wp_check_filetype(basename($filename), null );
+		$attachment = array(
+			'post_mime_type' => $wp_filetype['type'],
+			'post_title' => $title,
+			'guid' => $filename,
+			'post_excerpt' => $title,
+			'post_content' => '',
+			'post_status' => 'inherit'
+		);
+		$attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
+		// you must first include the image.php file
+		// for the function wp_generate_attachment_metadata() to work
+		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+		$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+		wp_update_attachment_metadata( $attach_id,  $attach_data );
+	}else{
 		//XXX: update the image? then we need a hash or something
 		error_log('Image already exists:'. $posts[0]->ID);
-		return 0;
+		// only update title
+		$post = $posts[0];
+		$post->title = $title;
+		$post->post_excerpt = $title;
+		$attach_id = wp_update_post($post);	
 	}
-
-	$contents = file_get_contents($remotefile);
-	if ( $contents == FALSE )
-		return new WP_Error('download_failed', __("Could not get file:".$remotefile));
-	$upload = wp_upload_bits($localfile,null,$contents);
-	if ( $upload['error'] != false )
-		return new WP_Error('upload_failed', $upload['error']);
-	$filename = $upload['file'];
-	$wp_filetype = wp_check_filetype(basename($filename), null );
-	$attachment = array(
-		'post_mime_type' => $wp_filetype['type'],
-		'post_title' => $title,
-		'post_content' => '',
-		'post_status' => 'inherit'
-	);
-	$attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
-	// you must first include the image.php file
-	// for the function wp_generate_attachment_metadata() to work
-	require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-	$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
-	wp_update_attachment_metadata( $attach_id,  $attach_data );
 	add_post_meta($attach_id,"_prim_key",$prim_key,true);
+	add_post_meta($attach_id,"_post_type",'smwimport',true);
   }
 
 }
