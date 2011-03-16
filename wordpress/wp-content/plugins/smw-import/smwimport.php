@@ -20,6 +20,39 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class smwimport
 {
+	static $all_categories = array( 
+	  array('cat_name' => 'Events',
+	  'category_description' => 'Events',
+	  'category_nicename' => 'events',
+	  'option_name' => 'smwimport_category_events',
+	  'subcategories' => array( 
+		array('cat_name' => 'Age',
+		'category_nicename' => 'age'),
+		array('cat_name' => 'Location',
+		'category_nicename' => 'location'),
+		array('cat_name' => 'Room',
+		'category_nicename' => 'room'),
+		array('cat_name' => 'House',
+		'category_nicename' => 'house'),
+		array('cat_name' => 'Genre',
+		'category_nicename' => 'genre'),
+		array('cat_name' => 'Type',
+		'category_nicename' => 'type')
+	  	)
+	  ),
+	  array('cat_name' => 'Press',
+	  'category_description' => 'Press',
+	  'category_nicename' => 'press',
+	  'option_name' => 'smwimport_category_press'
+	  ),
+	  array('cat_name' => 'News',
+	  'category_description' => 'News',
+	  'category_nicename' => 'news',
+	  'option_name' => 'smwimport_category_news'
+	  )
+	);
+
+
   function get_links(){
 	$data = array( 'SMW Test Link' => array(
 		'short_description' => 'This is a link automtically added by smwimport.',
@@ -40,7 +73,7 @@ class smwimport
 		'link1' => 'www.test1.de',
 		'link2' => 'www.test2.de',
 		'link3' => 'www.test3.de',
-		'location' => 'Potsdam',
+		'location' => 'Werkstatt',
 		'house' => 'big house',
 		'room' => '203',
 		'age' => '18',
@@ -62,7 +95,7 @@ class smwimport
 		'link1' => 'www.test1.de',
 		'link2' => 'www.test2.de',
 		'link3' => 'www.test3.de',
-		'location' => 'berlin',
+		'location' => 'Spartakus',
 		'house' => 'small house',
 		'room' => '210',
 		'age' => '16')
@@ -101,7 +134,11 @@ class smwimport
   }
 
   function get_images(){
-	$data = array( 'SMW Test Image' => array(
+	$data = array( 
+		'SMW Test Image' => array(
+		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
+		'title' => 'New imported image3'),
+		'SMW New Image' => array(
 		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
 		'title' => 'New imported image3')
 	);
@@ -185,39 +222,8 @@ class smwimport
   }
 
   static function create_categories(){
-	$categories = array( 
-	  array('cat_name' => 'Events',
-	  'category_description' => 'Events',
-	  'category_nicename' => 'events',
-	  'option_name' => 'smwimport_category_events',
-	  'subcategories' => array( 
-		array('cat_name' => 'Age',
-		'category_nicename' => 'age'),
-		array('cat_name' => 'Location',
-		'category_nicename' => 'location'),
-		array('cat_name' => 'Room',
-		'category_nicename' => 'room'),
-		array('cat_name' => 'House',
-		'category_nicename' => 'house'),
-		array('cat_name' => 'Genre',
-		'category_nicename' => 'genre'),
-		array('cat_name' => 'Type',
-		'category_nicename' => 'type')
-	  	)
-	  ),
-	  array('cat_name' => 'Press',
-	  'category_description' => 'Press',
-	  'category_nicename' => 'press',
-	  'option_name' => 'smwimport_category_press'
-	  ),
-	  array('cat_name' => 'News',
-	  'category_description' => 'News',
-	  'category_nicename' => 'news',
-	  'option_name' => 'smwimport_category_news'
-	  )
-	);
 
-	foreach( $categories as $catarr ){
+	foreach( self::$all_categories as $catarr ){
 		// create category
 		$id = smwimport::create_category( $catarr );
 		if ( is_wp_error($id) ){
@@ -250,6 +256,24 @@ class smwimport
 	// XXX: this is needed due to a bug in wordpress category
 	delete_option('category_children'); 
 	return($cat_id);
+  }
+
+  static function delete_empty_subcategories(){
+
+	foreach( self::$all_categories as $category ){
+		if ( !isset( $category['subcategories'] ) )
+			continue;
+		foreach($category['subcategories'] as $subcat ){
+			$parent =  get_category_by_slug($subcat['category_nicename']);
+			$childs = get_categories( "hide_empty=0&parent=$parent->term_id" );
+			foreach( $childs as $child ){
+				if ($child->count == 0){
+					wp_delete_category( $child->term_id );
+				}
+			}
+		}
+	}
+	return true;
   }
 
   static function delete_all_imported(){
@@ -294,7 +318,7 @@ class smwimport
 				return $ret;
 		}
 
-	return $ret;
+	return self::delete_empty_subcategories();
   }
 
   static function get_link_category() {
