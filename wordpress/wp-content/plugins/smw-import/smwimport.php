@@ -191,6 +191,51 @@ class smwimport
 	return ArrayXML::XMLToArray($xml);
   }
 
+  static function test_read_events_from_csv(){
+	$url = get_option( 'smwimport_events_data' );
+	$content = file_get_contents($url);
+	if ($content === false) 
+		return new WP_Error('data_source_error', __("Could not get event data source:").$url);
+	$data = str_getcsv($content);
+	$start = 9; // skip garbage
+	$events[] = array( $data[$start] => array(
+		'title' => $data[$start],
+		'genre' => $data[$start+1],
+		'date_begin' => $data[$start+2],
+		'date_end'   => $data[$start+2],
+		'age' => $data[$start+3],
+		'short_description' => $data[$start+4],
+		'long_description' => $data[$start+5],
+		'link1' => $data[$start+6],
+		'location' => $data[$start+7],
+		'room' => $data[$start+8],
+		'house' => $data[$start+9],
+		'type'  => $data[$start+11]));
+
+	error_log(print_r($events,true));
+	return $data;
+  }
+
+  static function test_read_events_from_json(){
+	$url = get_option( 'smwimport_events_data' );
+	$content = file_get_contents($url);
+	if ($content === false) 
+		return new WP_Error('data_source_error', __("Could not get event data source:").$url);
+
+	$content = str_replace(array("\r", "\r\n", "\n"),' ',$content);
+	$data = json_decode($content,true);
+	if ( !$data )
+		return new WP_Error('data_source_error', __("Could not decode json file:").$url);
+
+	foreach( $data['items'] as $item ){
+		$events[$item['label']] = $item;
+		$events[$item['label']]['title'] = $item['label'];
+	}
+
+	error_log(print_r($events,true));
+	return $events;
+  }
+
   static function test_write_data_as_json($data){
   	$url = get_option( 'smwimport_xml_data_source' );
 	$url = str_replace('.xml','.json',$url);
@@ -332,6 +377,15 @@ class smwimport
 	if ( is_wp_error($ret) ) return $ret;
 
 	self::test_write_data_as_json($ret);
+	
+//	self::test_read_events_from_csv();
+	$testret = self::test_read_events_from_json();
+	if ( is_wp_error($testret) ){
+		error_log($testret->get_error_message());
+	}else{
+		foreach( $testret as $key => $event )
+			self::import_event($key,$event);
+	}
 
 	$root_importer_map = array(
 		'links' => import_link,
@@ -473,7 +527,10 @@ class smwimport
 	$postarr['post_excerpt'] = $data['short_description'];
 	$postarr['post_content'] = $data['long_description'];
 	$ID = self::import_post($prim_key,$postarr,'smwimport_category_events');
-	if ( is_wp_error($ID) ) return $ID;
+	if ( is_wp_error($ID) ){
+		error_log('smwimport: could not import:'.$prim_key);
+		return $ID;
+	}
 	$images = array('image_big','image_small');
 	foreach( $images as $image ){
 		if ( isset($data[$image]) ){
