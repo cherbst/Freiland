@@ -80,6 +80,9 @@ define ('WPLANG', '');
  */
 define('WP_DEBUG', false);
 
+/* disaple wp_cron */
+define('DISABLE_WP_CRON', true);
+
 /* That's all, stop editing! Happy blogging. */
 
 /** Absolute path to the WordPress directory. */
