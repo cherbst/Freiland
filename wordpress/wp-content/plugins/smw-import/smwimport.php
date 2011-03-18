@@ -58,6 +58,16 @@ class smwimport
 	  )
 	);
 
+  static function get_event_subcategories(){
+	$subcats = array();
+	foreach(self::$all_categories as $cat){
+		if ( $cat['category_nicename'] == 'events' ){
+			foreach($cat['subcategories'] as $subcat)
+				$subcats[] = $subcat['category_nicename'];
+		}
+	}
+	return $subcats;
+  }
 
   static function get_links(){
 	$data = array( 'SMW Test Link' => array(
@@ -196,7 +206,7 @@ class smwimport
 
   static function get_event_content($post_content){
 	global $post;
-	$metadata = array('age','location','room','house','genre','type');
+	$metadata = self::get_event_subcategories();
 	$return = '<table class="event_meta">';
 	foreach( $metadata as $key ){
 		$meta = get_post_meta($post->ID,$key,true);
@@ -441,7 +451,7 @@ class smwimport
 
   static function import_event_meta($post_ID,$data){
         $ret = 0;
-	$metadata = array('age','location','room','house','genre','type');
+	$metadata = self::get_event_subcategories();
 	foreach( $metadata as $key ){
 		if ( !isset($data[$key]) ) continue;
 		add_post_meta($post_ID,$key,$data[$key],true);
