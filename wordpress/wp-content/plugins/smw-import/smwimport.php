@@ -247,7 +247,21 @@ class smwimport
   }
 
   static function create_category($category){
-	$cat_id = wp_insert_category($category, true);
+	$cat_id = -1;
+	if ( !isset($category['category_parent']) ){
+		$cat = get_category_by_slug($category['category_nicename']);
+		if ( $cat )
+			$cat_id = $cat->term_id;
+	}else{
+		$cats = get_categories( "hide_empty=0&parent=".$category['category_parent'] );
+		foreach( $cats as $cat ){
+			if ( $cat->slug == $category['category_nicename'] )
+				$cat_id = (int)$cat->term_id;
+		}
+	}
+
+	if ( $cat_id == -1 )
+		$cat_id = wp_insert_category($category, true);
 	if ( is_wp_error( $cat_id ) ) {
 		if ( 'term_exists' == $cat_id->get_error_code() )
 			return (int) $cat_id->get_error_data();
