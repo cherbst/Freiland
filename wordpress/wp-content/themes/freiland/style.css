@@ -16,4 +16,7 @@ Template: twentyten
 
 @import url("../twentyten/style.css");
 
-
+div.filter_age{ display : none; }
+div.filter_genre{ display : none; }
+div.filter_house{ display : none; }
+div.filter_room{ display : none; }
