@@ -441,12 +441,12 @@ class smwimport
   static function get_smwimport_posts(){
 	$args = array(
 		'meta_key' => '_post_type',
-		'meta_value' => 'smwimport'
+		'meta_value' => 'smwimport',
+		'numberposts' => -1
 	);
 	$posts = get_posts($args);
 	$args['post_type'] = 'attachment';
 	$args['post_status'] = null;
-	$args['numberposts'] = -1;
 	$attachments = get_posts($args);
 	return array_merge($posts,$attachments);	
   }
