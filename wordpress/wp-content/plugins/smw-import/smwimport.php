@@ -262,6 +262,7 @@ class smwimport
 
 	if ( $cat_id == -1 )
 		$cat_id = wp_insert_category($category, true);
+
 	if ( is_wp_error( $cat_id ) ) {
 		if ( 'term_exists' == $cat_id->get_error_code() )
 			return (int) $cat_id->get_error_data();
@@ -269,8 +270,6 @@ class smwimport
 		return(new WP_Error('category_failed', __("Sorry, the new category failed.")));
 	}
 
-	// XXX: this is needed due to a bug in wordpress category
-	delete_option('category_children'); 
 	return($cat_id);
   }
 
@@ -283,7 +282,11 @@ class smwimport
 			$parent =  get_category_by_slug($subcat['category_nicename']);
 			$childs = get_categories( "hide_empty=0&parent=$parent->term_id" );
 			foreach( $childs as $child ){
-				if ($child->count == 0){
+				// XXX: the following should work, but does not!
+				//if ($child->category_count == 0){
+				$objects = get_objects_in_term($child->term_id,'category');
+				if ( empty($objects) ){
+					error_log('Deleting empty subcategory:'.$child->slug);
 					wp_delete_category( $child->term_id );
 				}
 			}
@@ -337,6 +340,8 @@ class smwimport
 			}
 		}
 
+	// XXX: this is needed due to a bug in wordpress category
+	delete_option('category_children'); 
 	return self::delete_empty_subcategories();
   }
 
@@ -424,11 +429,11 @@ class smwimport
 	require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
 	$ec3_admin=new ec3_Admin();
 	if ( $action == 'update' ){
-		error_log("Updating:".$post_id);
+		error_log("Updating image:".$post_id);
 		$schedule = $ec3_admin->get_schedule($post_id);
 		$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
 	}else{
-		error_log("Creating:".$post_id);
+		error_log("Creating image:".$post_id);
 		$sched_entries = array( $sched_entry );
 	}
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
