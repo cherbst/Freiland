@@ -16,12 +16,15 @@ function freiland_category_header($cat_id){
 <input type="hidden" name="hiddencategoryfilter" value="Y">
 
 <?php
+	global $query_string;
+	parse_str( $query_string, $query_args );
+
 	$filtered = false;
 	foreach( $filtercats as $filtercat ){
 		$name = 'filter_'.$filtercat->slug; 
     		if( isset($_POST[ 'hiddencategoryfilter' ]) && $_POST['hiddencategoryfilter'] == 'Y' ) {
 			if ( $_POST[$name] ){
-				$query_string['category__and'][] = (int)$_POST[$name];
+				$query_args['category__and'][] = (int)$_POST[$name];
 				$filtered = true;
 			}
 		}
@@ -39,7 +42,7 @@ function freiland_category_header($cat_id){
 		</p></div>
   <?php }
 	if ( $filtered )
-		query_posts($query_string);
+		query_posts($query_args);
 
 	if ( ! empty($filtercats) ){
  ?>
