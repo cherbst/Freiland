@@ -228,8 +228,14 @@ class smwimport
 		return new WP_Error('data_source_error', __("Could not decode json file:").$url);
 
 	foreach( $data['items'] as $item ){
-		$events[$item['label']] = $item;
-		$events[$item['label']]['title'] = $item['label'];
+		$event['title'] = $item['label'];
+		$event['type'] = $item['veranstaltungstyp'];
+		$event['date_begin'] = $item['anfangsdatum'];
+		$event['age'] = $item['alter'];
+		$event['location'] = $item['ort'];
+		$event['short_description'] = $item['beschreibung_(kurz)'];
+		$event['long_description'] = $item['beschreibung_(lang)'];
+		$events[$item['label']] = $event;
 	}
 
 	error_log(print_r($events,true));
@@ -484,6 +490,10 @@ class smwimport
   }
 
   static function import_event_dates($post_id,$action,$start,$end){
+	if ( $start == null )
+		$start = date("Y-m-d H:i");
+	if ( $end == null )
+		$end = $start;
 	$sched_entry = array(
 		'action' => $action,
 		'start'  => $start,
@@ -493,11 +503,11 @@ class smwimport
 
 	$ec3_admin=new ec3_Admin();
 	if ( $action == 'update' ){
-		error_log("Updating image:".$post_id);
+		error_log("Updating date:".$post_id);
 		$schedule = $ec3_admin->get_schedule($post_id);
 		$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
 	}else{
-		error_log("Creating image:".$post_id);
+		error_log("Creating date:".$post_id);
 		$sched_entries = array( $sched_entry );
 	}
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
