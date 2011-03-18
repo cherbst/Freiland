@@ -17,9 +17,12 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
 require_once(ABSPATH . "wp-admin" . '/includes/bookmark.php');
 require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
+require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
+require_once(dirname(__FILE__) . '/ArrayXML.php');
+require_once(dirname(__FILE__) . '/json.php');
 
 class smwimport
 {
@@ -175,7 +178,6 @@ class smwimport
 	if ($content === false) 
 		return new WP_Error('data_source_error', __("Could not get data source:").$url);
 	$xml = simplexml_load_string($content);
-	require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
 	return ArrayXML::XMLToArray($xml);
   }
 
@@ -186,7 +188,6 @@ class smwimport
 	if ( $fh == null ) 
 		return new WP_Error('data_source_error', __("Could not open json file:").$url);
 
-	require_once(dirname(__FILE__) . '/json.php');
 	$json = new json();
 	$json_str = $json->indent(json_encode($data));
 	fwrite($fh,$json_str);
@@ -426,7 +427,6 @@ class smwimport
 		'allday' => 0
 	);
 
-	require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
 	$ec3_admin=new ec3_Admin();
 	if ( $action == 'update' ){
 		error_log("Updating image:".$post_id);
@@ -538,7 +538,6 @@ class smwimport
 		$attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
 		// you must first include the image.php file
 		// for the function wp_generate_attachment_metadata() to work
-		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 		$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
 		wp_update_attachment_metadata( $attach_id,  $attach_data );
 	}else{
