@@ -8,22 +8,48 @@
  */
 
 function freiland_category_header($cat_id){
+
 	$filtercats = get_categories( "hide_empty=0&parent=$cat_id" );
 
+?>
+<form name="categoryfilterform" method="post" action="">
+<input type="hidden" name="hiddencategoryfilter" value="Y">
+
+<?php
+	$filtered = false;
 	foreach( $filtercats as $filtercat ){
+		$name = 'filter_'.$filtercat->slug; 
+    		if( isset($_POST[ 'hiddencategoryfilter' ]) && $_POST['hiddencategoryfilter'] == 'Y' ) {
+			if ( $_POST[$name] ){
+				$query_string['category__and'][] = (int)$_POST[$name];
+				$filtered = true;
+			}
+		}
+
 		$args = array('hide_empty' => 0, 
-			'name' => 'filter_'.$filtercat->slug, 
+			'name' => $name, 
 			'orderby' => 'name',
+			'selected' => $_POST[$name],
 			'show_option_all'    => "Show all $filtercat->name"."s" ,
 			'hierarchical' => true,
 			'parent' => $filtercat->term_id );
 	?>
-		<p><?php _e("Filter by $filtercat->name:", 'freiland-category' ); 
+		<div class="<?php echo $name ?>"><p><?php _e("Filter by $filtercat->name:", 'freiland-category' ); 
 			wp_dropdown_categories($args); ?>
-		</p>
-	<?php
-	}
-}
+		</p></div>
+  <?php }
+	if ( $filtered )
+		query_posts($query_string);
+
+	if ( ! empty($filtercats) ){
+ ?>
+<p class="submit">
+<input type="submit" name="filter" class="button-primary" value="<?php esc_attr_e('Filter posts') ?>" />
+</p>
+</form>
+	
+<?php 	}
+  }
 
 get_header(); ?>
 
