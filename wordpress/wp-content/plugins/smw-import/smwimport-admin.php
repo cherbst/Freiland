@@ -143,14 +143,26 @@ function smwimport_settings_page() {
     $options['news']['name'] = 'smwimport_category_news';
     $options['press']['name'] = 'smwimport_category_press';
     $options['images']['name'] = 'smwimport_page_images';
+    $options['events_data']['name'] = 'smwimport_events_data';
+    $options['news_data']['name'] = 'smwimport_news_data';
+    $options['press_data']['name'] = 'smwimport_press_data';
+    $options['links_data']['name'] = 'smwimport_links_data';
+    $options['images_data']['name'] = 'smwimport_images_data';
     $hidden_field_name = 'smwimport_submit_hidden';
 
     $categories_opt = array(
 	'Events' => &$options['events'],
 	'News' => &$options['news'],
 	'Press' => &$options['press']);
+
+    $datasources_opt = array(
+	'Events' => &$options['events_data'],
+	'News' => &$options['news_data'],
+	'Press' => &$options['press_data'],
+	'Links' => &$options['links_data'],
+	'Images' => &$options['images_data']);
+
     // Read in existing option value from database
-    $host_opt['val'] = get_option( $host_opt['name'] );
     foreach ( $options as $key => $opt )
     	$options[$key]['val'] = get_option( $opt['name'] );
 
@@ -193,6 +205,12 @@ function smwimport_settings_page() {
 <p><?php _e("SMW data source:", 'menu-smwimport' ); ?> 
 <input type="text" name="<?php echo $options['data']['name']; ?>" value="<?php echo $options['data']['val']; ?>" size="20">
 </p>
+
+<?php foreach ( $datasources_opt as $key => $opt ){ ?>
+<p><?php _e("Data source for $key:", 'menu-smwimport' ); ?> 
+<input type="text" name="<?php echo $opt['name']; ?>" value="<?php echo $opt['val']; ?>" size="80">
+</p>
+<?php } ?>
 
 <?php foreach ( $categories_opt as $key => $opt ){ ?>
 <p><?php _e("Category to import $key:", 'menu-smwimport' ); ?> 
