@@ -25,22 +25,34 @@ License: GPL2
 */
 
 require_once('smwimport.php');
-global $smwimport;
-$smwimport = new smwimport();
 // Hook for adding admin menus
 add_action('admin_menu', 'smwimport_add_pages');
 add_filter( 'the_content', 'smwimport_filter_the_content' );
 register_activation_hook( __FILE__, array('smwimport','create_categories') );
+register_activation_hook( __FILE__, 'smwimport_activate_cron' );
+register_deactivation_hook(__FILE__, 'smwimport_deactivate_cron');
+add_action('smwimport_import_all_event', 'smwimport_import_all' );
 
+
+function smwimport_deactivate_cron() {
+	wp_clear_scheduled_hook('smwimport_import_all_event');
+}
+
+function smwimport_activate_cron() {
+	wp_schedule_event(time(), 'hourly','smwimport_import_all_event');
+}
+
+function smwimport_import_all(){
+	smwimport::import_all();
+}
 
 function smwimport_filter_the_content( $post_content ) {
-	global $smwimport;
 	if ( in_category( get_option('smwimport_category_events') ) )
-		return $smwimport->get_event_content($post_content);
+		return smwimport::get_event_content($post_content);
 	else if ( in_category( get_option('smwimport_category_news') ) )
-		return $smwimport->get_news_content($post_content);
+		return smwimport::get_news_content($post_content);
 	else if ( in_category( get_option('smwimport_category_press') ) )
-		return $smwimport->get_press_content($post_content);
+		return smwimport::get_press_content($post_content);
 	return $post_content;
 }
 
@@ -59,7 +71,6 @@ function smwimport_add_pages() {
 
 // mt_tools_page() displays the page content for the Test Tools submenu
 function smwimport_tools_page() {
-    global $smwimport;
     //must check that the user has the required capability 
     if (!current_user_can('manage_options'))
     {
@@ -73,7 +84,7 @@ function smwimport_tools_page() {
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
 	if ( $_POST['Import'] ){
-		$ret = $smwimport->import_all();
+		$ret = smwimport::import_all();
 
 		if ( is_wp_error($ret) )
 			$message = $ret->get_error_message();

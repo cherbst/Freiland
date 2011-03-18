@@ -17,6 +17,9 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
+require_once(ABSPATH . "wp-admin" . '/includes/bookmark.php');
+require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
 
 class smwimport
 {
@@ -53,7 +56,7 @@ class smwimport
 	);
 
 
-  function get_links(){
+  static function get_links(){
 	$data = array( 'SMW Test Link' => array(
 		'short_description' => 'This is a link automtically added by smwimport.',
 		'website' => 'http://www.smwimport.org')
@@ -61,7 +64,7 @@ class smwimport
 	return $data;
   }
 
-  function get_events(){
+  static function get_events(){
 	$data = array( 'SMW Test Event' => array(
 		'title' => 'SMW Event',
 		'type'  => 'concert',
@@ -103,7 +106,7 @@ class smwimport
 	return $data;
   }
 
-  function get_news(){
+  static function get_news(){
 	$data = array( 'SMW Test News' => array(
 		'topic' => 'SMW News',
 		'short_description' => 'SMW imported news',
@@ -117,7 +120,7 @@ class smwimport
 	return $data;
   }
 
-  function get_press(){
+  static function get_press(){
 	$data = array( 'SMW Test Press' => array(
 		'topic' => 'SMW Press',
 		'date'  => '1.1.2011',
@@ -133,7 +136,7 @@ class smwimport
 	return $data;
   }
 
-  function get_images(){
+  static function get_images(){
 	$data = array( 
 		'SMW Test Image' => array(
 		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
@@ -145,15 +148,14 @@ class smwimport
 	return $data;
   }
 
-  function test_write_data_as_xml($source_root_map) {
+  static function test_write_data_as_xml($source_root_map) {
 	$url = get_option( 'smwimport_xml_data_source' );
 	$fh = fopen($url, 'w');
 	if ( $fh == null ) 
 		return new WP_Error('data_source_error', __("Could not open data source:").$url);
 
-	require_once(ABSPATH . "wp-content" . '/plugins/smw-import/ArrayXML.php');
 	foreach( $source_root_map as $source => $root )
-		foreach( $this->$source() as $key => $data)
+		foreach( self::$source() as $key => $data)
 			$array[$root][$key] = $data;
 
 	$content = ArrayXml::arrayToXml($array,'smwimportdata');
@@ -167,7 +169,7 @@ class smwimport
 	return 0;
   }
 
-  function test_read_data_from_xml(){
+  static function test_read_data_from_xml(){
 	$url = get_option( 'smwimport_xml_data_source' );
 	$content = file_get_contents($url);
 	if ($content === false) 
@@ -177,7 +179,7 @@ class smwimport
 	return ArrayXML::XMLToArray($xml);
   }
 
-  function test_write_data_as_json($data){
+  static function test_write_data_as_json($data){
   	$url = get_option( 'smwimport_xml_data_source' );
 	$url = str_replace('.xml','.json',$url);
 	$fh = fopen($url, 'w');
@@ -191,7 +193,7 @@ class smwimport
 	fclose($fh);
   }
 
-  function get_event_content($post_content){
+  static function get_event_content($post_content){
 	global $post;
 	$metadata = array('age','location','room','house','genre','type');
 	$return = '<table class="event_meta">';
@@ -213,11 +215,11 @@ class smwimport
 	return $post_content . $return;
   }
 
-  function get_news_content($post_content){
+  static function get_news_content($post_content){
 	return 'NEWS:'.$post_content;
   }
 
-  function get_press_content($post_content){
+  static function get_press_content($post_content){
 	return 'PRESS:'.$post_content;
   }
 
@@ -285,8 +287,8 @@ class smwimport
 	self::delete_empty_subcategories();
   }
 
-  function import_all() {
-	$this->delete_links();
+  static function import_all() {
+	self::delete_links();
 
 	$source_root_map = array(
 		get_links => 'links',
@@ -296,12 +298,12 @@ class smwimport
 		get_images => 'images'
 	);
 
-	$ret = $this->test_write_data_as_xml($source_root_map);
+	$ret = self::test_write_data_as_xml($source_root_map);
 	if ( is_wp_error($ret) ) return $ret;
-	$ret = $this->test_read_data_from_xml();
+	$ret = self::test_read_data_from_xml();
 	if ( is_wp_error($ret) ) return $ret;
 
-	$this->test_write_data_as_json($ret);
+	self::test_write_data_as_json($ret);
 
 	$root_importer_map = array(
 		'links' => import_link,
@@ -314,9 +316,11 @@ class smwimport
 	foreach( $ret as $root => $entities )
 		foreach( $entities as $key => $data ){
 			$importer = $root_importer_map[$root];
-			$ret = $this->$importer($key,$data);
-			if ( is_wp_error($ret) )
+			$ret = self::$importer($key,$data);
+			if ( is_wp_error($ret) ){
+				error_log($ret->get_error_message());
 				return $ret;
+			}
 		}
 
 	return self::delete_empty_subcategories();
@@ -339,7 +343,7 @@ class smwimport
 		wp_delete_link($link->link_id);
   }
 
-  function import_link($key,$data) {
+  static function import_link($key,$data) {
 	$linkdata['link_name'] = $key;
 	$linkdata['link_url'] = $data['website'];
 	$linkdata['link_description'] = $data['short_description'];
@@ -363,7 +367,7 @@ class smwimport
 	return array_merge($posts,$attachments);	
   }
 
-  function get_post($prim_key, $category_option){
+  static function get_post($prim_key, $category_option){
 	if ( $category_option=='image'){
 		$cat = null;
 		$type = 'attachment';
@@ -382,9 +386,9 @@ class smwimport
 	return get_posts($args);
   }
 
-  function import_post($prim_key,&$postarr, $category_option ) {
+  static function import_post($prim_key,&$postarr, $category_option ) {
 	$postarr['post_category'] = array( get_option( $category_option ));
-	$posts = $this->get_post($prim_key,$category_option);
+	$posts = self::get_post($prim_key,$category_option);
 	if ( !empty($posts) )
 		$postarr['ID'] = $posts[0]->ID;
 
@@ -395,7 +399,7 @@ class smwimport
 	return $ID;
   }
 
-  function import_event_dates($post_id,$action,$start,$end){
+  static function import_event_dates($post_id,$action,$start,$end){
 	$sched_entry = array(
 		'action' => $action,
 		'start'  => $start,
@@ -416,7 +420,7 @@ class smwimport
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
-  function import_event_meta($post_ID,$data){
+  static function import_event_meta($post_ID,$data){
         $ret = 0;
 	$metadata = array('age','location','room','house','genre','type');
 	foreach( $metadata as $key ){
@@ -434,67 +438,67 @@ class smwimport
 	return wp_set_post_terms($post_ID,$categories,'category',true);
   }
 
-  function import_event($prim_key,$data) {
+  static function import_event($prim_key,$data) {
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = $data['title'];
 	$postarr['post_excerpt'] = $data['short_description'];
 	$postarr['post_content'] = $data['long_description'];
-	$ID = $this->import_post($prim_key,$postarr,'smwimport_category_events');
+	$ID = self::import_post($prim_key,$postarr,'smwimport_category_events');
 	if ( is_wp_error($ID) ) return $ID;
 	$images = array('image_big','image_small');
 	foreach( $images as $image ){
 		if ( isset($data[$image]) ){
-			$ret = $this->import_image_for_post($prim_key.$image,$data[$image],$ID);
+			$ret = self::import_image_for_post($prim_key.$image,$data[$image],$ID);
 			if ( is_wp_error($ret) ) return $ret;
 		}
 	}
 	$action = 'create';
 	if ( isset($postarr['ID']) )
 		$action = 'update';
-	$this->import_event_dates($ID,$action,$data['date_begin'], $data['date_end']);
-	return $this->import_event_meta($ID,$data);
+	self::import_event_dates($ID,$action,$data['date_begin'], $data['date_end']);
+	return self::import_event_meta($ID,$data);
   }
 
-  function import_news($prim_key,$data) {
+  static function import_news($prim_key,$data) {
 
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = $data['topic'];
 	$postarr['post_excerpt'] = $data['short_description'];
 	$postarr['post_content'] = $data['long_description'];
-	$ID = $this->import_post($prim_key,$postarr,'smwimport_category_news');
+	$ID = self::import_post($prim_key,$postarr,'smwimport_category_news');
 	if ( is_wp_error($ID) ) return $ID;
 	if ( isset($data['image']) ){
-		$ret = $this->import_image_for_post($prim_key.'image',$data['image'],$ID);
+		$ret = self::import_image_for_post($prim_key.'image',$data['image'],$ID);
 		if ( is_wp_error($ret) ) return $ret;
 	}
 	return $ID;
   }
 
-  function import_press($prim_key,$data) {
+  static function import_press($prim_key,$data) {
 
 	$postarr['post_status'] = 'publish';
 	$postarr['post_title'] = $data['topic'];
 	$postarr['post_excerpt'] = $data['short_description'];
 	$postarr['post_content'] = $data['long_description'];
-	$ID = $this->import_post($prim_key,$postarr,'smwimport_category_press');
+	$ID = self::import_post($prim_key,$postarr,'smwimport_category_press');
 	if ( is_wp_error($ID) ) return $ID;
 	if ( isset($data['image']) ){
-		$ret = $this->import_image_for_post($prim_key.'image',$data['image'],$ID);
+		$ret = self::import_image_for_post($prim_key.'image',$data['image'],$ID);
 		if ( is_wp_error($ret) ) return $ret;
 	}
 	return $ID;
   }
 
-  function import_image($prim_key,$data) {
-	return $this->import_image_for_post($prim_key,$data,get_option( 'smwimport_page_images' ));
+  static function import_image($prim_key,$data) {
+	return self::import_image_for_post($prim_key,$data,get_option( 'smwimport_page_images' ));
   }
 
-  function import_image_for_post($prim_key,$data,$post_id) {
+  static function import_image_for_post($prim_key,$data,$post_id) {
 	$remotefile = $data['file'];
 	$title = $data['title'];
 	$localfile = basename($remotefile);
 
-	$posts = $this->get_post($prim_key,'image');
+	$posts = self::get_post($prim_key,'image');
 	if ( empty($posts) ){
 		$contents = file_get_contents($remotefile);
 		if ( $contents == FALSE )
