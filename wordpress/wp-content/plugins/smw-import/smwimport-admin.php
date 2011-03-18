@@ -44,6 +44,9 @@ function smwimport_activate_cron() {
 
 function smwimport_import_all(){
 	smwimport::import_all();
+	// reschedule event
+	wp_clear_scheduled_hook('smwimport_import_all_event');
+	wp_schedule_event(time(), 'hourly','smwimport_import_all_event');
 }
 
 function smwimport_filter_the_content( $post_content ) {
