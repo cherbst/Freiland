@@ -86,9 +86,7 @@ class smwimport
 		'short_description' => 'SMW imported event',
 		'long_description' => '<strong>Newer imported event content</strong>',
 		'genre' => 'rock',
-		'link1' => 'www.test1.de',
-		'link2' => 'www.test2.de',
-		'link3' => 'www.test3.de',
+		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
 		'location' => 'Werkstatt',
 		'house' => 'big house',
 		'room' => '203',
@@ -108,9 +106,7 @@ class smwimport
 		'short_description' => 'SMW new imported event',
 		'long_description' => '<strong>Newer imported event content</strong>',
 		'genre' => 'pop',
-		'link1' => 'www.test1.de',
-		'link2' => 'www.test2.de',
-		'link3' => 'www.test3.de',
+		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
 		'location' => 'Spartakus',
 		'house' => 'small house',
 		'room' => '210',
@@ -212,7 +208,7 @@ class smwimport
 		'house' => $data[$start+9],
 		'type'  => $data[$start+11]));
 
-	error_log(print_r($events,true));
+//	error_log(print_r($events,true));
 	return $data;
   }
 
@@ -237,9 +233,9 @@ class smwimport
 		$event['room'] = $item['raum_(freiland)'];
 		$event['short_description'] = $item['beschreibung_(kurz)'];
 		$event['long_description'] = $item['beschreibung_(lang)'];
+		$event['homepage'] = $item['homepage'];
 		$events[$item['label']] = $event;
 	}
-
 	return $events;
   }
 
@@ -266,8 +262,19 @@ class smwimport
 		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
 		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
 	}
+	$homepage = get_post_meta($post->ID,'homepage',true);
+	if ( $homepage != null ){
+		foreach( $homepage as $key => $link ){
+			$return .= '<tr><td class=homepage"'.$key.'-label">homapage'.$key.'</td>';
+			$return .= '<td class=homepage"'.$key.'-content">';
+			$return .= '<a href="'.$link.'">homepage'.$key.'</a></td></tr>';
+		}
+	}
 	$return .= '</table>';
-	$args = array( 'post_type' => 'attachment', 'numberposts' => -1, 'post_status' => null, 'post_parent' => $post->ID ); 
+	$args = array(  'post_type' => 'attachment', 
+			'numberposts' => -1, 
+			'post_status' => null, 
+			'post_parent' => $post->ID ); 
 	$attachments = get_posts($args);
 	if ($attachments) {
 		foreach ( $attachments as $attachment ) {
@@ -384,7 +391,7 @@ class smwimport
 	if ( is_wp_error($ret) ) return $ret;
 
 	self::test_write_data_as_json($ret);
-	
+
 //	self::test_read_events_from_csv();
 	$testret = self::test_read_events_from_json();
 	if ( is_wp_error($testret) ){
@@ -405,6 +412,10 @@ class smwimport
 	foreach( $ret as $root => $entities )
 		foreach( $entities as $key => $data ){
 			$importer = $root_importer_map[$root];
+			//XXX: quick fix for homepages on xml import data
+			// xml import will probably be discarded anyway
+			if ( isset($data['homepage']) && isset($data['homepage']['homepage']) )
+				$data['homepage'] = $data['homepage']['homepage'];
 			$ret = self::$importer($key,$data);
 			if ( is_wp_error($ret) ){
 				error_log($ret->get_error_message());
@@ -516,6 +527,9 @@ class smwimport
 
   static function import_event_meta($post_ID,$data){
         $ret = 0;
+	if ( isset($data['homepage'] ) ){
+		add_post_meta($post_ID,'homepage',$data['homepage'],true);
+	}
 	$metadata = self::get_event_subcategories();
 	foreach( $metadata as $key ){
 		if ( !isset($data[$key]) ) continue;
