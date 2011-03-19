@@ -189,7 +189,7 @@ class smwimport
 		foreach( $homepage as $key => $link ){
 			$return .= '<tr><td class=homepage"'.$key.'-label">homapage'.$key.'</td>';
 			$return .= '<td class=homepage"'.$key.'-content">';
-			$return .= '<a href="'.$link.'">homepage'.$key.'</a></td></tr>';
+			$return .= '<a href="'.$link.'">'.$link.'</a></td></tr>';
 		}
 	}
 	$return .= '</table>';
