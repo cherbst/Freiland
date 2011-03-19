@@ -324,6 +324,8 @@ class smwimport
 		if ( $cat )
 			$cat_id = $cat->term_id;
 	}else{
+		//XXX: again needed because of a bug in wordpress term cache
+		wp_cache_flush();
 		$cats = get_categories( "hide_empty=0&parent=".$category['category_parent'] );
 		foreach( $cats as $cat ){
 			if ( $cat->slug == $category['category_nicename'] )
@@ -425,7 +427,8 @@ class smwimport
 		}
 
 	// XXX: this is needed due to a bug in wordpress category
-	delete_option('category_children'); 
+//	delete_option('category_children'); 
+	wp_cache_flush();
 	return self::delete_empty_subcategories();
   }
 
