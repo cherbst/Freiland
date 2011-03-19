@@ -233,12 +233,13 @@ class smwimport
 		$event['date_begin'] = $item['anfangsdatum'];
 		$event['age'] = $item['alter'];
 		$event['location'] = $item['ort'];
+		$event['house'] = $item['haus_(freiland)'];
+		$event['room'] = $item['raum_(freiland)'];
 		$event['short_description'] = $item['beschreibung_(kurz)'];
 		$event['long_description'] = $item['beschreibung_(lang)'];
 		$events[$item['label']] = $event;
 	}
 
-	error_log(print_r($events,true));
 	return $events;
   }
 
