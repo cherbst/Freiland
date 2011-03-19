@@ -236,6 +236,7 @@ class smwimport
 		$event['homepage'] = $item['homepage'];
 		$events[$item['label']] = $event;
 	}
+	error_log(print_r($events,true));
 	return $events;
   }
 
@@ -536,12 +537,22 @@ class smwimport
 		add_post_meta($post_ID,$key,$data[$key],true);
 		// get parent category
 		$idObj =  get_category_by_slug($key);
-		$category['cat_name'] = $data[$key];
-		$category['category_nicename'] = $data[$key];
-		$category['category_parent'] = $idObj->term_id;
-		$cat_id = self::create_category($category);
-		if ( is_wp_error($cat_id) ) return $cat_id;
-		$categories[] = $cat_id;
+		if ( is_array($data[$key]) )
+			$subcats = $data[$key];
+		else
+			$subcats = array( $data[$key] );
+		foreach($subcats as $subcat){ 
+			$category['cat_name'] = $subcat;
+			$category['category_nicename'] = $subcat;
+			$category['category_parent'] = $idObj->term_id;
+			$cat_id = self::create_category($category);
+			if ( is_wp_error($cat_id) ){
+				error_log('smwimport: could not create sub category:'.$subcat);
+				error_log($cat_id->get_error_message());
+				continue;
+			}
+			$categories[] = $cat_id;
+		}
 	}
 	return wp_set_post_terms($post_ID,$categories,'category',true);
   }
