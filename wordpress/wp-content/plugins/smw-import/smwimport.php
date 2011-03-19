@@ -21,8 +21,6 @@ require_once(ABSPATH . "wp-admin" . '/includes/bookmark.php');
 require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
 require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
-require_once(dirname(__FILE__) . '/ArrayXML.php');
-require_once(dirname(__FILE__) . '/json.php');
 
 class smwimport
 {
@@ -157,61 +155,6 @@ class smwimport
 	return $data;
   }
 
-  static function test_write_data_as_xml($source_root_map) {
-	$url = get_option( 'smwimport_xml_data_source' );
-	$fh = fopen($url, 'w');
-	if ( $fh == null ) 
-		return new WP_Error('data_source_error', __("Could not open data source:").$url);
-
-	foreach( $source_root_map as $source => $root )
-		foreach( self::$source() as $key => $data)
-			$array[$root][$key] = $data;
-
-	$content = ArrayXml::arrayToXml($array,'smwimportdata');
-	$dom = new DomDocument();
-	$dom->loadXML($content);
-	$dom->formatOutput = true;
-	$formatedXML = $dom->saveXML();
-	fwrite($fh,$formatedXML);
-	fclose($fh);
-
-	return 0;
-  }
-
-  static function test_read_data_from_xml(){
-	$url = get_option( 'smwimport_xml_data_source' );
-	$content = file_get_contents($url);
-	if ($content === false) 
-		return new WP_Error('data_source_error', __("Could not get data source:").$url);
-	$xml = simplexml_load_string($content);
-	return ArrayXML::XMLToArray($xml);
-  }
-
-  static function test_read_events_from_csv(){
-	$url = get_option( 'smwimport_events_data' );
-	$content = file_get_contents($url);
-	if ($content === false) 
-		return new WP_Error('data_source_error', __("Could not get event data source:").$url);
-	$data = str_getcsv($content);
-	$start = 9; // skip garbage
-	$events[] = array( $data[$start] => array(
-		'title' => $data[$start],
-		'genre' => $data[$start+1],
-		'date_begin' => $data[$start+2],
-		'date_end'   => $data[$start+2],
-		'age' => $data[$start+3],
-		'short_description' => $data[$start+4],
-		'long_description' => $data[$start+5],
-		'link1' => $data[$start+6],
-		'location' => $data[$start+7],
-		'room' => $data[$start+8],
-		'house' => $data[$start+9],
-		'type'  => $data[$start+11]));
-
-//	error_log(print_r($events,true));
-	return $data;
-  }
-
   static function test_read_events_from_json(){
 	$url = get_option( 'smwimport_events_data' );
 	$content = file_get_contents($url);
@@ -228,19 +171,6 @@ class smwimport
 		$events[$item['label']] = $item;
 	}
 	return $events;
-  }
-
-  static function test_write_data_as_json($data){
-  	$url = get_option( 'smwimport_xml_data_source' );
-	$url = str_replace('.xml','.json',$url);
-	$fh = fopen($url, 'w');
-	if ( $fh == null ) 
-		return new WP_Error('data_source_error', __("Could not open json file:").$url);
-
-	$json = new json();
-	$json_str = $json->indent(json_encode($data));
-	fwrite($fh,$json_str);
-	fclose($fh);
   }
 
   static function get_event_content($post_content){
@@ -370,22 +300,14 @@ class smwimport
   static function import_all() {
 	self::delete_links();
 
-	$source_root_map = array(
-		get_links => 'links',
-		get_events => 'events',
-		get_news => 'news',
-		get_press => 'press',
-		get_images => 'images'
+	$source_importer_map = array(
+		get_links => import_link,
+		get_events => import_event,
+		get_news => import_news,
+		get_press => import_press,
+		get_images => import_image
 	);
 
-	$ret = self::test_write_data_as_xml($source_root_map);
-	if ( is_wp_error($ret) ) return $ret;
-	$ret = self::test_read_data_from_xml();
-	if ( is_wp_error($ret) ) return $ret;
-
-	self::test_write_data_as_json($ret);
-
-//	self::test_read_events_from_csv();
 	$testret = self::test_read_events_from_json();
 	if ( is_wp_error($testret) ){
 		error_log($testret->get_error_message());
@@ -394,27 +316,16 @@ class smwimport
 			self::import_event($key,$event);
 	}
 
-	$root_importer_map = array(
-		'links' => import_link,
-		'events' => import_event,
-		'news' => import_news,
-		'press' => import_press,
-		'images' => import_image
-	);
-
-	foreach( $ret as $root => $entities )
-		foreach( $entities as $key => $data ){
-			$importer = $root_importer_map[$root];
-			//XXX: quick fix for homepages on xml import data
-			// xml import will probably be discarded anyway
-			if ( isset($data['homepage']) && isset($data['homepage']['homepage']) )
-				$data['homepage'] = $data['homepage']['homepage'];
-			$ret = self::$importer($key,$data);
+	foreach( $source_importer_map as $source => $importer ){
+		$items = self::$source();
+		foreach( $items as $key => $item ){
+			$ret = self::$importer($key,$item);
 			if ( is_wp_error($ret) ){
 				error_log($ret->get_error_message());
 				return $ret;
 			}
 		}
+	}
 
 	// XXX: this is needed due to a bug in wordpress category
 //	delete_option('category_children'); 
