@@ -168,6 +168,7 @@ class smwimport
 
 	foreach( $data['items'] as $item ){
 		$item['title'] = $item['label'];
+		$item['type'] = $item['veranstaltungstyp'];
 		$events[$item['label']] = $item;
 	}
 	return $events;
