@@ -247,6 +247,8 @@ class smwimport
 	}else{
 		//XXX: again needed because of a bug in wordpress term cache
 		wp_cache_flush();
+		//XXX: same bug, needed for wp_cron support
+		delete_option('category_children');
 		$cats = get_categories( "hide_empty=0&parent=".$category['category_parent'] );
 		foreach( $cats as $cat ){
 			if ( $cat->slug == $category['category_nicename'] )
