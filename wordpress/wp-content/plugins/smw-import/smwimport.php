@@ -320,8 +320,7 @@ class smwimport
 		}
 	}
 
-	// XXX: this is needed due to a bug in wordpress category
-//	delete_option('category_children'); 
+	// XXX: this is needed due to a bug in wordpress category cache
 	wp_cache_flush();
 	return self::delete_empty_subcategories();
   }
