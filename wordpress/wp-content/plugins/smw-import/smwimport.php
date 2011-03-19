@@ -309,20 +309,30 @@ class smwimport
 		get_images => import_image
 	);
 
+	$g_ret = true;
 	foreach( $source_importer_map as $source => $importer ){
 		$items = self::$source();
+		if ( is_wp_error($items) ){
+			error_log("smwimport: could not import from:".$source);
+			error_log($items->get_error_message());
+			$g_ret = $items;
+			continue;
+		}
 		foreach( $items as $key => $item ){
 			$ret = self::$importer($key,$item);
 			if ( is_wp_error($ret) ){
+				error_log("smwimport: Importer failed:".$importer);
 				error_log($ret->get_error_message());
-				return $ret;
+				$g_ret = $ret;
 			}
 		}
 	}
 
 	// XXX: this is needed due to a bug in wordpress category cache
 	wp_cache_flush();
-	return self::delete_empty_subcategories();
+	$ret = self::delete_empty_subcategories();
+	if ( is_wp_error($ret) ) $g_ret = $ret;
+	return $g_ret;
   }
 
   static function get_link_category() {
