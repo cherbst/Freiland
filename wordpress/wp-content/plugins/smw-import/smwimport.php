@@ -303,18 +303,11 @@ class smwimport
 	$source_importer_map = array(
 		get_links => import_link,
 		get_events => import_event,
+		test_read_events_from_json => import_event,
 		get_news => import_news,
 		get_press => import_press,
 		get_images => import_image
 	);
-
-	$testret = self::test_read_events_from_json();
-	if ( is_wp_error($testret) ){
-		error_log($testret->get_error_message());
-	}else{
-		foreach( $testret as $key => $event )
-			self::import_event($key,$event);
-	}
 
 	foreach( $source_importer_map as $source => $importer ){
 		$items = self::$source();
