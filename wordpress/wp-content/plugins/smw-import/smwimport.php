@@ -20,7 +20,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require_once(ABSPATH . "wp-admin" . '/includes/bookmark.php');
 require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
 require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admin.php');
 
 class smwimport
 {
@@ -450,6 +449,16 @@ class smwimport
 		get_links
 	);
 
+	// check if ec3 plugin is activated
+	$plugins = get_option('active_plugins');
+	$ec3plugin = 'eventcalendar3.php';
+	foreach( $plugins as $plugin ){
+		if ( strpos($plugin,$ec3plugin) === false ) continue;
+		$admin_php = str_replace($ec3plugin,'admin.php',$plugin);
+		require_once(ABSPATH . "wp-content" . '/plugins/'.$admin_php);
+		break;
+	}
+
 	foreach( $sources as $source ){
 		$items = self::$source();
 		if ( is_wp_error($items) ){
@@ -541,6 +550,8 @@ class smwimport
   }
 
   static function import_post_dates($post_id,$action,$start,$end){
+	// this requires the ec3 plugin
+	if ( !class_exists(ec3_admin) ) return;
 	if ( $start == null )
 		$start = date("Y-m-d H:i");
 	if ( $end == null )
