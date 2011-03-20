@@ -28,7 +28,6 @@ require_once('smwimport.php');
 // Hook for adding admin menus
 add_action('admin_menu', 'smwimport_add_pages');
 add_filter( 'the_content', 'smwimport_filter_the_content' );
-register_activation_hook( __FILE__, array('smwimport','create_categories') );
 register_activation_hook( __FILE__, 'smwimport_activate_cron' );
 register_deactivation_hook(__FILE__, 'smwimport_deactivate_cron');
 add_action('smwimport_import_all_event', 'smwimport_import_all' );
@@ -138,22 +137,12 @@ function smwimport_settings_page() {
     }
 
     // variables for the field and option names 
-    $options['data']['name'] = 'smwimport_xml_data_source';
-    $options['events']['name'] = 'smwimport_category_events';
-    $options['news']['name'] = 'smwimport_category_news';
-    $options['press']['name'] = 'smwimport_category_press';
-    $options['images']['name'] = 'smwimport_page_images';
     $options['events_data']['name'] = 'smwimport_events_data';
     $options['news_data']['name'] = 'smwimport_news_data';
     $options['press_data']['name'] = 'smwimport_press_data';
     $options['links_data']['name'] = 'smwimport_links_data';
     $options['images_data']['name'] = 'smwimport_images_data';
     $hidden_field_name = 'smwimport_submit_hidden';
-
-    $categories_opt = array(
-	'Events' => &$options['events'],
-	'News' => &$options['news'],
-	'Press' => &$options['press']);
 
     $datasources_opt = array(
 	'Events' => &$options['events_data'],
@@ -202,24 +191,12 @@ function smwimport_settings_page() {
 <form name="form1" method="post" action="">
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
-<p><?php _e("SMW data source:", 'menu-smwimport' ); ?> 
-<input type="text" name="<?php echo $options['data']['name']; ?>" value="<?php echo $options['data']['val']; ?>" size="20">
-</p>
-
 <?php foreach ( $datasources_opt as $key => $opt ){ ?>
 <p><?php _e("Data source for $key:", 'menu-smwimport' ); ?> 
 <input type="text" name="<?php echo $opt['name']; ?>" value="<?php echo $opt['val']; ?>" size="80">
 </p>
 <?php } ?>
 
-<?php foreach ( $categories_opt as $key => $opt ){ ?>
-<p><?php _e("Category to import $key:", 'menu-smwimport' ); ?> 
-<?php wp_dropdown_categories(array('hide_empty' => 0, 'name' => $opt['name'], 'orderby' => 'name', 'selected' => $opt['val'], 'hierarchical' => true,'depth' => 1)); ?>
-</p>
-<?php } ?>
-<p><?php _e("Page to import Images:", 'menu-smwimport' ); ?> 
-<?php wp_dropdown_pages(array('hide_empty' => 0, 'name' => $options['images']['name'], 'orderby' => 'name', 'selected' => $options['images']['val'], 'hierarchical' => true)); ?>
-</p>
 <hr />
 
 <p class="submit">
