@@ -8,5 +8,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule . /freiland/index.php [L]
 </IfModule>
-
+RedirectMatch permanent /freiland/$ /freiland/category/events
 # END WordPress
