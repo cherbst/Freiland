@@ -427,13 +427,27 @@ class smwimport
 	return $ret;
   }
 
+  static function load_ec3(){
+	// check if ec3 plugin is activated
+	$plugins = get_option('active_plugins');
+	$ec3plugin = 'eventcalendar3.php';
+	foreach( $plugins as $plugin ){
+		if ( strpos($plugin,$ec3plugin) === false ) continue;
+		$admin_php = str_replace($ec3plugin,'admin.php',$plugin);
+		require_once(ABSPATH . "wp-content" . '/plugins/'.$admin_php);
+		break;
+	}
+  }
 
   static function delete_all_imported(){
 	self::delete_links();
 	$posts = self::get_smwimport_posts();
 
-	foreach($posts as $post)
+	self::load_ec3();
+	foreach($posts as $post){
+		self::delete_post_dates($post->ID);
 		wp_delete_post($post->ID,true);
+	}
 	self::delete_empty_subcategories();
   }
 
@@ -449,15 +463,7 @@ class smwimport
 		get_links
 	);
 
-	// check if ec3 plugin is activated
-	$plugins = get_option('active_plugins');
-	$ec3plugin = 'eventcalendar3.php';
-	foreach( $plugins as $plugin ){
-		if ( strpos($plugin,$ec3plugin) === false ) continue;
-		$admin_php = str_replace($ec3plugin,'admin.php',$plugin);
-		require_once(ABSPATH . "wp-content" . '/plugins/'.$admin_php);
-		break;
-	}
+	self::load_ec3();
 
 	foreach( $sources as $source ){
 		$items = self::$source();
@@ -547,6 +553,23 @@ class smwimport
 	add_post_meta($ID,"_prim_key",$prim_key,true);
 	add_post_meta($ID,"_post_type",'smwimport',true);
 	return $ID;
+  }
+
+  static function delete_post_dates($post_id){
+	// this requires the ec3 plugin
+	if ( !class_exists(ec3_admin) ) return;
+	$sched_entry = array(
+		'action' => 'delete',
+		'start'  => 'dummy',
+		'end'  => 'dummy'
+	);
+
+	$ec3_admin=new ec3_Admin();
+	$schedule = $ec3_admin->get_schedule($post_id);
+	foreach( $schedule as $entry )
+		$sched_entries[$entry->sched_id] = $sched_entry;
+	if ( !empty($sched_entries) )
+		$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
   static function import_post_dates($post_id,$action,$start,$end){
