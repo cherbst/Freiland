@@ -243,46 +243,6 @@ class smwimport
 	return $data['items'];
   }
 
-  static function get_event_content($post_content){
-	global $post;
-	$metadata = self::get_event_subcategories();
-	$return = '<table class="event_meta">';
-	foreach( $metadata as $key ){
-		$meta = get_post_meta($post->ID,$key,true);
-		if ( $meta == null ) continue;
-		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
-		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
-	}
-	$homepage = get_post_meta($post->ID,'homepage',true);
-	if ( $homepage != null ){
-		foreach( $homepage as $key => $link ){
-			$return .= '<tr><td class=homepage"'.$key.'-label">homapage'.$key.'</td>';
-			$return .= '<td class=homepage"'.$key.'-content">';
-			$return .= '<a href="'.$link.'">'.$link.'</a></td></tr>';
-		}
-	}
-	$return .= '</table>';
-	$args = array(  'post_type' => 'attachment', 
-			'numberposts' => -1, 
-			'post_status' => null, 
-			'post_parent' => $post->ID ); 
-	$attachments = get_posts($args);
-	if ($attachments) {
-		foreach ( $attachments as $attachment ) {
-			$return .= wp_get_attachment_image( $attachment->ID );
-		}
-	}else $return .= 'No images in this event:'.$post->ID;
-
-	return $post_content . $return;
-  }
-
-  static function get_news_content($post_content){
-	return 'NEWS:'.$post_content;
-  }
-
-  static function get_press_content($post_content){
-	return 'PRESS:'.$post_content;
-  }
 
   static function create_category($category){
 	$cat_id = -1;

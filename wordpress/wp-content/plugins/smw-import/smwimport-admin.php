@@ -27,7 +27,6 @@ License: GPL2
 require_once('smwimport.php');
 // Hook for adding admin menus
 add_action('admin_menu', 'smwimport_add_pages');
-add_filter( 'the_content', 'smwimport_filter_the_content' );
 register_activation_hook( __FILE__, 'smwimport_activate_cron' );
 register_deactivation_hook(__FILE__, 'smwimport_deactivate_cron');
 add_action('smwimport_import_all_event', 'smwimport_import_all' );
@@ -46,16 +45,6 @@ function smwimport_import_all(){
 	// reschedule event
 	wp_clear_scheduled_hook('smwimport_import_all_event');
 	wp_schedule_event(time(), 'hourly','smwimport_import_all_event');
-}
-
-function smwimport_filter_the_content( $post_content ) {
-	if ( in_category( get_option('smwimport_category_events') ) )
-		return smwimport::get_event_content($post_content);
-	else if ( in_category( get_option('smwimport_category_news') ) )
-		return smwimport::get_news_content($post_content);
-	else if ( in_category( get_option('smwimport_category_press') ) )
-		return smwimport::get_press_content($post_content);
-	return $post_content;
 }
 
 // action function for above hook
