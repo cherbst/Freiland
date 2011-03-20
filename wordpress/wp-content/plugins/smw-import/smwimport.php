@@ -24,37 +24,6 @@ require_once(ABSPATH . "wp-content" . '/plugins/event-calendar-3-for-php-53/admi
 
 class smwimport
 {
-	static $all_categories = array( 
-	  array('cat_name' => 'Events',
-	  'category_description' => 'Events',
-	  'category_nicename' => 'events',
-	  'option_name' => 'smwimport_category_events',
-	  'subcategories' => array( 
-		array('cat_name' => 'Age',
-		'category_nicename' => 'age'),
-		array('cat_name' => 'Location',
-		'category_nicename' => 'location'),
-		array('cat_name' => 'Room',
-		'category_nicename' => 'room'),
-		array('cat_name' => 'House',
-		'category_nicename' => 'house'),
-		array('cat_name' => 'Genre',
-		'category_nicename' => 'genre'),
-		array('cat_name' => 'Type',
-		'category_nicename' => 'type')
-	  	)
-	  ),
-	  array('cat_name' => 'Press',
-	  'category_description' => 'Press',
-	  'category_nicename' => 'press',
-	  'option_name' => 'smwimport_category_press'
-	  ),
-	  array('cat_name' => 'News',
-	  'category_description' => 'News',
-	  'category_nicename' => 'news',
-	  'option_name' => 'smwimport_category_news'
-	  )
-	);
 
   static $smw_mapping = array(
 	'Veranstaltung' => array(
@@ -122,12 +91,26 @@ class smwimport
 	)
   );
 
-  static function get_event_subcategories(){
+  static function get_imported_sub_categories(){
 	$subcats = array();
-	foreach(self::$all_categories as $cat){
-		if ( $cat['category_nicename'] == 'events' ){
-			foreach($cat['subcategories'] as $subcat)
-				$subcats[] = $subcat['category_nicename'];
+	foreach(self::$smw_mapping as $mapping){
+		if ( $mapping['type'] != 'post' ) continue;
+		if ( !isset($mapping['category']) ) continue;
+		// top level category
+		$topcat = get_category_by_slug($mapping['category']);
+		if ( !$topcat ) continue;
+		foreach( $mapping['attributes'] as $attr => $type ){
+			if ( is_array($type) ){
+				if ( ! in_array('category',$type) ) continue;
+			}else if ( $type != 'category' ) continue;
+			// get parent cat
+			$parentcat = self::get_category_by_slug_and_parent($attr,$topcat->term_id);
+			if ( $parentcat == -1 ) continue;
+			// get sub categories
+			$cats = get_categories( "hide_empty=0&parent=".$parentcat );
+			foreach( $cats as $cat ){
+				$subcats[] = (int)$cat->term_id;
+			}
 		}
 	}
 	return $subcats;
@@ -243,11 +226,10 @@ class smwimport
 	return $data['items'];
   }
 
-
-  static function create_category($category){
+  static function get_category_by_slug_and_parent($slug,$parent = null){
 	$cat_id = -1;
-	if ( !isset($category['category_parent']) ){
-		$cat = get_category_by_slug($category['category_nicename']);
+	if ( $parent != null ){
+		$cat = get_category_by_slug($slug);
 		if ( $cat )
 			$cat_id = $cat->term_id;
 	}else{
@@ -255,12 +237,17 @@ class smwimport
 		wp_cache_flush();
 		//XXX: same bug, needed for wp_cron support
 		delete_option('category_children');
-		$cats = get_categories( "hide_empty=0&parent=".$category['category_parent'] );
+		$cats = get_categories( "hide_empty=0&parent=".$parent );
 		foreach( $cats as $cat ){
-			if ( $cat->slug == $category['category_nicename'] )
+			if ( $cat->slug == $slug )
 				$cat_id = (int)$cat->term_id;
 		}
 	}
+	return $cat_id;
+  }
+
+  static function create_category($category){
+	$cat_id = self::get_category_by_slug_and_parent($category['category_nicename'],$category['category_parent']);
 
 	if ( $cat_id == -1 )
 		$cat_id = wp_insert_category($category, true);
@@ -277,21 +264,13 @@ class smwimport
 
   static function delete_empty_subcategories(){
 
-	foreach( self::$all_categories as $category ){
-		if ( !isset( $category['subcategories'] ) )
-			continue;
-		foreach($category['subcategories'] as $subcat ){
-			$parent =  get_category_by_slug($subcat['category_nicename']);
-			$childs = get_categories( "hide_empty=0&parent=$parent->term_id" );
-			foreach( $childs as $child ){
-				// XXX: the following should work, but does not!
-				//if ($child->category_count == 0){
-				$objects = get_objects_in_term($child->term_id,'category');
-				if ( empty($objects) ){
-					error_log('Deleting empty subcategory:'.$child->slug);
-					wp_delete_category( $child->term_id );
-				}
-			}
+	foreach( self::get_imported_sub_categories() as $category ){
+		// XXX: the following should work, but does not!
+		//if ($child->category_count == 0){
+		$objects = get_objects_in_term($category,'category');
+		if ( empty($objects) ){
+			error_log('Deleting empty subcategory:'.$category);
+			wp_delete_category( $category );
 		}
 	}
 	return true;
@@ -487,8 +466,8 @@ class smwimport
 	}
 	// XXX: this is needed due to a bug in wordpress category cache
 	wp_cache_flush();
-//	delete_option('category_children');
-//	$ret = self::delete_empty_subcategories();
+	delete_option('category_children');
+	$ret = self::delete_empty_subcategories();
 	if ( is_wp_error($ret) ) $g_ret = $ret;
 	return $g_ret;
   }
