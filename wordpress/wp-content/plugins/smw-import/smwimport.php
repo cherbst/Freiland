@@ -23,6 +23,15 @@ require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 
 class smwimport
 {
+  /* Supported data sources: 
+	
+    JSON: the JSON file must have at least following attribute:
+        "items" : An array of all items to import
+     Each item must have at least the following attribute:
+        "type" : Name of the SMW category
+     Any other attributes can be defined in the mapping for this 
+     SMW category. Attributes that have no mapping are ignored.
+  */
 
   /* Mapping SMW categories and attributes to wordpress types.
      The mapping must be an array of the form:
