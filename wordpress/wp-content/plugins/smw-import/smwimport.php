@@ -416,7 +416,7 @@ class smwimport
 	
 	// import attachments
 	foreach( $attachments as $attachment ){
-		$ret = self::import_image_for_post($prim_key.$attachment,$data[$attachment],$ID);
+		$ret = self::import_attachment_for_post($prim_key.$attachment,$data[$attachment],$ID);
 		if ( is_wp_error($ret) ){
 			error_log('smwimport: could not import attachment:'.$attachment);
 			$g_ret = $ret;
@@ -468,7 +468,7 @@ class smwimport
 		}
 	}
 
-	return self::import_image_for_post($prim_key,$attachment,$page->ID);
+	return self::import_attachment_for_post($prim_key,$attachment,$page->ID);
   }
 
   /*  imports $data into a wordpress link according to $mapping
@@ -765,7 +765,7 @@ class smwimport
   /*  import an attachment for $post_id
       The attachment is downloaded if it does not exist
   */
-  private static function import_image_for_post($prim_key,$data,$post_id) {
+  private static function import_attachment_for_post($prim_key,$data,$post_id) {
 	$remotefile = $data['file'];
 	$title = $data['title'];
 	$localfile = basename($remotefile);
