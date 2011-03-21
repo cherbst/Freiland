@@ -137,6 +137,8 @@ class smwimport
 	)
   );
 
+  /* returns an array of the ids of all imported subcategories 
+  */
   private static function get_imported_sub_categories(){
 	$subcats = array();
 	foreach(self::$smw_mapping as $mapping){
@@ -258,6 +260,9 @@ class smwimport
 	return $data;
   }
 
+  /*  returns array of all defined data sources together with function to retrieve the data
+      returns: array( 'url' => function ) or array( WP_Error )
+  */
   private static function get_data_sources(){
 	$num_sources = (int)get_option( 'smwimport_num_data_sources' );
 	if ($num_sources == 0) 
@@ -272,6 +277,9 @@ class smwimport
 	return $data_sources;
   }
 
+  /*  returns array of SMW items from datasource or a WP_Error
+      $url: url of data source
+  */
   private static function get_data_from_source($url){
 
 	$ret = true;
@@ -286,6 +294,10 @@ class smwimport
 	return $data['items'];
   }
 
+  /* returns the id of the wordpess category if it exists, otherwise -1
+     $slug: slug of the category
+     $parent: $parent of the category
+  */ 
   private static function get_category_by_slug_and_parent($slug,$parent = null){
 	$cat_id = -1;
 	if ( $parent != null ){
@@ -307,7 +319,9 @@ class smwimport
   }
 
   private static function create_category($category){
-	$cat_id = self::get_category_by_slug_and_parent($category['category_nicename'],$category['category_parent']);
+	$cat_id = self::get_category_by_slug_and_parent(
+		$category['category_nicename'],
+		$category['category_parent']);
 
 	if ( $cat_id == -1 )
 		$cat_id = wp_insert_category($category, true);
@@ -322,6 +336,10 @@ class smwimport
 	return($cat_id);
   }
 
+  /*
+	delete imported subcategories that are no longer used 
+	( have no posts attached )
+  */
   private static function delete_empty_subcategories(){
 
 	foreach( self::get_imported_sub_categories() as $category ){
@@ -336,6 +354,8 @@ class smwimport
 	return true;
   }
 
+  /*  imports $data into a wordpress post according to $mapping
+  */
   private static function import_post_type($mapping,$data){
 	$attribute_mapping = $mapping['attributes'];
 	$attachments = array();
@@ -426,6 +446,8 @@ class smwimport
 	return $g_ret;
   }
 
+  /*  imports $data into a wordpress attachment according to $mapping
+  */
   private static function import_attachment_type($mapping,$data){
 	$prim_key = $data[$mapping['primary_key']];
 	$attribute_mapping = $mapping['attributes'];
@@ -449,6 +471,8 @@ class smwimport
 	return self::import_image_for_post($prim_key,$attachment,$page->ID);
   }
 
+  /*  imports $data into a wordpress link according to $mapping
+  */
   private static function import_link_type($mapping,$data){
 	$attribute_mapping = $mapping['attributes'];
 	foreach( $data as $key => $value ){
@@ -463,7 +487,12 @@ class smwimport
 	return self::import_link($link);
   }
 
+  /*
+	Check for wordpress type of data and call the right import function 
+	returns WP_Error on error or boolean true on success
+  */
   private static function import_data($data){
+	$ret = true;
 	if ( !isset($data['type']) )
 		return new WP_Error('no_type', __("No SMW type set, cannot continue"));
 
@@ -488,6 +517,8 @@ class smwimport
 	return $ret;
   }
 
+  /* load ec3 plugin if it exists
+  */
   private static function load_ec3(){
 	// check if ec3 plugin is activated
 	$plugins = get_option('active_plugins');
@@ -560,6 +591,8 @@ class smwimport
 	return $g_ret;
   }
 
+  /*  return the id of the link category into which links will be imported
+  */
   private static function get_link_category() {
 	$link_categories = get_terms('link_category', 'fields=ids&slug=smwimport&hide_empty=0');
 	if (empty($link_categories)) 
@@ -567,6 +600,8 @@ class smwimport
 	return $link_categories[0];
   }
 
+  /*  deletes all imported links
+  */
   private static function delete_links() {
 	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
@@ -577,6 +612,9 @@ class smwimport
 		wp_delete_link($link->link_id);
   }
 
+  /*  imports $link
+      $link must be an array expected by wp_insert_link
+  */
   private static function import_link($link) {
 	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
@@ -585,6 +623,8 @@ class smwimport
 	return wp_insert_link($link,true);
   }
 
+  /*  returns an array of all imported posts + attachments
+  */
   private static function get_smwimport_posts(){
 	$args = array(
 		'meta_key' => '_post_type',
@@ -598,6 +638,9 @@ class smwimport
 	return array_merge($posts,$attachments);	
   }
 
+  /*  return a post with the specified $prim_key inside $category_id
+      $category_id can be null
+  */
   private static function get_post($prim_key, $category_id = null){
 	if ( $category_id == null ){
 		$type = 'attachment';
@@ -615,6 +658,9 @@ class smwimport
 	return get_posts($args);
   }
 
+  /*  import a post
+      $postarr must be an array expected by wp_insert_post
+  */
   private static function import_post($prim_key,&$postarr, $category_id ) {
 	$postarr['post_category'] = array( $category_id );
 	$posts = self::get_post($prim_key,$category_id);
@@ -628,6 +674,8 @@ class smwimport
 	return $ID;
   }
 
+  /*  deletes all dates attached to $post_id
+  */
   private static function delete_post_dates($post_id){
 	// this requires the ec3 plugin
 	if ( !class_exists(ec3_admin) ) return;
@@ -645,6 +693,8 @@ class smwimport
 		$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
+  /*  creates or updates a date for $post_id
+  */
   private static function import_post_dates($post_id,$action,$start,$end){
 	// this requires the ec3 plugin
 	if ( !class_exists(ec3_admin) ) return;
@@ -671,6 +721,13 @@ class smwimport
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
+  /*  Attaches a post to categories. The categories are created if they do not
+      exist.
+      $post_id: id of the post
+      $data: array with elements of the form:
+	<parent_slug> => <category slug>
+      $top_cat: id of the top category under which all categories will be created
+  */
   private static function import_post_categories($post_ID,$data,$top_cat){
         $ret = 0;
 	foreach( $data as $parent_slug => $cat_slug ){
@@ -705,6 +762,9 @@ class smwimport
 	return wp_set_post_terms($post_ID,$categories,'category',true);
   }
 
+  /*  import an attachment for $post_id
+      The attachment is downloaded if it does not exist
+  */
   private static function import_image_for_post($prim_key,$data,$post_id) {
 	$remotefile = $data['file'];
 	$title = $data['title'];
