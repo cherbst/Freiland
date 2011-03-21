@@ -126,37 +126,38 @@ function smwimport_settings_page() {
     }
 
     // variables for the field and option names 
-    $options['events_data']['name'] = 'smwimport_events_data';
-    $options['news_data']['name'] = 'smwimport_news_data';
-    $options['press_data']['name'] = 'smwimport_press_data';
-    $options['links_data']['name'] = 'smwimport_links_data';
-    $options['images_data']['name'] = 'smwimport_images_data';
     $hidden_field_name = 'smwimport_submit_hidden';
 
-    $datasources_opt = array(
-	'Events' => &$options['events_data'],
-	'News' => &$options['news_data'],
-	'Press' => &$options['press_data'],
-	'Links' => &$options['links_data'],
-	'Images' => &$options['images_data']);
-
+    $num_sources = (int)get_option('smwimport_num_data_sources');
     // Read in existing option value from database
-    foreach ( $options as $key => $opt )
-    	$options[$key]['val'] = get_option( $opt['name'] );
-
+    for ( $source = 0; $source < $num_sources; $source++)
+	$datasources_opt[$source] = get_option('smwimport_data_source'.$source);
 
     // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
         // Read their posted value
 
-        foreach ( $options as $key => $opt )
-    	    $options[$key]['val'] = $_POST[ $opt['name'] ];
+	if ( $_POST['Submit'] ){
+		foreach( $datasources_opt as $key => $opt )
+    		    $datasources_opt[$key] = $_POST[ 'smwimport_data_source'.$key ];
 
-        // Save the posted value in the database
-        foreach ( $options as $key => $opt )
-    	    update_option( $opt['name'], $opt['val'] );
+		// Save the posted value in the database
+		foreach( $datasources_opt as $key => $opt )
+			update_option( 'smwimport_data_source'.$key, $opt );
 
+	}else if ( $_POST['NewSource'] ){
+		// add new data source
+		$num_sources += 1;
+		$datasources_opt[] = '';
+		update_option( 'smwimport_num_data_sources', $num_sources );	
+	}else if ( $_POST['RemoveSource'] ){
+		// remove last data source
+		$num_sources -= 1;
+		unset($datasources_opt[$num_sources]);
+		delete_option('smwimport_data_source'.$num_sources);
+		update_option( 'smwimport_num_data_sources', $num_sources );
+	}
         // Put an settings updated message on the screen
 
 ?>
@@ -181,13 +182,21 @@ function smwimport_settings_page() {
 <input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 
 <?php foreach ( $datasources_opt as $key => $opt ){ ?>
-<p><?php _e("Data source for $key:", 'menu-smwimport' ); ?> 
-<input type="text" name="<?php echo $opt['name']; ?>" value="<?php echo $opt['val']; ?>" size="80">
+<p><?php echo(($key+1).'.'); _e("Data source:", 'menu-smwimport' ); ?> 
+<input type="text" name="smwimport_data_source<?php echo $key; ?>" value="<?php echo $opt; ?>" size="80">
 </p>
 <?php } ?>
 
 <hr />
 
+<p class="submit">
+<input type="submit" name="NewSource" class="button-primary" value="<?php esc_attr_e('Add new data source') ?>" />
+</p>
+<?php if ( $num_sources > 0 ){ ?>
+<p class="submit">
+<input type="submit" name="RemoveSource" class="button-primary" value="<?php esc_attr_e('Remove last data source') ?>" />
+</p>
+<?php } ?>
 <p class="submit">
 <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
 </p>

@@ -211,17 +211,31 @@ class smwimport
 	return $data;
   }
 
-  static function test_read_events_from_json(){
-	$url = get_option( 'smwimport_events_data' );
-	$content = file_get_contents($url);
-	if ($content === false) 
-		return new WP_Error('data_source_error', __("Could not get event data source:").$url);
+  static function get_data_sources(){
+	$num_sources = (int)get_option( 'smwimport_num_data_sources' );
+	if ($num_sources == 0) 
+		return array(new WP_Error('no_data_sources', __("No data sources defined.")));
 
+	$data_sources = array();
+	for( $i = 0; $i< $num_sources; $i++ )
+		$data_sources[get_option( 'smwimport_data_source'.$i )] = get_data_from_source;
+
+	if (empty($data_sources)) 
+		return array(new WP_Error('no_data_sources', __("No data sources defined.")));
+	return $data_sources;
+  }
+
+  static function get_data_from_source($url){
+
+	$ret = true;
+	$content = file_get_contents($url);
+	if ($content === false)
+		return new WP_Error('data_source_error', __("Could not retrieve data source:").$url);
 	$content = str_replace(array("\r", "\r\n", "\n"),' ',$content);
 	$data = json_decode($content,true);
-	if ( !$data )
-		return new WP_Error('data_source_error', __("Could not decode json file:").$url);
 
+	if ( !$data )
+		return new WP_Error('data_source_error', __("Could not decode source into json:").$url);	
 	return $data['items'];
   }
 
@@ -455,21 +469,27 @@ class smwimport
 	self::delete_links();
 
 	$sources = array(
-		test_read_events_from_json,
 		get_events,
 		get_news,
 		get_press,
 		get_images,
 		get_links
 	);
+	
+	$sources = array_merge( $sources, self::get_data_sources());
 
 	self::load_ec3();
-
-	foreach( $sources as $source ){
-		$items = self::$source();
+	$g_ret = true;
+	foreach( $sources as $key => $source ){
+		if ( is_wp_error($source) ){
+			$g_ret = $source;
+			continue;
+		}
+		$items = self::$source($key);
 		if ( is_wp_error($items) ){
 			error_log("smwimport: could not import from:".$source);
-			return $items;
+			$g_ret = $items;
+			continue;
 		}
 		foreach( $items as $item ){
 			$ret = self::import_data($item);
