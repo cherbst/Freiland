@@ -145,23 +145,25 @@ function smwimport_settings_page() {
 		// Save the posted value in the database
 		foreach( $datasources_opt as $key => $opt )
 			update_option( 'smwimport_data_source'.$key, $opt );
-
+		$message = __('settings saved.', 'menu-smwimport' );
 	}else if ( $_POST['NewSource'] ){
 		// add new data source
 		$num_sources += 1;
 		$datasources_opt[] = '';
 		update_option( 'smwimport_num_data_sources', $num_sources );	
+		$message = __('New data source added.', 'menu-smwimport' );
 	}else if ( $_POST['RemoveSource'] ){
 		// remove last data source
 		$num_sources -= 1;
 		unset($datasources_opt[$num_sources]);
 		delete_option('smwimport_data_source'.$num_sources);
 		update_option( 'smwimport_num_data_sources', $num_sources );
+		$message = __('Data source removed.', 'menu-smwimport' );
 	}
         // Put an settings updated message on the screen
 
 ?>
-<div class="updated"><p><strong><?php _e('settings saved.', 'menu-smwimport' ); ?></strong></p></div>
+<div class="updated"><p><strong><?php echo($message);  ?></strong></p></div>
 <?php
 
     }
@@ -191,13 +193,9 @@ function smwimport_settings_page() {
 
 <p class="submit">
 <input type="submit" name="NewSource" class="button-primary" value="<?php esc_attr_e('Add new data source') ?>" />
-</p>
 <?php if ( $num_sources > 0 ){ ?>
-<p class="submit">
 <input type="submit" name="RemoveSource" class="button-primary" value="<?php esc_attr_e('Remove last data source') ?>" />
-</p>
 <?php } ?>
-<p class="submit">
 <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
 </p>
 
