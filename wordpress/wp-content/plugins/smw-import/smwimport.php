@@ -24,6 +24,53 @@ require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 class smwimport
 {
 
+  /* Mapping SMW categories and attributes to wordpress types.
+     The mapping must be an array of the form:
+
+     array( <SMW category> => array(
+	      'type' => <wordpress type>
+	      <any required mappings for the wordpress type>
+	      'attributes' => array(
+	         'SMW attribute' => <attribute mapping>
+	      )
+	    )
+     )
+       
+     Supported wordpress types:
+     "post" : imports element into an wordpress post
+	required mappings:
+	   "category"    : slug of top level category to import into ( must exist )
+	   "primary_key" : attribute which holds the primary key for each item
+        supported attribute mappings:
+	   A single value or an array of the following types are supported:
+	   "category"   : adds post to a subcategory with the name of the attribute value
+		          and a parent category with the name of the attribute
+	   "post_title" : attribute value becomes the post title
+	   "post_excerpt" : attribute value becomes the post excerpt
+	   "post_content" : attribute value becomes the post content
+	   "meta"	  : attribute value becomes a post custom value with the attribute
+			    name as the key
+	   "attachment"   : attribute value becomes an attachment to the post
+	   "calendar_start" : ( requires ec3 plugin ) 
+			 attribute value becomes the start date of this post
+	   "calendar_end" : ( requires ec3 plugin ) 
+			 attribute value becomes the end date of this post
+
+     "attachment" : imports element into a wordpress attachment
+	required mappings:
+	   "page"    : slug of the page that attachments are attached to ( must exist )
+	   "primary_key" : attribute which holds the primary key for each item
+        supported attribute mappings:
+	   "file" : attribute value holds the URL used to download the attachment
+	   "title": attribute value becomes the title of this attachment
+
+     "link" : imports element into a wordpress link
+	required mappings:  none
+        supported attribute mappings:
+	   "link_name':  attribute value will become the link name 
+	   "link_url":   attribute value will become the link url
+	   "link_description":   attribute value will become the link description
+  */
   static $smw_mapping = array(
 	'Veranstaltung' => array(
 		'type' => 'post',
