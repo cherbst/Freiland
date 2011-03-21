@@ -137,7 +137,7 @@ class smwimport
 	)
   );
 
-  static function get_imported_sub_categories(){
+  private static function get_imported_sub_categories(){
 	$subcats = array();
 	foreach(self::$smw_mapping as $mapping){
 		if ( $mapping['type'] != 'post' ) continue;
@@ -162,7 +162,7 @@ class smwimport
 	return $subcats;
   }
 
-  static function get_links(){
+  private static function get_links(){
 	$data = array( array(
 		'type'  => 'Link',
 		'name' => 'SMW Test Link', 
@@ -172,7 +172,7 @@ class smwimport
 	return $data;
   }
 
-  static function get_events(){
+  private static function get_events(){
 	$data = array( 
 	array(
 		'type'  => 'Veranstaltung',
@@ -213,7 +213,7 @@ class smwimport
 	return $data;
   }
 
-  static function get_news(){
+  private static function get_news(){
 	$data = array( array(
 		'type'  => 'News',
 		'label' => 'SMW News',
@@ -228,7 +228,7 @@ class smwimport
 	return $data;
   }
 
-  static function get_press(){
+  private static function get_press(){
 	$data = array( array(
 		'type'  => 'Presse',
 		'label' => 'SMW Press',
@@ -245,7 +245,7 @@ class smwimport
 	return $data;
   }
 
-  static function get_images(){
+  private static function get_images(){
 	$data = array( array(
 		'type'  => 'Bild',
 		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
@@ -258,7 +258,7 @@ class smwimport
 	return $data;
   }
 
-  static function get_data_sources(){
+  private static function get_data_sources(){
 	$num_sources = (int)get_option( 'smwimport_num_data_sources' );
 	if ($num_sources == 0) 
 		return array(new WP_Error('no_data_sources', __("No data sources defined.")));
@@ -272,7 +272,7 @@ class smwimport
 	return $data_sources;
   }
 
-  static function get_data_from_source($url){
+  private static function get_data_from_source($url){
 
 	$ret = true;
 	$content = file_get_contents($url);
@@ -286,7 +286,7 @@ class smwimport
 	return $data['items'];
   }
 
-  static function get_category_by_slug_and_parent($slug,$parent = null){
+  private static function get_category_by_slug_and_parent($slug,$parent = null){
 	$cat_id = -1;
 	if ( $parent != null ){
 		$cat = get_category_by_slug($slug);
@@ -306,7 +306,7 @@ class smwimport
 	return $cat_id;
   }
 
-  static function create_category($category){
+  private static function create_category($category){
 	$cat_id = self::get_category_by_slug_and_parent($category['category_nicename'],$category['category_parent']);
 
 	if ( $cat_id == -1 )
@@ -322,7 +322,7 @@ class smwimport
 	return($cat_id);
   }
 
-  static function delete_empty_subcategories(){
+  private static function delete_empty_subcategories(){
 
 	foreach( self::get_imported_sub_categories() as $category ){
 		// XXX: the following should work, but does not!
@@ -336,7 +336,7 @@ class smwimport
 	return true;
   }
 
-  static function import_post_type($mapping,$data){
+  private static function import_post_type($mapping,$data){
 	$attribute_mapping = $mapping['attributes'];
 	$attachments = array();
 	$calendar = null;
@@ -426,7 +426,7 @@ class smwimport
 	return $g_ret;
   }
 
-  static function import_attachment_type($mapping,$data){
+  private static function import_attachment_type($mapping,$data){
 	$prim_key = $data[$mapping['primary_key']];
 	$attribute_mapping = $mapping['attributes'];
 
@@ -449,7 +449,7 @@ class smwimport
 	return self::import_image_for_post($prim_key,$attachment,$page->ID);
   }
 
-  static function import_link_type($mapping,$data){
+  private static function import_link_type($mapping,$data){
 	$attribute_mapping = $mapping['attributes'];
 	foreach( $data as $key => $value ){
 		switch($attribute_mapping[$key]){
@@ -463,7 +463,7 @@ class smwimport
 	return self::import_link($link);
   }
 
-  static function import_data($data){
+  private static function import_data($data){
 	if ( !isset($data['type']) )
 		return new WP_Error('no_type', __("No SMW type set, cannot continue"));
 
@@ -488,7 +488,7 @@ class smwimport
 	return $ret;
   }
 
-  static function load_ec3(){
+  private static function load_ec3(){
 	// check if ec3 plugin is activated
 	$plugins = get_option('active_plugins');
 	$ec3plugin = 'eventcalendar3.php';
@@ -500,7 +500,10 @@ class smwimport
 	}
   }
 
-  static function delete_all_imported(){
+  /* public function
+     Deletes all imported data ( posts, attachments, links, categories )
+  */
+  public static function delete_all_imported(){
 	self::delete_links();
 	$posts = self::get_smwimport_posts();
 
@@ -512,7 +515,10 @@ class smwimport
 	self::delete_empty_subcategories();
   }
 
-  static function import_all() {
+  /* public function
+     Imports data from all defined data sources
+  */
+  public static function import_all() {
 	self::delete_links();
 
 	$sources = array(
@@ -554,14 +560,14 @@ class smwimport
 	return $g_ret;
   }
 
-  static function get_link_category() {
+  private static function get_link_category() {
 	$link_categories = get_terms('link_category', 'fields=ids&slug=smwimport&hide_empty=0');
 	if (empty($link_categories)) 
 		return new WP_Error('no_link_category', __("Link category 'smwimport' does not exist!"));
 	return $link_categories[0];
   }
 
-  static function delete_links() {
+  private static function delete_links() {
 	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
 		return $cat;
@@ -571,7 +577,7 @@ class smwimport
 		wp_delete_link($link->link_id);
   }
 
-  static function import_link($link) {
+  private static function import_link($link) {
 	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
 		return $cat;
@@ -579,7 +585,7 @@ class smwimport
 	return wp_insert_link($link,true);
   }
 
-  static function get_smwimport_posts(){
+  private static function get_smwimport_posts(){
 	$args = array(
 		'meta_key' => '_post_type',
 		'meta_value' => 'smwimport',
@@ -592,7 +598,7 @@ class smwimport
 	return array_merge($posts,$attachments);	
   }
 
-  static function get_post($prim_key, $category_id = null){
+  private static function get_post($prim_key, $category_id = null){
 	if ( $category_id == null ){
 		$type = 'attachment';
 	}else{
@@ -609,7 +615,7 @@ class smwimport
 	return get_posts($args);
   }
 
-  static function import_post($prim_key,&$postarr, $category_id ) {
+  private static function import_post($prim_key,&$postarr, $category_id ) {
 	$postarr['post_category'] = array( $category_id );
 	$posts = self::get_post($prim_key,$category_id);
 	if ( !empty($posts) )
@@ -622,7 +628,7 @@ class smwimport
 	return $ID;
   }
 
-  static function delete_post_dates($post_id){
+  private static function delete_post_dates($post_id){
 	// this requires the ec3 plugin
 	if ( !class_exists(ec3_admin) ) return;
 	$sched_entry = array(
@@ -639,7 +645,7 @@ class smwimport
 		$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
-  static function import_post_dates($post_id,$action,$start,$end){
+  private static function import_post_dates($post_id,$action,$start,$end){
 	// this requires the ec3 plugin
 	if ( !class_exists(ec3_admin) ) return;
 	if ( $start == null )
@@ -665,7 +671,7 @@ class smwimport
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
   }
 
-  static function import_post_categories($post_ID,$data,$top_cat){
+  private static function import_post_categories($post_ID,$data,$top_cat){
         $ret = 0;
 	foreach( $data as $parent_slug => $cat_slug ){
 		// create parent category
@@ -699,7 +705,7 @@ class smwimport
 	return wp_set_post_terms($post_ID,$categories,'category',true);
   }
 
-  static function import_image_for_post($prim_key,$data,$post_id) {
+  private static function import_image_for_post($prim_key,$data,$post_id) {
 	$remotefile = $data['file'];
 	$title = $data['title'];
 	$localfile = basename($remotefile);
