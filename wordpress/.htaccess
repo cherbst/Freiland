@@ -10,4 +10,4 @@ RewriteRule . /freiland/index.php [L]
 </IfModule>
 
 # END WordPress
-RedirectMatch permanent /freiland/$ /freiland/category/events
+RedirectMatch permanent ^(.*)/freiland/$ $1/freiland/category/events
