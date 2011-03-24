@@ -4,11 +4,11 @@ Plugin Name: Lightbox Gallery
 Plugin URI: http://wpgogo.com/development/lightbox-gallery.html
 Description: Changes to the lightbox view in galleries.
 Author: Hiroaki Miyashita
-Version: 0.6.3
+Version: 0.6.5
 Author URI: http://wpgogo.com/
 */
 
-/*  Copyright 2009 -2010 Hiroaki Miyashita
+/*  Copyright 2009 -2011 Hiroaki Miyashita
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,8 +26,10 @@ Author URI: http://wpgogo.com/
 */
 
 add_action( 'init', 'lightbox_gallery_textdomain' );
-add_action( 'wp_head', 'add_lightbox_gallery_head' );
-add_action( 'wp_print_scripts', 'add_lightbox_gallery_jquery' );
+add_action( 'wp_head', 'lightbox_gallery_wp_head' );
+add_action( 'wp_print_scripts', 'lightbox_gallery_wp_print_scripts' );
+add_action( 'wp_print_scripts', 'lightbox_gallery_print_path_header', 1 );
+add_action( 'wp_footer', 'lightbox_gallery_print_path_footer', 1 );
 add_filter( 'plugin_action_links', 'lightbox_gallery_plugin_action_links', 10, 2 );
 add_action( 'admin_menu', 'lightbox_gallery_admin_menu' );
 add_shortcode( 'gallery', 'lightbox_gallery' );
@@ -42,7 +44,7 @@ function lightbox_gallery_textdomain() {
 	}
 }
 
-function add_lightbox_gallery_head() {
+function lightbox_gallery_wp_head() {
 	global $wp_query;
 	$options = get_option('lightbox_gallery_data');
 	
@@ -97,8 +99,8 @@ function add_lightbox_gallery_head() {
 		endif;
 	}
 }
-	
-function add_lightbox_gallery_jquery() {
+
+function lightbox_gallery_wp_print_scripts() {
 	global $wp_query;
 	$options = get_option('lightbox_gallery_data');
 	
@@ -162,6 +164,38 @@ function add_lightbox_gallery_jquery() {
 		else :
 			wp_enqueue_script( 'lightbox-gallery', '/' . PLUGINDIR . '/' . $plugin_dir . '/lightbox-gallery.js', array('jquery'), '', $in_footer );
 		endif;
+	endif;
+}
+
+function lightbox_gallery_print_path_header() {
+	$options = get_option('lightbox_gallery_data');
+	if ( $options['global_settings']['lightbox_gallery_script_loading_point'] == 'footer' ) return;
+	if ( get_option('home') != get_option('siteurl') ) :
+		echo '<script type="text/javascript">'."\n";
+		echo '// <![CDATA['."\n";
+		if ( $options['global_settings']['lightbox_gallery_loading_type'] == 'highslide' ) :
+			echo 'var graphicsDir = "'.get_option('siteurl').'/wp-content/plugins/lightbox-gallery/graphics/";'."\n";
+		else :
+			echo 'var lightbox_path = "'.get_option('siteurl').'/wp-content/plugins/lightbox-gallery/";'."\n";
+		endif;
+		echo '// ]]>'."\n";
+		echo '</script>'."\n";
+	endif;
+}
+
+function lightbox_gallery_print_path_footer() {
+	$options = get_option('lightbox_gallery_data');
+	if ( $options['global_settings']['lightbox_gallery_script_loading_point'] != 'footer' ) return;
+	if ( get_option('home') != get_option('siteurl') ) :
+		echo '<script type="text/javascript">'."\n";
+		echo '// <![CDATA['."\n";
+		if ( $options['global_settings']['lightbox_gallery_loading_type'] == 'highslide' ) :
+			echo 'var graphicsDir = "'.get_option('siteurl').'/wp-content/plugins/lightbox-gallery/graphics/";'."\n";
+		else :
+			echo 'var lightbox_path = "'.get_option('siteurl').'/wp-content/plugins/lightbox-gallery/";'."\n";
+		endif;
+		echo '// ]]>'."\n";
+		echo '</script>'."\n";
 	endif;
 }
 
@@ -489,9 +523,9 @@ function lightbox_gallery($attr) {
 </'.$icontag.'>';
 			if ( $captiontag && (trim($attachment->post_excerpt) || trim($attachment->post_content) || $metadata) ) {
 				$output .= '<'.$captiontag.' class="gallery-caption" id="caption'.$attachment->ID.'">';
-				if($attachment->post_excerpt) $output .= $attachment->post_excerpt . "<br />\n";
-				if($attachment->post_content) $output .= $attachment->post_content . "<br />\n";
-				if($metadata) $output .= $metadata;
+				if($attachment->post_excerpt) $output .= '<span class="imagecaption">'.$attachment->post_excerpt . "</span><br />\n";
+				if($attachment->post_content) $output .= '<span class="imagedescription">'.$attachment->post_content . "</span><br />\n";
+				if($metadata) $output .= '<span class="imagemeta">'.$metadata.'</span>';
 				$output .= '</'.$captiontag.'>';
 			}
 			$output .= '</'.$itemtag.'>';

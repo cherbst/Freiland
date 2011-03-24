@@ -1,6 +1,8 @@
-// You do not need to change the following path if you installed WordPress into the root directory.
-var lightbox_path = 'http://'+location.hostname+'/wp-content/plugins/lightbox-gallery/';
-if ( typeof hs != "undefined" ) hs.graphicsDir = 'http://'+location.hostname+'/wp-content/plugins/lightbox-gallery/graphics/';
+if ( typeof lightbox_path == "undefined" ) var lightbox_path = 'http://'+location.hostname+'/wp-content/plugins/lightbox-gallery/';
+if ( typeof hs != "undefined" ) {
+	if ( typeof graphicsDir != "undefined" ) hs.graphicsDir = graphicsDir;
+	else  hs.graphicsDir = 'http://'+location.hostname+'/wp-content/plugins/lightbox-gallery/graphics/';
+}
 
 if ( typeof hs == "undefined" ) {
 	jQuery(document).ready(function () {
