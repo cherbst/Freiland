@@ -560,6 +560,7 @@ class smwimport
      Imports data from all defined data sources
   */
   public static function import_all() {
+	global $wp_rewrite;
 	self::delete_links();
 
 	$sources = array(
@@ -596,6 +597,8 @@ class smwimport
 	// XXX: this is needed due to a bug in wordpress category cache
 	wp_cache_flush();
 	delete_option('category_children');
+	// XXX: needed to make permalinks work (not dokumented)
+	$wp_rewrite->flush_rules();
 	$ret = self::delete_empty_subcategories();
 	if ( is_wp_error($ret) ) $g_ret = $ret;
 	return $g_ret;
