@@ -27,11 +27,13 @@
 		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
 	}
 	$homepage = get_post_meta($post_id,'homepage',true);
+	$homepagelabel = get_post_meta($post_id,'homepagelabel',true);
 	if ( $homepage != null ){
 		foreach( $homepage as $key => $link ){
 			$return .= '<tr><td class=homepage"'.$key.'-label">homapage'.$key.'</td>';
 			$return .= '<td class=homepage"'.$key.'-content">';
-			$return .= '<a href="'.$link.'">'.$link.'</a></td></tr>';
+			$label = ( isset($homepagelabel[$key])?$homepagelabel[$key]:$link );
+			$return .= '<a href="'.$link.'">'.$label.'</a></td></tr>';
 		}
 	}
 	$return .= '</table>';
