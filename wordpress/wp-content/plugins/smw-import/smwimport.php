@@ -100,7 +100,8 @@ class smwimport
 			'date_end' => 'calendar_end',
 			'image_small' => 'attachment',
 			'image_big' => 'attachment',
-			'homepage' => 'meta'
+			'homepage' => 'meta',
+			'homepagelabel' => 'meta'
 		)	
 	),
 	'News' => array(
