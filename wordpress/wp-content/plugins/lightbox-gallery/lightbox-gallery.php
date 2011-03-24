@@ -170,7 +170,7 @@ function lightbox_gallery_wp_print_scripts() {
 function lightbox_gallery_print_path_header() {
 	$options = get_option('lightbox_gallery_data');
 	if ( $options['global_settings']['lightbox_gallery_script_loading_point'] == 'footer' ) return;
-	if ( get_option('home') != get_option('siteurl') ) :
+//	if ( get_option('home') != get_option('siteurl') ) :
 		echo '<script type="text/javascript">'."\n";
 		echo '// <![CDATA['."\n";
 		if ( $options['global_settings']['lightbox_gallery_loading_type'] == 'highslide' ) :
@@ -180,13 +180,13 @@ function lightbox_gallery_print_path_header() {
 		endif;
 		echo '// ]]>'."\n";
 		echo '</script>'."\n";
-	endif;
+//	endif;
 }
 
 function lightbox_gallery_print_path_footer() {
 	$options = get_option('lightbox_gallery_data');
 	if ( $options['global_settings']['lightbox_gallery_script_loading_point'] != 'footer' ) return;
-	if ( get_option('home') != get_option('siteurl') ) :
+//	if ( get_option('home') != get_option('siteurl') ) :
 		echo '<script type="text/javascript">'."\n";
 		echo '// <![CDATA['."\n";
 		if ( $options['global_settings']['lightbox_gallery_loading_type'] == 'highslide' ) :
@@ -196,7 +196,7 @@ function lightbox_gallery_print_path_footer() {
 		endif;
 		echo '// ]]>'."\n";
 		echo '</script>'."\n";
-	endif;
+//	endif;
 }
 
 function lightbox_gallery_plugin_action_links($links, $file){
