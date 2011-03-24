@@ -19,10 +19,10 @@
 	$metadata = get_post_custom_keys();
 	foreach( $metadata as $key ){
 		$keyt = trim($key);
-		if ( '_' == $keyt{0} || 'homepage' == $keyt )
+		if ( '_' == $keyt{0} )
 			continue;
 		$meta = get_post_meta($post_id,$key,true);
-		if ( $meta == null ) continue;
+		if ( $meta == null || is_array($meta)) continue;
 		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
 		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
 	}
