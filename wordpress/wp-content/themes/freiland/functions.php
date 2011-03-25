@@ -59,4 +59,21 @@
 	return 'PRESS:';
   }
 
+  /* load ec3 plugin if it exists
+  */
+  function freiland_load_ec3(){
+	// check if ec3 plugin is activated
+	$ret = false;
+	$plugins = get_option('active_plugins');
+	$ec3plugin = 'eventcalendar3.php';
+	foreach( $plugins as $plugin ){
+		if ( strpos($plugin,$ec3plugin) === false ) continue;
+		$admin_php = str_replace($ec3plugin,'admin.php',$plugin);
+		require_once(ABSPATH . "wp-content" . '/plugins/'.$admin_php);
+		$ret = true;
+		break;
+	}
+	return $ret;
+  }
+
 ?>
