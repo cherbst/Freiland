@@ -192,11 +192,11 @@ function smwimport_settings_page() {
 <hr />
 
 <p class="submit">
-<input type="submit" name="NewSource" class="button-primary" value="<?php esc_attr_e('Add new data source') ?>" />
-<?php if ( $num_sources > 0 ){ ?>
-<input type="submit" name="RemoveSource" class="button-primary" value="<?php esc_attr_e('Remove last data source') ?>" />
-<?php } ?>
 <input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
+<input type="submit" name="NewSource" class="button-secondary" value="<?php esc_attr_e('Add new data source') ?>" />
+<?php if ( $num_sources > 0 ){ ?>
+<input type="submit" name="RemoveSource" class="button-secondary" value="<?php esc_attr_e('Remove last data source') ?>" />
+<?php } ?>
 </p>
 
 </form>
