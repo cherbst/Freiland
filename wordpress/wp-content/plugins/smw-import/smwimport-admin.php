@@ -103,9 +103,7 @@ function smwimport_tools_page() {
 
 <p class="submit">
 <input type="submit" name="Import" class="button-primary" value="<?php esc_attr_e('Import from SMW') ?>" />
-</p>
-<p class="submit">
-<input type="submit" name="Delete" class="button-primary" value="<?php esc_attr_e('Delete all imported') ?>" />
+<input type="submit" name="Delete" class="button-secondary" value="<?php esc_attr_e('Delete all imported') ?>" />
 </p>
 
 </form>
