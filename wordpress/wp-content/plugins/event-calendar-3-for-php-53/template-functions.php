@@ -125,7 +125,7 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id)
        AND post_id=id
        AND end>='$begin_date'
        AND start<'$end_date'";
-  if(!$ec3->show_only_events)
+/*  if(!$ec3->show_only_events)
   {
     // We are interested in normal posts, as well as events.
     $sql="( $sql ) UNION
@@ -143,7 +143,7 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id)
          AND post_date<'$end_date'
          AND post_date<NOW()
      )";
-  }
+  }*/
   $sql.=' ORDER BY id, allday DESC, start_date, is_event DESC';
   $calendar_entries = $wpdb->get_results($sql);
 
