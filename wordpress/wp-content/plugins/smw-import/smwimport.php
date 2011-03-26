@@ -109,11 +109,13 @@ class smwimport
 		'category' => 'news',
 		'primary_key' => 'label',
 		'attributes' => array(
-			'label' => 'post_title',
+			'title' => 'post_title',
 			'short_description' => 'post_excerpt',
 			'long_description' => 'post_content',
+			'subtitle' => 'meta',
 			'image' => 'attachment',
-			'link' => 'meta'
+			'homepage' => 'meta',
+			'homepagelabel' => 'meta'
 		)	
 	),
 	'Presse' => array(
@@ -229,9 +231,12 @@ class smwimport
 	$data = array( array(
 		'type'  => 'News',
 		'label' => 'SMW News',
+		'title' => 'SMW News title',
 		'short_description' => 'SMW imported news',
 		'long_description' => '<strong>New imported news content</strong>',
-		'link' => 'www.test1.de',
+		'subtitle' => 'A news subtitle',
+		'homepage' => 'www.test1.de',
+		'homepagelabel' => 'A test link',
 		'image' => array(
 			'file' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
 			'title' => 'News image title')
