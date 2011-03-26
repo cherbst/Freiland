@@ -418,24 +418,18 @@ class smwimport
 
 	// get top level category
 	$cat = get_category_by_slug($mapping['category']);
-	if ( !$cat ){
-		error_log('smwimport: could not find category:'.$mapping['category']);
-		return new WP_Error('category_failed', __("Could not find parent category."));
-	}
+	if ( !$cat )
+		return new WP_Error('category_failed', __("Could not find top level category:").$mapping['category']);
+
 	// create the post
 	$ID = self::import_post($prim_key,$postarr,$cat->term_id);
-	if ( is_wp_error($ID) ){
-		error_log('smwimport: could not import:'.$prim_key);
+	if ( is_wp_error($ID) )
 		return $ID;
-	}
 	
 	// import attachments
 	foreach( $attachments as $attachment ){
 		$ret = self::import_attachment_for_post($prim_key.$attachment,$data[$attachment],$ID);
-		if ( is_wp_error($ret) ){
-			error_log('smwimport: could not import attachment:'.$attachment);
-			$g_ret = $ret;
-		}
+		if ( is_wp_error($ret) ) $g_ret = $ret;
 	}
 
 	// import dates
@@ -453,10 +447,7 @@ class smwimport
 	// create categories
 	if ( $categories != null ){
 		$ret = self::import_post_categories($ID,$categories,$cat->term_id);
-		if ( is_wp_error($ret) ){
-			error_log('smwimport: could not import post categories:'.$prim_key);
-			$g_ret = $ret;
-		}
+		if ( is_wp_error($ret) ) $g_ret = $ret;
 	}
 	return $g_ret;
   }
@@ -469,10 +460,8 @@ class smwimport
 
 	$page = get_page_by_path( $mapping['page'] ); 
 	
-	if ( $page == null ){
-		error_log('smwimport: could not find attachment page:'.$mapping['page']);
+	if ( $page == null )
 		return new WP_Error('no_page', __("could not find attachment page:").$mapping['page']);
-	}
 
 	foreach( $data as $key => $value ){
 		switch($attribute_mapping[$key]){
@@ -518,10 +507,9 @@ class smwimport
 			   'attachment' => import_attachment_type,
 			   'link' => import_link_type);
 
-	if ( !isset( $importer[$mapping['type']]) ){
-		$message = __('smwimport: Undefined wordpress import type:').$mapping['type'];
-		return new WP_Error('undefined_type',$message);
-	}
+	if ( !isset( $importer[$mapping['type']]) )
+		return new WP_Error('undefined_type',__('smwimport: Undefined wordpress import type:').$mapping['type']);
+
 	return self::$importer[$mapping['type']]($mapping,$data);
   }
 
