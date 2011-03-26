@@ -65,7 +65,16 @@ function freiland_filter_the_content( $post_content ) {
   }
 
   function freiland_get_news_content($content){
-	return 'NEWS:'.$content;
+	global $post;
+	$subtitle = get_post_meta($post->ID,'subtitle',true);
+	$homepage = get_post_meta($post->ID,'homepage',true);
+	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
+	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
+
+	$return = '<p>'. $subtitle .'</p>';
+	$return .= $content;
+	$return .= '<p><a href="'.$homepagelabel.'">'.$label.'</a></p>';
+	return $return;
   }
 
   function freiland_get_press_content($content){
