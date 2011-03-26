@@ -13,7 +13,7 @@
  * @subpackage Freiland
  * @since freiland 0.1
  */
-add_filter( 'the_content', 'freiland_filter_the_content' );
+add_filter( 'the_content', 'freiland_filter_the_content',7 );
 function freiland_filter_the_content( $post_content ) {
        if ( in_category( 'events' ) )
                return freiland_get_event_content($post_content);
@@ -38,17 +38,18 @@ function freiland_filter_the_content( $post_content ) {
 		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
 		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
 	}
+	$return .= '</table>';
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	if ( $homepage != null ){
 		foreach( $homepage as $key => $link ){
-			$return .= '<tr><td class=homepage"'.$key.'-label">homapage'.$key.'</td>';
-			$return .= '<td class=homepage"'.$key.'-content">';
-			$label = ( isset($homepagelabel[$key])?$homepagelabel[$key]:$link );
-			$return .= '<a href="'.$link.'">'.$label.'</a></td></tr>';
+			if ( isset($homepagelabel[$key]) )
+				$return .= '<p>'.$homepagelabel[$key].'</p>';
+			$return .= '[embed]'.$link.'[/embed]';
 		}
+		$return .= "\n";
 	}
-	$return .= '</table>';
+
 	$args = array(  'post_type' => 'attachment', 
 			'numberposts' => -1, 
 			'post_status' => null, 
