@@ -507,7 +507,6 @@ class smwimport
 	returns WP_Error on error or boolean true on success
   */
   private static function import_data($data){
-	$ret = true;
 	if ( !isset($data['type']) )
 		return new WP_Error('no_type', __("No SMW type set, cannot continue"));
 
@@ -515,21 +514,15 @@ class smwimport
 		return new WP_Error('no_mapping', __("No mapping defined for:").$data['type']);
 
 	$mapping = self::$smw_mapping[$data['type']];
-	
-	switch($mapping['type']){
-		case "post":
-			$ret = self::import_post_type($mapping,$data);
-			break;
-		case "attachment":
-			$ret = self::import_attachment_type($mapping,$data);
-			break;
-		case "link":
-			$ret = self::import_link_type($mapping,$data);
-			break;
-		default:
-			error_log('smwimport: Undefined wordpress import type:'.$mapping['type']);
+	$importer = array( 'post' => import_post_type,
+			   'attachment' => import_attachment_type,
+			   'link' => import_link_type);
+
+	if ( !isset( $importer[$mapping['type']]) ){
+		$message = __('smwimport: Undefined wordpress import type:').$mapping['type'];
+		return new WP_Error('undefined_type',$message);
 	}
-	return $ret;
+	return self::$importer[$mapping['type']]($mapping,$data);
   }
 
   /* load ec3 plugin if it exists
