@@ -663,8 +663,16 @@ class smwimport
   private static function import_post($prim_key,&$postarr, $category_id ) {
 	$postarr['post_category'] = array( $category_id );
 	$posts = self::get_post($prim_key,$category_id);
-	if ( !empty($posts) )
-		$postarr['ID'] = $posts[0]->ID;
+	if ( !empty($posts) ){
+		$ID = $posts[0]->ID;
+		$postarr['ID'] = $ID;
+		$post = get_post($ID,'ARRAY_A');
+		$post['post_category'] = $postarr['post_category'];
+		$diff = array_diff_assoc($postarr,$post);
+		// the post did not change, so just return the ID
+		if ( empty($diff) )
+			return $ID;
+	}
 
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
@@ -729,6 +737,7 @@ class smwimport
   */
   private static function import_post_categories($post_ID,$data,$top_cat){
         $ret = 0;
+	$categories[] = $top_cat;
 	foreach( $data as $parent_slug => $cat_slug ){
 		// create parent category
 		$parent_id = self::create_category(array(
@@ -758,7 +767,7 @@ class smwimport
 			$categories[] = $cat_id;
 		}
 	}
-	return wp_set_post_terms($post_ID,$categories,'category',true);
+	return wp_set_post_terms($post_ID,$categories,'category');
   }
 
   /*  import an attachment for $post_id
