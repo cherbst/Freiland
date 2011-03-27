@@ -149,6 +149,9 @@ class smwimport
 	)
   );
 
+  // time measure variables
+  static $start_time;
+
   /* returns an array of the ids of all imported subcategories 
   */
   private static function get_imported_sub_categories(){
@@ -547,6 +550,7 @@ class smwimport
   */
   public static function import_all() {
 	global $wp_rewrite;
+	self::$start_time = time();
 	self::delete_links();
 
 	$sources = array(
@@ -587,6 +591,9 @@ class smwimport
 	$wp_rewrite->flush_rules();
 	$ret = self::delete_empty_subcategories();
 	if ( is_wp_error($ret) ) $g_ret = $ret;
+	if ( !is_wp_error($g_ret) ){
+		$g_ret = 'The import took '.(time() - self::$start_time).' seconds.';
+	}
 	return $g_ret;
   }
 
