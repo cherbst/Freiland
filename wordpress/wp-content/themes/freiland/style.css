@@ -20,3 +20,17 @@ div.filter_age{ display : none; }
 div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
 div.filter_room{ display : none; }
+
+#access #submenu ul.menu {
+	clear : left;
+	margin-left: 20px;
+}
+
+#access #submenu a {
+	line-height : 30px;
+}
+
+#access ul li.current-category-ancestor > a,
+#access ul li.current-cat > a {
+	color: #fff;
+}
