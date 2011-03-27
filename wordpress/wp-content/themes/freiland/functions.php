@@ -45,6 +45,7 @@ function freiland_filter_the_content( $post_content ) {
 		foreach( $homepage as $key => $link ){
 			if ( isset($homepagelabel[$key]) )
 				$return .= '<p>'.$homepagelabel[$key].'</p>';
+			else $return .= '</br>';
 			$return .= '[embed]'.$link.'[/embed]';
 		}
 		$return .= "\n";
