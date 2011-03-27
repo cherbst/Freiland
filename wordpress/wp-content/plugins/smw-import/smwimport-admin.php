@@ -74,21 +74,24 @@ function smwimport_tools_page() {
 // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
+	$class = "updated";
 	if ( $_POST['Import'] ){
 		$ret = smwimport::import_all();
 
-		if ( is_wp_error($ret) )
+		if ( is_wp_error($ret) ){
 			$message = $ret->get_error_message();
-		else $message = 'successfully imported.';
+			$class = "error";
+		}else $message = 'Successfully imported.'."</br>".$ret;
 	}else if ( $_POST['Delete'] ){
 		$ret = smwimport::delete_all_imported();
-		if ( is_wp_error($ret) )
+		if ( is_wp_error($ret) ){
 			$message = $ret->get_error_message();
-		else $message = 'successfully deleted all imported posts.';
+			$class = "error";
+		}else $message = 'successfully deleted all imported posts.';
 	}
         // Put the result  message on the screen
 ?>
-<div class="imported"><p><strong><?php _e($message, 'menu-smwimport' ); ?></strong></p></div>
+<div id="message" class="<?php echo $class ?>"><p><strong><?php _e($message, 'menu-smwimport' ); ?></strong></p></div>
 <?php
 
     }
