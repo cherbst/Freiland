@@ -149,8 +149,10 @@ class smwimport
 	)
   );
 
-  // time measure variables
+  // time measure variable
   static $start_time;
+  // post time for creating posts
+  static $posttime;
 
   /* returns an array of the ids of all imported subcategories 
   */
@@ -551,6 +553,7 @@ class smwimport
   public static function import_all() {
 	global $wp_rewrite;
 	self::$start_time = time();
+	self::$posttime = time();
 	self::delete_links();
 
 	$sources = array(
@@ -680,6 +683,10 @@ class smwimport
 		if ( empty($diff) )
 			return $ID;
 	}
+	// make sure each post has a different publish date
+	// otherwise the 'next_post', 'previous_post' queries get confused
+	self::$posttime -= 1;
+	$postarr['post_date'] = date("Y-m-d H:i:s",self::$posttime);
 
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
