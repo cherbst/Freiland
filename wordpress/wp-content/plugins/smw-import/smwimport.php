@@ -709,9 +709,7 @@ class smwimport
 
   /*  creates or updates a date for $post_id
   */
-  private static function import_post_dates($post_id,$action,$start,$end){
-	// this requires the ec3 plugin
-	if ( !class_exists(ec3_admin) ) return;
+  private static function import_ec3_post_dates($post_id,$action,$start,$end){
 	if ( $start == null )
 		$start = date("Y-m-d H:i");
 	if ( $end == null )
@@ -733,6 +731,22 @@ class smwimport
 		$sched_entries = array( $sched_entry );
 	}
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
+  }
+
+  /*  creates or updates a date for $post_id
+  */
+  private static function import_post_dates($post_id,$action,$start,$end){
+	$ret = true;
+	// this requires the ec3 plugin
+	if ( class_exists(ec3_admin) ) 
+		$ret = self::import_ec3_post_dates($post_id,$action,$start,$end);
+
+	// set meta data for the-events-calender
+	add_post_meta($post_id,"_isEvent","yes",true);
+	add_post_meta($post_id,"_EventStartDate",$start,true);
+	$end = ( $end == null?$start:$end );
+	add_post_meta($post_id,"_EventEndDate",$end,true);
+	return $true;
   }
 
   /*  Attaches a post to categories. The categories are created if they do not
