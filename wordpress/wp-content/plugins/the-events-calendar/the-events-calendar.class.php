@@ -7,6 +7,7 @@ if ( !class_exists( 'The_Events_Calendar' ) ) {
 		const VERSION 				= '1.6.5';
 		const EVENTSERROROPT		= '_tec_events_errors';
 		const CATEGORYNAME	 		= 'Events';
+		const CATEGORYSLUG	 		= 'events';
 		const OPTIONNAME 			= 'sp_events_calendar_options';
 		// default formats, they are overridden by WP options or by arguments to date methods
 		const DATEONLYFORMAT 		= 'F j, Y';
@@ -554,7 +555,7 @@ if ( !class_exists( 'The_Events_Calendar' ) ) {
 		}
 		
 		private function updateMapPostMeta() {
-			$eventsCatId = get_cat_ID( The_Events_Calendar::CATEGORYNAME );
+			$eventsCatId = self::eventCategory();
 			$eventPosts = get_posts('numberposts=-1&category='.$eventsCatId);
 			foreach( $eventPosts as $place => $object ) {
 				$keys = get_post_custom_keys($object->ID);
@@ -746,7 +747,11 @@ if ( !class_exists( 'The_Events_Calendar' ) ) {
 	     * @return int|false Category id to use or false is none is set
 	     */
 	    static function eventCategory() {
-			return get_cat_id( The_Events_Calendar::CATEGORYNAME );
+			$id = get_cat_id( The_Events_Calendar::CATEGORYNAME );
+		if ( $id != 0) return $id;
+		$cat = get_category_by_slug( The_Events_Calendar::CATEGORYSLUG );
+		if ( !$cat ) return 0;
+		return $cat->term_id;
 	    }
 		/**
 		 * Flush rewrite rules to support custom links
@@ -784,7 +789,7 @@ if ( !class_exists( 'The_Events_Calendar' ) ) {
 			if( $useRewriteRules = eventsGetOptionValue('useRewriteRules','on') == 'off' ) {
 				return;
 			}
-			$categoryId = get_cat_id( The_Events_Calendar::CATEGORYNAME );
+			$categoryId = self::eventCategory();
 			$eventCategory = get_category( $categoryId );
 			$eventCats = array( $eventCategory );
 			$childCats = get_categories("hide_empty=0&child_of=$categoryId");
@@ -1277,7 +1282,7 @@ if ( !class_exists( 'The_Events_Calendar' ) ) {
 		public function iCalFeed() {
 			$getVal = $_GET['ical'];
 			$catObj = get_category_by_slug( $getVal );
-			$eventsCatId = get_cat_id( The_Events_Calendar::CATEGORYNAME );
+			$eventsCatId = self::eventCategory();
 			if( $catObj && cat_is_ancestor_of( $eventsCatId, $catObj ) ) {
 				$categoryId = $catObj->term_id;
 				$includePosts = '';
