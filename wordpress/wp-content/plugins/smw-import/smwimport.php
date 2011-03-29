@@ -70,7 +70,8 @@ class smwimport
 	   "page"    : slug of the page that attachments are attached to ( must exist )
 	   "primary_key" : attribute which holds the primary key for each item
         supported attribute mappings:
-	   "file" : attribute value holds the URL used to download the attachment
+	   "url" : attribute value holds the URL used to download the attachment
+	   "file" : attribute value holds the filename of the attachment
 	   "title": attribute value becomes the title of this attachment
 
      "link" : imports element into a wordpress link
@@ -136,7 +137,8 @@ class smwimport
 		'primary_key' => 'label',
 		'attributes' => array(
 			'label' => 'title',
-			'file' => 'file'
+			'file' => 'file',
+			'url' => 'url'
 		)	
 	),
 	'Link' => array(
@@ -208,10 +210,10 @@ class smwimport
 		'room' => '203',
 		'age' => '18',
 		'image_big' => array(
-			'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
+			'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
 			'title' => 'Big image title'),
 		'image_small' => array(
-			'file' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
+			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
 			'title' => 'Small image title')
 		),
 	array(
@@ -243,7 +245,7 @@ class smwimport
 		'homepage' => 'www.test1.de',
 		'homepagelabel' => 'A test link',
 		'image' => array(
-			'file' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
+			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
 			'title' => 'News image title')
 		)
 	);
@@ -260,7 +262,7 @@ class smwimport
 		'long_description' => '<strong>New imported press content</strong>',
 		'link' => 'www.test1.de',
 		'image' => array(
-			'file' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
+			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
 			'title' => 'Press image title')
 		)
 	);
@@ -270,11 +272,11 @@ class smwimport
   private static function get_images(){
 	$data = array( array(
 		'type'  => 'Bild',
-		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
+		'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
 		'label' => 'SMW imported image1'),
 		array(
 		'type'  => 'Bild',
-		'file' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
+		'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
 		'label' => 'SMW imported image2')
 	);
 	return $data;
@@ -380,7 +382,8 @@ class smwimport
 	$file = $array[1];
 	$attachment_url = get_option('smwimport_attachment_url');
 	$attach_array = array( 'title' => $file,
-			       'file' => $attachment_url.urlencode($file));
+			       'file' => $file,
+			       'url' => $attachment_url.urlencode($file));
 	return $attach_array;
   }
 
@@ -488,6 +491,7 @@ class smwimport
 	foreach( $data as $key => $value ){
 		switch($attribute_mapping[$key]){
 			case 'title':
+			case 'url':
 			case 'file':
 				$attachment[$attribute_mapping[$key]] = $value;
 				break;
@@ -819,15 +823,15 @@ class smwimport
       The attachment is downloaded if it does not exist
   */
   private static function import_attachment_for_post($prim_key,$data,$post_id) {
-	$remotefile = $data['file'];
+	$remotefile = $data['url'];
 	$title = $data['title'];
-	$localfile = basename($remotefile);
+	$localfile = (isset($data['file'])?$data['file']:basename($remotefile));
 
 	$posts = self::get_post($prim_key);
 	if ( empty($posts) ){
 		$contents = file_get_contents($remotefile);
 		if ( $contents == FALSE )
-			return new WP_Error('download_failed', __("Could not get file:".$remotefile));
+			return new WP_Error('download_failed', __("Could not get file:").$remotefile.'for post:'.$prim_key);
 		$upload = wp_upload_bits($localfile,null,$contents);
 		if ( $upload['error'] != false )
 			return new WP_Error('upload_failed', $upload['error']);
@@ -836,7 +840,7 @@ class smwimport
 		$attachment = array(
 			'post_mime_type' => $wp_filetype['type'],
 			'post_title' => $title,
-			'guid' => $filename,
+			'guid' => $localfile,
 			'post_excerpt' => $title,
 			'post_content' => '',
 			'post_status' => 'inherit'
