@@ -59,6 +59,8 @@ class smwimport
 	   "post_content" : attribute value becomes the post content
 	   "meta"	  : attribute value becomes a post custom value with the attribute
 			    name as the key
+	   "attachmentname" : attribute value becomes the name of all attachments for
+			      this post
 	   "attachment"   : attribute value becomes an attachment to the post
 			    The attribute value must be either an array containing the
 			    keys described in the attachment attribute mapping or a string
@@ -105,6 +107,7 @@ class smwimport
 			'date_end' => 'calendar_end',
 			'image_small' => 'attachment',
 			'image_big' => 'attachment',
+			'image_name' => 'attachmentname',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
 		)	
@@ -416,6 +419,9 @@ class smwimport
 				case 'attachment':
 					$attachments[] = $key;
 					break;
+				case 'attachmentname':
+					$attachmentname = $value;
+					break;
 				case 'calendar_start':
 					$calendar['start'] = $value;
 					break;
@@ -457,6 +463,8 @@ class smwimport
 			error_log('Could not get smw attachment:'.$attachment);
 			continue;
 		}
+		if ( $attachmentname != null )
+			$attach_arr['title'] = $attachmentname;
 		$ret = self::import_attachment_for_post($prim_key.$attachment,$attach_arr,$ID);
 		if ( is_wp_error($ret) ) $g_ret = $ret;
 	}
@@ -859,7 +867,7 @@ class smwimport
 		error_log('Image already exists:'. $posts[0]->ID);
 		// only update title
 		$post = $posts[0];
-		$post->title = $title;
+		$post->post_title = $title;
 		$post->post_excerpt = $title;
 		$attach_id = wp_update_post($post);	
 	}
