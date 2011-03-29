@@ -60,6 +60,10 @@ class smwimport
 	   "meta"	  : attribute value becomes a post custom value with the attribute
 			    name as the key
 	   "attachment"   : attribute value becomes an attachment to the post
+			    The attribute value must be either an array containing the
+			    keys described in the attachment attribute mapping or a string
+			    of the form '<prefix>:filename'. The latter will be downloaded
+			    from the url given in the attachment_url option
 	   "calendar_start" : ( requires ec3 plugin ) 
 			 attribute value becomes the start date of this post
 	   "calendar_end" : ( requires ec3 plugin ) 
