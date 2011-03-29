@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 require_once(ABSPATH . "wp-admin" . '/includes/bookmark.php');
 require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
+// for the function wp_generate_attachment_metadata()
 require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 
 class smwimport
@@ -858,21 +859,27 @@ class smwimport
 			'post_status' => 'inherit'
 		);
 		$attach_id = wp_insert_attachment( $attachment, $filename, $post_id );
-		// you must first include the image.php file
-		// for the function wp_generate_attachment_metadata() to work
 		$attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
 		wp_update_attachment_metadata( $attach_id,  $attach_data );
+		add_post_meta($attach_id,"_prim_key",$prim_key,true);
+		add_post_meta($attach_id,"_post_type",'smwimport',true);
 	}else{
-		//XXX: update the image? then we need a hash or something
-		error_log('Image already exists:'. $posts[0]->ID);
-		// only update title
 		$post = $posts[0];
-		$post->post_title = $title;
-		$post->post_excerpt = $title;
-		$attach_id = wp_update_post($post);	
+		if ( $post->guid != $localfile ){
+			error_log('Attachment changed:'. $post->ID);
+			// filename changed, delete this attachment and create a new one
+			wp_delete_post($post->ID,true);
+			$attach_id = self::import_attachment_for_post($prim_key,$data,$post_id);
+		}else{
+			//XXX: update the attachment? then we need a hash or something
+			error_log('Attachment already exists:'. $post->ID);
+			// only update title
+			$post->post_title = $title;
+			$post->post_excerpt = $title;
+			$attach_id = wp_update_post($post);
+		}
 	}
-	add_post_meta($attach_id,"_prim_key",$prim_key,true);
-	add_post_meta($attach_id,"_post_type",'smwimport',true);
+	return $attach_id;
   }
 
 }
