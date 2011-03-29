@@ -374,6 +374,16 @@ class smwimport
 	return true;
   }
 
+  private static function convert_smw_attachment_to_array($attachment){
+	$array = explode(':',$attachment);
+	if ( !isset($array[1]) ) return false;
+	$file = $array[1];
+	$attachment_url = get_option('smwimport_attachment_url');
+	$attach_array = array( 'title' => $file,
+			       'file' => $attachment_url.urlencode($file));
+	return $attach_array;
+  }
+
   /*  imports $data into a wordpress post according to $mapping
   */
   private static function import_post_type($mapping,$data){
@@ -433,7 +443,14 @@ class smwimport
 	
 	// import attachments
 	foreach( $attachments as $attachment ){
-		$ret = self::import_attachment_for_post($prim_key.$attachment,$data[$attachment],$ID);
+		$attach_arr = $data[$attachment];
+		if ( !is_array($attach_arr) )
+			$attach_arr = self::convert_smw_attachment_to_array($attach_arr);
+		if ( $attach_arr === false ){
+			error_log('Could not get smw attachment:'.$attachment);
+			continue;
+		}
+		$ret = self::import_attachment_for_post($prim_key.$attachment,$attach_arr,$ID);
 		if ( is_wp_error($ret) ) $g_ret = $ret;
 	}
 
