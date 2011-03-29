@@ -130,6 +130,7 @@ function smwimport_settings_page() {
     $hidden_field_name = 'smwimport_submit_hidden';
 
     $num_sources = (int)get_option('smwimport_num_data_sources');
+    $attachment_url = get_option('smwimport_attachment_url');
     // Read in existing option value from database
     for ( $source = 0; $source < $num_sources; $source++)
 	$datasources_opt[$source] = get_option('smwimport_data_source'.$source);
@@ -143,9 +144,12 @@ function smwimport_settings_page() {
 		foreach( $datasources_opt as $key => $opt )
     		    $datasources_opt[$key] = $_POST[ 'smwimport_data_source'.$key ];
 
+		$attachment_url = $_POST['smwimport_attachment_url'];
 		// Save the posted value in the database
 		foreach( $datasources_opt as $key => $opt )
 			update_option( 'smwimport_data_source'.$key, $opt );
+
+		update_option( 'smwimport_attachment_url', $attachment_url );
 		$message = __('settings saved.', 'menu-smwimport' );
 	}else if ( $_POST['NewSource'] ){
 		// add new data source
@@ -189,6 +193,9 @@ function smwimport_settings_page() {
 <input type="text" name="smwimport_data_source<?php echo $key; ?>" value="<?php echo $opt; ?>" size="80">
 </p>
 <?php } ?>
+<p><?php _e("Url to download attachments:", 'menu-smwimport' ); ?> 
+<input type="text" name="smwimport_attachment_url" value="<?php echo $attachment_url; ?>" size="80">
+</p>
 
 <hr />
 
