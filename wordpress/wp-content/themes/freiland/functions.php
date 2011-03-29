@@ -27,7 +27,20 @@ function freiland_filter_the_content( $post_content ) {
 
   function freiland_get_event_content($content){
 	global $post;
-	$return = '<table class="event_meta">';
+	$args = array(  'post_type' => 'attachment', 
+			'numberposts' => -1, 
+			'post_status' => null, 
+			'post_parent' => $post->ID ); 
+	$attachments = get_posts($args);
+	if ($attachments) {
+		foreach ( $attachments as $attachment ) {
+			$return .= wp_get_attachment_image( $attachment->ID,
+				'thumbnail',false,array('class' => 'alignleft' ) );
+		}
+	}else $return .= 'No images in this event:'.$post->ID;
+	$return .= $content ;
+
+	$return .= '<table class="event_meta">';
 	$metadata = get_post_custom_keys();
 	foreach( $metadata as $key ){
 		$keyt = trim($key);
@@ -50,19 +63,7 @@ function freiland_filter_the_content( $post_content ) {
 		}
 		$return .= "\n";
 	}
-
-	$args = array(  'post_type' => 'attachment', 
-			'numberposts' => -1, 
-			'post_status' => null, 
-			'post_parent' => $post->ID ); 
-	$attachments = get_posts($args);
-	if ($attachments) {
-		foreach ( $attachments as $attachment ) {
-			$return .= wp_get_attachment_image( $attachment->ID );
-		}
-	}else $return .= 'No images in this event:'.$post->ID;
-
-	return $content . $return;
+	return $return;
   }
 
   function freiland_get_news_content($content){
