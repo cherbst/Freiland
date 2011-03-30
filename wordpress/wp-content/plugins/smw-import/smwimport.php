@@ -348,6 +348,8 @@ class smwimport
 	return $cat_id;
   }
 
+  /* 	create a category if it does not exist 
+  */
   private static function create_category($category){
 	$cat_id = self::get_category_by_slug_and_parent(
 		$category['category_nicename'],
@@ -366,8 +368,7 @@ class smwimport
 	return($cat_id);
   }
 
-  /*
-	delete imported subcategories that are no longer used 
+  /* 	delete imported subcategories that are no longer used 
 	( have no posts attached )
   */
   private static function delete_empty_subcategories(){
@@ -384,6 +385,10 @@ class smwimport
 	return true;
   }
 
+  /*  converts an SMW file attribute value of the form
+      '<prefix>:filename' into an array which can be used by
+      self::import_attachment_for_post
+  */
   private static function convert_smw_attachment_to_array($attachment){
 	$array = explode(':',$attachment);
 	if ( !isset($array[1]) ) return false;
