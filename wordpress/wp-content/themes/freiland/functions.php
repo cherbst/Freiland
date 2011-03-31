@@ -155,4 +155,18 @@ function freiland_subcategory_dropdown($cat_id){
 		query_posts($args);
 	}
   }
+
+  function freiland_location_submenu(){
+	if(!is_single()){
+		if ( in_category( 'events' ) ){ ?>
+			<div id="submenu" class="menu-header">
+				<ul class="menu"><?php
+					$cat = get_category_by_slug('location');
+					if ( $cat != null )
+						wp_list_categories ('child_of='.$cat->term_id.'&title_li=');
+				?></ul>
+			</div>
+		<?php }
+	}
+  }
 ?>

@@ -82,20 +82,8 @@
 			  <?php /*  Allow screen readers / text browsers to skip the navigation menu and get right to the good stuff */ ?>
 				<div class="skip-link screen-reader-text"><a href="#content" title="<?php esc_attr_e( 'Skip to content', 'twentyten' ); ?>"><?php _e( 'Skip to content', 'twentyten' ); ?></a></div>
 				<?php /* Our navigation menu.  If one isn't filled out, wp_nav_menu falls back to wp_page_menu.  The menu assiged to the primary position is the one used.  If none is assigned, the menu with the lowest ID is used.  */ ?>
-				<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) ); ?>
-				<?php  if(!is_single()){
-       						if ( in_category( 'events' ) ){ ?>
-							<div id="submenu" class="menu-header">
-								<ul class="menu"><?php
-							$cat = get_category_by_slug('location');
-							if ( $cat != null )
-								wp_list_categories ('child_of='.$cat->term_id.'&title_li=');
-								?></ul>
-							</div>
-<?php
-						}
-					}
-				?>
+				<?php wp_nav_menu( array( 'container_class' => 'menu-header', 'theme_location' => 'primary' ) ); 
+				      freiland_location_submenu(); ?>
 			</div><!-- #access -->
 		</div><!-- #masthead -->
 	</div><!-- #header -->
