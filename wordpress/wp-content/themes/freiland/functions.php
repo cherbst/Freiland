@@ -145,4 +145,14 @@ function freiland_subcategory_dropdown($cat_id){
 	</form>
 <?php 
   }
+
+  function freiland_query_only_events(){
+	if ( freiland_load_ec3() ){
+		// if ec3 is installed we only show posts from its event category
+		global $ec3;
+		global $wp_query;
+		$args = array_merge( $wp_query->query, array('category__and' => array( $ec3->event_category ) ));
+		query_posts($args);
+	}
+  }
 ?>
