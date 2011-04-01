@@ -92,6 +92,18 @@ class smwimport
 	   "link_name':  attribute value will become the link name 
 	   "link_url":   attribute value will become the link url
 	   "link_description":   attribute value will become the link description
+
+     "gallery" : creates a post and attachments for this post
+	required mappings:
+	   "primary_key" : attribute which holds the primary key for each item
+	   "category"    : slug of top level category to import into ( must exist )
+        supported attribute mappings:
+	   "name':  attribute value will become the title of the gallery 
+	   "description":   attribute value will become the description of the gallery
+	   "featured_image":   attribute value holds the filename of the featured image 
+			       for the gallery
+	   "gallery_folder":   attribute value is a folder which contains all images for
+			       this gallery
   */
   static $smw_mapping = array(
 	'Veranstaltung' => array(
@@ -163,6 +175,16 @@ class smwimport
 			'website' => 'link_url',
 			'short_description' => 'link_description',
 		)	
+	),
+	'Gallery' => array(
+		'type' => 'gallery',
+		'primary_key' => 'name',
+		'category' => 'images',
+		'attributes' => array(
+			'name' => 'name',
+			'description' => 'description',
+			'gallery_folder' => 'gallery_folder',
+		)
 	)
   );
 
@@ -294,6 +316,21 @@ class smwimport
 		'type'  => 'Bild',
 		'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
 		'label' => 'SMW imported image2')
+	);
+	return $data;
+  }
+
+  private static function get_galleries(){
+	$data = array( array(
+		'type'  => 'Gallery',
+		'name' => 'Test gallery1',
+		'description' => 'An imported test gallery',
+		'gallery_folder' => '/home/chris/Bilder/Coanghai/'),
+		array(
+		'type'  => 'Gallery',
+		'name' => 'Test gallery2',
+		'description' => 'Another imported test gallery',
+		'gallery_folder' => '/home/chris/Bilder/Coanghai/')
 	);
 	return $data;
   }
@@ -464,7 +501,6 @@ class smwimport
 		}
 	}
 	$prim_key = $data[$mapping['primary_key']];
-	$postarr['post_status'] = 'publish';
 
 	// get top level category
 	$cat = get_category_by_slug($mapping['category']);
@@ -561,6 +597,60 @@ class smwimport
 	return self::import_attachment_for_post($prim_key,$attachment,$page->ID);
   }
 
+  /*  creates a wordpress post together with attachments
+      for all files contained in a public directory
+  */
+  private static function import_gallery_type($mapping,$data){
+	$prim_key = $data[$mapping['primary_key']];
+	$attribute_mapping = $mapping['attributes'];
+
+	// get top level category
+	$cat = get_category_by_slug($mapping['category']);
+	if ( !$cat )
+		return new WP_Error('category_failed', __("Could not find top level category:").$mapping['category']);
+
+	foreach( $data as $key => $value ){
+		switch($attribute_mapping[$key]){
+			case 'description':
+				$postarr['post_excerpt'] = $value;
+				$postarr['post_content'] = $value;
+				break;
+			case 'name':
+				$postarr['post_title'] = $value;
+				break;
+			case 'gallery_folder':
+				$gallery_folder = $value;
+				break;
+		}
+	}
+
+	$postarr['post_content'] .= '[gallery]';
+
+	$uploads = wp_upload_dir();
+	if (!is_dir($gallery_folder))
+		return new WP_Error('no_directory', __("The given gallery folder is not a directory:").$gallery_folder);
+	if (!($dh = opendir($gallery_folder)))
+		return new WP_Error('open_error', __("Could not open the given gallery folder:").$gallery_folder);
+
+	$ID = self::import_post($prim_key,&$postarr,$cat->term_id);
+	if ( is_wp_error($ID) ) return $ID;
+
+	error_log("Importing gallery folder:".$gallery_folder);
+	while (($file = readdir($dh)) !== false) {
+		if ( filetype($gallery_folder . $file) != 'file' )
+			continue;
+		$data['url'] = $uploads['path'] .'/' . $file;
+		$data['title'] = $file;
+		// create a symlink in the upload folder
+		symlink( $gallery_folder . $file, $data['url'] );
+
+		self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
+	}
+	closedir($dh);
+
+	return $ID;
+  }
+
   /*  imports $data into a wordpress link according to $mapping
   */
   private static function import_link_type($mapping,$data){
@@ -594,7 +684,8 @@ class smwimport
 	$mapping = self::$smw_mapping[$data['type']];
 	$importer = array( 'post' => import_post_type,
 			   'attachment' => import_attachment_type,
-			   'link' => import_link_type);
+			   'link' => import_link_type,
+			   'gallery' => import_gallery_type);
 
 	if ( !isset( $importer[$mapping['type']]) )
 		return new WP_Error('undefined_type',__('smwimport: Undefined wordpress import type:').$mapping['type']);
@@ -646,7 +737,8 @@ class smwimport
 		get_news,
 		get_press,
 		get_images,
-		get_links
+		get_links,
+		get_galleries
 	);
 	
 	$sources = array_merge( $sources, self::get_data_sources());
@@ -745,7 +837,7 @@ class smwimport
       $category_id can be null
   */
   private static function get_post($prim_key, $category_id = null){
-	if ( $category_id == null ){
+	if ( $category_id === null ){
 		$type = 'attachment';
 	}else{
 		$type = 'post';
@@ -766,6 +858,7 @@ class smwimport
   */
   private static function import_post($prim_key,&$postarr, $category_id ) {
 	$postarr['post_category'] = array( $category_id );
+	$postarr['post_status'] = 'publish';
 	$posts = self::get_post($prim_key,$category_id);
 	if ( !empty($posts) ){
 		$ID = $posts[0]->ID;
@@ -894,22 +987,25 @@ class smwimport
   }
 
   /*  import an attachment for $post_id
-      The attachment is downloaded if it does not exist
+      The attachment is downloaded if $download is true and if it does not exist
   */
-  private static function import_attachment_for_post($prim_key,$data,$post_id) {
+  private static function import_attachment_for_post($prim_key,$data,$post_id,$download = true) {
 	$remotefile = $data['url'];
 	$title = $data['title'];
 	$localfile = (isset($data['file'])?$data['file']:basename($remotefile));
 
 	$posts = self::get_post($prim_key);
 	if ( empty($posts) ){
-		$contents = smwaccess::get_content($remotefile);
-		if ( $contents == FALSE )
-			return new WP_Error('download_failed', __("Could not get file:").$remotefile.'for post:'.$prim_key);
-		$upload = wp_upload_bits($localfile,null,$contents);
-		if ( $upload['error'] != false )
-			return new WP_Error('upload_failed', $upload['error']);
-		$filename = $upload['file'];
+		if ( $download ){
+			$contents = smwaccess::get_content($remotefile);
+			if ( $contents == FALSE )
+				return new WP_Error('download_failed', __("Could not get file:").$remotefile.'for post:'.$prim_key);
+			$upload = wp_upload_bits($localfile,null,$contents);
+			if ( $upload['error'] != false )
+				return new WP_Error('upload_failed', $upload['error']);
+			$filename = $upload['file'];
+		}else $filename = $remotefile;
+
 		$wp_filetype = wp_check_filetype(basename($filename), null );
 		$attachment = array(
 			'post_mime_type' => $wp_filetype['type'],
