@@ -621,6 +621,9 @@ class smwimport
 			case 'gallery_folder':
 				$gallery_folder = $value;
 				break;
+			case 'featured_image':
+				$featured_image = $value;
+				break;
 		}
 	}
 
@@ -639,12 +642,16 @@ class smwimport
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
 			continue;
+		if ( $featured_image == null )
+			$featured_image = $file;
 		$data['url'] = $uploads['path'] .'/' . $file;
 		$data['title'] = $file;
 		// create a symlink in the upload folder
 		symlink( $gallery_folder . $file, $data['url'] );
 
-		self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
+		$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
+		if ( $file == $featured_image )
+			update_post_meta( $ID, '_thumbnail_id', $attach_id );
 	}
 	closedir($dh);
 
