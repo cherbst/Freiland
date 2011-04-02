@@ -638,6 +638,9 @@ class smwimport
 	$ID = self::import_post($prim_key,&$postarr,$cat->term_id);
 	if ( is_wp_error($ID) ) return $ID;
 
+	// set gallery format
+	set_post_format($ID,'gallery');
+
 	error_log("Importing gallery folder:".$gallery_folder);
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
