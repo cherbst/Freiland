@@ -1,2 +1,6 @@
 Requirements for authentication support:
  php5-curl
+Required php modules for gallery upload:
+  - php5-gd
+Max execution time must be set to a high value because
+image resizing takes a long time
