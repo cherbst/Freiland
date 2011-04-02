@@ -641,6 +641,8 @@ class smwimport
 	// set gallery format
 	set_post_format($ID,'gallery');
 
+	$attachments = get_children( array( 'post_parent' => $ID, 'post_type' => 'attachment', 'numberposts' => 999 ) );
+
 	error_log("Importing gallery folder:".$gallery_folder);
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
@@ -655,9 +657,13 @@ class smwimport
 		$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
 		if ( $file == $featured_image )
 			update_post_meta( $ID, '_thumbnail_id', $attach_id );
+		unset($attachments[$attach_id]);
 	}
 	closedir($dh);
 
+	// delete all attachments that have no image in folder
+	foreach( array_keys($attachments) as $attach_id )
+		wp_delete_post($attach_id,true);
 	return $ID;
   }
 
