@@ -650,7 +650,7 @@ class smwimport
 		$data['url'] = $uploads['path'] .'/' . $file;
 		$data['title'] = $file;
 		// create a symlink in the upload folder
-		symlink( $gallery_folder . $file, $data['url'] );
+		@symlink( $gallery_folder . $file, $data['url'] );
 
 		$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
 		if ( $file == $featured_image )
