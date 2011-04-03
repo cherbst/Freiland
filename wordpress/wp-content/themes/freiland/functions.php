@@ -34,7 +34,7 @@ function freiland_filter_the_content( $post_content ) {
 	$attachments = get_posts($args);
 	if ($attachments) {
 		foreach ( $attachments as $attachment ) {
-			$return .= '<a href="'.get_attachment_link($attachment->ID).'">';
+			$return .= '<a rel="lightbox" href="'.wp_get_attachment_url($attachment->ID).'">';
 			$return .= wp_get_attachment_image( $attachment->ID,
 				'thumbnail',false,array('class' => 'alignleft' ) );
 			$return .= '</a>';
