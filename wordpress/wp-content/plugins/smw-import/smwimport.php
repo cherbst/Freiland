@@ -866,7 +866,8 @@ class smwimport
 		'meta_key' => '_prim_key',
 		'meta_value' => $prim_key
 	);
-	return get_posts($args);
+	$posts = get_posts($args);
+	return $posts[0];
   }
 
   /*  import a post
@@ -875,9 +876,9 @@ class smwimport
   private static function import_post($prim_key,&$postarr, $category_id ) {
 	$postarr['post_category'] = array( $category_id );
 	$postarr['post_status'] = 'publish';
-	$posts = self::get_post($prim_key,$category_id);
-	if ( !empty($posts) ){
-		$ID = $posts[0]->ID;
+	$post = self::get_post($prim_key,$category_id);
+	if ( $post != null ){
+		$ID = $post->ID;
 		$postarr['ID'] = $ID;
 		$post = get_post($ID,'ARRAY_A');
 		$post['post_category'] = $postarr['post_category'];
@@ -1010,8 +1011,8 @@ class smwimport
 	$title = $data['title'];
 	$localfile = (isset($data['file'])?$data['file']:basename($remotefile));
 
-	$posts = self::get_post($prim_key);
-	if ( empty($posts) ){
+	$post = self::get_post($prim_key);
+	if ( $post == null ){
 		if ( $download ){
 			$contents = smwaccess::get_content($remotefile);
 			if ( $contents == FALSE )
@@ -1037,7 +1038,6 @@ class smwimport
 		add_post_meta($attach_id,"_prim_key",$prim_key,true);
 		add_post_meta($attach_id,"_post_type",'smwimport',true);
 	}else{
-		$post = $posts[0];
 		if ( $post->guid != $localfile ){
 			error_log('Attachment changed:'. $post->ID);
 			// filename changed, delete this attachment and create a new one
