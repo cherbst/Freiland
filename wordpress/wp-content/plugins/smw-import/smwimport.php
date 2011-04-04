@@ -629,7 +629,6 @@ class smwimport
 
 	$postarr['post_content'] .= '[gallery]';
 
-	$uploads = wp_upload_dir();
 	if (!is_dir($gallery_folder))
 		return new WP_Error('no_directory', __("The given gallery folder is not a directory:").$gallery_folder);
 	if (!($dh = opendir($gallery_folder)))
@@ -643,16 +642,31 @@ class smwimport
 
 	$attachments = get_children( array( 'post_parent' => $ID, 'post_type' => 'attachment', 'numberposts' => 999 ) );
 
+	$uploads = wp_upload_dir();
 	error_log("Importing gallery folder:".$gallery_folder);
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
 			continue;
 		if ( $featured_image == null )
 			$featured_image = $file;
+
 		$data['url'] = $uploads['path'] .'/' . $file;
 		$data['title'] = $file;
-		// create a symlink in the upload folder
-		@symlink( $gallery_folder . $file, $data['url'] );
+
+		$attachment = self::get_post($prim_key.$file);
+		if ( $attachment == null ){
+			// attachment is new
+			$cnt = 1;
+			while ( file_exists($data['url']) ){
+				// file already exists, append running number
+				$info = pathinfo($data['url']);
+				$data['url'] = $info['dirname'].'/'.$info['filename'].$cnt.'.'.$info['extension'];
+				error_log('New name:'.$data['url']);
+				$cnt++;
+			}
+			// create a symlink in the upload folder
+			symlink( $gallery_folder . $file, $data['url'] );
+		}
 
 		$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
 		if ( $file == $featured_image )
