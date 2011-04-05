@@ -135,6 +135,10 @@ function smwimport_settings_page() {
     for ( $source = 0; $source < $num_sources; $source++)
 	$datasources_opt[$source] = get_option('smwimport_data_source'.$source);
 
+    $login_url = get_option('smwimport_login_url');
+    $username = get_option('smwimport_username');
+    $password = get_option('smwimport_password');
+
     // See if the user has posted us some information
     // If they did, this hidden field will be set to 'Y'
     if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
@@ -145,11 +149,17 @@ function smwimport_settings_page() {
     		    $datasources_opt[$key] = $_POST[ 'smwimport_data_source'.$key ];
 
 		$attachment_url = $_POST['smwimport_attachment_url'];
+		$login_url = $_POST['smwimport_login_url'];
+		$username = $_POST['smwimport_username'];
+		$password = $_POST['smwimport_password'];
 		// Save the posted value in the database
 		foreach( $datasources_opt as $key => $opt )
 			update_option( 'smwimport_data_source'.$key, $opt );
 
 		update_option( 'smwimport_attachment_url', $attachment_url );
+		update_option( 'smwimport_login_url', $login_url );
+		update_option( 'smwimport_username', $username );
+		update_option( 'smwimport_password', $password );
 		$message = __('settings saved.', 'menu-smwimport' );
 	}else if ( $_POST['NewSource'] ){
 		// add new data source
@@ -197,6 +207,17 @@ function smwimport_settings_page() {
 <input type="text" name="smwimport_attachment_url" value="<?php echo $attachment_url; ?>" size="80">
 </p>
 
+<p><?php _e("Url to login page (optional):", 'menu-smwimport' ); ?> 
+<input type="text" name="smwimport_login_url" value="<?php echo $login_url; ?>" size="80">
+</p>
+
+<p><?php _e("SMW username:", 'menu-smwimport' ); ?> 
+<input type="text" name="smwimport_username" value="<?php echo $username; ?>" size="40">
+</p>
+
+<p><?php _e("SMW password:", 'menu-smwimport' ); ?> 
+<input type="password" name="smwimport_password" value="<?php echo $password; ?>" size="40">
+</p>
 <hr />
 
 <p class="submit">
