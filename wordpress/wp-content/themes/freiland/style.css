@@ -19,6 +19,9 @@ Template: twentyten
 /* hide wordpress logo */
 div#site-generator { display : none; }
 
+/* hide comment links */
+span.comments-link { display : none; }
+
 div.filter_age{ display : none; }
 div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
