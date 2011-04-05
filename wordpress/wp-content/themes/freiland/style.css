@@ -16,6 +16,9 @@ Template: twentyten
 
 @import url("../twentyten/style.css");
 
+/* hide wordpress logo */
+div#site-generator { display : none; }
+
 div.filter_age{ display : none; }
 div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
