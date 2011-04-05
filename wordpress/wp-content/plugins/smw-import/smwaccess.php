@@ -19,7 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 class smwaccess
 {
-   const smwcookie = "./.smwcookie";
+   const smwcookie = "/tmp/.smwcookie";
 
    static function login($url,$user,$pass){
 	@unlink(self::smwcookie);
