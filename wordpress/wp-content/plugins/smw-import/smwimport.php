@@ -21,6 +21,7 @@ require_once(ABSPATH . "wp-admin" . '/includes/bookmark.php');
 require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
 // for the function wp_generate_attachment_metadata()
 require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+require_once(dirname(__FILE__) . '/smwaccess.php');
 
 class smwimport
 {
@@ -313,7 +314,7 @@ class smwimport
   private static function get_data_from_source($url){
 
 	$ret = true;
-	$content = file_get_contents($url);
+	$content = smwaccess::get_content($url);
 	if ($content === false)
 		return new WP_Error('data_source_error', __("Could not retrieve data source:").$url);
 	$content = str_replace(array("\r", "\r\n", "\n"),' ',$content);
@@ -605,6 +606,14 @@ class smwimport
 	
 	$sources = array_merge( $sources, self::get_data_sources());
 
+	// login to data source server if auth details are given
+	$login_url = get_option('smwimport_login_url');
+	if ( $login_url != "" ){
+		$username = get_option('smwimport_username');
+		$password = get_option('smwimport_password');
+		smwaccess::login($login_url,$username,$password);
+	}
+
 	self::load_ec3();
 	$g_ret = true;
 	foreach( $sources as $key => $source ){
@@ -847,7 +856,7 @@ class smwimport
 
 	$posts = self::get_post($prim_key);
 	if ( empty($posts) ){
-		$contents = file_get_contents($remotefile);
+		$contents = smwaccess::get_content($remotefile);
 		if ( $contents == FALSE )
 			return new WP_Error('download_failed', __("Could not get file:").$remotefile.'for post:'.$prim_key);
 		$upload = wp_upload_bits($localfile,null,$contents);
