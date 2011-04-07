@@ -28,11 +28,10 @@ class smwaccess
 	$token = $matches[1];
 	preg_match('/<form.*userlogin.*action="(.+)"/',$content,$matches);
 	$login_url = parse_url($url);
-	$action = $login_url['scheme'].'://'.$login_url['host'].$matches[1];
+	$action = $login_url['scheme'].'://'.$login_url['host'].html_entity_decode($matches[1]);
 	$user=urlencode($user);
 
 	$postdata="wpName=$user&wpPassword=$pass&wpRemember=1&wpLoginToken=$token";
-	$action = 'http://87.238.194.42/df4/index.php?title=Spezial:Anmelden&action=submitlogin&type=login';
 	return self::get_content($action,$postdata);
    }
 
