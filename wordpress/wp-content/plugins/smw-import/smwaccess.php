@@ -32,27 +32,11 @@ class smwaccess
 	$user=urlencode($user);
 
 	$postdata="wpName=$user&wpPassword=$pass&wpRemember=1&wpLoginToken=$token";
-	$ch = curl_init();
 	$action = 'http://87.238.194.42/df4/index.php?title=Spezial:Anmelden&action=submitlogin&type=login';
-	curl_setopt ($ch, CURLOPT_URL,$action);
-	curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-	curl_setopt ($ch, CURLOPT_USERAGENT, 
-		"Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6");
-	curl_setopt ($ch, CURLOPT_TIMEOUT, 60);
-	curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-	curl_setopt ($ch, CURLOPT_COOKIEJAR, self::smwcookie);
-	curl_setopt ($ch, CURLOPT_COOKIEFILE, self::smwcookie);
-	curl_setopt ($ch, CURLOPT_REFERER, $url);
-
-	curl_setopt ($ch, CURLOPT_POSTFIELDS, $postdata);
-	curl_setopt ($ch, CURLOPT_POST, 1);
-	$result = curl_exec ($ch);
-	curl_close($ch);
-	return $result;
+	return self::get_content($action,$postdata);
    }
 
-   static function get_content($url){
+   static function get_content($url,$postdata = null){
 	$ch = curl_init();
 	curl_setopt ($ch, CURLOPT_URL,$url);
 	curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
@@ -63,6 +47,10 @@ class smwaccess
 	curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
 	curl_setopt ($ch, CURLOPT_COOKIEJAR, self::smwcookie);
 	curl_setopt ($ch, CURLOPT_COOKIEFILE, self::smwcookie);
+	if ( $postdata !== null ){
+		curl_setopt ($ch, CURLOPT_POSTFIELDS, $postdata);
+		curl_setopt ($ch, CURLOPT_POST, 1);
+	}
 	$result = curl_exec ($ch);
 	curl_close($ch);
 	return $result;
