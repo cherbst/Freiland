@@ -100,7 +100,7 @@ class smwimport
 		'primary_key' => 'label',
 		'attributes' => array(
 			'genre' => array('category','meta'),
-			'label' => 'post_title',
+			'title' => 'post_title',
 			'short_description' => 'post_excerpt',
 			'long_description' => 'post_content',
 			'genre' => array('category','meta'),
@@ -213,6 +213,7 @@ class smwimport
 	array(
 		'type'  => 'Veranstaltung',
 		'label' => 'SMW Event',
+		'title' => 'SMW Event',
 		'eventtype'  => 'concert',
 		'date_begin' => '2011-03-02 10:00',
 		'date_end' => '2011-03-06 10:00',
@@ -234,6 +235,7 @@ class smwimport
 	array(
 		'type'  => 'Veranstaltung',
 		'label' => 'SMW Event 2',
+		'title' => 'SMW Event 2',
 		'eventtype'  => 'festival',
 		'date_begin' => '2011-04-02 12:00',
 		'date_end' => '2011-04-03 15:00',
