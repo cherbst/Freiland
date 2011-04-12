@@ -512,19 +512,25 @@ class smwimport
 	return $g_ret;
   }
 
+  private function get_favicon_url($url){
+	$favicon = new favicon($url, 0);
+	$favicon_url = get_option('favicon-'.$favicon->get_site_url());
+	if ( $favicon_url == null ){
+		if ( $favicon->is_ico_exists() ){
+			$favicon_url = $favicon->get_ico_url();
+			update_option('favicon-'.$favicon->get_site_url(),$favicon_url);
+		}
+	}
+	return $favicon_url;
+  }
+
   /*  saves the favicon url of a given url into a post meta
   */
   private function import_favicon_url($post_id,$url){
-	$favicon = new favicon($url, 0);
-	$favicon_site = get_post_meta($post_id,'favicon_site',true);
-	// do not update favicon if site did not change
-	if ( $favicon_site == $favicon->get_site_url() )
-		return;
+	$favicon = self::get_favicon_url($url);
 
-	if ( $favicon->is_ico_exists() ){
-		add_post_meta($post_id,'favicon',$favicon->get_ico_url(),true);
-		add_post_meta($post_id,'favicon_site',$favicon->get_site_url(),true);
-	}
+	if ( $favicon != null )
+		update_post_meta($post_id,'favicon',$favicon);
   }
 
   /*  imports $data into a wordpress attachment according to $mapping
@@ -564,9 +570,9 @@ class smwimport
 				break;
 		}
 	}
-	$favicon = new favicon($link['link_url'], 0);
-	if ( $favicon->is_ico_exists() )
-		$link['link_image'] = $favicon->get_ico_url();
+	$favicon = self::get_favicon_url($link['link_url']);
+	if ( $favicon != null )
+		$link['link_image'] = $favicon;
 	return self::import_link($link);
   }
 
