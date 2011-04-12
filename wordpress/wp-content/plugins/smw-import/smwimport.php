@@ -317,6 +317,8 @@ class smwimport
 	$content = smwaccess::get_content($url);
 	if ($content === false)
 		return new WP_Error('data_source_error', __("Could not retrieve data source:").$url);
+	//XXX: assume that empty lines only occur in strings (may break import)
+	$content = str_replace(array("\n\n"),'<p></p>',$content);
 	$content = str_replace(array("\r", "\r\n", "\n"),' ',$content);
 	$data = json_decode($content,true);
 
