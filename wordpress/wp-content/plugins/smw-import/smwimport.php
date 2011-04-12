@@ -555,6 +555,9 @@ class smwimport
 				break;
 		}
 	}
+	$favicon = new favicon($link['link_url'], 0);
+	if ( $favicon->is_ico_exists() )
+		$link['link_image'] = $favicon->get_ico_url();
 	return self::import_link($link);
   }
 
