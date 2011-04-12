@@ -30,7 +30,11 @@ class favicon
         $site_url = 'http://' . $site_url[0] . '/';
         $this->site_url = $site_url;
         $this->if_modified_since = $if_modified_since;
-	$this->get_ico_url();
+    }
+
+    # get uri of site
+    function get_site_url(){
+	return $this->site_url;
     }
 
     # get uri of favicon
@@ -77,7 +81,7 @@ class favicon
     {
         if ($this->ico_exists=='not checked')
         {
-            $h = @fopen($this->ico_url, 'r');
+            $h = @fopen($this->get_ico_url(), 'r');
             $this->ico_exists = ($h) ? true : false;
             if ($h) fclose($h);
         }

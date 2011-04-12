@@ -516,8 +516,15 @@ class smwimport
   */
   private function import_favicon_url($post_id,$url){
 	$favicon = new favicon($url, 0);
-	if ( $favicon->is_ico_exists() )
-		add_post_meta($post_id,"favicon",$favicon->get_ico_url(),true);
+	$favicon_site = get_post_meta($post_id,'favicon_site',true);
+	// do not update favicon if site did not change
+	if ( $favicon_site == $favicon->get_site_url() )
+		return;
+
+	if ( $favicon->is_ico_exists() ){
+		add_post_meta($post_id,'favicon',$favicon->get_ico_url(),true);
+		add_post_meta($post_id,'favicon_site',$favicon->get_site_url(),true);
+	}
   }
 
   /*  imports $data into a wordpress attachment according to $mapping
