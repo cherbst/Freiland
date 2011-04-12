@@ -77,12 +77,26 @@ function freiland_filter_the_content( $post_content ) {
 
 	$return = '<p>'. $subtitle .'</p>';
 	$return .= $content;
-	$return .= '<p><a href="'.$homepagelabel.'">'.$label.'</a></p>';
+	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
 	return $return;
   }
 
   function freiland_get_press_content($content){
-	return 'PRESS:'.$content;
+	global $post;
+	$source = get_post_meta($post->ID,'source',true);
+	$date = get_post_meta($post->ID,'date',true);
+	$date =  new DateTime($date);	
+	$subtitle = get_post_meta($post->ID,'subtitle',true);
+	$homepage = get_post_meta($post->ID,'homepage',true);
+	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
+	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
+
+	
+	$return = '<p>Erschienen in '. $source .' am '.$date->format('d.m.Y').'</p>';
+	$return .= '<p>'. $subtitle .'</p>';
+	$return .= $content;
+	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
+	return $return;
   }
 
   /* load ec3 plugin if it exists

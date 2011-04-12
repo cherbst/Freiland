@@ -128,16 +128,18 @@ class smwimport
 			'homepagelabel' => 'meta'
 		)	
 	),
-	'Presse' => array(
+	'Pressebericht' => array(
 		'type' => 'post',
 		'category' => 'press',
 		'primary_key' => 'label',
 		'attributes' => array(
-			'label' => 'post_title',
-			'short_description' => 'post_excerpt',
-			'long_description' => 'post_content',
-			'image' => 'attachment',
-			'link' => 'meta'
+			'title' => 'post_title',
+			'description' => 'post_content',
+			'subtitle' => array('post_excerpt','meta'),
+			'homepage' => 'meta',
+			'homepagelabel' => 'meta',
+			'source' => 'meta',
+			'date' => 'meta'
 		)	
 	),
 	'Bild' => array(
@@ -263,16 +265,14 @@ class smwimport
 
   private static function get_press(){
 	$data = array( array(
-		'type'  => 'Presse',
+		'type'  => 'Pressebericht',
 		'label' => 'SMW Press',
+		'title' => 'SMW Press',
 		'date'  => '1.1.2011',
-		'media' => 'Bild am Sonntag',
-		'short_description' => 'SMW imported press',
-		'long_description' => '<strong>New imported press content</strong>',
-		'link' => 'www.test1.de',
-		'image' => array(
-			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
-			'title' => 'Press image title')
+		'source' => 'Bild am Sonntag',
+		'subtitle' => 'SMW imported press',
+		'description' => '<strong>New imported press content</strong>',
+		'homepage' => 'www.test1.de'
 		)
 	);
 	return $data;
