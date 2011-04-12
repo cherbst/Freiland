@@ -498,7 +498,7 @@ class smwimport
 
 	// import meta data
 	foreach( $metas as $meta )
-		add_post_meta($ID,$meta,$data[$meta],true);
+		update_post_meta($ID,$meta,$data[$meta]);
 
 	// import favicon url
 	if ( $favicon != null )
@@ -838,10 +838,10 @@ class smwimport
 		$ret = self::import_ec3_post_dates($post_id,$action,$start,$end);
 
 	// set meta data for the-events-calender
-	add_post_meta($post_id,"_isEvent","yes",true);
-	add_post_meta($post_id,"_EventStartDate",$start,true);
+	update_post_meta($post_id,"_isEvent","yes");
+	update_post_meta($post_id,"_EventStartDate",$start);
 	$end = ( $end == null?$start:$end );
-	add_post_meta($post_id,"_EventEndDate",$end,true);
+	update_post_meta($post_id,"_EventEndDate",$end);
 	return $true;
   }
 
