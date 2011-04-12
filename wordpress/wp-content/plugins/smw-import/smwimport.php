@@ -59,6 +59,7 @@ class smwimport
 	   "post_title" : attribute value becomes the post title
 	   "post_excerpt" : attribute value becomes the post excerpt
 	   "post_content" : attribute value becomes the post content
+	   "post_date"    : attribute value becomes the post publish date
 	   "meta"	  : attribute value becomes a post custom value with the attribute
 			    name as the key
 	   "attachmentname" : attribute value becomes the name of all attachments for
@@ -139,7 +140,7 @@ class smwimport
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta',
 			'source' => 'meta',
-			'date' => 'meta'
+			'date' => array('meta','post_date')
 		)	
 	),
 	'Bild' => array(
@@ -423,6 +424,7 @@ class smwimport
 				case 'post_title':
 				case 'post_excerpt':
 				case 'post_content':
+				case 'post_date':
 					$postarr[$key_map] = $value;
 					break;
 				case 'attachment':
@@ -736,7 +738,8 @@ class smwimport
 	// make sure each post has a different publish date
 	// otherwise the 'next_post', 'previous_post' queries get confused
 	self::$posttime -= 1;
-	$postarr['post_date'] = date("Y-m-d H:i:s",self::$posttime);
+	if ( !isset($postarr['post_date']) )
+		$postarr['post_date'] = date("Y-m-d H:i:s",self::$posttime);
 
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
