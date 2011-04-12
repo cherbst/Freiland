@@ -40,3 +40,13 @@ div.filter_room{ display : none; }
 #access ul li.current-cat > a {
 	color: #fff;
 }
+          
+ul.Linklist {
+	list-style-type: none; 
+	margin-left: 0px;
+	padding-left: 0px;
+}
+
+img.LinkImage  {
+	margin-right: 10px;
+}
