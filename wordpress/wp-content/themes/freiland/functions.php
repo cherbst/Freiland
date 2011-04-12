@@ -14,6 +14,8 @@
  * @since freiland 0.1
  */
 add_filter( 'the_content', 'freiland_filter_the_content',7 );
+add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
+
 function freiland_filter_the_content( $post_content ) {
        if ( in_category( 'events' ) )
                return freiland_get_event_content($post_content);
@@ -22,6 +24,13 @@ function freiland_filter_the_content( $post_content ) {
        else if ( in_category( 'press') )
                return freiland_get_press_content($post_content);
        return $post_content;
+}
+
+function freiland_filter_the_title( $post_title, $id ) {
+	global $post;
+	if ( in_category( 'press') && in_the_loop() && $id == $post->ID )
+		return freiland_get_press_title($post_title,$id);
+	return $post_title;
 }
 
 
@@ -83,6 +92,7 @@ function freiland_filter_the_content( $post_content ) {
 
   function freiland_get_press_content($content){
 	global $post;
+	$return = '';
 	$source = get_post_meta($post->ID,'source',true);
 	$date = get_post_meta($post->ID,'date',true);
 	$date =  new DateTime($date);	
@@ -91,11 +101,24 @@ function freiland_filter_the_content( $post_content ) {
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
 
-	
-	$return = '<p>Erschienen in '. $source .' am '.$date->format('d.m.Y').'</p>';
+	$return .= '<p>Erschienen in '. $source .' am '.$date->format('d.m.Y').'</p>';
 	$return .= '<p>'. $subtitle .'</p>';
 	$return .= $content;
 	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
+	return $return;
+  }
+
+  function freiland_get_press_title($title,$id){
+	$img = freiland_get_favicon_img($id);
+	return $img.$title;
+  }
+
+  function freiland_get_favicon_img($id){
+	$favicon = get_post_meta($id,'favicon',true);
+
+	if ( $favicon != null )
+		$return = '<img src="'.$favicon.'" class="alignleft"/>';
+
 	return $return;
   }
 

@@ -22,6 +22,7 @@ require_once(ABSPATH . "wp-admin" . '/includes/taxonomy.php');
 // for the function wp_generate_attachment_metadata()
 require_once(ABSPATH . "wp-admin" . '/includes/image.php');
 require_once(dirname(__FILE__) . '/smwaccess.php');
+require_once(dirname(__FILE__) . '/favicon.inc.php');
 
 class smwimport
 {
@@ -62,6 +63,8 @@ class smwimport
 	   "post_date"    : attribute value becomes the post publish date
 	   "meta"	  : attribute value becomes a post custom value with the attribute
 			    name as the key
+	   "favicon"	  : attribute value should be a URL. The favicon of this URL will be
+			    saved as a post meta with the key "favicon"
 	   "attachmentname" : attribute value becomes the name of all attachments for
 			      this post
 	   "attachment"   : attribute value becomes an attachment to the post
@@ -137,7 +140,7 @@ class smwimport
 			'title' => 'post_title',
 			'description' => 'post_content',
 			'subtitle' => array('post_excerpt','meta'),
-			'homepage' => 'meta',
+			'homepage' => array('meta','favicon'),
 			'homepagelabel' => 'meta',
 			'source' => 'meta',
 			'date' => array('meta','post_date')
@@ -442,6 +445,9 @@ class smwimport
 				case 'meta':
 					$metas[] = $key;
 					break;
+				case 'favicon':
+					$favicon = $value;
+					break;
 				case 'category':
 					$categories[$key] = $value;
 					break;
@@ -492,12 +498,24 @@ class smwimport
 	foreach( $metas as $meta )
 		add_post_meta($ID,$meta,$data[$meta],true);
 
+	// import favicon url
+	if ( $favicon != null )
+		self::import_favicon_url($ID,$favicon);
+
 	// create categories
 	if ( $categories != null ){
 		$ret = self::import_post_categories($ID,$categories,$cat->term_id);
 		if ( is_wp_error($ret) ) $g_ret = $ret;
 	}
 	return $g_ret;
+  }
+
+  /*  saves the favicon url of a given url into a post meta
+  */
+  private function import_favicon_url($post_id,$url){
+	$favicon = new favicon($url, 0);
+	if ( $favicon->is_ico_exists() )
+		add_post_meta($post_id,"favicon",$favicon->get_ico_url(),true);
   }
 
   /*  imports $data into a wordpress attachment according to $mapping
