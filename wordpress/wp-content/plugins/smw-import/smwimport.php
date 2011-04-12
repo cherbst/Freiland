@@ -455,7 +455,7 @@ class smwimport
 					break;
 				default:
 					// ignore some keys
-					if ( $key != 'uri' && $key != 'type' ) 
+					if ( $key != 'uri' && $key != 'type' && $key != $mapping['primary_key'] )
 						error_log('smwimport: no mapping defined for:'.$key);
 			}
 		}
