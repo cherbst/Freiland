@@ -647,6 +647,12 @@ class smwimport
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
 			continue;
+
+		// check if file is an image
+		$wp_filetype = wp_check_filetype($gallery_folder . $file, null );
+		if ( strpos($wp_filetype['type'],'image') === false )
+			continue;
+
 		if ( $featured_image == null )
 			$featured_image = $file;
 
