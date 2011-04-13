@@ -188,6 +188,8 @@ class smwimport
 	)
   );
 
+  // import test sources
+  static $import_tests = true;
   // time measure variables
   static $start_time;
   static $fetch_time;
@@ -221,120 +223,6 @@ class smwimport
 	return $subcats;
   }
 
-  private static function get_links(){
-	$data = array( array(
-		'type'  => 'Link',
-		'name' => 'SMW Test Link', 
-		'short_description' => 'This is a link automtically added by smwimport.',
-		'website' => 'http://www.smwimport.org')
-	);
-	return $data;
-  }
-
-  private static function get_events(){
-	$data = array( 
-	array(
-		'type'  => 'Veranstaltung',
-		'label' => 'SMW Event',
-		'title' => 'SMW Event',
-		'eventtype'  => 'concert',
-		'date_begin' => '2011-03-02 10:00',
-		'date_end' => '2011-03-06 10:00',
-		'short_description' => 'SMW imported event',
-		'long_description' => '<strong>Newer imported event content</strong>',
-		'genre' => 'rock',
-		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
-		'location' => 'Werkstatt',
-		'house' => 'big house',
-		'room' => '203',
-		'age' => '18',
-		'image_big' => array(
-			'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
-			'title' => 'Big image title'),
-		'image_small' => array(
-			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
-			'title' => 'Small image title')
-		),
-	array(
-		'type'  => 'Veranstaltung',
-		'label' => 'SMW Event 2',
-		'title' => 'SMW Event 2',
-		'eventtype'  => 'festival',
-		'date_begin' => '2011-04-02 12:00',
-		'date_end' => '2011-04-03 15:00',
-		'short_description' => 'SMW new imported event',
-		'long_description' => '<strong>Newer imported event content</strong>',
-		'genre' => 'pop',
-		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
-		'location' => 'Spartakus',
-		'house' => 'small house',
-		'room' => '210',
-		'age' => '16')
-	);
-	return $data;
-  }
-
-  private static function get_news(){
-	$data = array( array(
-		'type'  => 'News',
-		'label' => 'SMW News',
-		'title' => 'SMW News title',
-		'short_description' => 'SMW imported news',
-		'long_description' => '<strong>New imported news content</strong>',
-		'subtitle' => 'A news subtitle',
-		'homepage' => 'www.test1.de',
-		'homepagelabel' => 'A test link',
-		'image' => array(
-			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
-			'title' => 'News image title')
-		)
-	);
-	return $data;
-  }
-
-  private static function get_press(){
-	$data = array( array(
-		'type'  => 'Pressebericht',
-		'label' => 'SMW Press',
-		'title' => 'SMW Press',
-		'date'  => '1.1.2011',
-		'source' => 'Bild am Sonntag',
-		'subtitle' => 'SMW imported press',
-		'description' => '<strong>New imported press content</strong>',
-		'homepage' => 'www.test1.de'
-		)
-	);
-	return $data;
-  }
-
-  private static function get_images(){
-	$data = array( array(
-		'type'  => 'Bild',
-		'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
-		'label' => 'SMW imported image1'),
-		array(
-		'type'  => 'Bild',
-		'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
-		'label' => 'SMW imported image2')
-	);
-	return $data;
-  }
-
-  private static function get_galleries(){
-	$data = array( array(
-		'type'  => 'Gallery',
-		'name' => 'Test gallery1',
-		'description' => 'An imported test gallery',
-		'gallery_folder' => '/testfolder1'),
-		array(
-		'type'  => 'Gallery',
-		'name' => 'Test gallery2',
-		'description' => 'Another imported test gallery',
-		'gallery_folder' => '/testfolder2')
-	);
-	return $data;
-  }
-
   /*  returns array of all defined data sources together with function to retrieve the data
       returns: array( 'url' => function ) or array( WP_Error )
   */
@@ -345,7 +233,7 @@ class smwimport
 
 	$data_sources = array();
 	for( $i = 0; $i< $num_sources; $i++ )
-		$data_sources[get_option( 'smwimport_data_source'.$i )] = get_data_from_source;
+		$data_sources[get_option( 'smwimport_data_source'.$i )] = array(self,get_data_from_source);
 
 	if (empty($data_sources)) 
 		return array(new WP_Error('no_data_sources', __("No data sources defined.")));
@@ -767,14 +655,11 @@ class smwimport
 	self::$posttime = time();
 	self::delete_links();
 
-	$sources = array(
-		get_events,
-		get_news,
-		get_press,
-		get_images,
-		get_links,
-		get_galleries
-	);
+	$sources = array();
+	if ( self::$import_tests ){
+		require_once(dirname(__FILE__) . '/smwimport-test.php');
+		$sources = smwimport_test::get_sources();
+	}
 	
 	$sources = array_merge( $sources, self::get_data_sources());
 
@@ -793,7 +678,7 @@ class smwimport
 			$g_ret = $source;
 			continue;
 		}
-		$items = self::$source($key);
+		$items = call_user_func($source,$key);
 		if ( is_wp_error($items) ){
 			error_log("smwimport: could not import from:".$source);
 			$g_ret = $items;
