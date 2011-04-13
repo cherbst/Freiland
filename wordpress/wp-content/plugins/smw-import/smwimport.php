@@ -656,28 +656,27 @@ class smwimport
 		if ( $featured_image == null )
 			$featured_image = $file;
 
-		$data['url'] = $uploads['path'] .'/' . $file;
 		$data['title'] = $file;
 
 		$attachment = self::get_post($prim_key.$file);
 		if ( $attachment == null ){
 			// attachment is new
-			$cnt = 1;
-			while ( file_exists($data['url']) ){
-				// file already exists, append running number
-				$info = pathinfo($data['url']);
-				$data['url'] = $info['dirname'].'/'.$info['filename'].$cnt.'.'.$info['extension'];
-				error_log('New name:'.$data['url']);
-				$cnt++;
-			}
+			$data['url'] = $uploads['path'] . '/' . wp_unique_filename($uploads['path'],$file);
 			// create a symlink in the upload folder
 			symlink( $gallery_folder . $file, $data['url'] );
+			$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
+			if ( is_wp_error($attach_id) ) {
+				error_log('Importing image failed:'.$attach_id->get_error_message());
+				continue;
+			}
+		}else{
+			// attachment already exist
+			$attach_id = $attachment->ID;
+			unset($attachments[$attach_id]);
 		}
 
-		$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
 		if ( $file == $featured_image )
 			update_post_meta( $ID, '_thumbnail_id', $attach_id );
-		unset($attachments[$attach_id]);
 	}
 	closedir($dh);
 
@@ -1062,7 +1061,7 @@ class smwimport
 			error_log('Attachment changed:'. $post->ID);
 			// filename changed, delete this attachment and create a new one
 			wp_delete_post($post->ID,true);
-			$attach_id = self::import_attachment_for_post($prim_key,$data,$post_id);
+			$attach_id = self::import_attachment_for_post($prim_key,$data,$post_id,$download);
 		}else{
 			//XXX: update the attachment? then we need a hash or something
 			error_log('Attachment already exists:'. $post->ID);
