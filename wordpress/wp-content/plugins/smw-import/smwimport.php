@@ -325,12 +325,12 @@ class smwimport
 		'type'  => 'Gallery',
 		'name' => 'Test gallery1',
 		'description' => 'An imported test gallery',
-		'gallery_folder' => '/home/chris/Bilder/Coanghai/'),
+		'gallery_folder' => '/testfolder1'),
 		array(
 		'type'  => 'Gallery',
 		'name' => 'Test gallery2',
 		'description' => 'Another imported test gallery',
-		'gallery_folder' => '/home/chris/Bilder/Coanghai/')
+		'gallery_folder' => '/testfolder2')
 	);
 	return $data;
   }
