@@ -515,6 +515,7 @@ class smwimport
 	return $g_ret;
   }
 
+  /* get the favicon url and cache it in an option */
   private function get_favicon_url($url){
 	$favicon = new favicon($url, 0);
 	$favicon_url = get_option('favicon-'.$favicon->get_site_url());
