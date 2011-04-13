@@ -166,8 +166,9 @@ class smwimport
 	)
   );
 
-  // time measure variable
+  // time measure variables
   static $start_time;
+  static $fetch_time;
   // post time for creating posts
   static $posttime;
 
@@ -320,7 +321,9 @@ class smwimport
   private static function get_data_from_source($url){
 
 	$ret = true;
+	$start = time(); 
 	$content = smwaccess::get_content($url);
+	self::$fetch_time += time()-$start;
 	if ($content === false)
 		return new WP_Error('data_source_error', __("Could not retrieve data source:").$url);
 	//XXX: assume that empty lines only occur in strings (may break import)
@@ -633,6 +636,7 @@ class smwimport
   public static function import_all() {
 	global $wp_rewrite;
 	self::$start_time = time();
+	self::$fetch_time = 0;
 	self::$posttime = time();
 	self::delete_links();
 
@@ -678,12 +682,13 @@ class smwimport
 	// XXX: this is needed due to a bug in wordpress category cache
 	wp_cache_flush();
 	delete_option('category_children');
-	// XXX: needed to make permalinks work (not dokumented)
+	// XXX: needed to make permalinks work (not documented)
 	$wp_rewrite->flush_rules();
 	$ret = self::delete_empty_subcategories();
 	if ( is_wp_error($ret) ) $g_ret = $ret;
 	if ( !is_wp_error($g_ret) ){
-		$g_ret = 'The import took '.(time() - self::$start_time).' seconds.';
+		$g_ret  = 'The import took '.(time() - self::$start_time).' seconds.'."\n";
+		$g_ret .= 'Fetching data took '.self::$fetch_time.' seconds.';
 	}
 	return $g_ret;
   }
