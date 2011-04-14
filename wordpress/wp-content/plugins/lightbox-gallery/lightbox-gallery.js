@@ -4,9 +4,17 @@ if ( typeof hs != "undefined" ) {
 	else  hs.graphicsDir = 'http://'+location.hostname+'/wp-content/plugins/lightbox-gallery/graphics/';
 }
 
-if ( typeof hs == "undefined" ) {
-	jQuery(document).ready(function () {
 
+if ( typeof hs == "undefined" ) {
+  	jQuery(document).ajaxComplete(function(){
+		initlightbox();
+	});
+
+	jQuery(document).ready(function () {
+		initlightbox();
+	});
+	
+	function initlightbox(){
 // If you make images display slowly, use following two lines;
 //	var i = 0;
 //	showImg(i);
@@ -19,7 +27,7 @@ if ( typeof hs == "undefined" ) {
 // You need to add into a [gallery] shorttag. ex) [gallery class="gallery2"] 
 //  jQuery('.gallery2 a').lightBox({captionPosition:'gallery'});
 //  jQuery('.gallery3 a').lightBox({captionPosition:'gallery'});
-	});
+	}
 
 	function showImg(i){
 		if(i == jQuery('img').length){
