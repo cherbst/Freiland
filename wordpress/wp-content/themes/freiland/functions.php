@@ -51,18 +51,6 @@ function freiland_filter_the_title( $post_title, $id ) {
 	}else $return .= 'No images in this event:'.$post->ID;
 	$return .= $content ;
 
-	$return .= '<table class="event_meta">';
-	$metadata = get_post_custom_keys();
-	foreach( $metadata as $key ){
-		$keyt = trim($key);
-		if ( '_' == $keyt{0} )
-			continue;
-		$meta = get_post_meta($post->ID,$key,true);
-		if ( $meta == null || is_array($meta)) continue;
-		$return .= '<tr><td class="'.$key.'-label">'.$key.'</td>';
-		$return .= '<td class="'.$key.'-content">'.$meta.'</td></tr>';
-	}
-	$return .= '</table>';
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	if ( $homepage != null ){
