@@ -121,7 +121,7 @@ class smwimport
 			'house' => array('category','meta'),
 			'room' => array('category','meta'),
 			'age' => array('category','meta'),
-			'date_begin' => 'calendar_start',
+			'date_begin' => array('calendar_start','meta'),
 			'date_end' => 'calendar_end',
 			'image_small' => 'attachment',
 			'image_big' => 'attachment',
