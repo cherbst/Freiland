@@ -30,45 +30,25 @@ class smwimport_test
   }
 
   static function get_events(){
-	$data = array( 
-	array(
+	for ( $i=0;$i<100;$i++){
+		$event = array(
 		'type'  => 'Veranstaltung',
-		'label' => 'SMW Event',
-		'title' => 'SMW Event',
+		'label' => 'SMW Event'.$i,
+		'title' => 'SMW Event'.$i,
 		'eventtype'  => 'concert',
-		'date_begin' => '2011-03-02 10:00',
-		'date_end' => '2011-03-06 10:00',
-		'short_description' => 'SMW imported event',
+		'date_begin' => '2011-'.($i%11).'-'.($i%29).' 10:00',
+		'short_description' => 'SMW imported event '.$i,
 		'long_description' => '<strong>Newer imported event content</strong>',
 		'genre' => 'rock',
 		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
 		'location' => 'Werkstatt',
 		'house' => 'big house',
 		'room' => '203',
-		'age' => '18',
-		'image_big' => array(
-			'url' => 'http://zeitgeist.yopi.de/wp-content/uploads/2007/12/wordpress.png',
-			'title' => 'Big image title'),
-		'image_small' => array(
-			'url' => 'http://www.webmonkey.com/wp-content/uploads/2010/06/wordpress-300x300.jpg',
-			'title' => 'Small image title')
-		),
-	array(
-		'type'  => 'Veranstaltung',
-		'label' => 'SMW Event 2',
-		'title' => 'SMW Event 2',
-		'eventtype'  => 'festival',
-		'date_begin' => '2011-04-02 12:00',
-		'date_end' => '2011-04-03 15:00',
-		'short_description' => 'SMW new imported event',
-		'long_description' => '<strong>Newer imported event content</strong>',
-		'genre' => 'pop',
-		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
-		'location' => 'Spartakus',
-		'house' => 'small house',
-		'room' => '210',
-		'age' => '16')
-	);
+		'age' => '18'
+		);
+
+		$data[] = $event;
+	}
 	return $data;
   }
 
