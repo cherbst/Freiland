@@ -199,7 +199,7 @@ function freiland_subcategory_dropdown($cat_id){
 
   function freiland_the_event_date(){
 	global $post;
-	$date = mktime(get_post_meta($post->ID,'date_begin',true));
+	$date = strtotime(get_post_meta($post->ID,'date_begin',true));
 	echo '<div class="event-day">';
 	echo strftime("%A",$date);
 	echo '</div>';
