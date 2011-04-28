@@ -208,4 +208,29 @@ function freiland_subcategory_dropdown($cat_id){
 		<?php }
 	}
   }
+
+  function freiland_the_event_date(){
+	global $post;
+	$date = mktime(get_post_meta($post->ID,'date_begin',true));
+	echo '<div class="event-day">';
+	echo strftime("%A",$date);
+	echo '</div>';
+	echo '<div class="event-date">';
+	echo strftime("%d.%m.",$date);
+	echo '</div>';
+	echo '<div class="event-time">';
+	echo strftime("%H:%M",$date) . " UHR";
+	echo '</div>';
+  }
+
+  function freiland_the_event_type(){
+	global $post;
+	echo get_post_meta($post->ID,'eventtype',true);
+  }
+
+  function freiland_the_event_genre(){
+	global $post;
+	echo get_post_meta($post->ID,'genre',true);
+  }
+
 ?>
