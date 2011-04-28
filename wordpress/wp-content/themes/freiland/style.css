@@ -22,6 +22,11 @@ div#site-generator { display : none; }
 /* hide comment links */
 span.comments-link { display : none; }
 
+/* hide comment links */
+div.entry-meta { display : none; }
+div.entry-utility { display : none; }
+
+/* hide filter dropdowns */
 div.filter_age{ display : none; }
 div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
