@@ -52,7 +52,13 @@
 	 * the rest of the loop that is shared.
 	 *
 	 * Without further ado, the loop:
-	 */ ?>
+	 */
+
+/* prevent pagination */
+global $wp_query;
+$args = array_merge( $wp_query->query, array('posts_per_page' => -1 ));
+query_posts($args);
+ ?>
 <?php while ( have_posts() ) : the_post(); ?>
 
 	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
