@@ -222,7 +222,10 @@ function freiland_subcategory_dropdown($cat_id){
 
   function freiland_the_event_type(){
 	global $post;
-	echo get_post_meta($post->ID,'eventtype',true);
+	$eventtype = get_post_meta($post->ID,'eventtype',true);
+	if ( is_array($eventtype) )
+		$eventtype = implode(" ",$eventtype);
+	echo $eventtype;
   }
 
   function freiland_the_event_genre(){
