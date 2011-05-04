@@ -213,6 +213,13 @@ function freiland_subcategory_dropdown($cat_id){
 	echo '</div>';
   }
 
+  function freiland_get_eventtypes(){
+	$cat = get_category_by_slug('eventtype');
+	if ( !$cat ) return;
+	$args = "title_li=&child_of=$cat->term_id";
+	wp_list_categories( $args );
+  }
+
   function freiland_the_event_type(){
 	global $post;
 	echo get_post_meta($post->ID,'eventtype',true);
