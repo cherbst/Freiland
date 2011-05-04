@@ -32,6 +32,111 @@ div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
 div.filter_room{ display : none; }
 
+#main { 
+	clear: both;
+	/* clear: none */
+	width: 100%;
+	/* overflow: visible; */
+}
+
+#main_left {
+	float: left;
+	width: 15%;
+	min-height: 300px;
+}
+
+#main_middle {
+	float: left;
+	width: 70%;
+	margin-top: 200px;
+}
+
+#main_right {
+	/* position: fixed;
+	right: 50px;
+	top: 450px; */
+	float: right;
+	width: 15%;
+	min-width: 200px;
+	margin-top: 400px;
+}
+
+#site-description {
+	display: none;
+}
+
+#site-title {
+	display: none;
+}
+
+#wrapper {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+#masthead {
+	position: fixed;
+	width: 100%;
+}
+
+#branding {
+	float: left;
+	width: 15%;
+	min-width: 142px;
+	height: 200px;
+	background: url(images/logo_digital.png) center no-repeat;
+}
+
+#branding img {
+	display: none;
+}
+
+#access {
+	float: left;
+	width: 70%;
+	height: 390px;
+	background: url(images/nav_left.png) left 83px repeat-x;
+}
+
+#access .menu-header, div.menu {
+	width: auto;
+}
+
+#access .menu-header, div.menu, #colophon {
+	width: auto;
+}
+
+#topright {
+	float: right;
+	width: 15%;
+	min-width: 42px;
+	max-width: 15%;
+	height: 390px;
+	background: url(images/nav_right.png) left 83px repeat-x;
+}
+
+#access ul.menu {
+	padding-top: 110px;
+	text-transform:uppercase;	
+}
+
+#access .menu-header {
+	margin: 0;
+}
+
+#access a {
+        padding: 0;
+}
+
+#access ul li {
+        padding-right: 3%;
+}
+
+#access ul li.current_page_item > a, #access ul li.current-menu-ancestor > a, #access ul li.current-menu-item > a, #access ul li.current-menu-parent > a {
+	color: black;
+}
+
 #access #submenu ul.menu {
 	clear : left;
 	margin-left: 20px;
