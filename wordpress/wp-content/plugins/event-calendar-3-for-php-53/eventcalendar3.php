@@ -132,6 +132,19 @@ function ec3_action_admin_head()
 }
 
 
+/** Rewrite date restrictions if the post is an event */
+function ec3_filter_nextprev_where($where)
+{
+  global $ec3,$post;
+  $s = $post->ec3_schedule[0];
+  if ( $s ){
+    $regexp="/(.*)\bp\.post_date\b (<|>) ('[^']+'|\d+\b)(.*)/i";
+    if(preg_match($regexp,$where,$match))
+	  $where = $match[1].'ec3_sch.start '.$match[2]." '".$s->start."' ".$match[4];
+  }
+  return $where;
+}
+
 /** Rewrite date restrictions if the query is day- or category- specific. */
 function ec3_filter_posts_where($where)
 {
@@ -225,6 +238,12 @@ function ec3_filter_posts_where($where)
   return $where;
 }
 
+function ec3_filter_nextprev_join($join)
+{
+  global $ec3;
+  $join.=" LEFT JOIN $ec3->schedule ec3_sch ON ec3_sch.post_id=p.ID ";
+  return $join;
+}
 /** */
 function ec3_filter_posts_join($join)
 {
@@ -239,6 +258,18 @@ function ec3_filter_posts_join($join)
   return $join;
 }
 
+function ec3_filter_nextprev_sort($orderby)
+{
+   global $ec3;
+   $ec3->order_by_start=true;
+   $regexp="/(?<!DATE_FORMAT[(])\bp\.post_date\b( DESC\b| ASC\b)(.*)?/i";
+   if(preg_match($regexp,$orderby,$match))
+   {
+    $orderby=preg_replace($regexp,'ec3_sch.start',$orderby);
+    $orderby .= ' '.$match[1].' '.$match[2];
+   }
+   return $orderby;
+}
 /** Change the order of event listings (only advanced mode). */
 function ec3_filter_posts_orderby($orderby)
 {
@@ -585,7 +616,11 @@ if($ec3->event_category)
   add_filter('query_vars',   'ec3_filter_query_vars');
   add_filter('parse_query',  'ec3_filter_parse_query');
   add_filter('posts_where',  'ec3_filter_posts_where',11);
+  add_filter('get_next_post_where',  'ec3_filter_nextprev_where',11);
+  add_filter('get_previous_post_where',  'ec3_filter_nextprev_where',11);
   add_filter('posts_join',   'ec3_filter_posts_join');
+  add_filter('get_next_post_join',   'ec3_filter_nextprev_join');
+  add_filter('get_previous_post_join',   'ec3_filter_nextprev_join');
   add_filter('posts_groupby','ec3_filter_posts_groupby');
   add_filter('posts_fields', 'ec3_filter_posts_fields');
   add_filter('the_posts',    'ec3_filter_the_posts');
@@ -596,8 +631,11 @@ if($ec3->event_category)
   remove_filter('get_the_excerpt', 'wp_trim_excerpt');
   add_filter('get_the_excerpt', 'ec3_get_the_excerpt');
   
-  if($ec3->advanced)
+  if($ec3->advanced){
     add_filter('posts_orderby','ec3_filter_posts_orderby',11);
+    add_filter('get_previous_post_sort','ec3_filter_nextprev_sort',11);
+    add_filter('get_next_post_sort','ec3_filter_nextprev_sort',11);
+  }
 }
 
 ?>
