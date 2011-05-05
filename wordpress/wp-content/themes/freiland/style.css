@@ -51,6 +51,53 @@ body{
 	/* overflow: visible; */
 }
 
+#content {
+	margin-left : 0;
+}
+
+.event_day, .event_date, .event_time{
+	float : left;
+	margin-right: 10px;
+}
+
+body.category-events .event_day {
+	width : 20%;
+}
+
+body.category-events .event_date {
+	width : 35%;
+}
+
+.event_date{
+	font-size:28pt;
+	font-family:"arial regular";
+}
+
+.event_day, .event_time{
+	font-size:7pt;
+}
+
+.entry-date {
+	float : left;
+	width : 35%;
+}
+
+body.category-events .entry-content {
+	clear: none;
+	float : right;
+	width : 65%;
+	padding-top : 0;
+}
+
+#content div.category-events .entry-title {
+	font-size:22pt;
+}
+
+.hentry{
+	margin-bottom : 0;
+	overflow : hidden;
+}
+
 #primary {
 	position: fixed;
 	right: 0;
@@ -63,6 +110,27 @@ body{
 	position : fixed;
 	bottom : 0;
 	left : 0;
+	margin-bottom : 0;
+}
+
+#footer-widget-area {
+	overflow : visible;
+}
+
+#footer-widget-area div#first {
+	float : right;
+	width : auto;
+	margin-right : 0px;
+}
+
+#footer-widget-area div#first li.widget_pages li {
+	display : inline;
+	padding-right: 2%;
+}
+
+#colophon {
+	border-top: none; 
+	overflow : visible;
 }
 
 #site-description {
