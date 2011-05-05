@@ -208,7 +208,7 @@ function ec3_get_calendar_month($date,$calendar_days,$thead)
     sprintf(__('View posts for %1$s %2$s'),$date->month_name(),$date->year_num);
   echo "<table id='" . $date->month_id() . "'>\n<caption>"
     . '<a href="' . $date->month_link() . '" title="' . $title . '">'
-    . $date->month_name() . ' ' . $date->year_num . "</a></caption>\n";
+    . $date->month_name() . "</a></caption>\n";
   echo $thead;
 
   //

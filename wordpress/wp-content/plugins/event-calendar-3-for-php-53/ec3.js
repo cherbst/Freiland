@@ -98,7 +98,7 @@ function ec3()
     if(caption)
     {
       var c=get_child_by_tag_name(caption,'a');
-      var caption_text=ec3.month_of_year[month_num0] + ' ' + year_num;
+      var caption_text=ec3.month_of_year[month_num0];
       if(c && c.firstChild && c.firstChild.nodeType==ec3.TEXT_NODE )
       {
 	if(month_num<10) 
