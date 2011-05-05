@@ -210,17 +210,35 @@ function freiland_subcategory_dropdown($cat_id){
 
   function freiland_the_event_date(){
 	global $post;
-	$date = get_post_meta($post->ID,'date_begin',true);
-	if ( $date == "" ) return;
-	$date = strtotime(get_post_meta($post->ID,'date_begin',true));
-	echo '<div class="event-day">';
-	echo strftime("%A",$date);
+	$begin_date = get_post_meta($post->ID,'date_begin',true);
+	if ( $begin_date == "" ) return;
+	$begin_date = strtotime($begin_date);
+	echo '<div class="begin_date">';
+	echo '<div class="event_day">';
+	echo strftime("%A",$begin_date);
 	echo '</div>';
-	echo '<div class="event-date">';
-	echo strftime("%d.%m.",$date);
+	echo '<div class="event_date">';
+	echo strftime("%d.%m.",$begin_date);
 	echo '</div>';
-	echo '<div class="event-time">';
-	echo strftime("%H:%M",$date) . " UHR";
+	echo '<div class="event_time">';
+	echo strftime("%H:%M",$begin_date) . " UHR";
+	echo '</div>';
+	echo '</div>';
+
+	$end_date = get_post_meta($post->ID,'date_end',true);
+	if ( $end_date == "" ) return;
+	$end_date = strtotime($end_date);
+	if ( $end_date == $begin_date ) return;
+	echo '<div class="end_date">';
+	echo '<div class="event_day">';
+	echo strftime("%A",$end_date);
+	echo '</div>';
+	echo '<div class="event_date">';
+	echo strftime("%d.%m.",$end_date);
+	echo '</div>';
+	echo '<div class="event_time">';
+	echo strftime("%H:%M",$end_date) . " UHR";
+	echo '</div>';
 	echo '</div>';
   }
 

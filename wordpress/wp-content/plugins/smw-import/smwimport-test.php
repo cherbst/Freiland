@@ -37,6 +37,7 @@ class smwimport_test
 		'title' => 'SMW Event'.$i,
 		'eventtype'  => 'concert',
 		'date_begin' => '2011-'.(($i%12)+1).'-'.(($i%29)+1).' 10:00',
+		'date_end' => ($i%10==0)?('2011-'.(($i%12)+1).'-'.((($i+1)%29)+1).' 10:00'):'',
 		'short_description' => 'SMW imported event '.$i,
 		'long_description' => '<strong>Newer imported event content</strong>',
 		'genre' => 'rock',

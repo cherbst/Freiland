@@ -32,6 +32,11 @@ div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
 div.filter_room{ display : none; }
 
+/* hide end_date in event category page */
+body.category-events div.end_date {
+	display : none;
+}
+
 #main { 
 	clear: both;
 	/* clear: none */
