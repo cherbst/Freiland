@@ -100,10 +100,10 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
 
-	$return .= '<p>Erschienen in '. $source .' am '.$date->format('d.m.Y').'</p>';
 	$return .= '<p>'. $subtitle .'</p>';
-	$return .= $content;
-	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
+	$return .= $content .'<p/>';
+	$return .= '<div class="source">'. $source .' '.$date->format('d.m.Y').'</div>';
+	$return .= '<div class="press_homepage"><a href="'.$homepage.'">'.$label.'</a></div>';
 	return $return;
   }
 
