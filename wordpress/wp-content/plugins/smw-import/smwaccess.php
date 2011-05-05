@@ -22,6 +22,8 @@ class smwaccess
    const smwcookie = "/tmp/.smwcookie";
 
    static function login($url,$user,$pass){
+	if ( !function_exists('curl_init') ) return false;
+
 	@unlink(self::smwcookie);
 	$content=self::get_content($url);
 	preg_match('/<input.*wpLoginToken.*value="([a-f0-9]+)"/',$content,$matches);
@@ -36,6 +38,9 @@ class smwaccess
    }
 
    static function get_content($url,$postdata = null){
+	if ( !function_exists('curl_init') )
+		 return file_get_contents($url);
+
 	$ch = curl_init();
 	curl_setopt ($ch, CURLOPT_URL,$url);
 	curl_setopt ($ch, CURLOPT_SSL_VERIFYPEER, FALSE);

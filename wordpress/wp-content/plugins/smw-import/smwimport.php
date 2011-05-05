@@ -668,7 +668,10 @@ class smwimport
 	if ( $login_url != "" ){
 		$username = get_option('smwimport_username');
 		$password = get_option('smwimport_password');
-		smwaccess::login($login_url,$username,$password);
+		$ret = smwaccess::login($login_url,$username,$password);
+		if ( $ret === false )
+			return new WP_Error('curl_not_installed',
+				__("You have to install php5_curl to use authentication!"));
 	}
 
 	self::load_ec3();
