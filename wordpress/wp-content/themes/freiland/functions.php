@@ -15,6 +15,17 @@
  */
 add_filter( 'the_content', 'freiland_filter_the_content',7 );
 add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
+add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
+
+function freiland_filter_start_el( $item_output, $item ){
+	$cat = get_category_by_slug('events');
+	if ( $cat == null || $cat->term_id != $item->object_id )
+		return $item_output;
+	$item_output .= '<ul class="children">';
+	$item_output .= freiland_get_event_locations(0);
+	$item_output .= '</ul>';
+	return $item_output;
+}
 
 function freiland_filter_the_content( $post_content ) {
        if ( in_category( 'events' ) )
@@ -213,11 +224,16 @@ function freiland_subcategory_dropdown($cat_id){
 	echo '</div>';
   }
 
-  function freiland_get_eventtypes(){
+  function freiland_get_event_locations($echo=1){
+	$cat = get_category_by_slug('location');
+	if ( $cat != null )
+		return wp_list_categories ("echo=$echo&child_of=$cat->term_id&title_li=");
+  }
+
+  function freiland_get_eventtypes($echo=1){
 	$cat = get_category_by_slug('eventtype');
-	if ( !$cat ) return;
-	$args = "title_li=&child_of=$cat->term_id";
-	wp_list_categories( $args );
+	if ( $cat != null )
+		return wp_list_categories("echo=$echo&child_of=$cat->term_id&title_li=");
   }
 
   function freiland_the_event_type(){
