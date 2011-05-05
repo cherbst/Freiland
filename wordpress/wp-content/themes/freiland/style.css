@@ -39,9 +39,9 @@ body.category-events div.end_date {
 
 body{
 	background : white;
-	padding-top : 150px;
+	padding-top : 180px;
 	padding-bottom : 150px;
-	padding-left : 15%;
+	padding-left : 190px;
 }
 
 #main { 
@@ -68,9 +68,22 @@ body.category-events .event_date {
 	width : 35%;
 }
 
+.event-type{
+	font-size : 8pt;
+}
+
+.event-genre{
+	font-size : 10pt;
+}
+
+.event-type, .event-genre {
+	color : rgb(196,81,157);
+	text-transform:uppercase;	
+}
+
 .event_date{
 	font-size:28pt;
-	font-family:"arial regular";
+	font-family:Arial;
 }
 
 .event_day, .event_time{
@@ -103,7 +116,40 @@ body.category-events .entry-content {
 	right: 0;
 	width: 15%;
 	min-width: 200px;
-	margin-top: 100px;
+	margin-top: 150px;
+}
+
+#primary a {
+	color : black;
+}
+
+#primary li > a {
+	font-family: Arial;
+	font-size : 8pt;
+	text-transform:uppercase;	
+}
+
+#event-calendar .widget-title{
+	display: none;
+}
+
+#event-calendar table thead{
+	border-bottom: 1px solid black;
+	border-top: 1px solid black;
+}
+
+#wp-calendar tbody td {
+	background : white;
+}
+
+#wp-calendar tbody,thead {
+	color: black;
+	font-family: Pragmatica;
+	font-size : 10pt;
+}
+
+#wp-calendar .ec3_eventday a {
+	color : rgb(196,81,157);
 }
 
 #footer {
@@ -115,11 +161,12 @@ body.category-events .entry-content {
 
 #footer-widget-area {
 	overflow : visible;
+	float : right;
 }
 
 #footer-widget-area div#first {
 	float : right;
-	width : auto;
+	width : 400px;
 	margin-right : 0px;
 }
 
@@ -158,6 +205,7 @@ body.category-events .entry-content {
 #header {
 	position: fixed;
 	padding: 0px;
+	top: 0;
 	background: #FFFFFF;
 	width: 100%;
 	height: 200px;
@@ -177,20 +225,15 @@ body.category-events .entry-content {
 }
 
 #access {
-	float: left;
 	height: 200px;
-	width: auto;
+	width: 450px;
 	min-width: 300px;
 	background: rgba(255, 255, 255, 0.0);
 	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
 }
 
-#access .menu-header, div.menu {
-	width: auto;
-}
-
 #access .menu-header, div.menu, #colophon {
-	width: auto;
+	width: 100%;
 }
 
 #access li > a, #access ul ul > a {
@@ -199,9 +242,13 @@ body.category-events .entry-content {
 }
 
 #access li:hover > a, #access ul ul :hover > a {
-	border-bottom: 6px solid red;
+	border-bottom: 6px solid rgb(196,81,157);
 	background: #FFFFFF;
 	color: #000000;
+}
+
+#access li.current-menu-item, li.current-category-ancestor > a {
+	border-bottom: 6px solid rgb(196,81,157);
 }
 
 #access ul ul a {
@@ -216,11 +263,18 @@ body.category-events .entry-content {
         background: rgba(255,255,255,0.9);
 }
 
+
+#access ul.children li > a {
+	color : rgb(196,81,157);
+	font-size : 8pt;
+	font-family:Arial;
+}
+
 #topright {
 	position: fixed;
 	right : 0;
 	top : 0;
-	width: 250px;
+	width: 210px;
 	height: 365px;
 	background: url(images/nav_right.png) left 84px repeat-x #FFFFFF;
 }
@@ -237,21 +291,39 @@ body.category-events .entry-content {
 	width: 100%;
 }
 
-#footer div {
-	float: left;
-}
-
 #footer li {
 	list-style: none;
 	display: inline;
+	text-transform:uppercase;	
 }
 
-#footer siteinfo {
-float: left;
+#footer li a {
+	color : black;
+	font-size : 9pt;
+	font-family: Helvetica!important;
 }
+
+#footer li:hover > a {
+	border-bottom: 3px solid rgb(196,81,157);
+}
+
+#footer li > a:hover {
+	text-decoration: none;
+}
+
+#footer li.current_page_item > a {
+	border-bottom: 3px solid rgb(196,81,157);
+}
+
+#footer #site-info {
+	float: left;
+}
+
 #access ul.menu {
 	padding-top: 110px;
 	text-transform:uppercase;	
+	font-family: Helvetica!important;
+	font-size : 14pt;
 }
 
 #access .menu-header {
@@ -279,11 +351,6 @@ float: left;
 	line-height : 30px;
 }
 
-#access ul li.current-category-ancestor > a,
-#access ul li.current-cat > a {
-	color: #fff;
-}
-          
 ul.Linklist {
 	list-style-type: none; 
 	margin-left: 0px;
