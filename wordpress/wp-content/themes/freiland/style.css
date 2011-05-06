@@ -117,7 +117,7 @@ body.category-events .entry-content {
 	right: 0;
 	width: 15%;
 	min-width: 200px;
-	margin-top: 150px;
+	margin-top: 130px;
 }
 
 #primary a {
@@ -284,7 +284,7 @@ li#eventtypes li{
 	right : 0;
 	top : 0;
 	width: 210px;
-	height: 365px;
+	height: 340px;
 	background: url(images/nav_right.png) left 84px repeat-x #FFFFFF;
 }
 
