@@ -93,6 +93,7 @@ body.category-events .event_date {
 .entry-date {
 	float : left;
 	width : 35%;
+	margin-top: 5px;
 }
 
 body.category-events .entry-content {
