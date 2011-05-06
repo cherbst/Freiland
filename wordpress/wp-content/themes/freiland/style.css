@@ -96,6 +96,13 @@ body.category-events .event_date {
 	margin-top: 5px;
 }
 
+.entry-content, .entry-summary {
+	clear: none;
+	float: right;
+	width: 65%;
+	padding: 0;
+}
+
 body.category-events .entry-content {
 	clear: none;
 	float : right;
