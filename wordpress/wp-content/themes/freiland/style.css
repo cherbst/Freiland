@@ -101,7 +101,7 @@ body.category-events .event_date {
 	margin-top: 5px;
 }
 
-.entry-content, .entry-summary {
+body.category-events .entry-content, body.category-events .entry-summary {
 	clear: none;
 	float: right;
 	width: 65%;
