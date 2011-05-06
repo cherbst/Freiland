@@ -50,6 +50,24 @@ class smwimport_test
 
 		$data[] = $event;
 	}
+	$data[] = array(
+		'type'  => 'Veranstaltung',
+		'label' => 'Kollektiv Turmstrasse',
+		'title' => 'Kollektiv Turmstrasse',
+		'eventtype'  => 'concert',
+		'date_begin' => '2011-06-02 10:00',
+		'short_description' => 'Rebellion der Träumer',
+		'long_description' => 'Das neue Rebellion der Träumer Konzert!',
+		'genre' => 'rock',
+		'homepage' => array( 'www.test1.de','www.test2.de','www.test3.de'),
+		'location' => 'Werkstatt',
+		'house' => 'big house',
+		'room' => '203',
+		'age' => '18',
+		'banner' => array('url' => 'http://87.238.194.42/Kollektiv-Turmstrasse.jpg',
+				'title' => 'Turmstrasse')
+		);
+
 	return $data;
   }
 

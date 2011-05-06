@@ -55,6 +55,11 @@ body{
 	margin-left : 0;
 }
 
+#mainevent-banner img{
+	width: 100%;
+	max-height: 200px;
+}
+
 .event_day, .event_date, .event_time{
 	float : left;
 	margin-right: 10px;

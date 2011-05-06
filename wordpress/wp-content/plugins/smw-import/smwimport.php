@@ -72,6 +72,8 @@ class smwimport
 			    keys described in the attachment attribute mapping or a string
 			    of the form '<prefix>:filename'. The latter will be downloaded
 			    from the url given in the attachment_url option
+	   "globalattachment" : a special attachment where the attachment file name
+				will be stored in an option under the key name
 	   "calendar_start" : ( requires ec3 plugin ) 
 			 attribute value becomes the start date of this post
 	   "calendar_end" : ( requires ec3 plugin ) 
@@ -126,6 +128,7 @@ class smwimport
 			'image_small' => 'attachment',
 			'image_big' => 'attachment',
 			'image_name' => 'attachmentname',
+			'banner' => 'globalattachment',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
 		)	
@@ -360,6 +363,8 @@ class smwimport
 				case 'post_date':
 					$postarr[$key_map] = $value;
 					break;
+				case 'globalattachment':
+					$globalattachment = $key;
 				case 'attachment':
 					$attachments[] = $key;
 					break;
@@ -412,7 +417,12 @@ class smwimport
 		if ( $attachmentname != null )
 			$attach_arr['title'] = $attachmentname;
 		$ret = self::import_attachment_for_post($prim_key.$attachment,$attach_arr,$ID);
-		if ( is_wp_error($ret) ) $g_ret = $ret;
+		if ( is_wp_error($ret) ){
+			$g_ret = $ret;
+			continue;
+		}
+		if ( $attachment == $globalattachment )
+			update_option($globalattachment,$ret);
 	}
 
 	// import dates

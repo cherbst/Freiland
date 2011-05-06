@@ -58,7 +58,13 @@
 global $wp_query;
 $args = array_merge( $wp_query->query, array('posts_per_page' => -1 ));
 query_posts($args);
+
+/* show banner of main event */
  ?>
+<div id="mainevent-banner">
+<?php echo freiland_get_mainevent_banner(); ?>
+</div>
+
 <?php while ( have_posts() ) : the_post(); ?>
 
 	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>

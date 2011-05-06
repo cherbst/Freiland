@@ -267,4 +267,11 @@ function freiland_subcategory_dropdown($cat_id){
 	echo get_post_meta($post->ID,'genre',true);
   }
 
+  function freiland_get_mainevent_banner(){
+	$id = get_option('banner');
+	if ( $id == false ) return;
+
+	return wp_get_attachment_image( $id,
+		'full',false,array('class' => 'aligncenter' ) );
+  }
 ?>
