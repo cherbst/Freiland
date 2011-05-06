@@ -405,6 +405,8 @@ class smwimport
 	if ( is_wp_error($ID) )
 		return $ID;
 	
+	$oldattachments = get_children( array( 'post_parent' => $ID, 
+		'post_type' => 'attachment', 'numberposts' => 999 ) );
 	// import attachments
 	foreach( $attachments as $attachment ){
 		$attach_arr = $data[$attachment];
@@ -423,7 +425,12 @@ class smwimport
 		}
 		if ( $attachment == $globalattachment )
 			update_option($globalattachment,$ret);
+		unset($oldattachments[$ret]);
 	}
+
+	// delete old attachments that are no longer used
+	foreach( array_keys($oldattachments) as $attach_id )
+		wp_delete_post($attach_id,true);
 
 	// import dates
 	if ( is_array($calendar) ){
