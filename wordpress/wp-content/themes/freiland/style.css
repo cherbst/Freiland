@@ -186,13 +186,12 @@ li#eventtypes li{
 }
 
 #footer-widget-area {
-	overflow : visible;
 	float : right;
+	width: 60%;
 }
 
 #footer-widget-area div#first {
-	float : right;
-	width : 400px;
+	width : 100%;
 	margin-right : 0px;
 }
 
@@ -201,9 +200,14 @@ li#eventtypes li{
 	padding-right: 2%;
 }
 
+#footer-widget-area #first ul{
+	margin:0;
+}
+
 #colophon {
-	border-top: none; 
-	overflow : visible;
+	border-top: none;
+	margin-top:5px;
+	padding:0; 
 }
 
 #site-description {
@@ -320,14 +324,19 @@ li#eventtypes li{
 	background: rgba(255, 255, 255, 0.9);
 }
 
-#footer #colophon {
-	width: 100%;
-}
-
 #footer li {
 	list-style: none;
-	display: inline;
+	display: block;
 	text-transform:uppercase;	
+}
+
+#footer li.widget_pages {
+	float: right;
+	width:60%;
+}
+
+#footer li.widget_nav_menu {
+	float: right;
 }
 
 #footer li a {
@@ -355,10 +364,15 @@ li#eventtypes li{
 	font-weight:normal;
 }
 
+#footer #menu-extern li{
+	float : left;
+}
+
 #footer #menu-extern span{
 	display:block;
 	height: 25px;
 	width:  25px;
+	margin-right: 20px;
 }
 
 #footer #menu-extern a[title="twitter"] span{
