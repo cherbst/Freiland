@@ -277,7 +277,9 @@ li#eventtypes li{
 	color: #000000;
 }
 
-#access li.current-menu-item > a, li.current-category-ancestor > a {
+#access li.current-menu-item > a, 
+#access li.current-category-ancestor > a, 
+#access li.current-post-ancestor > a {
 	border-bottom: 6px solid rgb(196,81,157);
 }
 
