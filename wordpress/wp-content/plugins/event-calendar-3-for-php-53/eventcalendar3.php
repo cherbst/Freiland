@@ -178,18 +178,26 @@ function ec3_filter_posts_where($where)
        }
        // start either matches the date criteria,
        //   OR the rdate/rtime is between start..end:
+        $event_date =  str_replace( "'", '', implode('-',$rdate).' '.implode(':',$rtime) );
+
        $where_start=
        sprintf("(%1\$s) OR (start<='%2\$s' AND end>='%2\$s')",
          preg_replace("/\b$wpdb->posts\.post_date\b/",'start',$where_post_date),
-         str_replace( "'", '', implode('-',$rdate).' '.implode(':',$rtime) )
+         $event_date
        );
 
-       $where=preg_replace($re,'',$where);
+       if ( $rdate[2] != 0 )	
+	$where = sprintf("AND ((start>='%1\$s' AND start<DATE_ADD('%1\$s',INTERVAL %2\$d DAY)) OR (start<='%1\$s' AND end>='%1\$s' AND end<DATE_ADD('%1\$s',INTERVAL %2\$d DAY)))",
+		$event_date,$ec3->num_days);
+       else
+	$where=preg_replace($re,'',$where);
        if(is_category($ec3->event_category)):
-         $where.=" AND ($where_start) ";
+	 if ( $rdate[2] == 0 )
+           $where.=" AND ($where_start) ";
          $ec3->order_by_start=true;
        else:
-         $where.=" AND (($where_post_date) OR ($where_start)) ";
+	 if ( $rdate[2] == 0 )
+           $where.=" AND (($where_post_date) OR ($where_start)) ";
        endif;
        $ec3->join_ec3_sch=true;
      endif;

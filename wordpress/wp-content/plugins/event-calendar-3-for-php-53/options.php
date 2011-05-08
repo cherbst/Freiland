@@ -60,6 +60,8 @@ class ec3_Options
   var $show_only_events;
   /** Number to months displayed by get_calendar(). DEFAULT=1 */
   var $num_months;
+  /** Number of days to check for events for a selected day. DEFAULT=1 */
+  var $num_days;
   /** Should day names be abbreviated to 1 or 3 letters? DEFAULT=1 */
   var $day_length;
   /** Hide the 'EC' logo on calendar displays? DEFAULT=0 */
@@ -106,6 +108,7 @@ class ec3_Options
     $this->read_event_category();
     $this->read_show_only_events();
     $this->read_num_months();
+    $this->read_num_days();
     $this->read_day_length();
     $this->read_hide_logo();
     $this->read_hide_event_box();
@@ -142,6 +145,12 @@ class ec3_Options
     $this->num_months =abs(intval(get_option('ec3_num_months')));
     if(!$this->num_months)
         $this->num_months=1;
+  }
+  function read_num_days()
+  {
+    $this->num_days =abs(intval(get_option('ec3_num_days')));
+    if(!$this->num_days)
+        $this->num_days=1;
   }
   function read_day_length()
   {
@@ -210,6 +219,14 @@ class ec3_Options
     {
       update_option('ec3_num_months',$val);
       $this->read_num_months();
+    }
+  }
+  function set_num_days($val)
+  {
+    if($this->num_days!=$val)
+    {
+      update_option('ec3_num_days',$val);
+      $this->read_num_days();
     }
   }
   function set_day_length($val)

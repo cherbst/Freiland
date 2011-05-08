@@ -430,6 +430,8 @@ class ec3_Admin
           $ec3->set_event_category( intval($_POST['ec3_event_category']) );
       if(isset($_POST['ec3_num_months']))
           $ec3->set_num_months( intval($_POST['ec3_num_months']) );
+      if(isset($_POST['ec3_num_days']))
+          $ec3->set_num_days( intval($_POST['ec3_num_days']) );
       if(isset($_POST['ec3_show_only_events']))
           $ec3->set_show_only_events( intval($_POST['ec3_show_only_events']) );
       if(isset($_POST['ec3_day_length']))
@@ -545,6 +547,13 @@ class ec3_Admin
        <th width="33%" scope="row"><?php _e('Number of months','ec3'); ?>:</th> 
        <td>
         <input type="text" name="ec3_num_months" value="<?php echo $ec3->num_months; ?>" />
+       </td> 
+      </tr> 
+
+      <tr valign="top"> 
+       <th width="33%" scope="row"><?php _e('Number of days','ec3'); ?>:</th> 
+       <td>
+        <input type="text" name="ec3_num_days" value="<?php echo $ec3->num_days; ?>" />
        </td> 
       </tr> 
 
