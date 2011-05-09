@@ -70,6 +70,7 @@ body{
 	float: left;
 	margin-top: 5px;
 	margin-bottom: 35px;
+	width: auto;
 }
 
 .end_date {
@@ -95,16 +96,26 @@ body{
 	display: none;
 }
 
-.event_day, .event_date, .event_time{
+.event_day {
 	float : left;
 	margin-right: 10px;
 }
 
-body.category-events .event_day {
+.event_date {
+        float : left;
+        margin-right: 10px;
+}
+
+.event_time{
+        float : left;
+        margin-right: 10px;
+}
+
+#event-listing .category-events .event_day {
 	width : 20%;
 }
 
-body.category-events .event_date {
+#event-listing .category-events .event_date {
 	width : 35%;
 }
 
