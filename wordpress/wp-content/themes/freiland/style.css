@@ -430,3 +430,9 @@ ul.Linklist {
 img.LinkImage  {
 	margin-right: 10px;
 }
+
+#newsletter_box {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
