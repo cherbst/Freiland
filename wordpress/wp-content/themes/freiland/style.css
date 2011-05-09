@@ -150,6 +150,8 @@ body{
 
 .event_day, .event_time{
 	font-size:7pt;
+	margin-top: 9px;
+	text-transform:uppercase;
 }
 
 .entry-date {
