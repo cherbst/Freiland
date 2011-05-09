@@ -154,7 +154,25 @@ class ec3_Date
     }
     $this->_unixdate=0;
   }
-  
+ 
+  /** Modifies the current object to be one day in the past. */
+  function decrement_day()
+  {
+    $this->day_num--;
+    if($this->day_num < 1)
+    {
+      $this->month_num--;
+      if ( $this->month_num < 1 ){
+	$this->year_num--;
+	$this->month_num = 12;
+      }
+      $this->_days_in_month=0;
+      $this->day_num=1;
+      $this->day_num = $this->days_in_month();
+    }
+    $this->_unixdate=0;
+  }
+ 
   function month_id() // e.g. ec3_2005_06
   {
     return 'ec3_' . $this->year_num . '_' . $this->month_num;

@@ -107,10 +107,10 @@ function ec3_get_calendar_nav($date,$num_months)
  *  month_id is in the form: ec3_<year_num>_<month_num> */
 function ec3_util_calendar_days($begin_month_id,$end_month_id)
 {
-  $begin_date=date('Y-m-d 00:00:00',ec3_dayid2php($begin_month_id));
-  $end_date  =date('Y-m-d 00:00:00',ec3_dayid2php($end_month_id));
   global $ec3, $wpdb;
-
+  $begin_date=date('Y-m-d 00:00:00',ec3_dayid2php($begin_month_id));
+  $end_date=strtotime(date('Y-m-d 00:00:00',ec3_dayid2php($end_month_id)) . " +".($ec3->num_days-1)." day");
+  $end_date=date('Y-m-d 00:00:00',$end_date);
   $sql=
     "SELECT DISTINCT
        id,
@@ -174,6 +174,10 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id)
       $current_day_id='';
     }
     $date=ec3_mysql2date($ent->start_date);
+    $orig_day_id = $date->day_id();
+    // start from num_days in the past
+    for ( $i=1;$i<$ec3->num_days;$i++)
+	$date->decrement_day();
     $end_date=ec3_mysql2date($ent->end_date);
     while(true)
     {
@@ -189,7 +193,8 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id)
       else
           $time=mysql2date($time_format,$ent->start_date);
       //?? Should only record start time on FIRST day.
-      $calendar_days[$day_id]->add_post($ent->post_title,$time,$ent->is_event);
+      if ( $current_day_id >= $orig_day_id && $current_day_id <= $end_date->day_id() )
+	      $calendar_days[$day_id]->add_post($ent->post_title,$time,$ent->is_event);
       if($date->to_unixdate()==$end_date->to_unixdate())
         break;
       $date->increment_day();
