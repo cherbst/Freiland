@@ -14,6 +14,7 @@
  * @since freiland 0.1
  */
 add_filter( 'the_content', 'freiland_filter_the_content',7 );
+add_filter( 'the_excerpt', 'freiland_filter_the_excerpt',7 );
 add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
 add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
 
@@ -37,6 +38,12 @@ function freiland_filter_the_content( $post_content ) {
        return $post_content;
 }
 
+function freiland_filter_the_excerpt( $post_excerpt ) {
+       if ( in_category( 'news') )
+               return freiland_get_news_excerpt($post_excerpt);
+       return $post_excerpt;
+}
+
 function freiland_filter_the_title( $post_title, $id ) {
 	global $post;
 	if ( in_category( 'press') && in_the_loop() && $id == $post->ID )
@@ -51,17 +58,9 @@ function freiland_filter_the_title( $post_title, $id ) {
 			'numberposts' => -1, 
 			'post_status' => null, 
 			'post_parent' => $post->ID ); 
-	$attachments = get_posts($args);
-	if ($attachments) {
-		foreach ( $attachments as $attachment ) {
-			$return .= '<a rel="lightbox" href="'.wp_get_attachment_url($attachment->ID).'">';
-			$return .= wp_get_attachment_image( $attachment->ID,
-				'thumbnail',false,array('class' => 'alignleft' ) );
-			$return .= '</a>';
-		}
-	}else $return .= 'No images in this event:'.$post->ID;
-	$return .= $content ;
 
+	$return = freiland_get_post_image($post->ID);
+	$return .= $content ;
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	if ( $homepage != null ){
@@ -76,6 +75,12 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $return;
   }
 
+  function freiland_get_news_excerpt($excerpt){
+	global $post;
+	$return = freiland_get_post_image($post->ID);
+	return $return . $excerpt;
+  }
+
   function freiland_get_news_content($content){
 	global $post;
 	$subtitle = get_post_meta($post->ID,'subtitle',true);
@@ -83,7 +88,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
 
-	$return = '<p>'. $subtitle .'</p>';
+	$return = freiland_get_post_image($post->ID);
+	$return .= '<p>'. $subtitle .'</p>';
 	$return .= $content;
 	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
 	return $return;
@@ -110,6 +116,22 @@ function freiland_filter_the_title( $post_title, $id ) {
   function freiland_get_press_title($title,$id){
 	$img = freiland_get_favicon_img($id);
 	return $img.$title;
+  }
+
+  function freiland_get_post_image($ID){
+	$args = array(  'post_type' => 'attachment', 
+			'numberposts' => 1, 
+			'post_status' => null, 
+			'post_parent' => $ID ); 
+	$attachments = get_posts($args);
+	if ($attachments) {
+		$attachment = $attachments[0];
+		$return .= '<a rel="lightbox" href="'.wp_get_attachment_url($attachment->ID).'">';
+		$return .= wp_get_attachment_image( $attachment->ID,
+			'thumbnail',false,array('class' => 'alignright' ) );
+		$return .= '</a>';
+	}
+	return $return;
   }
 
   function freiland_get_favicon_img($id){
