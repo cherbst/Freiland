@@ -65,6 +65,7 @@ query_posts($args);
 <?php echo freiland_get_mainevent_banner(); ?>
 </div>
 
+<div id="event-listing">
 <?php while ( have_posts() ) : the_post(); ?>
 
 	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
@@ -87,6 +88,7 @@ query_posts($args);
 		<?php comments_template( '', true ); ?>
 
 <?php endwhile; // End the loop. Whew. ?>
+</div>
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
