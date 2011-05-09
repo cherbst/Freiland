@@ -143,6 +143,7 @@ class smwimport
 			'long_description' => 'post_content',
 			'subtitle' => 'meta',
 			'image' => 'attachment',
+			'image_name' => 'attachmentname',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
 		)	
