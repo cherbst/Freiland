@@ -113,6 +113,13 @@ body.category-events .entry-content, body.category-events .entry-summary {
 	padding: 0;
 }
 
+.entry-content, .entry-summary {
+	clear: none;
+	padding: 12px 0 0 0;
+	float: right;
+	width: 65%;
+}
+
 body.category-events .entry-content {
 	clear: none;
 	float : right;
