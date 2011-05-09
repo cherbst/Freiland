@@ -32,10 +32,11 @@ div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
 div.filter_room{ display : none; }
 
-/* hide end_date in event category page */
+/* deprecated: hide end_date in event category page 
 body.category-events div.end_date {
 	display : none;
 }
+*/
 
 body{
 	background : white;
@@ -63,6 +64,35 @@ body{
 
 #mainevent-banner img{
 	width: 100%;
+}
+
+.begin_date, .end_date {
+	float: left;
+	margin-top: 5px;
+	margin-bottom: 35px;
+}
+
+.end_date {
+	border-left: solid #000000 3px;
+	padding-left: 10px;
+}
+
+#event-listing .category-events .entry-content, #event-listing .category-events .entry-summary {
+        clear: none;
+        float: right;
+        width: 65%;
+        padding: 0;
+}
+
+#event-listing .begin_date {
+	float: none;
+	margin-top: 5px;
+	margin-bottom: 15px;
+}
+
+#event-listing .end_date {
+	float: none;
+	display: none;
 }
 
 .event_day, .event_date, .event_time{
@@ -93,7 +123,7 @@ body.category-events .event_date {
 
 .event_date{
 	font-size:28pt;
-	font-family:Arial;
+	font-family:arial;
 }
 
 .event_day, .event_time{
@@ -106,6 +136,7 @@ body.category-events .event_date {
 	margin-top: 5px;
 }
 
+/* depricated with new div #event-listing
 body.category-events .entry-content, body.category-events .entry-summary {
 	clear: none;
 	float: right;
@@ -119,6 +150,7 @@ body.category-events .entry-content {
 	width : 65%;
 	padding-top : 0;
 }
+*/
 
 #content div.category-events .entry-title {
 	font-size:22pt;
