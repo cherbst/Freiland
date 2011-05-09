@@ -54,9 +54,9 @@
 	 * Without further ado, the loop:
 	 */
 
-/* prevent pagination */
+/* show 7 events at most */
 global $wp_query;
-$args = array_merge( $wp_query->query, array('posts_per_page' => -1 ));
+$args = array_merge( $wp_query->query, array('posts_per_page' => 7 ));
 query_posts($args);
 
 /* show banner of main event */
