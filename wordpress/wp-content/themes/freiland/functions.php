@@ -268,8 +268,12 @@ function freiland_subcategory_dropdown($cat_id){
 
   function freiland_get_eventtypes($echo=1){
 	$cat = get_category_by_slug('eventtype');
+	$args = array('echo' => $echo,
+		'child_of' => $cat->term_id,
+		'title_li' => '',
+		'show_option_all' => __('Zeige alle','freiland'));
 	if ( $cat != null )
-		return wp_list_categories("echo=$echo&child_of=$cat->term_id&title_li=");
+		return wp_list_categories($args);
   }
 
   function freiland_the_event_type(){
