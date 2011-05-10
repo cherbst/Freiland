@@ -101,6 +101,20 @@ function ec3_get_calendar_nav($date,$num_months)
   echo "</tr></tbody></table>\n";
 }
 
+function ec3_util_get_active_event_count($cat){
+  	global $ec3, $wpdb;
+	$sql= 
+	"SELECT COUNT(*) AS count FROM wp_posts  
+	 INNER JOIN wp_term_relationships 
+		ON (wp_posts.ID = wp_term_relationships.object_id) 
+	 LEFT JOIN wp_ec3_schedule ec3_sch 
+		ON ec3_sch.post_id=id AND ec3_sch.end>='$ec3->today'  
+	 WHERE ( wp_term_relationships.term_taxonomy_id IN ($cat) ) AND 
+		wp_posts.post_type = 'post' AND (wp_posts.post_status = 'publish') AND 
+		ec3_sch.post_id IS NOT NULL";
+ 	$res = $wpdb->get_results($sql);
+	return $res[0]->count;
+}
 
 /** Generates an array of all 'ec3_Day's between the start of
  *  begin_month & end_month. Indexed by day_id.
