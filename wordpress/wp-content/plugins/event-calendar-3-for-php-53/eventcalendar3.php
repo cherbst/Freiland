@@ -191,11 +191,10 @@ function ec3_filter_posts_where($where)
          $event_date
        );
 
-       if ( $rdate[2] != 0 )	
-	$where = sprintf("AND ((start>='%1\$s' AND start<DATE_ADD('%1\$s',INTERVAL %2\$d DAY)) OR (start<='%1\$s' AND end>='%1\$s' AND end<DATE_ADD('%1\$s',INTERVAL %2\$d DAY)))",
+       $where=preg_replace($re,'',$where);
+       if ( $rdate[2] != 0 )
+	$where .= sprintf(" AND ((start>='%1\$s' AND start<DATE_ADD('%1\$s',INTERVAL %2\$d DAY)) OR (start<='%1\$s' AND end>='%1\$s' AND end<DATE_ADD('%1\$s',INTERVAL %2\$d DAY)))",
 		$event_date,$ec3->num_days);
-       else
-	$where=preg_replace($re,'',$where);
        if(is_descendent_category($ec3->event_category)):
 	 if ( $rdate[2] == 0 )
            $where.=" AND ($where_start) ";
