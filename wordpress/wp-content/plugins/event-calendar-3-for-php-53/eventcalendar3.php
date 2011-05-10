@@ -145,6 +145,11 @@ function ec3_filter_nextprev_where($where)
   return $where;
 }
 
+function is_descendent_category($id){
+	$cat_id = get_query_var('cat');
+	return ( is_category($id) || cat_is_ancestor_of( $id , $cat_id )); 
+}
+
 /** Rewrite date restrictions if the query is day- or category- specific. */
 function ec3_filter_posts_where($where)
 {
@@ -191,7 +196,7 @@ function ec3_filter_posts_where($where)
 		$event_date,$ec3->num_days);
        else
 	$where=preg_replace($re,'',$where);
-       if(is_category($ec3->event_category)):
+       if(is_descendent_category($ec3->event_category)):
 	 if ( $rdate[2] == 0 )
            $where.=" AND ($where_start) ";
          $ec3->order_by_start=true;
@@ -218,7 +223,7 @@ function ec3_filter_posts_where($where)
      endif;
 
   elseif($ec3->advanced):
-      if(is_category($ec3->event_category)):
+      if(is_descendent_category($ec3->event_category)):
 
           // Hide inactive events
           $where.=" AND ec3_sch.post_id IS NOT NULL ";

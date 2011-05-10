@@ -191,11 +191,12 @@ class ec3_Date
     global $ec3;
     if($ec3->show_only_events)
     {
+      $cat_id = get_query_var('cat');
       return get_option('home') . '/?m='
        . $this->year_num
        . zeroise($this->month_num, 2)
        . zeroise($this->day_num, 2)
-       . "&amp;cat=" . $ec3->event_category;
+       . ($cat_id != null?"&amp;cat=" . $cat_id:"");
     }
     else
       return get_day_link($this->year_num,$this->month_num,$this->day_num);
@@ -215,10 +216,11 @@ class ec3_Date
     global $ec3;
     if($ec3->show_only_events)
     {
+      $cat_id = get_query_var('cat');
       return get_option('home') . '/?m='
        . $this->year_num
        . zeroise($this->month_num, 2)
-       . "&amp;cat=" . $ec3->event_category;
+       . "&amp;cat=" . $cat_id;
     }
     else
       return get_month_link($this->year_num,$this->month_num);

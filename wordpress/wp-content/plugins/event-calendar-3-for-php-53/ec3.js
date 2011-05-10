@@ -396,6 +396,8 @@ function ec3()
         var txt=td.removeChild(td.firstChild);
         var a=document.createElement('a');
         a.href=days[i].getAttribute('link');
+        if(ec3.catClause)
+           a.href+=ec3.catClause; // Copy cat' limit from original month link.
         a.title=days[i].getAttribute('titles');
         if(days[i].getAttribute('is_event'))
         {
