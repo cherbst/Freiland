@@ -415,15 +415,14 @@ li#eventtypes li{
 	font-family: Helvetica!important;
 }
 
-#footer li:hover > a {
+#footer li:hover > a,
+#primary li:hover > a {
 	border-bottom: 3px solid rgb(196,81,157);
-}
-
-#footer li > a:hover {
 	text-decoration: none;
 }
 
-#footer li.current_page_item > a {
+#footer li.current_page_item > a,
+#primary li.current-cat > a {
 	border-bottom: 3px solid rgb(196,81,157);
 }
 
