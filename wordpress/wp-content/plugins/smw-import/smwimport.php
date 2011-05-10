@@ -79,7 +79,9 @@ class smwimport
 			    keys described in the attachment attribute mapping or a string
 			    of the form '<prefix>:filename'. The latter will be downloaded
 			    from the url given in the attachment_url option
-	   "globalattachment" : a special attachment where the attachment file name
+			    The attachment ID will be stored as a post meta value under
+			    the key name.
+	   "globalattachment" : a special attachment where the attachment ID
 				will be stored in an option under the key name
 	   "calendar_start" : ( requires ec3 plugin ) 
 			 attribute value becomes the start date of this post
@@ -434,6 +436,8 @@ class smwimport
 		}
 		if ( $attachment == $globalattachment )
 			update_option($globalattachment,$ret);
+		// store attachment ID as post meta
+		update_post_meta($ID,$attachment,$ret);
 		unset($oldattachments[$ret]);
 	}
 
