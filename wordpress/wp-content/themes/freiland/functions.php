@@ -149,7 +149,9 @@ function freiland_filter_the_title( $post_title, $id ) {
 	foreach( $plugins as $plugin ){
 		if ( strpos($plugin,$ec3plugin) === false ) continue;
 		$admin_php = str_replace($ec3plugin,'admin.php',$plugin);
+		$template_php = str_replace($ec3plugin,'template-functions.php',$plugin);
 		require_once(ABSPATH . "wp-content" . '/plugins/'.$admin_php);
+		require_once(ABSPATH . "wp-content" . '/plugins/'.$template_php);
 		$ret = true;
 		break;
 	}
@@ -260,20 +262,36 @@ function freiland_subcategory_dropdown($cat_id){
 	echo '</div>';
   }
 
+  function freiland_get_exclude_subcats($cat){
+	// exclude categories which have no active posts
+	if ( !freiland_load_ec3() ) return;
+	$cats = get_categories( "parent=".$cat->term_id );
+	foreach( $cats as $c ){
+		if ( ec3_util_get_active_event_count($c->term_id) == 0 )
+			$exclude[] = $c->term_id;
+	}
+
+	if ( !empty($exclude) )
+		return implode(',',$exclude);
+  }
+
   function freiland_get_event_locations($echo=1){
 	$cat = get_category_by_slug('location');
-	if ( $cat != null )
-		return wp_list_categories ("echo=$echo&child_of=$cat->term_id&title_li=");
+	if ( $cat != null ){
+		$exclude = freiland_get_exclude_subcats($cat);
+		return wp_list_categories ("echo=$echo&child_of=$cat->term_id&title_li=&exclude=$exclude");
+	}
   }
 
   function freiland_get_eventtypes($echo=1){
 	$cat = get_category_by_slug('eventtype');
+	if ( $cat == null ) return;
 	$args = array('echo' => $echo,
 		'child_of' => $cat->term_id,
 		'title_li' => '',
-		'show_option_all' => __('Zeige alle','freiland'));
-	if ( $cat != null )
-		return wp_list_categories($args);
+		'show_option_all' => __('Zeige alle','freiland'),
+		'exclude' => freiland_get_exclude_subcats($cat));
+	return wp_list_categories($args);
   }
 
   function freiland_the_event_type(){
