@@ -20,6 +20,8 @@ get_header(); ?>
 				 */
 				if ( in_category('events') )
 					get_template_part( 'loop', 'events' );
+				else if ( in_category('news') )
+					get_template_part( 'loop', 'news' );
 				else
 					get_template_part( 'loop', 'category' );
 				?>

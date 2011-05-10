@@ -292,4 +292,14 @@ function freiland_subcategory_dropdown($cat_id){
 	return wp_get_attachment_image( $id,
 		'full',false,array('class' => 'aligncenter' ) );
   }
+
+  function freiland_get_news_banner(){
+	global $post;
+	$id = get_post_meta($post->ID,'image',true);
+	if ( $id == "" ) return;
+
+	return wp_get_attachment_image( $id,
+		'full',false,array('class' => 'aligncenter' ) );
+  }
+
 ?>

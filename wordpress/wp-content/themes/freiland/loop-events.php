@@ -61,7 +61,7 @@ query_posts($args);
 
 /* show banner of main event */
  ?>
-<div id="mainevent-banner">
+<div id="mainpost-banner">
 <?php echo freiland_get_mainevent_banner(); ?>
 </div>
 

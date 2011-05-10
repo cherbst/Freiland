@@ -56,13 +56,13 @@ body{
 	margin-left : 0;
 }
 
-#mainevent-banner{
+#mainpost-banner{
 	max-height: 180px;
 	overflow: hidden;
 	margin-bottom : 30px;
 }
 
-#mainevent-banner img{
+#mainpost-banner img{
 	width: 100%;
 }
 
@@ -175,6 +175,10 @@ body.category-events .entry-content {
 	padding-top : 0;
 }
 */
+
+body.category-news #content > div.first img {
+	display : none;
+}
 
 #content div.category-events .entry-title {
 	float: left;
