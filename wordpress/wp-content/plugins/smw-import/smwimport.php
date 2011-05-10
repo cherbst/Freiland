@@ -47,7 +47,14 @@ class smwimport
 	      )
 	    )
      )
-       
+      
+     If an entry has the form:
+
+	'SMW category A' => 'SMW category B'
+
+     The mapping for 'SMW category B' will be the same as for 'SMW category A'.
+
+ 
      Supported wordpress types:
      "post" : imports element into an wordpress post
 	required mappings:
@@ -189,7 +196,8 @@ class smwimport
 			'description' => 'description',
 			'gallery_folder' => 'gallery_folder',
 		)
-	)
+	),
+	'SWVorlage' => 'Veranstaltung'
   );
 
   // import test sources
@@ -619,10 +627,13 @@ class smwimport
 	if ( !isset($data['type']) )
 		return new WP_Error('no_type', __("No SMW type set, cannot continue"));
 
-	if ( !isset(self::$smw_mapping[$data['type']]) )
+	$mapping = self::$smw_mapping[$data['type']];
+	if ( $mapping != null && !is_array($mapping) ) // copy mapping
+		$mapping = self::$smw_mapping[$mapping];
+
+	if ( $mapping == null )
 		return new WP_Error('no_mapping', __("No mapping defined for:").$data['type']);
 
-	$mapping = self::$smw_mapping[$data['type']];
 	$importer = array( 'post' => import_post_type,
 			   'attachment' => import_attachment_type,
 			   'link' => import_link_type,
