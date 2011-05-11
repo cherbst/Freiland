@@ -23,6 +23,18 @@ function ec3()
 {
   WindowOnload( function()
   {
+    // jQuery click events for category links
+    jQuery('.event-categories a').click(function(index){
+    	var calendars=get_calendars();
+	var date_array = null;
+    	if(calendars)
+		date_array = get_current_year_month(calendars[0]);
+	if ( date_array == null )
+		date_array = [ec3.today_year_num,ec3.today_month_num];
+	rewrite_category_link(jQuery(this),date_array[1],date_array[0]);
+	return true;
+    });
+
     // Overwrite the href links in ec3_prev & ec3_next to activate EC3.
     var prev=document.getElementById('ec3_prev');
     var next=document.getElementById('ec3_next');
@@ -38,15 +50,6 @@ function ec3()
       // Replace links
       prev.href='javascript:ec3.go_prev()';
       next.href='javascript:ec3.go_next()';
-      // jQuery click events for category links
-      jQuery('.event-categories a').click(function(index){
-    	var calendars=get_calendars();
-    	if(!calendars) return true;
-	var date_array = get_current_year_month(calendars[0]);
-	if ( date_array == null ) return true;
-	rewrite_category_link(jQuery(this),date_array[1],date_array[0]);
-	return true;
-      });
 
       // Pre-load image.
       ec3.imgwait=new Image(14,14);
@@ -228,6 +231,7 @@ function ec3()
   function get_calendars()
   {
     var div=document.getElementById('wp-calendar');
+    if ( !div ) return 0;
     var result=new Array();
     for(var i=0; i<div.childNodes.length; i++)
     {
