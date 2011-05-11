@@ -123,8 +123,7 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id,$cat = 0)
 {
   global $ec3, $wpdb;
   $begin_date=date('Y-m-d 00:00:00',ec3_dayid2php($begin_month_id));
-  $end_date=strtotime(date('Y-m-d 00:00:00',ec3_dayid2php($end_month_id)) . " +".($ec3->num_days-1)." day");
-  $end_date=date('Y-m-d 00:00:00',$end_date);
+  $end_date=date('Y-m-d 00:00:00',ec3_dayid2php($end_month_id));
   if ( $cat == 0 )
 	$cat = $ec3->event_category;
   $sql=
@@ -194,7 +193,7 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id,$cat = 0)
     $date=ec3_mysql2date($ent->start_date);
     $orig_day_id = $date->day_id();
     // start from num_days in the past
-    for ( $i=1;$i<$ec3->num_days;$i++)
+    for ( $i=1;$i<$ec3->num_days && $date->day_num > 1;$i++)
 	$date->decrement_day();
     $end_date=ec3_mysql2date($ent->end_date);
     while(true)
