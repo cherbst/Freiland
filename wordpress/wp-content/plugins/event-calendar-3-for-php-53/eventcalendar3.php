@@ -359,11 +359,11 @@ function ec3_filter_query_vars($wpvarstoreset)
 function ec3_filter_query_vars_xml()
 {
   $components=explode('_',$_GET['ec3_xml']);
-  if(count($components)==2)
+  if(count($components)>=2)
   {
     $date=new ec3_Date($components[0],$components[1]);
     $end=$date->next_month();
-    $calendar_days=ec3_util_calendar_days($date->month_id(),$end->month_id());
+    $calendar_days=ec3_util_calendar_days($date->month_id(),$end->month_id(),$components[2]);
     @header('Content-type: text/xml');
     echo '<?xml version="1.0" encoding="'.get_option('blog_charset')
     .    '" standalone="yes"?>';

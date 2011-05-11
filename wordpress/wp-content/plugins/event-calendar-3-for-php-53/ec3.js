@@ -29,10 +29,12 @@ function ec3()
     if(prev && next)
     {
       // Check for cat limit in month link
-      var xCat=new RegExp('&cat=[0-9]+$');
+      var xCat=new RegExp('&cat=([0-9]+)$');
       var match=xCat.exec(prev.href);
-      if(match)
+      if(match){
         ec3.catClause=match[0];
+	ec3.cat=match[1];
+      }
       // Replace links
       prev.href='javascript:ec3.go_prev()';
       next.href='javascript:ec3.go_next()';
@@ -200,8 +202,11 @@ function ec3()
     {
       ec3.reqs.push(req);
       req.onreadystatechange=process_xml;
-      req.open("GET",
-        ec3.home+'/?ec3_xml='+year_num+'_'+month_num,true);
+      var xml=
+        ec3.home+'/?ec3_xml='+year_num+'_'+month_num;
+      if(ec3.cat)
+           xml+='_'+ec3.cat; // Copy cat' limit from original month link.
+      req.open("GET",xml,true);
       set_spinner(1);
       req.send(null);
     }

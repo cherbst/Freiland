@@ -104,13 +104,13 @@ function ec3_get_calendar_nav($date,$num_months)
 function ec3_util_get_active_event_count($cat){
   	global $ec3, $wpdb;
 	$sql= 
-	"SELECT COUNT(*) AS count FROM wp_posts  
-	 INNER JOIN wp_term_relationships 
-		ON (wp_posts.ID = wp_term_relationships.object_id) 
+	"SELECT COUNT(*) AS count FROM $wpdb->posts  
+	 INNER JOIN $wpdb->term_relationships 
+		ON (id = object_id) 
 	 LEFT JOIN wp_ec3_schedule ec3_sch 
 		ON ec3_sch.post_id=id AND ec3_sch.end>='$ec3->today'  
-	 WHERE ( wp_term_relationships.term_taxonomy_id IN ($cat) ) AND 
-		wp_posts.post_type = 'post' AND (wp_posts.post_status = 'publish') AND 
+	 WHERE ( term_taxonomy_id IN ($cat) ) AND 
+		post_type = 'post' AND (post_status = 'publish') AND 
 		ec3_sch.post_id IS NOT NULL";
  	$res = $wpdb->get_results($sql);
 	return $res[0]->count;
@@ -119,12 +119,14 @@ function ec3_util_get_active_event_count($cat){
 /** Generates an array of all 'ec3_Day's between the start of
  *  begin_month & end_month. Indexed by day_id.
  *  month_id is in the form: ec3_<year_num>_<month_num> */
-function ec3_util_calendar_days($begin_month_id,$end_month_id)
+function ec3_util_calendar_days($begin_month_id,$end_month_id,$cat = 0)
 {
   global $ec3, $wpdb;
   $begin_date=date('Y-m-d 00:00:00',ec3_dayid2php($begin_month_id));
   $end_date=strtotime(date('Y-m-d 00:00:00',ec3_dayid2php($end_month_id)) . " +".($ec3->num_days-1)." day");
   $end_date=date('Y-m-d 00:00:00',$end_date);
+  if ( $cat == 0 )
+	$cat = $ec3->event_category;
   $sql=
     "SELECT DISTINCT
        id,
@@ -133,8 +135,10 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id)
        LEAST(end,'$end_date') AS end_date,
        allday,
        1 AS is_event
-     FROM $wpdb->posts,$ec3->schedule
+     FROM $wpdb->posts,$ec3->schedule,$wpdb->term_relationships
      WHERE post_status='publish'
+       AND id = wp_term_relationships.object_id
+       AND wp_term_relationships.term_taxonomy_id IN ($cat) 
        AND post_type='post'
        AND post_id=id
        AND end>='$begin_date'
@@ -327,7 +331,8 @@ function ec3_get_calendar()
   $calendar_days =
     ec3_util_calendar_days(
       $this_month->month_id(),
-      $end_month->month_id()
+      $end_month->month_id(),
+      get_query_var('cat')
     );
 
   // Display months.
