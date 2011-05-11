@@ -124,10 +124,7 @@ function ec3()
       var caption_text=ec3.month_of_year[month_num0];
       if(c && c.firstChild && c.firstChild.nodeType==ec3.TEXT_NODE )
       {
-	if(month_num<10) 
-	{
-	  c.href=ec3.home+'/?m='+year_num+get_padded_monthnum(month_num);
-	}
+	c.href=ec3.home+'/?m='+year_num+get_padded_monthnum(month_num);
         if(ec3.catClause)
            c.href+=ec3.catClause; // Copy cat' limit from original month link.
         c.title=ec3.viewpostsfor;
@@ -270,8 +267,10 @@ function ec3()
     var cat=xCat.exec(liElem.attr('class'));
     if ( cat ){ 
 	cat = '&cat=' + cat[1];
-        var href=ec3.home+'/?m='+year+get_padded_monthnum(month)+cat;
-        elem.attr('href',href);
+        var href=ec3.home+'/?m='+year+get_padded_monthnum(month);
+	if ( month == ec3.today_month_num && year == ec3.today_year_num )
+		href += ec3.today_day_num;
+        elem.attr('href',href+cat);
     }
   }
 
