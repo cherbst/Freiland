@@ -17,12 +17,20 @@ add_filter( 'the_content', 'freiland_filter_the_content',7 );
 add_filter( 'the_excerpt', 'freiland_filter_the_excerpt',7 );
 add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
 add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
+add_filter( 'nav_menu_css_class', 'freiland_filter_menu_classes',11,2 );
+
+function freiland_filter_menu_classes( $classes, $item ){
+	$cat = get_category_by_slug('events');
+	if ( $cat == null || $cat->term_id != $item->object_id )
+		return $classes;
+	return array_merge( $classes, array( 'cat-item-'.$cat->term_id) );
+}
 
 function freiland_filter_start_el( $item_output, $item ){
 	$cat = get_category_by_slug('events');
 	if ( $cat == null || $cat->term_id != $item->object_id )
 		return $item_output;
-	$item_output .= '<ul class="children event-categories">';
+	$item_output .= '<ul class="children">';
 	$item_output .= freiland_get_event_locations(0);
 	$item_output .= '</ul>';
 	return $item_output;
