@@ -268,11 +268,11 @@ function ec3()
     var liElem = elem.parent('li');
     var xCat=new RegExp('.*cat-item-([0-9]+)');
     var cat=xCat.exec(liElem.attr('class'));
-    if ( cat ) 
+    if ( cat ){ 
 	cat = '&cat=' + cat[1];
-    else cat = '';
-    var href=ec3.home+'/?m='+year+get_padded_monthnum(month)+cat;
-    elem.attr('href',href);
+        var href=ec3.home+'/?m='+year+get_padded_monthnum(month)+cat;
+        elem.attr('href',href);
+    }
   }
 
   /** Turn the busy spinner on or off. */
