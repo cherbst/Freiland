@@ -66,6 +66,8 @@ class ec3_Options
   var $day_length;
   /** Hide the 'EC' logo on calendar displays? DEFAULT=0 */
   var $hide_logo;
+  /** Use ajax to load ec3 calendar? DEFAULT=1 */
+  var $use_ajax;
   /** Display event box within post. DEFAULT=0 */
   var $hide_event_box;
   /** Use advanced post behaviour? DEFAULT=0 */
@@ -111,6 +113,7 @@ class ec3_Options
     $this->read_num_days();
     $this->read_day_length();
     $this->read_hide_logo();
+    $this->read_use_ajax();
     $this->read_hide_event_box();
     $this->read_advanced();
     $this->read_navigation();
@@ -161,6 +164,12 @@ class ec3_Options
   function read_hide_logo()
   {
     $this->hide_logo=intval(get_option('ec3_hide_logo'));
+  }
+  function read_use_ajax()
+  {
+    $this->use_ajax=intval(get_option('ec3_use_ajax'));
+    if($this->use_ajax === false)
+	$this->use_ajax=1;
   }
   function read_hide_event_box()
   {
@@ -243,6 +252,14 @@ class ec3_Options
     {
       update_option('ec3_hide_logo',$val);
       $this->read_hide_logo();
+    }
+  }
+  function set_use_ajax($val)
+  {
+    if($this->use_ajax!=$val)
+    {
+      update_option('ec3_use_ajax',$val);
+      $this->read_use_ajax();
     }
   }
   function set_hide_event_box($val)

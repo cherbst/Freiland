@@ -86,6 +86,7 @@ function ec3_action_wp_head()
 	ec3.myfiles='<?php echo $ec3->myfiles; ?>';
 	ec3.home='<?php echo get_option('home'); ?>';
 	ec3.hide_logo=<?php echo $ec3->hide_logo; ?>;
+	ec3.use_ajax=<?php echo $ec3->use_ajax; ?>;
 	ec3.viewpostsfor="<?php echo __('View posts for %1$s %2$s'); ?>";
 	// --></script>
 

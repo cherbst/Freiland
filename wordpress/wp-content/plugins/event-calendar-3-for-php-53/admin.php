@@ -438,6 +438,8 @@ class ec3_Admin
           $ec3->set_day_length( intval($_POST['ec3_day_length']) );
       if(isset($_POST['ec3_hide_logo']))
           $ec3->set_hide_logo( intval($_POST['ec3_hide_logo']) );
+      if(isset($_POST['ec3_use_ajax']))
+          $ec3->set_use_ajax( intval($_POST['ec3_use_ajax']) );
       if(isset($_POST['ec3_hide_event_box']))
           $ec3->set_hide_event_box( intval($_POST['ec3_hide_event_box']) );
       if(isset($_POST['ec3_advanced']))
@@ -597,6 +599,20 @@ class ec3_Admin
          </option>
          <option value='1'<?php if($ec3->hide_logo) echo " selected='selected'" ?> >
           <?php _e('Hide Logo','ec3'); ?>
+         </option>
+        </select>
+       </td> 
+      </tr> 
+
+      <tr valign="top"> 
+       <th width="33%" scope="row"><?php _e('Use Ajax to load event calendar','ec3'); ?>:</th> 
+       <td>
+        <select name="ec3_use_ajax">
+         <option value='0'<?php if(!$ec3->use_ajax) echo " selected='selected'" ?> >
+          <?php _e('Do not use Ajax','ec3'); ?>
+         </option>
+         <option value='1'<?php if($ec3->use_ajax) echo " selected='selected'" ?> >
+          <?php _e('Use Ajax','ec3'); ?>
          </option>
         </select>
        </td> 

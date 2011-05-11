@@ -9,6 +9,7 @@
 //   var ec3.myfiles
 //   var ec3.home
 //   var ec3.hide_logo
+//   var ec3.use_ajax
 //   var ec3.viewpostsfor
 
 /** Register an onload function. */
@@ -48,8 +49,10 @@ function ec3()
 	ec3.cat=match[1];
       }
       // Replace links
-      prev.href='javascript:ec3.go_prev()';
-      next.href='javascript:ec3.go_next()';
+      if ( ec3.use_ajax ){
+        prev.href='javascript:ec3.go_prev()';
+        next.href='javascript:ec3.go_next()';
+     }
 
       // Pre-load image.
       ec3.imgwait=new Image(14,14);
