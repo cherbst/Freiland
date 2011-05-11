@@ -42,8 +42,8 @@
 		<?php endif; // end primary widget area ?>
 		<?php if ( (in_category('events') && !is_single()) ||
   			!empty($wp_query->query_vars['m']) ) : // eventtypes ?>
-			<li id="eventtypes" class="widget-container event-categories">
-				<ul><?php freiland_get_eventtypes(); ?></ul>
+			<li id="eventtypes" class="widget-container">
+				<ul class="event-categories"><?php freiland_get_eventtypes(); ?></ul>
 			</li>
 		<?php endif; // end eventtypes ?>
 			</ul>
