@@ -286,12 +286,24 @@ function freiland_subcategory_dropdown($cat_id){
   function freiland_get_eventtypes($echo=1){
 	$cat = get_category_by_slug('eventtype');
 	if ( $cat == null ) return;
-	$args = array('echo' => $echo,
+	$args = array('echo' => 0,
 		'child_of' => $cat->term_id,
 		'title_li' => '',
-		'show_option_all' => __('Zeige alle','freiland'),
 		'exclude' => freiland_get_exclude_subcats($cat));
-	return wp_list_categories($args);
+	$return = wp_list_categories($args);
+	// add link to 'event' category
+	$cat = get_category_by_slug('events');
+	if ( $cat != null ){
+		$title =  __('Zeige alle','freiland');
+		$link = get_category_link( $cat->term_id );
+		$show_all  = '<li class="cat-item cat-item-'.$cat->term_id.'">';
+		$show_all .= '<a href="'.$link.'" title="'.$title.'">';
+		$show_all .=  $title.'</a></li>';
+		$return = $show_all . $return;
+	}
+	if ( $echo == 1 )
+		echo $return;
+	return $return;
   }
 
   function freiland_the_event_type(){
