@@ -38,6 +38,16 @@ function ec3()
       // Replace links
       prev.href='javascript:ec3.go_prev()';
       next.href='javascript:ec3.go_next()';
+      // jQuery click events for category links
+      jQuery('.event-categories a').click(function(index){
+    	var calendars=get_calendars();
+    	if(!calendars) return true;
+	var date_array = get_current_year_month(calendars[0]);
+	if ( date_array == null ) return true;
+	rewrite_category_link(jQuery(this),date_array[1],date_array[0]);
+	return true;
+      });
+
       // Pre-load image.
       ec3.imgwait=new Image(14,14);
       ec3.imgwait.src=ec3.myfiles+'/ec_load.gif';
@@ -85,6 +95,11 @@ function ec3()
     }
   }
 
+  function get_padded_monthnum(month){
+	if(month<10) 
+		month = '0' + month;
+	return month;
+  }
 
   /** Replaces the caption and tbody in table to be the specified year/month. */
   function create_calendar(table_cal,month_num,year_num)
@@ -105,11 +120,7 @@ function ec3()
       {
 	if(month_num<10) 
 	{
-	  c.href=ec3.home+'/?m='+year_num+'0'+month_num;
-	}
-	else
-	{
-	  c.href=ec3.home+'/?m='+year_num+month_num;
+	  c.href=ec3.home+'/?m='+year_num+get_padded_monthnum(month_num);
 	}
         if(ec3.catClause)
            c.href+=ec3.catClause; // Copy cat' limit from original month link.
@@ -244,6 +255,18 @@ function ec3()
       next.firstChild.data=ec3.month_abbrev[next_month0%12]+'\u00a0\u00bb';
   }
 
+  function rewrite_category_link(elem,month,year)
+  {
+    // use Jquery to find all links that are children of class 'event-categories'
+    var liElem = elem.parent('li');
+    var xCat=new RegExp('.*cat-item-([0-9]+)');
+    var cat=xCat.exec(liElem.attr('class'));
+    if ( cat ) 
+	cat = '&cat=' + cat[1];
+    else cat = '';
+    var href=ec3.home+'/?m='+year+get_padded_monthnum(month)+cat;
+    elem.attr('href',href);
+  }
 
   /** Turn the busy spinner on or off. */
   function set_spinner(on)
@@ -267,6 +290,15 @@ function ec3()
     }
   }
 
+  function get_current_year_month(cal){
+    // calculate date of new calendar
+    var id_array=cal.id.split('_');
+    if(id_array.length<3)
+      return;
+    var year_num=parseInt(id_array[1]);
+    var month_num=parseInt(id_array[2]);
+    return [year_num,month_num];
+  }
 
   /** Called when the user clicks the 'previous month' button. */
   function go_prev()
@@ -277,11 +309,11 @@ function ec3()
     var pn=calendars[0].parentNode;
 
     // calculate date of new calendar
-    var id_array=calendars[0].id.split('_');
-    if(id_array.length<3)
+    var date_array=get_current_year_month(calendars[0]);
+    if(date_array == null)
       return;
-    var year_num=parseInt(id_array[1]);
-    var month_num=parseInt(id_array[2])-1;
+    var year_num=date_array[0];
+    var month_num=date_array[1]-1;
     if(month_num==0)
     {
       month_num=12;
@@ -320,11 +352,11 @@ function ec3()
     var last_cal=calendars[calendars.length-1];
 
     // calculate date of new calendar
-    var id_array=last_cal.id.split('_');
-    if(id_array.length<3)
+    var date_array=get_current_year_month(last_cal);
+    if(date_array == null)
       return;
-    var year_num=parseInt(id_array[1]);
-    var month_num=1+parseInt(id_array[2]);
+    var year_num=date_array[0];
+    var month_num=1+date_array[1];
     if(month_num==13)
     {
       month_num=1;
