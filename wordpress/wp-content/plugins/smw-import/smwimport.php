@@ -164,7 +164,7 @@ class smwimport
 		'attributes' => array(
 			'title' => 'post_title',
 			'description' => 'post_content',
-			'subtitle' => array('post_excerpt','meta'),
+			'subtitle' => 'meta',
 			'homepage' => array('meta','favicon'),
 			'homepagelabel' => 'meta',
 			'source' => 'meta',
