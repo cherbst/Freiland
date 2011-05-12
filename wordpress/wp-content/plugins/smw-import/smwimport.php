@@ -361,6 +361,12 @@ class smwimport
 	$categories = null;
 	$g_ret = true;
 
+	// init some post properties
+	$postarr = array( 
+		'post_title' => '',
+		'post_content' => '',	
+		'post_excerpt' => '');	
+
 	foreach( $data as $key => $value ){
 		if ( is_array($attribute_mapping[$key]) )
 			$key_mapping = $attribute_mapping[$key];
