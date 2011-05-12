@@ -99,10 +99,14 @@ class smwimport
 
      "link" : imports element into a wordpress link
 	required mappings:  none
+	optional mappings:
+	   "default_category": if existent, links which have no category
+                               will be assigned to this category
         supported attribute mappings:
 	   "link_name':  attribute value will become the link name 
 	   "link_url":   attribute value will become the link url
 	   "link_description":   attribute value will become the link description
+	   "category":   attribute value will become the link category
 
      "gallery" : creates a post and attachments for this post
 	required mappings:
@@ -183,10 +187,12 @@ class smwimport
 	),
 	'Link' => array(
 		'type' => 'link',
+		'default_category' => 'Freiland',
 		'attributes' => array(
 			'name' => 'link_name',
 			'website' => 'link_url',
 			'short_description' => 'link_description',
+			'category' => 'category'
 		)	
 	),
 	'Gallery' => array(
@@ -621,11 +627,22 @@ class smwimport
 			case 'link_description':
 				$link[$attribute_mapping[$key]] = $value;
 				break;
+			case 'category':
+				$categories[] = $value;
+				break;
 		}
 	}
 	$favicon = self::get_favicon_url($link['link_url']);
 	if ( $favicon != null )
 		$link['link_image'] = $favicon;
+
+	if ( $categories == null ){
+		if ( isset($mapping['default_category']) )
+			$categories[] = $mapping['default_category'];
+	}
+
+	foreach( $categories as $cat_name )
+		$link['link_category'][] = self::create_link_category($cat_name);
 	return self::import_link($link);
   }
 
@@ -748,6 +765,15 @@ class smwimport
 	return $g_ret;
   }
 
+  /*  return the id of a link category, create it if it does not exist
+  */
+  private static function create_link_category($cat_name){
+	if ( !$cat = term_exists( $cat_name, 'link_category' ) ) {
+		$cat = wp_insert_term( $cat_name, 'link_category' );
+	}
+	return $cat['term_id'];
+  }
+
   /*  return the id of the link category into which links will be imported
   */
   private static function get_link_category() {
@@ -776,7 +802,7 @@ class smwimport
 	$cat = self::get_link_category();
 	if ( is_wp_error($cat) )
 		return $cat;
-	$link['link_category'] = (string)$cat;
+	$link['link_category'][] = $cat;
 	return wp_insert_link($link,true);
   }
 

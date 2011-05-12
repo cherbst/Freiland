@@ -22,7 +22,8 @@ class smwimport_test
   static function get_links(){
 	$data = array( array(
 		'type'  => 'Link',
-		'name' => 'SMW Test Link', 
+		'name' => 'SMW Test Link',
+		'category' => 'SMW Test Category', 
 		'short_description' => 'This is a link automtically added by smwimport.',
 		'website' => 'http://www.smwimport.org')
 	);
