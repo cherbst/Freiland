@@ -345,7 +345,10 @@ function freiland_subcategory_dropdown($cat_id){
 
   function freiland_the_event_genre(){
 	global $post;
-	echo get_post_meta($post->ID,'genre',true);
+	$genre = get_post_meta($post->ID,'genre',true);
+	if ( is_array($genre) )
+		$genre = implode(" ",$genre);
+	echo $genre;
   }
 
   function freiland_get_mainevent_banner(){
