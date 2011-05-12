@@ -194,6 +194,10 @@ body.category-events .entry-content {
 }
 */
 
+body.page #content > div.page > h1 {
+	display : none;
+}
+
 body.category-news #content > div.first img {
 	display : none;
 }
@@ -517,13 +521,32 @@ li#eventtypes li{
 	line-height : 30px;
 }
 
+h1.link-category{
+	font-family: Arial;
+	text-transform:uppercase;	
+	font-size: 20pt;
+}
+
 ul.Linklist {
+	font-family: Arial;
+	text-transform:uppercase;
+	font-size: 12pt;
 	list-style-type: none; 
 	margin-left: 0px;
 	padding-left: 0px;
 }
 
+ul.Linklist a {
+	color:black;
+	text-decoration:none;
+}
+
+ul.Linklist span.link-description {
+	display:none;
+}
+
 img.LinkImage  {
+	display:none;
 	margin-right: 10px;
 }
 
