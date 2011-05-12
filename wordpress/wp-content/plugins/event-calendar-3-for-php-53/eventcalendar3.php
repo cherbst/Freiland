@@ -647,8 +647,8 @@ if($ec3->event_category)
   if(!$ec3->hide_event_box)
     add_filter('the_content','ec3_filter_the_content',20);
   
-  remove_filter('get_the_excerpt', 'wp_trim_excerpt');
-  add_filter('get_the_excerpt', 'ec3_get_the_excerpt');
+//  remove_filter('get_the_excerpt', 'wp_trim_excerpt');
+//  add_filter('get_the_excerpt', 'ec3_get_the_excerpt');
   
   if($ec3->advanced){
     add_filter('posts_orderby','ec3_filter_posts_orderby',11);
