@@ -45,6 +45,8 @@ function freiland_filter_the_content( $post_content ) {
                return freiland_get_news_content($post_content);
        else if ( in_category( 'press') )
                return freiland_get_press_content($post_content);
+	else if ( is_page( 'links') )
+               return freiland_get_links_content($post_content);
        return $post_content;
 }
 
@@ -129,6 +131,18 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$return .= '<div class="source">'. $source .' '.$date->format('d.m.Y').'</div>';
 	$return .= '<div class="press_homepage"><a href="'.$homepage.'">'.$label.'</a></div>';
 	return $return;
+  }
+
+  function freiland_get_links_content($content){
+	$link_categories = get_terms('link_category');
+	$content = '';
+	$exclude = array('blogroll','smwimport');
+	foreach ( $link_categories as $cat ){
+		if ( in_array($cat->slug,$exclude) ) continue;
+		$content .= '<h1 class="link-category">'.$cat->name.'</h1>';
+		$content .= '[blogroll-links categoryslug="'.$cat->slug.'"]'."\n";
+	}
+	return $content;
   }
 
   function freiland_get_press_title($title,$id){
