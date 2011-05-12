@@ -117,7 +117,7 @@
           foreach ($alllinks as $link) {
               $url = $link->link_url;
               $name = $link->link_name;
-              $description = (strlen($link->link_description) > 0) ? ' - ' . $link->link_description : '';
+              $description = (strlen($link->link_description) > 0) ? '<span class="link-description"> - ' . $link->link_description . '</span>' : '';
               $rel = (strlen($link->link_rel) > 0) ? ' rel="' . $link->link_rel . '"' : '';
               $image = (strlen($link->link_image) > 0) ? '<img src="' . $link->link_image . '" border="0" class="LinkImage"/>' : '';
               $target = (strlen($link->link_target) > 0) ? ' target="' . $link->link_target . '"' : '';
