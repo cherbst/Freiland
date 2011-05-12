@@ -15,6 +15,7 @@
  */
 add_filter( 'the_content', 'freiland_filter_the_content',7 );
 add_filter( 'the_excerpt', 'freiland_filter_the_excerpt',7 );
+add_filter( 'excerpt_more', 'freiland_filter_excerpt_more');
 add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
 add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
 add_filter( 'nav_menu_css_class', 'freiland_filter_menu_classes',11,2 );
@@ -101,6 +102,10 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$return .= $content;
 	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
 	return $return;
+  }
+
+  function freiland_filter_excerpt_more($more){
+	return __('weiter lesen','freiland');
   }
 
   function freiland_get_press_content($content){
