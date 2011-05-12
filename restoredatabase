@@ -1,1 +1,1 @@
-mysql -uroot -p freiland < wordpress.sql
+mysql -uroot -p wordpress < wordpress.sql
