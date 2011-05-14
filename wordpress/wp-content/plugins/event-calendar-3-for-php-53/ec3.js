@@ -124,9 +124,13 @@ function ec3()
 	newcal=create_calendar(curcal,month_num,year_num);
 	pn.insertBefore( newcal, curcal );
 	jQuery(curcal).remove();
+	var oldCatClause = ec3.catClause;
+	var oldCat = ec3.cat;
 	ec3.catClause = '&cat='+cat;
 	ec3.cat = cat;
 	loadDates(month_num,year_num);
+	ec3.catClause = oldCatClause;
+	ec3.cat=oldCat;	
   };
   ec3.reloadCalendar=reloadCalendar;
 
@@ -272,14 +276,32 @@ function ec3()
 
   /** Changes the link text in the forward and backwards buttons.
    *  Parameters are the 0-based month numbers. */
-  function rewrite_controls(prev_month0,next_month0)
+  function rewrite_controls(year_num,prev_month0,next_month0)
   {
     var prev=document.getElementById('ec3_prev');
-    if(prev && prev.firstChild && prev.firstChild.nodeType==ec3.TEXT_NODE)
+    if(prev && prev.firstChild && prev.firstChild.nodeType==ec3.TEXT_NODE){
       prev.firstChild.data='\u00ab\u00a0'+ec3.month_abbrev[prev_month0%12];
+      if ( !ec3.use_ajax ){
+	 var month = prev_month0%12+1;
+	 var year = year_num;
+	 if ( month == 12 ) year--;
+         prev.href=ec3.home+'/?m='+year+get_padded_monthnum(prev_month0%12+1);
+         if(ec3.catClause)
+            prev.href+=ec3.catClause; // Copy cat' limit from original month link.
+      }
+    }
     var next=document.getElementById('ec3_next');
-    if(next && next.firstChild && next.firstChild.nodeType==ec3.TEXT_NODE)
+    if(next && next.firstChild && next.firstChild.nodeType==ec3.TEXT_NODE){
       next.firstChild.data=ec3.month_abbrev[next_month0%12]+'\u00a0\u00bb';
+      if ( !ec3.use_ajax ){
+	 var month = next_month0%12+1;
+	 var year = year_num;
+	 if ( month == 1 ) year++;
+         next.href=ec3.home+'/?m='+year+get_padded_monthnum(month);
+         if(ec3.catClause)
+            next.href+=ec3.catClause; // Copy cat' limit from original month link.
+      }
+    }
   }
 
   function rewrite_category_link(elem,month,year)
@@ -327,6 +349,30 @@ function ec3()
     return [year_num,month_num];
   }
 
+  function get_prev_cal()
+  {
+    var calendars=get_calendars();
+    if(!calendars)
+      return;
+    var pn=calendars[0].parentNode;
+
+    // calculate date of new calendar
+    var date_array=get_current_year_month(calendars[0]);
+    if(date_array == null)
+      return;
+    var year_num=date_array[0];
+    var month_num=date_array[1]-1;
+    if(month_num==0)
+    {
+      month_num=12;
+      year_num--;
+    }
+    // Get new calendar
+    var newcal=document.getElementById('ec3_'+year_num+'_'+month_num);
+    return newcal;
+  }
+  ec3.get_prev_cal=get_prev_cal;
+
   /** Called when the user clicks the 'previous month' button. */
   function go_prev()
   {
@@ -364,10 +410,34 @@ function ec3()
     calendars[calendars.length-1].style.display='none';
 
     // Re-write the forward & back buttons.
-    rewrite_controls(month_num+10,month_num+calendars.length-1);
+    rewrite_controls(year_num,month_num+10,month_num+calendars.length-1);
   }
   ec3.go_prev=go_prev;
 
+  function get_next_cal()
+  {
+    var calendars=get_calendars();
+    if(!calendars)
+      return;
+    var pn=calendars[0].parentNode;
+    var last_cal=calendars[calendars.length-1];
+
+    // calculate date of new calendar
+    var date_array=get_current_year_month(last_cal);
+    if(date_array == null)
+      return;
+    var year_num=date_array[0];
+    var month_num=1+date_array[1];
+    if(month_num==13)
+    {
+      month_num=1;
+      year_num++;
+    }
+    // Get new calendar
+    var newcal=document.getElementById('ec3_'+year_num+'_'+month_num);
+    return newcal;
+  }
+  ec3.get_next_cal=get_next_cal;
 
   /** Called when the user clicks the 'next month' button. */
   function go_next()
@@ -410,7 +480,7 @@ function ec3()
     calendars[0].style.display='none';
 
     // Re-write the forward & back buttons.
-    rewrite_controls(month_num-calendars.length+11,month_num);
+    rewrite_controls(year_num,month_num-calendars.length+11,month_num);
   }
   ec3.go_next=go_next;
 
