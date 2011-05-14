@@ -1,7 +1,7 @@
 
 jQuery(document).ready(function(){
 	jQuery('#eventtypes > ul > li,' + 
-	       'ul.children > li').live('click',function(){ 
+	       'ul.children > li').live('click',function(){
 		var cat = jQuery(this).attr('class');
     		var xCat=new RegExp('.*cat-item-([0-9]+)');
 		var catid=xCat.exec(cat);
@@ -22,6 +22,7 @@ jQuery(document).ready(function(){
 		other.hide();
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery(this).addClass('current-cat');
+		ec3.reloadCalendar(catid[1]);
 		return false;
 	});
 });
