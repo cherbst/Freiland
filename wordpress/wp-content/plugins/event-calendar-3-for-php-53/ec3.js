@@ -463,6 +463,7 @@ function ec3()
         if(ec3.catClause)
            a.href+=ec3.catClause; // Copy cat' limit from original month link.
         a.title=days[i].getAttribute('titles');
+        jQuery(a).attr('postids',days[i].getAttribute('ids'));
         if(days[i].getAttribute('is_event'))
         {
           td.className+=' ec3_eventday';

@@ -211,7 +211,7 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id,$cat = 0)
           $time=mysql2date($time_format,$ent->start_date);
       //?? Should only record start time on FIRST day.
       if ( $current_day_id >= $orig_day_id && $current_day_id <= $end_date->day_id() )
-	      $calendar_days[$day_id]->add_post($ent->post_title,$time,$ent->is_event);
+	      $calendar_days[$day_id]->add_post($ent->id,$ent->post_title,$time,$ent->is_event);
       if($date->to_unixdate()==$end_date->to_unixdate())
         break;
       $date->increment_day();
@@ -266,7 +266,8 @@ function ec3_get_calendar_month($date,$calendar_days,$thead)
           echo ' ec3_eventday';
       echo '">';
       echo '<a href="' . $date->day_link()
-         . '" title="' . $calendar_days[$day_id]->get_titles() . '"';
+         . '" title="' . $calendar_days[$day_id]->get_titles() . '"'
+	 . ' postids="'. $calendar_days[$day_id]->get_ids() . '"';
       if($calendar_days[$day_id]->is_event)
           echo ' class="eventday"';
       echo ">$date->day_num</a>";

@@ -23,8 +23,9 @@ class ec3_Day
 {
   var $is_event =False;
   var $titles   =array();
+  var $ids      =array();
   function ec3_Day(){}
-  function add_post($title,$time,$is_event)
+  function add_post($id,$title,$time,$is_event)
   {
     $safe_title=strip_tags($title);
     $safe_title=
@@ -43,10 +44,15 @@ class ec3_Day
       $this->is_event=True;
     }
     $this->titles[]=$safe_title;
+    $this->ids[]=$id;
   }
   function get_titles()
   {
     return implode(', ',$this->titles);
+  }
+  function get_ids()
+  {
+    return implode(', ',$this->ids);
   }
 }
 

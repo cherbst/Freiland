@@ -385,8 +385,9 @@ function ec3_filter_query_vars_xml()
       {
         $date->day_num=$dc[3];
         $titles=$day->get_titles();
+        $ids=$day->get_ids();
         echo "<day id='$day_id' is_event='$day->is_event'"
-        .    " titles='$titles' link='" . $date->day_link() . "'/>\n";
+        .    " titles='$titles' ids='$ids' link='" . $date->day_link() . "'/>\n";
       }
     }
     echo "</month></calendar>\n";
