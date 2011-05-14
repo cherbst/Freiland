@@ -216,14 +216,6 @@ class ec3_Date
     global $ec3;
     if($ec3->show_only_events)
     {
-      if ( $this->month_num == date("m") &&
-           $this->year_num == date("Y") ){
-	$day_num = $this->day_num;	
-	$this->day_num = date("d");
-	$link = $this->day_link();
-	$this->day_num = $day_num;
-	return $link;
-      }
       $cat_id = get_query_var('cat');
       return get_option('home') . '/?m='
        . $this->year_num

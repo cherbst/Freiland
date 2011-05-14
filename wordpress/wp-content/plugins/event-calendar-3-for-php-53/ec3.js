@@ -267,10 +267,8 @@ function ec3()
     var cat=xCat.exec(liElem.attr('class'));
     if ( cat ){ 
 	cat = '&cat=' + cat[1];
-        var href=ec3.home+'/?m='+year+get_padded_monthnum(month);
-	if ( month == ec3.today_month_num && year == ec3.today_year_num )
-		href += ec3.today_day_num;
-        elem.attr('href',href+cat);
+        var href=ec3.home+'/?m='+year+get_padded_monthnum(month)+cat;
+        elem.attr('href',href);
     }
   }
 
