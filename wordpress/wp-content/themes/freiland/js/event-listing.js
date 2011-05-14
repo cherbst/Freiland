@@ -1,6 +1,7 @@
 
 jQuery(document).ready(function(){
-	jQuery('#eventtypes > ul > li').live('click',function(){ 
+	jQuery('#eventtypes > ul > li,' + 
+	       'ul.children > li').live('click',function(){ 
 		var cat = jQuery(this).attr('class');
     		var xCat=new RegExp('.*cat-item-([0-9]+)');
 		var catid=xCat.exec(cat);
