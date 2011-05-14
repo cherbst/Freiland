@@ -4,10 +4,11 @@ jQuery(document).ready(function(){
 	jQuery('td.ec3_postday > a').live('click',function(){
 		var eventDay = jQuery();
 		var curDay = jQuery(this).parent();
-		if ( curDay.hasClass('ec3_eventday') )
-			eventDay = curDay;
 		while ( eventDay.length == 0 ){
-			eventDay = curDay.nextAll('.ec3_eventday').filter(':visible').first();
+			if ( curDay.hasClass('ec3_eventday') )
+				eventDay = curDay;
+			else
+				eventDay = curDay.nextAll('.ec3_eventday').filter(':visible').first();
 			curDay = curDay.parent().next().children().first();
 		}
 		eventDay = eventDay.children('a');
