@@ -106,6 +106,29 @@ function ec3()
 		month = '0' + month;
 	return month;
   }
+  
+  function reloadCalendar(cat){
+	var calendars=get_calendars();
+	if(!calendars)
+		return;
+	var pn=calendars[0].parentNode;
+		// calculate date of new calendar
+	var date_array=get_current_year_month(calendars[0]);
+	if(date_array == null)
+		return;
+
+	var year_num=date_array[0];
+	var month_num=date_array[1];
+	var curcal=document.getElementById('ec3_'+year_num+'_'+month_num);
+
+	newcal=create_calendar(curcal,month_num,year_num);
+	pn.insertBefore( newcal, curcal );
+	jQuery(curcal).remove();
+	ec3.catClause = '&cat='+cat;
+	ec3.cat = cat;
+	loadDates(month_num,year_num);
+  };
+  ec3.reloadCalendar=reloadCalendar;
 
   /** Replaces the caption and tbody in table to be the specified year/month. */
   function create_calendar(table_cal,month_num,year_num)
