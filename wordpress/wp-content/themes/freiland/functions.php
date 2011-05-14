@@ -20,6 +20,29 @@ add_filter( 'excerpt_length', 'freiland_filter_excerpt_length',999);
 add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
 add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
 add_filter( 'nav_menu_css_class', 'freiland_filter_menu_classes',11,2 );
+add_filter( 'post_class', 'freiland_post_class_filter');
+add_action( 'init', 'freiland_init_method');
+add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
+
+
+function freiland_init_method() {
+	wp_register_script('event-listing',
+	dirname(get_bloginfo('stylesheet_url')) . '/js/event-listing.js',
+	array('jquery'));
+}
+
+function freiland_enqueue_scripts() {
+	if ( in_category('events') )
+		wp_enqueue_script('event-listing');
+}
+
+function freiland_post_class_filter($classes) {
+	if ( !in_category('events') ) return $classes;
+	global $post;
+	foreach((get_the_category($post->ID)) as $category)
+		$classes[] = 'cat-id-' . $category->term_id;
+	return $classes;
+}
 
 function freiland_filter_menu_classes( $classes, $item ){
 	$cat = get_category_by_slug('events');
