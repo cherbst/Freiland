@@ -1,5 +1,26 @@
 
 jQuery(document).ready(function(){
+	var topmargin = jQuery('#event-listing > div.post:first').offset().top;
+	jQuery('td.ec3_postday > a').live('click',function(){
+		var eventDay = jQuery();
+		var curDay = jQuery(this).parent();
+		if ( curDay.hasClass('ec3_eventday') )
+			eventDay = curDay;
+		while ( eventDay.length == 0 ){
+			eventDay = curDay.nextAll('.ec3_eventday').filter(':visible').first();
+			curDay = curDay.parent().next().children().first();
+		}
+		eventDay = eventDay.children('a');
+		var id = eventDay.attr('postids');
+		id=id.split(",");
+		if(!id) return false;
+		id = id[0].trim();
+		var post = jQuery('#post-'+id);
+		if ( post.length == 0 ) return false;
+		var offset = post.offset().top - topmargin;
+		jQuery('body').animate({scrollTop:offset},'slow');
+		return false;
+	});
 	jQuery('#eventtypes > ul > li,' + 
 	       'ul.children > li').live('click',function(){
 		var cat = jQuery(this).attr('class');
