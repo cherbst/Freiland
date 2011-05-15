@@ -401,8 +401,7 @@ function ec3()
 		ec3.callback = callback;
 	      	newcal = reloadCalendar(newcal,year_num,month_num);
 		ec3.currentCal = newcal;
-      }else 
-      	if ( callback ) callback(newcal);
+      } 
       newcal.style.display=ec3.calendar_display;
     }
     else
@@ -419,6 +418,7 @@ function ec3()
 
     // Re-write the forward & back buttons.
     rewrite_controls(year_num,month_num+10,month_num+calendars.length-1);
+    if ( !ec3.callback && callback ) callback(newcal);
     return newcal;
   }
   ec3.go_prev=go_prev;
@@ -477,8 +477,7 @@ function ec3()
 	     	ec3.callback = callback;
 		newcal = reloadCalendar(newcal,year_num,month_num);
       		ec3.currentCal = newcal;
-      }else 
-      	if ( callback ) callback(newcal);
+      } 
       newcal.style.display=ec3.calendar_display;
     }
     else
@@ -498,6 +497,7 @@ function ec3()
 
     // Re-write the forward & back buttons.
     rewrite_controls(year_num,month_num-calendars.length+11,month_num);
+    if ( !ec3.callback && callback ) callback(newcal);
     return newcal;
   }
   ec3.go_next=go_next;
