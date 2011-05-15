@@ -585,6 +585,18 @@ function ec3_filter_parse_query($wp_query)
     $ec3->range_from  =$a;
     $ec3->range_before=$b;
   }
+
+  // if nothing is set, force current month
+  if ( !$ec3->is_date_range && !$ec3->is_listing ){
+	$cat = get_category_by_slug($wp_query->query_vars['category_name']);
+	if ( $cat && $cat->term_id == $ec3->event_category){
+		$wp_query->query_vars['m']=ec3_strftime('%Y%m');
+		$wp_query->is_date=true;
+		$wp_query->is_month=true;
+		$wp_query->is_year=true;
+	}
+  }
+
 }
 
 
