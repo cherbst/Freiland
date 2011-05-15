@@ -19,7 +19,7 @@ jQuery(document).ready(function(){
 				});
 			} else notfound.show();
 		}else notfound.hide();
-
+		ec3.reloadCalendar(cat);
 		allPosts.show();
 		other.hide();
 	};
@@ -97,7 +97,6 @@ jQuery(document).ready(function(){
 		filterPosts(curCat,ec3.get_current_month_link(getCatId(jQuery(this))));
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery(this).addClass('current-cat');
-		ec3.reloadCalendar(curCat);
 		return false;
 	});
 });
