@@ -19,7 +19,6 @@ jQuery(document).ready(function(){
 				});
 			} else notfound.show();
 		}else notfound.hide();
-		ec3.reloadCalendar(cat);
 		allPosts.show();
 		other.hide();
 	};
@@ -93,6 +92,7 @@ jQuery(document).ready(function(){
 	jQuery('#eventtypes > ul > li,' + 
 	       'ul.children > li').live('click',function(){
 		curCat = getCatId(jQuery(this));
+		ec3.set_cur_cat(curCat);
 		if(!curCat) return;
 		filterPosts(curCat,ec3.get_current_month_link(getCatId(jQuery(this))));
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
