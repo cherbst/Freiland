@@ -35,7 +35,7 @@ jQuery(document).ready(function(){
 
 	var curCat = getCatId(jQuery('.current-menu-item'));
 
-	var scrollTo = function(elem){
+	var scrollTo = function(elem,duration){
 		var eventDay = jQuery();
 		var curDay = elem.parent();
 		while ( eventDay.length == 0 && curDay.length!=0 ){
@@ -54,8 +54,12 @@ jQuery(document).ready(function(){
 		var post = jQuery('#post-'+id);
 		if ( post.length == 0 ) return false;
 		var offset = post.offset().top - topmargin;
-		jQuery('body').animate({scrollTop:offset},'slow');
+		if ( !duration ) duration = 'slow';
+		jQuery('body').animate({scrollTop:offset},duration);
 	};
+
+	// scroll to next active event
+	scrollTo(jQuery('#today > a'),'fast');
 
 	scrollToMonth = function(curCal){
 		var post_day = jQuery(curCal).find('td.ec3_postday').first().children('a');
