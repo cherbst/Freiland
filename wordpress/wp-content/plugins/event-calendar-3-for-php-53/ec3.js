@@ -97,6 +97,7 @@ function ec3()
       return 'ec3_'+year_num+'_'+month_num+'_'+day_num;
     }
   }
+  ec3.calc_day_id=calc_day_id;
 
   function get_padded_monthnum(month){
 	if(month<10) 
