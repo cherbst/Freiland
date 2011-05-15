@@ -121,5 +121,11 @@ jQuery(document).ready(function(){
 		jQuery(this).addClass('current-cat');
 		return false;
 	});
+
+	// scroll to first of month when clicking on month link
+	jQuery('#wp-calendar caption > a').live('click',function(){
+		scrollToMonth(jQuery(this).closest('table'));
+		return false;
+	});
 });
 
