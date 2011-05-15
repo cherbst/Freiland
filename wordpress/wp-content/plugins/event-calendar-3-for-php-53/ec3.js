@@ -11,6 +11,7 @@
 //   var ec3.hide_logo
 //   var ec3.use_ajax
 //   var ec3.viewpostsfor
+//   var ec3.event_category
 
 /** Register an onload function. */
 function WindowOnload(f)
@@ -29,13 +30,10 @@ function ec3()
     var next=document.getElementById('ec3_next');
     if(prev && next)
     {
-      // Check for cat limit in month link
-      var xCat=new RegExp('&cat=([0-9]+)$');
-      var match=xCat.exec(prev.href);
-      if(match){
-        ec3.catClause=match[0];
-	ec3.cat=match[1];
-      }
+	set_cur_cat(ec3.event_category);
+        var calendars=get_calendars();
+        if ( calendars )
+  	  jQuery(calendars[0]).data('category',ec3.cat);
       // Replace links
       if ( ec3.use_ajax ){
         prev.href='javascript:ec3.go_prev()';
@@ -53,6 +51,15 @@ function ec3()
         ec3.month_abbrev[j]=unencode(ec3.month_abbrev[j]);
     }
   } );
+
+  function set_cur_cat(cat){
+	var reload = ( ec3.cat != null && ec3.cat != cat );
+	ec3.catClause="&cat="+cat;
+	ec3.cat=cat;
+	if ( reload )
+		reloadCalendar();
+  }
+  ec3.set_cur_cat=set_cur_cat;
 
   /** Converts HTML encoded text (e.g. "&copy Copyright") into Unicode. */
   function unencode(text)
@@ -95,32 +102,30 @@ function ec3()
 	return month;
   }
   
-  function reloadCalendar(cat){
-	var calendars=get_calendars();
-	if(!calendars)
-		return;
-	var pn=calendars[0].parentNode;
-		// calculate date of new calendar
-	var date_array=get_current_year_month(calendars[0]);
-	if(date_array == null)
-		return;
+  function reloadCalendar(curcal,year_num,month_num){
+	var pn = null;
+	if ( !curcal ){
+		var calendars=get_calendars();
+		if(!calendars)
+			return;
+		pn=calendars[0].parentNode;
+			// calculate date of new calendar
+		var date_array=get_current_year_month(calendars[0]);
+		if(date_array == null)
+			return;
 
-	var year_num=date_array[0];
-	var month_num=date_array[1];
-	var curcal=document.getElementById('ec3_'+year_num+'_'+month_num);
+		year_num=date_array[0];
+		month_num=date_array[1];
+		curcal=document.getElementById('ec3_'+year_num+'_'+month_num);
+	}else
+		pn=curcal.parentNode;
 
 	newcal=create_calendar(curcal,month_num,year_num);
 	pn.insertBefore( newcal, curcal );
 	jQuery(curcal).remove();
-	var oldCatClause = ec3.catClause;
-	var oldCat = ec3.cat;
-	ec3.catClause = '&cat='+cat;
-	ec3.cat = cat;
 	loadDates(month_num,year_num);
-	ec3.catClause = oldCatClause;
-	ec3.cat=oldCat;	
+	return newcal;	
   };
-  ec3.reloadCalendar=reloadCalendar;
 
   /** Replaces the caption and tbody in table to be the specified year/month. */
   function create_calendar(table_cal,month_num,year_num)
@@ -128,6 +133,9 @@ function ec3()
     // Take a deep copy of the current calendar.
     var table=table_cal.cloneNode(1);
 
+    // append current category
+    if ( ec3.cat )
+	jQuery(table).data('category',ec3.cat);
     // Calculate the zero-based month_num
     var month_num0=month_num-1;
 
@@ -274,8 +282,8 @@ function ec3()
 	 var year = year_num;
 	 if ( month == 12 ) year--;
          prev.href=ec3.home+'/?m='+year+get_padded_monthnum(prev_month0%12+1);
-         if(ec3.catClause)
-            prev.href+=ec3.catClause; // Copy cat' limit from original month link.
+         if(ec3.event_category)
+            prev.href+='&cat='+ec3.event_category; // use event category
       }
     }
     var next=document.getElementById('ec3_next');
@@ -286,8 +294,8 @@ function ec3()
 	 var year = year_num;
 	 if ( month == 1 ) year++;
          next.href=ec3.home+'/?m='+year+get_padded_monthnum(month);
-         if(ec3.catClause)
-            next.href+=ec3.catClause; // Copy cat' limit from original month link.
+         if(ec3.event_category)
+            next.href+='&cat='+ec3.event_category; // use event category
       }
     }
   }
@@ -385,6 +393,9 @@ function ec3()
     if(newcal)
     {
       // Add in the new first calendar
+      // check the category
+      if ( jQuery(newcal).data('category') != ec3.cat )
+	      newcal = reloadCalendar(newcal,year_num,month_num);
       newcal.style.display=ec3.calendar_display;
     }
     else
@@ -452,6 +463,8 @@ function ec3()
     if(newcal)
     {
       // Add in the new last calendar
+      if ( jQuery(newcal).data('category') != ec3.cat )
+	      newcal = reloadCalendar(newcal,year_num,month_num);
       newcal.style.display=ec3.calendar_display;
     }
     else
