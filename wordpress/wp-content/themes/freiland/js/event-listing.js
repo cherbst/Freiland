@@ -38,7 +38,8 @@ jQuery(document).ready(function(){
 	// and add them to the event listing
 	jQuery('#wp-calendar #next > a,' + 
 	       '#wp-calendar #prev > a,').live('click',function(){
-		
+		if ( postreq > 0 ) return false;
+	
 		var href = jQuery(this).attr('href');
 		var id = jQuery(this).attr('id');
 		var reload = false;
@@ -50,6 +51,7 @@ jQuery(document).ready(function(){
 			ec3.go_prev();
 		}
 		if ( reload ){
+			postreq++;
 	       	 	jQuery.get(href, function(data){
 				var content = jQuery(data).find('#event-listing').contents();
 				if ( id == 'ec3_next' ){
@@ -58,6 +60,7 @@ jQuery(document).ready(function(){
 					jQuery('#event-listing').prepend(content);
 				}
 				filterPosts(curCat);
+				postreq--;
 			});
 		}
 		return false;
