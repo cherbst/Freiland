@@ -3,6 +3,8 @@ jQuery(document).ready(function(){
 	var topmargin = jQuery('#event-listing > div.post:first').offset().top;
 	// count ajax requests for posts
 	var postreq = 0;
+	var reload = false;
+	var newMonthHref;
 
 	// filter posts for given category
 	// show 404 if no posts found
@@ -33,49 +35,17 @@ jQuery(document).ready(function(){
 
 	var curCat = getCatId(jQuery('.current-menu-item'));
 
-	// get the events of next/prev month
-	// and add them to the event listing
-	jQuery('#wp-calendar #next > a,' + 
-	       '#wp-calendar #prev > a,').live('click',function(){
-		if ( postreq > 0 ) return false;
-	
-		var href = jQuery(this).attr('href');
-		var id = jQuery(this).attr('id');
-		var reload = false;
-		if ( id == 'ec3_next' ){
-			reload = !ec3.get_next_cal();
-			ec3.go_next();
-		}else{
-			reload = !ec3.get_prev_cal();
-			ec3.go_prev();
-		}
-		if ( reload ){
-			postreq++;
-	       	 	jQuery.get(href, function(data){
-				var content = jQuery(data).find('#event-listing').contents();
-				if ( id == 'ec3_next' ){
-					jQuery('#event-listing').append(content);
-				}else{
-					jQuery('#event-listing').prepend(content);
-				}
-				filterPosts(curCat);
-				postreq--;
-			});
-		}
-		return false;
-	}); 
-
-	// scroll to corrsponding post when click on day 
-	jQuery('td.ec3_postday > a').live('click',function(){
+	var scrollTo = function(elem){
 		var eventDay = jQuery();
-		var curDay = jQuery(this).parent();
-		while ( eventDay.length == 0 ){
+		var curDay = elem.parent();
+		while ( eventDay.length == 0 && curDay.length!=0 ){
 			if ( curDay.hasClass('ec3_eventday') )
 				eventDay = curDay;
 			else
 				eventDay = curDay.nextAll('.ec3_eventday').filter(':visible').first();
 			curDay = curDay.parent().next().children().first();
 		}
+		if ( eventDay.length == 0 ) return;
 		eventDay = eventDay.children('a');
 		var id = eventDay.attr('postids');
 		id=id.split(",");
@@ -85,6 +55,54 @@ jQuery(document).ready(function(){
 		if ( post.length == 0 ) return false;
 		var offset = post.offset().top - topmargin;
 		jQuery('body').animate({scrollTop:offset},'slow');
+	};
+
+	scrollToMonth = function(curCal){
+		var post_day = jQuery(curCal).find('td.ec3_postday').first().children('a');
+		if ( post_day.length != 0 )
+			scrollTo(post_day);
+	};
+
+	loadNewEvents = function(curCal){
+		if ( reload ){
+			postreq++;
+	       	 	jQuery.get(newMonthHref, function(data){
+				var content = jQuery(data).find('#event-listing').contents();
+				if ( requestNextMonth ){
+					jQuery('#event-listing').append(content);
+				}else{
+					jQuery('#event-listing').prepend(content);
+				}
+				filterPosts(curCat);
+				scrollToMonth(curCal);
+				postreq--;
+			});
+		}else scrollToMonth(curCal);
+	};
+
+	// get the events of next/prev month
+	// and add them to the event listing
+	jQuery('#wp-calendar #next > a,' + 
+	       '#wp-calendar #prev > a,').live('click',function(){
+		if ( postreq > 0 ) return false;
+
+		newMonthHref = jQuery(this).attr('href');
+		var id = jQuery(this).attr('id');
+		requestNextMonth = ( id == 'ec3_next' );
+		if ( requestNextMonth ){
+			reload = !ec3.get_next_cal();
+			ec3.go_next(loadNewEvents);
+		}else{
+			reload = !ec3.get_prev_cal();
+			ec3.go_prev(loadNewEvents);
+		}
+
+		return false;
+	}); 
+
+	// scroll to corrsponding post when click on day 
+	jQuery('td.ec3_postday > a').live('click',function(){
+		scrollTo(jQuery(this));
 		return false;
 	});
 
