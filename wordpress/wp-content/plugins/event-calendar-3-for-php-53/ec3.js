@@ -24,18 +24,6 @@ function ec3()
 {
   WindowOnload( function()
   {
-    // jQuery click events for category links
-    jQuery('.event-categories a').click(function(index){
-    	var calendars=get_calendars();
-	var date_array = null;
-    	if(calendars)
-		date_array = get_current_year_month(calendars[0]);
-	if ( date_array == null )
-		date_array = [ec3.today_year_num,ec3.today_month_num];
-	rewrite_category_link(jQuery(this),date_array[1],date_array[0]);
-	return true;
-    });
-
     // Overwrite the href links in ec3_prev & ec3_next to activate EC3.
     var prev=document.getElementById('ec3_prev');
     var next=document.getElementById('ec3_next');
@@ -304,19 +292,6 @@ function ec3()
     }
   }
 
-  function rewrite_category_link(elem,month,year)
-  {
-    // use Jquery to find all links that are children of class 'event-categories'
-    var liElem = elem.parent('li');
-    var xCat=new RegExp('.*cat-item-([0-9]+)');
-    var cat=xCat.exec(liElem.attr('class'));
-    if ( cat ){ 
-	cat = '&cat=' + cat[1];
-        var href=ec3.home+'/?m='+year+get_padded_monthnum(month)+cat;
-        elem.attr('href',href);
-    }
-  }
-
   /** Turn the busy spinner on or off. */
   function set_spinner(on)
   {
@@ -338,6 +313,19 @@ function ec3()
       }
     }
   }
+
+  var get_current_month_link = function(cat){
+	var calendars=get_calendars();
+	var date_array = null;
+	if(calendars)
+		date_array = get_current_year_month(calendars[0]);
+	if ( date_array == null )
+		date_array = [ec3.today_year_num,ec3.today_month_num];
+
+	cat = '&cat=' + cat;
+	return ec3.home+'/?m='+date_array[1]+get_padded_monthnum(date_array[0])+cat;
+  }
+  ec3.get_current_month_link=get_current_month_link;
 
   function get_current_year_month(cal){
     // calculate date of new calendar
