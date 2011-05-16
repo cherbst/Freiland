@@ -30,15 +30,32 @@ jQuery(document).ready(function(){
 		var hidden = allPosts.filter(':hidden').length;
 		allPosts.show();
 		other.hide();
+		// post listing has changed
 		if ( other.length > 0 || hidden > 0 ){
-			curPost = allPosts.first();
-			updateCal = false;
-			updateCurPost(function(){
-				updateCal = true;
+			var newPost = curPost;
+			// select nearest visible post
+			if ( newPost.filter(':visible').length == 0 ){
+				var nextPost = newPost.nextAll(':visible').first();
+				var prevPost = newPost.prevAll(':visible').first();
+
+				if ( nextPost.length == 0 )
+					newPost = prevPost;
+				else if ( prevPost.length == 0 )
+					newPost = nextPost;
+				else if ( newPost.prevAll().index(prevPost) < newPost.nextAll().index(nextPost) )
+					newPost = prevPost;
+				else
+					newPost = nextPost;
+
+				curPost = newPost;
+			}
+			scrollToPost(curPost,0,function(){
+				updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
 			});
 		}
 	};
 
+	// return the categroy id of this element
 	var getCatId = function(elem){
 		var cat = elem.attr('class');
     		var xCat=new RegExp('.*cat-item-([0-9]+)');
@@ -47,8 +64,10 @@ jQuery(document).ready(function(){
 		return catid[1];
 	};
 
+	// initialize current cat from 'events' menu item
 	var curCat = getCatId(jQuery('.current-menu-item'));
 
+	// get the next event following the given cal day
 	var getPostFromCalDay = function(elem){
 		var eventDay = jQuery();
 		var curDay = elem;
@@ -67,7 +86,8 @@ jQuery(document).ready(function(){
 		id = id[0].trim();
 		return jQuery('#post-'+id);
 	};
-	
+
+	// scroll to given post
 	var scrollToPost = function(post,duration,callback){
 		if ( post.length == 0 || duration === false ) 
 			return;
@@ -75,13 +95,15 @@ jQuery(document).ready(function(){
 		jQuery('html,body').animate({scrollTop:offset},duration,callback);
 	};
 
+	// scroll to next post following the given cal day
 	var scrollToCalDay = function(elem,duration,callback){
 		scrollToPost(getPostFromCalDay(elem),duration,callback);
 	};
 
-	// scroll to next active event
+	// when loading the page, scroll to next active event
 	scrollToCalDay(jQuery('#today'),0);
 
+	// return the first/last event day from given calendar
 	getEventDay = function(curCal,first){
 		var days = jQuery(curCal).find('td.ec3_eventday');
 		if ( days.length == 0 ) return jQuery();
@@ -90,27 +112,33 @@ jQuery(document).ready(function(){
 	// the post which is currently on top
 	var curPost = getPostFromCalDay(jQuery('#today'));
 
+	// scroll to first/last event in month shown by the given calendar
 	scrollToMonth = function(curCal,first,scroll,callback){
 		if ( scroll === false ) return;
 		scrollToCalDay(getEventDay(curCal,first),scroll,callback);
 	};
 
+	// load new events with ajax
+	// apend/prepend them to the list and filter them
 	loadNewEvents = function(href,append,callback){
 		if ( postreq > 0 ) return;
 		postreq++;
 	 	jQuery.get(href, function(data){
 			var content = jQuery(data).find('#event-listing').contents();
-			if ( append ){
-				jQuery('#event-listing').append(content);
-			}else{
-				jQuery('#event-listing').prepend(content);
+			if ( content.length > 0 ){
+				if ( append ){
+					jQuery('#event-listing').append(content);
+				}else{
+					jQuery('#event-listing').prepend(content);
+				}
+				filterPosts(curCat);
 			}
-			filterPosts(curCat);
 			if ( callback ) callback();
 			postreq--;
 		});
 	};
 
+	// parse a calendar month url into [begin,year,month,rest]
 	parseHref = function(href){
 	 	var reg = /(.+m=)(\d\d\d\d)(\d\d)(.+)/;
 		reg.exec(href);
@@ -189,6 +217,7 @@ jQuery(document).ready(function(){
 		return false;
 	});
 
+	// return the url pointing to the previous month of given url
 	decrementHref = function(href){
 		href = parseHref(href);
 		var month = href[2] - 1;
@@ -201,6 +230,7 @@ jQuery(document).ready(function(){
 		return (href[0] + year + "" + month  + href[3]);
 	};
 
+	// return the url pointing to the next month of given url
 	incrementHref = function(href){
 		href = parseHref(href);
 		var month = href[2] + 1;
@@ -220,13 +250,14 @@ jQuery(document).ready(function(){
 		var postDate = curPost.find('.begin_date').attr('id').split('_');	
 		calDate = new Date(calDate[1],calDate[2]-1,1).getTime();
 		postDate = new Date(postDate[0],postDate[1]-1,1).getTime();
-		//debug(calDate+':'+postDate);
 		if( calDate < postDate )
 			ec3.go_next(updateCalendar);
 		else if( calDate > postDate )
 			ec3.go_prev(updateCalendar);
 	}
-	
+
+	// update the current post to the first one shown
+	// call updateCalendar
 	updateCurPost = function(callback){
 		var elem = jQuery(window);
 		if ( curPost.length != 0 ) {
@@ -245,7 +276,6 @@ jQuery(document).ready(function(){
 			}
 //			curPost.css('background','white');
 			if ( newPost != curPost ){
-			//	debug('<p>old:'+curPost.find('a').attr('title')+"</p>new:"+newPost.find('a').attr('title'));
 				curPost = newPost;
 				updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
 			}
@@ -255,26 +285,27 @@ jQuery(document).ready(function(){
 		if ( callback ) callback();
 	}
 
-	// update calendar when scrolling through events
+	// update calendar and load new events when scrolling through event list
 	jQuery(document).scroll(function(e){
 		var elem = jQuery(window);
 		var variance = 5;
-//		debug('top:'+curPost.offset().top+':scl:'+jQuery(window).scrollTop());
 		if ( updateCal ) 
 			updateCurPost();
 
+		// scroll reached the bottom
  		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
 			loadNewEvents(next_href,true,function(){
 				next_href = incrementHref(next_href);
 			});
-		}else if (elem.scrollTop() == 0 ){
+		}
+		// scroll reached the top
+		else if (elem.scrollTop() == 0 ){
 			var firstPost = jQuery('#event-listing > div:first');
 			loadNewEvents(prev_href,false,function(){
 				prev_href = decrementHref(prev_href);
 				scrollToPost(firstPost,0);
 			});
-		} 
-
+		}
 	});
 });
 
