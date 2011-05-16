@@ -435,6 +435,7 @@ class smwimport
 	// import attachments
 	foreach( $attachments as $attachment ){
 		$attach_arr = $data[$attachment];
+		$attach_arrs = array();
 		if ( !is_array($attach_arr) )
 		       	// the attach_arr should be an smw file URI
 			$attach_arr = array($attach_arr);
@@ -448,7 +449,7 @@ class smwimport
 		}
 
 		$ids = array();
-		foreach ( $attach_arrs as $attach_arr ){
+		foreach ( $attach_arrs as $key => $attach_arr ){
 			if ( $attach_arr === false ){
 				error_log('Could not get smw attachment:'.$attachment);
 				continue;
@@ -456,7 +457,7 @@ class smwimport
 
 			if ( $attachmentname != null )
 				$attach_arr['title'] = $attachmentname;
-			$ret = self::import_attachment_for_post($prim_key.$attachment,$attach_arr,$ID);
+			$ret = self::import_attachment_for_post($prim_key.$attachment.$key,$attach_arr,$ID);
 			if ( is_wp_error($ret) ){
 				$g_ret = $ret;
 				continue;
