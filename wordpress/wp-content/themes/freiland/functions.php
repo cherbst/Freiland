@@ -288,7 +288,9 @@ function freiland_subcategory_dropdown($cat_id){
 	$begin_date = get_post_meta($post->ID,'date_begin',true);
 	if ( $begin_date == "" ) return;
 	$begin_date = strtotime($begin_date);
-	echo '<div class="begin_date">';
+	echo '<div class="begin_date" id="';
+	echo date("Y_n",$begin_date);
+	echo '">';
 	echo '<div class="event_day">';
 	echo strftime("%A",$begin_date);
 	echo '</div>';
