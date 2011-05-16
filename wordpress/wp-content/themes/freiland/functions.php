@@ -94,7 +94,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 			'post_status' => null, 
 			'post_parent' => $post->ID ); 
 
-	$return = freiland_get_post_image($post->ID,'image_big');
+	$return  = freiland_get_post_image($post->ID,'image_big');
+	$return .= freiland_get_post_image($post->ID,'sponsor');
 	$return .= $content ;
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
@@ -196,13 +197,20 @@ function freiland_filter_the_title( $post_title, $id ) {
   }
 
   function freiland_get_post_image($ID,$meta){
-	$attach_id = get_post_meta($ID,$meta,true);
-	if ($attach_id != "") {
-		$attach_id = intval($attach_id);
-		$return .= '<a rel="lightbox" href="'.wp_get_attachment_url($attach_id).'">';
-		$return .= wp_get_attachment_image( $attach_id,
-			'thumbnail',false,array('class' => 'alignright' ) );
-		$return .= '</a>';
+	$attach_ids = get_post_meta($ID,$meta,true);
+	if ($attach_ids != "") {
+		if ( !is_array($attach_ids))
+			$attach_ids = array($attach_ids);
+
+		$return = '<div class="'.$meta.'">';
+		foreach( $attach_ids as $attach_id){
+			$attach_id = intval($attach_id);
+			$return .= '<a rel="lightbox" href="'.wp_get_attachment_url($attach_id).'">';
+			$return .= wp_get_attachment_image( $attach_id,
+				'thumbnail',false,array('class' => 'alignright' ) );
+			$return .= '</a>';
+		}
+		$return .= '</div>';
 	}
 	return $return;
   }
