@@ -344,7 +344,7 @@ li#eventtypes li{
 	padding: 0px;
 	top: 25px;
 	width: 100%;
-	height: 163px;
+	height: 140px;
 	z-index: 99;
 	background: #FFFFFF;
 	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
@@ -580,13 +580,4 @@ img.LinkImage  {
 
 #legende_box {
 	padding-top: 400px;
-}
-
-#start_box {
-	width: 100%;
-	margin: 20px;
-}
-
-#start_box #welcome_img {
-	margin: 0px auto;
 }
