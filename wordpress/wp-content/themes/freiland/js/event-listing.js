@@ -50,7 +50,8 @@ jQuery(document).ready(function(){
 				curPost = newPost;
 			}
 			scrollToPost(curPost,0,function(){
-				updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
+				if ( updateCal )
+					updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
 			});
 		}
 	};
@@ -89,8 +90,10 @@ jQuery(document).ready(function(){
 
 	// scroll to given post
 	var scrollToPost = function(post,duration,callback){
-		if ( post.length == 0 || duration === false ) 
-			return;
+		if ( post.length == 0 || duration === false ){
+			if ( callback ) callback();
+			return ;
+		}
 		var offset = post.offset().top - (topmargin);
 		jQuery('html,body').animate({scrollTop:offset},duration,callback);
 	};
@@ -215,7 +218,7 @@ jQuery(document).ready(function(){
 		if(!curCat) return;
 		filterPosts(curCat,ec3.get_current_month_link(getCatId(jQuery(this))));
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
-		jQuery(this).addClass('current-cat');
+		jQuery('.cat-item-'+curCat).addClass('current-cat');
 		return false;
 	});
 
@@ -229,10 +232,10 @@ jQuery(document).ready(function(){
 
 	// load post content
 	jQuery('#event-listing > div a').live('click',function(){
-		jQuery(listingElements).hide();
        	 	jQuery.get(jQuery(this).attr('href'), function(data){
 			// store id of added content
 			jQuery('#content').append(getSinglePost(data));
+			jQuery(listingElements).hide();
 		});
 		return false;
 	});
@@ -324,9 +327,14 @@ jQuery(document).ready(function(){
 	jQuery(document).scroll(function(e){
 		var elem = jQuery(window);
 		var variance = 5;
+
+		// do nothing when showing single posts
+		if ( jQuery('#single-post').length > 0 ) return;
+
 		if ( updateCal ) 
 			updateCurPost();
 
+//		debug('curPost:'+curPost.find('a').attr('title')+':updateCal:'+updateCal);
 		// scroll reached the bottom
  		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
 			loadNewEvents(next_href,true,function(){
