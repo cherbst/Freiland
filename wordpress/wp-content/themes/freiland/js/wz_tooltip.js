@@ -112,7 +112,7 @@ var TagsToTip   = true      // false or true - if true, HTML elements to be conv
 
 
 
-config. Above           = false     // false or true - tooltip above mousepointer
+config. Above           = true     // false or true - tooltip above mousepointer
 
 config. BgColor         = '#FFFFFF' // Background colour (HTML colour value, in quotes)
 
@@ -168,9 +168,9 @@ config. JumpVert        = true      // false or true - jump vertically      "
 
 config. Left            = false     // false or true - tooltip on the left of the mouse
 
-config. OffsetX         = 14        // Horizontal offset of left-top corner from mousepointer
+config. OffsetX         = 5       // Horizontal offset of left-top corner from mousepointer
 
-config. OffsetY         = 8         // Vertical offset
+config. OffsetY         = 135         // Vertical offset
 
 config. Opacity         = 100       // Integer between 0 and 100 - opacity of tooltip in percent
 
