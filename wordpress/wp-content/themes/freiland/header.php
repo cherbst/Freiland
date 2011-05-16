@@ -49,10 +49,15 @@
 	 * as styles, scripts, and meta tags.
 	 */
 	wp_head();
+	
 ?>
+
 </head>
 
 <body <?php body_class(); ?>>
+
+<script type="text/javascript" src="http://localhost/freiland/wp-content/themes/freiland/js/wz_tooltip.js"></script>
+
 <div id="wrapper" class="hfeed">
 	<div id="header">
 		<div id="masthead">
