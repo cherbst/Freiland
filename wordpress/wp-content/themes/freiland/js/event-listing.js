@@ -199,15 +199,49 @@ jQuery(document).ready(function(){
 		return false;
 	});
 
+	// all elements that need to be shown/hidden when loading one event
+	var listingElements = '#mainpost-banner,#event-listing,#wp-calendar,#eventtypes';
+
 	// filter posts when clicking on event sub categories
 	jQuery('#eventtypes > ul > li,' + 
 	       'ul.children > li').live('click',function(){
+		// remove any single events
+		jQuery('#content #single-post').remove();
+		jQuery(listingElements).show();
+
 		curCat = getCatId(jQuery(this));
 		ec3.set_cur_cat(curCat);
 		if(!curCat) return;
 		filterPosts(curCat,ec3.get_current_month_link(getCatId(jQuery(this))));
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery(this).addClass('current-cat');
+		return false;
+	});
+
+	// get a single post from 'data' and wrap it into a div
+	getSinglePost = function(data){
+		var content = jQuery(data).find('#content').contents();
+		var container = jQuery('<div id="single-post"></div>');
+		container.append(content);
+		return container;
+	}
+
+	// load post content
+	jQuery('#event-listing > div a').live('click',function(){
+		jQuery(listingElements).hide();
+       	 	jQuery.get(jQuery(this).attr('href'), function(data){
+			// store id of added content
+			jQuery('#content').append(getSinglePost(data));
+		});
+		return false;
+	});
+
+	// load next/prev post
+	jQuery('.nav-previous > a,.nav-next > a').live('click',function(){
+       	 	jQuery.get(jQuery(this).attr('href'), function(data){
+			jQuery('#content #single-post').remove();
+			jQuery('#content').append(getSinglePost(data));
+		});
 		return false;
 	});
 
