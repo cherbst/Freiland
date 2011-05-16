@@ -205,7 +205,7 @@ class smwimport
 			'gallery_folder' => 'gallery_folder',
 		)
 	),
-	'SWVorlage' => 'Veranstaltung'
+	'CSSVeranstaltung' => 'Veranstaltung'
   );
 
   // import test sources
