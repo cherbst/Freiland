@@ -114,15 +114,15 @@ var TagsToTip   = true      // false or true - if true, HTML elements to be conv
 
 config. Above           = false     // false or true - tooltip above mousepointer
 
-config. BgColor         = '#E2E7FF' // Background colour (HTML colour value, in quotes)
+config. BgColor         = '#FFFFFF' // Background colour (HTML colour value, in quotes)
 
 config. BgImg           = ''        // Path to background image, none if empty string ''
 
-config. BorderColor     = '#333333'
+config. BorderColor     = '#000000'
 
 config. BorderStyle     = 'solid'   // Any permitted CSS value, but I recommend 'solid', 'dotted' or 'dashed'
 
-config. BorderWidth     = 1
+config. BorderWidth     = 2
 
 config. CenterMouse     = false     // false or true - center the tip horizontally below (or above) the mousepointer
 
@@ -156,7 +156,7 @@ config. FontColor       = '#000044'
 
 config. FontFace        = 'Verdana,Geneva,sans-serif'
 
-config. FontSize        = '8pt'     // E.g. '9pt' or '12px' - unit is mandatory
+config. FontSize        = '0pt'     // E.g. '9pt' or '12px' - unit is mandatory
 
 config. FontWeight      = 'normal'  // 'normal' or 'bold';
 
