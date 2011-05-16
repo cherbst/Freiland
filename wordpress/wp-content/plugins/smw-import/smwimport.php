@@ -287,7 +287,7 @@ class smwimport
   */ 
   private static function get_category_by_slug_and_parent($slug,$parent = null){
 	$cat_id = -1;
-	if ( $parent != null ){
+	if ( $parent == null ){
 		$cat = get_category_by_slug($slug);
 		if ( $cat )
 			$cat_id = $cat->term_id;
@@ -297,8 +297,9 @@ class smwimport
 		//XXX: same bug, needed for wp_cron support
 		delete_option('category_children');
 		$cats = get_categories( "hide_empty=0&parent=".$parent );
+		$parentcat = get_category($parent);
 		foreach( $cats as $cat ){
-			if ( $cat->slug == $slug )
+			if ( $cat->slug == $slug || $cat->slug == $slug.'-'.$parentcat->slug )
 				$cat_id = (int)$cat->term_id;
 		}
 	}
@@ -961,7 +962,7 @@ class smwimport
 			$subcats = array( $cat_slug );
 		foreach($subcats as $subcat){ 
 			$category['cat_name'] = $subcat;
-			$category['category_nicename'] = $subcat;
+			$category['category_nicename'] = sanitize_title($subcat);
 			$category['category_parent'] = $parent_id;
 			$cat_id = self::create_category($category);
 			if ( is_wp_error($cat_id) ){
