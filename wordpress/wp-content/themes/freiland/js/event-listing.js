@@ -31,7 +31,7 @@ jQuery(document).ready(function(){
 		allPosts.show();
 		other.hide();
 		// post listing has changed
-		if ( other.length > 0 || hidden > 0 ){
+		if ( (other.length > 0 || hidden > 0) && allPosts.length != other.length ){
 			var newPost = curPost;
 			// select nearest visible post
 			if ( newPost.filter(':visible').length == 0 ){
@@ -298,7 +298,7 @@ jQuery(document).ready(function(){
 	// call updateCalendar
 	updateCurPost = function(callback){
 		var elem = jQuery(window);
-		if ( curPost.length != 0 ) {
+		if ( curPost.length != 0 && jQuery('#event-listing > div').filter(':visible').length > 0 ) {
 			var newPost = curPost;
 			while ( newPost.offset().top-(topmargin-newPost.height()) < elem.scrollTop() ){
 				var nextPost = newPost.nextAll(':visible').first();
