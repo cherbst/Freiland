@@ -77,8 +77,8 @@ class smwimport
 	   "attachment"   : attribute value becomes an attachment to the post
 			    The attribute value must be either an array containing the
 			    keys described in the attachment attribute mapping or a string
-			    of the form '<prefix>:filename'. The latter will be downloaded
-			    from the url given in the attachment_url option
+			    ( or an array of strings ) of the form '<prefix>:filename'. 
+			    The latter will be downloaded from the url given in the attachment_url option.
 			    The attachment ID will be stored as a post meta value under
 			    the key name.
 	   "globalattachment" : a special attachment where the attachment ID
@@ -140,6 +140,7 @@ class smwimport
 			'date_end' => array('calendar_end','meta'),
 			'image_small' => 'attachment',
 			'image_big' => 'attachment',
+			'sponsor' => 'attachment',
 			'image_name' => 'attachmentname',
 			'banner' => 'globalattachment',
 			'homepage' => 'meta',
@@ -435,23 +436,40 @@ class smwimport
 	foreach( $attachments as $attachment ){
 		$attach_arr = $data[$attachment];
 		if ( !is_array($attach_arr) )
-			$attach_arr = self::convert_smw_attachment_to_array($attach_arr);
-		if ( $attach_arr === false ){
-			error_log('Could not get smw attachment:'.$attachment);
-			continue;
+		       	// the attach_arr should be an smw file URI
+			$attach_arr = array($attach_arr);
+		if (isset($attach_arr['url'])) {
+			// the attach_arr is already in the right format
+			$attach_arrs[] = $attach_arr;
+		}else{
+		       	// the attach_arr is an array of smw file URIs
+			foreach( $attach_arr as $arr )
+				$attach_arrs[] = self::convert_smw_attachment_to_array($arr);
 		}
-		if ( $attachmentname != null )
-			$attach_arr['title'] = $attachmentname;
-		$ret = self::import_attachment_for_post($prim_key.$attachment,$attach_arr,$ID);
-		if ( is_wp_error($ret) ){
-			$g_ret = $ret;
-			continue;
+
+		$ids = array();
+		foreach ( $attach_arrs as $attach_arr ){
+			if ( $attach_arr === false ){
+				error_log('Could not get smw attachment:'.$attachment);
+				continue;
+			}
+
+			if ( $attachmentname != null )
+				$attach_arr['title'] = $attachmentname;
+			$ret = self::import_attachment_for_post($prim_key.$attachment,$attach_arr,$ID);
+			if ( is_wp_error($ret) ){
+				$g_ret = $ret;
+				continue;
+			}
+			$ids[] = $ret;
+			unset($oldattachments[$ret]);
 		}
+
+		if ( count($ids) == 1 ) $ids = $ids[0];
 		if ( $attachment == $globalattachment )
-			update_option($globalattachment,$ret);
+			update_option($globalattachment,$ids);
 		// store attachment ID as post meta
-		update_post_meta($ID,$attachment,$ret);
-		unset($oldattachments[$ret]);
+		update_post_meta($ID,$attachment,$ids);
 	}
 
 	// delete old attachments that are no longer used
@@ -908,11 +926,14 @@ class smwimport
 
 	$ec3_admin=new ec3_Admin();
 	if ( $action == 'update' ){
-		error_log("Updating date:".$post_id);
 		$schedule = $ec3_admin->get_schedule($post_id);
-		$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
+		if ( empty($schedule) ) { 
+			// no previous schedule there
+			$sched_entry['action'] = 'create';
+			$sched_entries = array( $sched_entry );
+		}else
+			$sched_entries = array( $schedule[0]->sched_id => $sched_entry );
 	}else{
-		error_log("Creating date:".$post_id);
 		$sched_entries = array( $sched_entry );
 	}
 	$ec3_admin->ec3_save_schedule($post_id,$sched_entries);
