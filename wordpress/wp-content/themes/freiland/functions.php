@@ -113,12 +113,19 @@ function freiland_filter_the_title( $post_title, $id ) {
 	}
 
 	// append link to the eventtype category
-	$eventtype = get_post_meta($post->ID,'eventtype',true);
-	if ( $eventtype ){ 
-		$eventcat = get_term_by('name', $eventtype, 'category');
-		if ( $eventcat ){
+	$eventtypes = get_post_meta($post->ID,'eventtype',true);
+	if ( $eventtypes ){ 
+		if ( !is_array($eventtypes) )
+			$eventtypes = array($eventtypes);
+		foreach ( $eventtypes as $eventtype ){
+			$eventcat = get_term_by('name', $eventtype, 'category');
+			if ( $eventcat )
+				$cats[] = $eventcat->term_id;
+		}
+		if ( $cats ){
+			$cats = implode(',',$cats);
 			$return .= '<ul class="event-subcat">';
-			$return .=  wp_list_categories ("echo=0&include=$eventcat->term_id&title_li=");
+			$return .=  wp_list_categories ("echo=0&include=$cats&title_li=");
 			$return .= "</ul>";
 		}
 	}
