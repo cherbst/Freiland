@@ -204,7 +204,8 @@ jQuery(document).ready(function(){
 
 	// filter posts when clicking on event sub categories
 	jQuery('#eventtypes > ul > li,' + 
-	       'ul.children > li').live('click',function(){
+	       'ul.children > li,' +
+	       'ul.event-subcat > li').live('click',function(){
 		// remove any single events
 		jQuery('#content #single-post').remove();
 		jQuery(listingElements).show();

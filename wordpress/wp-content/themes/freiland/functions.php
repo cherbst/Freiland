@@ -107,6 +107,17 @@ function freiland_filter_the_title( $post_title, $id ) {
 		}
 		$return .= "\n";
 	}
+
+	// append link to the eventtype category
+	$eventtype = get_post_meta($post->ID,'eventtype',true);
+	if ( $eventtype ){ 
+		$eventcat = get_term_by('name', $eventtype, 'category');
+		if ( $eventcat ){
+			$return .= '<ul class="event-subcat">';
+			$return .=  wp_list_categories ("echo=0&include=$eventcat->term_id&title_li=");
+			$return .= "</ul>";
+		}
+	}
 	return $return;
   }
 
