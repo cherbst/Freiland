@@ -53,7 +53,7 @@ function freiland_filter_menu_classes( $classes, $item ){
 
 function freiland_filter_start_el( $item_output, $item ){
 	$cat = get_category_by_slug('events');
-	if ( $cat == null || $cat->term_id != $item->object_id )
+	if ( $cat == null || $cat->term_id != $item->object_id || !in_category('events'))
 		return $item_output;
 	$item_output .= '<ul class="children">';
 	$item_output .= freiland_get_event_locations(0);
