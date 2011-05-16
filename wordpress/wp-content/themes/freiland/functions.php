@@ -99,6 +99,10 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	if ( $homepage != null ){
+		if ( !is_array($homepage ) ){
+			$homepage = array($homepage);
+			$homepagelabel = array($homepagelabel);
+		}
 		foreach( $homepage as $key => $link ){
 			if ( isset($homepagelabel[$key]) )
 				$return .= '<p>'.$homepagelabel[$key].'</p>';
