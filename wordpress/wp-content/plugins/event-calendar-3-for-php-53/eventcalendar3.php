@@ -141,8 +141,13 @@ function ec3_filter_nextprev_where($where)
   $s = $post->ec3_schedule[0];
   if ( $s ){
     $regexp="/(.*)\bp\.post_date\b (<|>) ('[^']+'|\d+\b)(.*)/i";
-    if(preg_match($regexp,$where,$match))
-	  $where = $match[1].'ec3_sch.start '.$match[2]." '".$s->start."' ".$match[4];
+    if(preg_match($regexp,$where,$match)){
+	  $where = $match[1].'((ec3_sch.start '.$match[2]." '".$s->start."') OR "
+	  	. '(ec3_sch.start ='."'$s->start'"
+		. ' AND strcmp(p.post_name,'."'$post->post_name'".')='
+		. ($match[2]=='<'?'-1':'1').'))'
+		. $match[4]; 
+    }
   }
   return $where;
 }
@@ -286,7 +291,7 @@ function ec3_filter_nextprev_sort($orderby)
    if(preg_match($regexp,$orderby,$match))
    {
     $orderby=preg_replace($regexp,'ec3_sch.start',$orderby);
-    $orderby .= ' '.$match[1].' '.$match[2];
+    $orderby .= $match[1].' ,p.post_name '.$match[1].' '.$match[2];
    }
    return $orderby;
 }
