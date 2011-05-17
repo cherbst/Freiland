@@ -443,9 +443,13 @@ class smwimport
 			// the attach_arr is already in the right format
 			$attach_arrs[] = $attach_arr;
 		}else{
-		       	// the attach_arr is an array of smw file URIs
-			foreach( $attach_arr as $arr )
-				$attach_arrs[] = self::convert_smw_attachment_to_array($arr);
+		       	// the attach_arr is an array of attachments
+			foreach( $attach_arr as $arr ){
+				if (is_array($arr))
+					$attach_arrs[] = $arr;
+				else
+					$attach_arrs[] = self::convert_smw_attachment_to_array($arr);
+			}
 		}
 
 		$ids = array();
@@ -1011,10 +1015,11 @@ class smwimport
 		if ( $download ){
 			$contents = smwaccess::get_content($remotefile);
 			if ( $contents == FALSE )
-				return new WP_Error('download_failed', __("Could not get file:").$remotefile.'for post:'.$prim_key);
+				return new WP_Error('download_failed', __("Could not get file:").$remotefile.' for post:'.$prim_key);
 			$upload = wp_upload_bits($localfile,null,$contents);
 			if ( $upload['error'] != false )
-				return new WP_Error('upload_failed', $upload['error']);
+				return new WP_Error('upload_failed',
+					__("Could not upload file:").$remotefile.' for post:'.$prim_key.':'. $upload['error']);
 			$filename = $upload['file'];
 		}else $filename = $remotefile;
 
