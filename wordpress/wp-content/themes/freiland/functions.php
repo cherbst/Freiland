@@ -26,9 +26,12 @@ add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
 
 
 function freiland_init_method() {
+	wp_register_script('jquery-address',
+	dirname(get_bloginfo('stylesheet_url')) . '/js/jquery.address-1.4.min.js',
+	array('jquery'));
 	wp_register_script('event-listing',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/event-listing.js',
-	array('jquery'));
+	array('jquery-address'));
 }
 
 function freiland_enqueue_scripts() {

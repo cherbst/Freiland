@@ -8,8 +8,8 @@ jQuery(document).ready(function(){
 	var curPost;
 	var updateCal = true;
 
-	var debug = function(text){	
-		jQuery('#topright > span').html(text);
+	var debug = function(text){
+		jQuery('#topright > span').append(text+"</br>");
 	};
 
 	// filter posts for given category
@@ -27,33 +27,33 @@ jQuery(document).ready(function(){
 				});
 			} else notfound.show();
 		}else notfound.hide();
-		var hidden = allPosts.filter(':hidden').length;
 		allPosts.show();
 		other.hide();
-		// post listing has changed
-		if ( (other.length > 0 || hidden > 0) && allPosts.length != other.length ){
-			var newPost = curPost;
-			// select nearest visible post
-			if ( newPost.filter(':visible').length == 0 ){
-				var nextPost = newPost.nextAll(':visible').first();
-				var prevPost = newPost.prevAll(':visible').first();
+	};
 
-				if ( nextPost.length == 0 )
-					newPost = prevPost;
-				else if ( prevPost.length == 0 )
-					newPost = nextPost;
-				else if ( newPost.prevAll().index(prevPost) < newPost.nextAll().index(nextPost) )
-					newPost = prevPost;
-				else
-					newPost = nextPost;
+	var findNextCurPost = function(){
+		var newPost = curPost;
+		// select nearest visible post
+		if ( newPost.filter(':visible').length == 0 ){
+			var nextPost = newPost.nextAll(':visible').first();
+			var prevPost = newPost.prevAll(':visible').first();
 
-				curPost = newPost;
-			}
-			scrollToPost(curPost,0,function(){
-				if ( updateCal )
-					updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
-			});
+			if ( nextPost.length == 0 && prevPost.length == 0 )
+				return;
+			if ( nextPost.length == 0 )
+				newPost = prevPost;
+			else if ( prevPost.length == 0 )
+				newPost = nextPost;
+			else if ( newPost.prevAll().index(prevPost) < newPost.nextAll().index(nextPost) )
+				newPost = prevPost;
+			else
+				newPost = nextPost;
+			curPost = newPost;
 		}
+		scrollToPost(curPost,0,function(){
+			if ( updateCal )
+				updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
+		});
 	};
 
 	// return the categroy id of this element
@@ -67,6 +67,8 @@ jQuery(document).ready(function(){
 
 	// initialize current cat from 'events' menu item
 	var curCat = getCatId(jQuery('.current-menu-item'));
+	// the top-level category, this never changes
+	var topCat = curCat;
 	// set 'current-cat' class
 	jQuery('#eventtypes ul li.cat-item-'+curCat).addClass('current-cat');
 
@@ -105,9 +107,6 @@ jQuery(document).ready(function(){
 		scrollToPost(getPostFromCalDay(elem),duration,callback);
 	};
 
-	// when loading the page, scroll to next active event
-	scrollToCalDay(jQuery('#today'),0);
-
 	// return the first/last event day from given calendar
 	getEventDay = function(curCal,first){
 		var days = jQuery(curCal).find('td.ec3_eventday');
@@ -116,6 +115,11 @@ jQuery(document).ready(function(){
 	}
 	// the post which is currently on top
 	var curPost = getPostFromCalDay(jQuery('#today'));
+	// page was just loaded;
+	var pageLoaded = true;
+
+	// when loading the page, scroll to next active event
+	scrollToPost(curPost,0);
 
 	// scroll to first/last event in month shown by the given calendar
 	scrollToMonth = function(curCal,first,scroll,callback){
@@ -206,23 +210,32 @@ jQuery(document).ready(function(){
 
 	// all elements that need to be shown/hidden when loading one event
 	var listingElements = '#mainpost-banner,#event-listing,#wp-calendar,#eventtypes';
+	// all event title links
+	var eventSelector = '#event-listing > div a';
+	// all subcategory links
+	var subcatSelector = '#eventtypes > ul > li > a,ul.children > li > a,ul.event-subcat > li > a';
+	// next/prev post
+	var nextPrevSelector = '.nav-previous > a,.nav-next > a';
+
 
 	// filter posts when clicking on event sub categories
-	jQuery('#eventtypes > ul > li,' + 
-	       'ul.children > li,' +
-	       'ul.event-subcat > li').live('click',function(){
+	subcatClicked = function(newCat){
 		// remove any single events
 		jQuery('#content #single-post').remove();
 		jQuery(listingElements).show();
 
-		curCat = getCatId(jQuery(this));
+		curCat = newCat;
 		ec3.set_cur_cat(curCat);
 		if(!curCat) return;
-		filterPosts(curCat,ec3.get_current_month_link(getCatId(jQuery(this))));
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
-		return false;
-	});
+		filterPosts(curCat,ec3.get_current_month_link(curCat));
+
+		if ( curCat == topCat )
+			scrollToPost(curPost,0);
+		else
+			findNextCurPost();
+	};
 
 	// get a single post from 'data' and wrap it into a div
 	getSinglePost = function(data){
@@ -230,26 +243,54 @@ jQuery(document).ready(function(){
 		var container = jQuery('<div id="single-post"></div>');
 		container.append(content);
 		return container;
-	}
+	};
 
-	// load post content
-	jQuery('#event-listing > div a').live('click',function(){
-       	 	jQuery.get(jQuery(this).attr('href'), function(data){
-			// store id of added content
-			jQuery('#content').append(getSinglePost(data));
-			jQuery(listingElements).hide();
-			jQuery('html,body').scrollTop(0);
+	// jquery - address plugin
+	// this provides browser history for ajax links
+	// used for subcategory and post links
+	var baseURL;
+	jQuery.address.init(function(event) {
+                // Initializes the plugin
+		baseURL = jQuery.address.baseURL().replace('events','');
+		jQuery(eventSelector + ',' + 
+		       subcatSelector + ',' +
+		       nextPrevSelector).address(function() {
+			return jQuery(this).attr('href').replace(baseURL,'');
 		});
-		return false;
-	});
+	}).change(function(event) {
+		var orgvalue = event.value.replace(/^\//, '');
+		var value = baseURL + event.value.replace(/^\//, '');
 
-	// load next/prev post
-	jQuery('.nav-previous > a,.nav-next > a').live('click',function(){
-       	 	jQuery.get(jQuery(this).attr('href'), function(data){
-			jQuery('#content #single-post').remove();
-			jQuery('#content').append(getSinglePost(data));
+		// load event listing
+		if ( orgvalue == '' ){
+			// XXX: workaround to prevent scrolling to 0
+			pageLoaded = true;
+			subcatClicked(topCat);
+			return;
+		}
+
+		var found = false;
+		// load a subcategory
+		jQuery(subcatSelector).each(function() {
+			if (jQuery(this).attr('href') == value) {
+				subcatClicked(getCatId(jQuery(this).parent()));
+				found = true;
+			}
 		});
-		return false;
+
+		if ( found ) return;
+
+		// load post content
+		jQuery(eventSelector + ',' + nextPrevSelector).filter(':visible').each(function() {
+			if (jQuery(this).attr('href') == value) {
+				jQuery.get(jQuery(this).attr('href'), function(data){
+					jQuery('#content #single-post').remove();
+					jQuery('#content').append(getSinglePost(data));
+					jQuery(listingElements).hide();
+					jQuery('html,body').scrollTop(0);
+				});
+			} 
+		});
 	});
 
 	// scroll to first of month when clicking on month link
@@ -330,6 +371,14 @@ jQuery(document).ready(function(){
 	jQuery(document).scroll(function(e){
 		var elem = jQuery(window);
 		var variance = 5;
+
+		// XXX: workaround to prevent scrolling to top on ajax page reload
+		if ( pageLoaded ) {
+			if ( elem.scrollTop() == 0 )
+				scrollToPost(curPost);
+			pageLoaded = false;
+			return;
+		}
 
 		// do nothing when showing single posts
 		if ( jQuery('#single-post').length > 0 ) return;
