@@ -65,10 +65,56 @@ class smwimport_test
 		'house' => 'big house',
 		'room' => '203',
 		'age' => '18',
-		'banner' => array('url' => 'http://87.238.194.42/Kollektiv-Turmstrasse.jpg',
+		'banner' => array('url' => 'http://87.238.194.42/cmsbilder/Kollektiv-Turmstrasse.jpg',
 				'title' => 'Turmstrasse')
 		);
+	$data[] = array(
+		'type'  => 'Veranstaltung',
+		'label' => 'Matthew Herbert',
+		'title' => 'Matthew Herbert',
+		'eventtype'  => 'Konzert',
+		'date_begin' => '2011-06-02 10:00',
+		'short_description' => 'Matthew Herbert',
+		'long_description' => 'Wenn es jemand gibt, der, ganz englisch, indeed very sophisticated ist,
+dann ist das ohne Zweifel Matthew Herbert. In vielerlei Hinsicht. Nicht
+nur was sein Schaffen in und für die elektronische Musik angeht, auch
+sein politisches Engagement erscheint beachtenswert. 
 
+Matthew Herbert ist vier Jahre alt, als er zum ersten Mal in den Genuss
+von Geigen- bzw. Klavierunterricht kommt. Diesem frönt er bis zum Be-
+ginn seines Studiums der Theaterwissenschaft. Während der Schule spielt
+Herbert in Orchestern, nebenher singt er auch im Schülerchor und mit
+13 gibt er den Keyboarder in verschiedenen Bands. In seiner Schulzeit
+bekommt Herbert es mit dem Musiklehrer Pete Stollery zu tun, der den
+musikalischen Denkhorizont seiner Schüler, insbesondere Matthew Her-
+bert, erweitert, indem er Jazz, wie auch die Musik von Reich oder Xenakis
+gleichberechtigt mit Klassik (z.B. Beethoven) behandelt.
+
+Matthew Herbert ist vier Jahre alt, als er zum ersten Mal in den Genuss
+von Geigen- bzw. Klavierunterricht kommt. Diesem frönt er bis zum Be-
+ginn seines Studiums der Theaterwissenschaft. Während der Schule spielt
+Herbert in Orchestern, nebenher singt er auch im Schülerchor und mit
+13 gibt er den Keyboarder in verschiedenen Bands. In seiner Schulzeit
+bekommt Herbert es mit dem Musiklehrer Pete Stollery zu tun, der den
+musikalischen Denkhorizont seiner Schüler, insbesondere Matthew Her-
+bert, erweitert, indem er Jazz, wie auch die Musik von Reich oder Xenakis
+gleichberechtigt mit Klassik (z.B. Beethoven) behandelt.
+',
+		'genre' => 'rock',
+		'homepage' => array( 'www.matthewherbert.com'),
+		'location' => 'Spartacus',
+		'house' => 'big house',
+		'room' => '203',
+		'age' => '18',
+		'image_big' => array('url' => 'http://87.238.194.42/cmsbilder/matthew_herbert.jpg',
+				     'title' => 'Matthew Herbert'),
+		'sponsor' => array(
+			  array('url' => 'http://87.238.194.42/cmsbilder/sponsor_stadtwerke.gif',
+			        'title' => 'Stadtwerke Potsdam'),
+			  array('url' => 'http://87.238.194.42/cmsbilder/sponsor_page.jpg',
+			        'title' => 'Page')
+			)
+		);
 	return $data;
   }
 
