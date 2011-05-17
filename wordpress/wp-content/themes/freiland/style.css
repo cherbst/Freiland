@@ -212,6 +212,11 @@ body.category-news #content > div.first img {
 	display : none;
 }
 
+.entry-title a:hover {
+color: rgba(0,0,0,0.5);
+text-decoration: none;
+}
+
 #content div.category-events .entry-title {
 	float: left;
 	font-size:22pt;
@@ -383,6 +388,12 @@ li#eventtypes li{
 	color: #000000;
 }
 
+#access ul li ul li:hover > a {
+        border-bottom: 0px solid rgb(196,81,157);
+        background: rgba(255, 255, 255, 0.9);
+        color: #000000;
+}
+
 #access li.current-menu-item > a, 
 #access li.current-category-ancestor > a, 
 #access li.current-post-ancestor > a {
@@ -392,9 +403,14 @@ li#eventtypes li{
 #access ul ul a {
 	background: rgba(255,255,255,0.9);
 	line-height: 1em;
-	padding: 10px;
+	padding: 2px;
 	height: auto;
 	width: auto;
+}
+
+#access ul li ul.children li > a {
+	font-size: 9pt;
+	font-style: normal!important;
 }
 
 #access ul ul {
@@ -522,7 +538,11 @@ li#eventtypes li{
 }
 
 #access ul li {
-        padding-right: 3%;
+        padding-right: 50px;
+}
+
+#access ul li ul li {
+	padding-right: 5px;
 }
 
 #access ul li.current_page_item > a, #access ul li.current-menu-ancestor > a, #access ul li.current-menu-item > a, #access ul li.current-menu-parent > a {
