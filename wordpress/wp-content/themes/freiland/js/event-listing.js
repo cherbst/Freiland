@@ -67,6 +67,8 @@ jQuery(document).ready(function(){
 
 	// initialize current cat from 'events' menu item
 	var curCat = getCatId(jQuery('.current-menu-item'));
+	// set 'current-cat' class
+	jQuery('#eventtypes ul li.cat-item-'+curCat).addClass('current-cat');
 
 	// get the next event following the given cal day
 	var getPostFromCalDay = function(elem){
