@@ -115,6 +115,47 @@ gleichberechtigt mit Klassik (z.B. Beethoven) behandelt.
 			        'title' => 'Page')
 			)
 		);
+	$data[] = array(
+		'type'  => 'Veranstaltung',
+		'label' => 'ULTRASH',
+		'title' => 'ULTRASH - FESTIVAL V',
+		'eventtype'  => 'Festival',
+		'date_begin' => '2011-05-20 10:00',
+		'date_end' => '2011-05-21 10:00',
+		'long_description' => '
+Am 20./21.5.2011 wird das mittlerweile fünfte Ultrash-Festival in Zusam-
+menarbeit von RASH Berlin-Brandenburg , Scortesi , dem Filmstadtinferno
+99 , Stara Garda und weiteren Unterstützer_innen in Potsdam in der neu-
+en Location „Freiland“ stattfinden. Folgende Bands werden aufteten:
+The Offenders (Ska/Italien/Berlin)
+
+United Struggle (AFA-Oi!/Düsseldorf)
+Redska (Ska/Italien)
+Jesus Skins (Christlicher-AFA-Oi!)
+Bier Iki Ütsch (Punk/Potsdam)
+The Last Minute (Ska/Ungarn)
+Produzenten der Froide (AFA-Oi!/Stuttgart)
+The Bayonets (AFA – Stretpunk/Serbien)
+Lea-Won (Hip Hop/München)
+und Asi & Jaycop (Hip Hop/Potsdam)',
+		'genre' => 'rock',
+		'homepage' => array( 'http://ultrash.blogsport.de/vorankuendigung-2011/'),
+		'location' => 'Freiland',
+		'house' => 'big house',
+		'room' => '203',
+		'age' => '18',
+		'image_big' => array('url' => 'http://87.238.194.42/cmsbilder/ultrash_v.jpg',
+				     'title' => 'Ultrash V'),
+		'sponsor' => array(
+			  array('url' => 'http://87.238.194.42/cmsbilder/antifalogo.gif',
+			        'title' => 'Antifa'),
+			  array('url' => 'http://87.238.194.42/cmsbilder/scortel_logo.jpg',
+			        'title' => 'Scortel'),
+			  array('url' => 'http://87.238.194.42/cmsbilder/asta_07.png',
+			        'title' => 'Asta')
+			)
+		);
+
 	return $data;
   }
 
