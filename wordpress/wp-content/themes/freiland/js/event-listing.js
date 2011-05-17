@@ -236,6 +236,7 @@ jQuery(document).ready(function(){
 			// store id of added content
 			jQuery('#content').append(getSinglePost(data));
 			jQuery(listingElements).hide();
+			jQuery('html,body').scrollTop(0);
 		});
 		return false;
 	});
