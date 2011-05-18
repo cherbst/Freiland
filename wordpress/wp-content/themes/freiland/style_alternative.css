@@ -40,8 +40,7 @@ body.category-events div.end_date {
 
 body{
 	background : white;
-	padding-top : 160px;
-	padding-bottom : 150px;
+	height: 100%;
 }
 
 #main { 
@@ -50,12 +49,18 @@ body{
 	background: #FFFFFF;
 	z-index: 95;
 	padding: 0;
+	padding-top: 160px;
 }
 
 #container {
 	position: relative;
 	background: #FFFFFF;
 	z-index: 96;
+	padding-left: 200px;
+	width: 850px;
+	height: 600px;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
 #content {
@@ -74,7 +79,7 @@ body{
 
 #mainpost-banner img{
         width: 850px;
-        position: fixed;
+        position: absolute;
 	z-index: 97;
 	padding-bottom: 30px;
 	background: rgba(255, 255, 255, 0.9); 
@@ -236,11 +241,11 @@ text-decoration: none;
 }
 
 #primary {
-	position: fixed;
+	position: absolute;
 	left: 1050px;
-	width: 15%;
-	min-width: 200px;
-	margin-top: 220px;
+	width: 240px;
+	min-width: 240px;
+	margin-top: 240px;
 }
 
 #primary a {
@@ -300,6 +305,11 @@ li#eventtypes li{
 	width: 60%;
 }
 
+#main .widget-area ul {
+	margin-left: 20px;
+	padding: 0 20px 0 0;
+}
+
 #footer-widget-area div#first {
 	width : 100%;
 	margin-right : 0px;
@@ -332,12 +342,11 @@ li#eventtypes li{
 #wrapper {
 	padding: 0;
 	margin: 0;
-	padding-left: 200px;
-	width: 850px;
+	width: 1350px;
 }
 
 #masthead {
-	position: fixed;
+	position: absolute;
 	z-index: 99;
 	top : 0;
 	left : 0;
@@ -345,10 +354,10 @@ li#eventtypes li{
 }
 
 #header {
-	position: fixed;
+	position: absolute;
 	padding: 0px;
 	top: 25px;
-	width: 100%;
+	width: 1350px;
 	height: 163px;
 	z-index: 99;
 	background: #FFFFFF;
@@ -434,7 +443,7 @@ li#eventtypes li{
 }
 
 #topright {
-	position: fixed;
+	position: absolute;
 	left: 1050px;
 	top : 25px;
 	width: 100%;
