@@ -44,6 +44,15 @@ body{
 	padding-bottom : 150px;
 }
 
+body, input, textarea {
+	color: black;
+}
+
+body, input, textarea, .page-title span, .pingback a.url {
+	font-family: Verdana;
+	font-size: 11pt;
+}
+
 #main { 
 	clear: both;
 	width: 100%;
@@ -61,6 +70,57 @@ body{
 #content {
 	position: relative;
 	margin: 0;
+}
+
+/* gallery page */
+body.category-images #content {
+	width: 300px;
+	float: left;
+	position: relative;
+	left: -10px;
+	overflow: hidden;
+}
+
+body.category-images #gallery-description {
+	float: left;
+	margin-top: 400px;
+	max-width: 550px;
+}
+
+body.category-images div.entry-content {
+	padding: 0px; 
+}
+
+body.category-images div.hentry {
+	margin: 0px;
+	padding: 0px;
+}
+
+body.category-images div.entry-content > p,
+body.category-images h2.entry-title {
+	display: none;
+	font-size : 14pt;
+	text-transform:uppercase;	
+}
+
+body.category-images div.entry-content > div {
+	margin: 0px;
+}
+
+body.category-images #content > div img:hover {
+	width: 80px;
+	height: 75px;
+	padding: 5px 5px 5px 5px;
+}
+body.category-images #content > div {
+	float : left;
+}
+
+body.category-images #content > div img {
+	width: 70px;
+	height: 65px;
+	padding: 10px 10px 10px 10px;
+	border: none;
 }
 
 #mainpost-banner{

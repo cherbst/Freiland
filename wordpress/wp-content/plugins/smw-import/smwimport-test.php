@@ -205,18 +205,49 @@ und Asi & Jaycop (Hip Hop/Potsdam)',
 	return $data;
   }
 
+  static function get_featured_image($i){
+	switch($i){
+	case 1:  return 'fest10_kl.jpg';
+	case 2:  return 'fl18_kl.jpg';
+	case 3:  return 'fest2_kl.jpg';
+	case 4:  return 'fl4_kl.jpg';
+	case 5:  return 'fl5_kl.jpg';
+	case 6:  return 'fl38_kl.jpg';
+	case 7:  return 'fl7_kl.jpg';
+	case 8:  return 'fl17_kl.jpg';
+	case 9:  return 'fl42_kl.jpg';
+	case 10:  return 'fl9_kl.jpg';
+	case 11:  return 'fl8_kl.jpg';
+	case 12:  return 'fl20_kl.jpg';
+	case 13:  return 'fl52_kl.jpg';
+	case 14:  return 'dnb35_klein.jpg';
+	case 15:  return 'hae6_klein.jpg';
+	case 16:  return 'fest_feuer1_kl.jpg';
+	case 17:  return 'fb48_kl.jpg';
+	case 18:  return 'blumenfrau.jpg';
+	case 19:  return 'fb10_kl.jpg';
+	case 20:  return 'fbo14_kl.jpg';
+	case 21:  return 'fl16_kl.jpg';
+	default : return ''; 
+	}
+  }
+
   static function get_galleries(){
-	$data = array( array(
+	for ( $i=1;$i<=21;$i++)
+		$data[] = array(
 		'type'  => 'Gallery',
-		'name' => 'Test gallery1',
-		'description' => 'An imported test gallery',
-		'gallery_folder' => '/testfolder1'),
-		array(
-		'type'  => 'Gallery',
-		'name' => 'Test gallery2',
-		'description' => 'Another imported test gallery',
-		'gallery_folder' => '/testfolder2')
-	);
+		'name' => 'Test gallery'.$i,
+		'description' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aene-
+an commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
+Nulla consequat massa quis enim. Donec pede justo, fringilla vel,
+aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imper-
+diet a, venenatis vitae, justo.
+'.$i,
+		'gallery_folder' => dirname(__FILE__) . '/../../themes/freiland/gallery',
+		'featured_image' => self::get_featured_image($i) );
+
 	return $data;
   }
 
