@@ -987,7 +987,8 @@ class smwimport
 		else
 			$subcats = array( $cat_slug );
 		foreach($subcats as $subcat){ 
-			$category['cat_name'] = $subcat;
+			// XXX: make category names case-insensitive
+			$category['cat_name'] = strtolower($subcat);
 			$category['category_nicename'] = sanitize_title($subcat);
 			$category['category_parent'] = $parent_id;
 			$cat_id = self::create_category($category);
