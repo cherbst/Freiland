@@ -92,10 +92,6 @@ function freiland_filter_the_title( $post_title, $id ) {
 
   function freiland_get_event_content($content){
 	global $post;
-	$args = array(  'post_type' => 'attachment', 
-			'numberposts' => -1, 
-			'post_status' => null, 
-			'post_parent' => $post->ID ); 
 
 	$return  = freiland_get_post_image($post->ID,'image_big');
 	$return .= freiland_get_post_image($post->ID,'sponsor');
