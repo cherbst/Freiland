@@ -63,6 +63,48 @@ body{
 	margin: 0;
 }
 
+/* gallery page */
+body.category-images #main {
+	width: 300px;
+	float: left;
+}
+
+body.category-images div.entry-content {
+	padding: 0px; 
+}
+
+body.category-images div.hentry {
+	margin: 0px;
+	padding: 0px;
+}
+
+body.category-images div.entry-content > p,
+body.category-images h2.entry-title {
+	display: none;
+}
+
+body.category-images div.entry-content > div {
+	margin: 0px;
+}
+
+body.category-images #content > div img:hover {
+	width: 80px;
+	height: 75px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+}
+body.category-images #content > div {
+	float : left;
+}
+
+body.category-images #content > div img {
+	width: 70px;
+	height: 65px;
+	padding-bottom: 20px;
+	padding-right: 20px;
+	border: none;
+}
+
 #mainpost-banner{
 	display: block;
 	width: 850px;
