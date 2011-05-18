@@ -55,8 +55,11 @@
 </head>
 
 <body <?php body_class(); ?>>
-
-<script type="text/javascript" src="http://localhost/freiland/wp-content/themes/freiland/js/wz_tooltip.js"></script>
+<?php	if ( is_page('land') ){ ?>
+	<script type="text/javascript" 
+		src="<?php echo dirname(get_bloginfo('stylesheet_url')) . '/js/wz_tooltip.js';?>">
+	</script>
+<?php } ?>
 
 <div id="wrapper" class="hfeed">
 	<div id="header">
