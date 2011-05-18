@@ -610,3 +610,10 @@ img.LinkImage  {
 #start_box #welcome_img {
 	margin: 0px auto;
 }
+
+/* Lightbox fixes */
+
+#jquery-overlay {
+	width: 100%!important;
+	z-index: 100!important;
+}
