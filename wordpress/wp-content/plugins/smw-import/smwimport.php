@@ -204,6 +204,7 @@ class smwimport
 			'name' => 'name',
 			'description' => 'description',
 			'gallery_folder' => 'gallery_folder',
+			'featured_image' => 'featured_image',
 		)
 	),
 	'CSSVeranstaltung' => 'Veranstaltung'
