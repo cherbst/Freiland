@@ -563,10 +563,15 @@ class smwimport
 	if ( !$cat )
 		return new WP_Error('category_failed', __("Could not find top level category:").$mapping['category']);
 
+	// init some post properties
+	$postarr = array(
+		'post_title' => '',
+		'post_content' => '',
+		'post_excerpt' => '');
+
 	foreach( $data as $key => $value ){
 		switch($attribute_mapping[$key]){
 			case 'description':
-				$postarr['post_excerpt'] = $value;
 				$postarr['post_content'] = $value;
 				break;
 			case 'name':
@@ -597,6 +602,8 @@ class smwimport
 	$attachments = get_children( array( 'post_parent' => $ID, 'post_type' => 'attachment', 'numberposts' => 999 ) );
 
 	$uploads = wp_upload_dir();
+	if (substr($gallery_folder,-1) != '/' ) $gallery_folder .= '/';
+ 
 	error_log("Importing gallery folder:".$gallery_folder);
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
