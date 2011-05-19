@@ -142,6 +142,11 @@ jQuery(document).ready(function(){
 				}
 				filterPosts(curCat);
 			}
+			if ( append )
+				next_href = incrementHref(next_href);
+			else
+				prev_href = decrementHref(prev_href);
+
 			if ( callback ) callback();
 			postreq--;
 		});
@@ -187,10 +192,6 @@ jQuery(document).ready(function(){
 			updateCal = false;
 			if ( reload ) 
 				loadNewEvents(newMonthHref,requestNextMonth,function(){
-					if ( requestNextMonth )
-						next_href = incrementHref(next_href);
-					else
-						prev_href = decrementHref(prev_href);
 					scrollToMonth(curCal,requestNextMonth,'slow',function(){
 						updateCal = true;
 					});
@@ -389,15 +390,12 @@ jQuery(document).ready(function(){
 //		debug('curPost:'+curPost.find('a').attr('title')+':updateCal:'+updateCal);
 		// scroll reached the bottom
  		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
-			loadNewEvents(next_href,true,function(){
-				next_href = incrementHref(next_href);
-			});
+			loadNewEvents(next_href,true);
 		}
 		// scroll reached the top
 		else if (elem.scrollTop() == 0 ){
 			var firstPost = jQuery('#event-listing > div:first');
 			loadNewEvents(prev_href,false,function(){
-				prev_href = decrementHref(prev_href);
 				scrollToPost(firstPost,0);
 			});
 		}
