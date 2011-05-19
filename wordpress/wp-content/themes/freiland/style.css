@@ -54,7 +54,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 
 #main { 
 	clear: both;
-	width: 100%;
+	width: 1000px;
 	background: #FFFFFF;
 	z-index: 95;
 	padding: 0;
@@ -64,6 +64,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 #container {
 	position: relative;
 	background: #FFFFFF;
+	width: 785px;
 	z-index: 96;
 	padding-left: 200px;
 	width: 850px;
@@ -137,9 +138,9 @@ body.category-images #content > div img {
 }
 
 #mainpost-banner img{
-        width: 850px;
         position: absolute;
 	z-index: 97;
+	width: 785px;
 	padding-bottom: 30px;
 	background: rgba(255, 255, 255, 0.9); 
 }
@@ -148,7 +149,6 @@ body.category-images #content > div img {
 	position: relative;
 	overflow: hidden;
 	z-index: 50;
-	padding-top: 20px;
 }
 
 .begin_date, .end_date {
@@ -170,7 +170,7 @@ body.category-images #content > div img {
 #event-listing .category-events .entry-content, #event-listing .category-events .entry-summary {
         clear: none;
         float: right;
-        width: 65%;
+        width: 470px;
         padding: 0;
 }
 
@@ -208,17 +208,18 @@ body.category-images #content > div img {
 }
 
 #event-listing .category-events .event_day {
-	width : 20%;
+	width : 25%;
 }
 
 #event-listing .category-events .event_date {
-	width : 35%;
+	width : 42%;
 }
 
 .event-type {
 	float: left;
 	font-size : 8pt;
-	width: 80px;
+	width: 60px;
+	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
 }
@@ -226,7 +227,7 @@ body.category-images #content > div img {
 .event-genre{
 	clear: both;
 	float: left;
-	margin-left: 90px;
+	margin-left: 70px;
 	font-size : 10pt;
 }
 
@@ -248,7 +249,7 @@ body.category-images #content > div img {
 
 .entry-date {
 	float : left;
-	width : 35%;
+	width : 250px;
 	margin-top: 5px;
 }
 
@@ -301,10 +302,9 @@ text-decoration: none;
 
 #primary {
 	position: absolute;
-	left: 1050px;
-	width: 240px;
-	min-width: 240px;
-	margin-top: 240px;
+	left: 1000px;
+	width: 200px;
+	margin-top: 220px;
 }
 
 #primary a {
@@ -338,6 +338,7 @@ text-decoration: none;
 	color: black;
 	font-family: Helvetica;
 	font-size : 10pt;
+	text-transform: uppercase;
 }
 
 #wp-calendar .ec3_eventday a {
@@ -348,6 +349,7 @@ text-decoration: none;
 	font-family: Helvetica;
 	font-size : 15pt;
 	font-weight : normal;
+	text-transform: uppercase;
 }
 
 li#eventtypes{
@@ -401,7 +403,9 @@ li#eventtypes li{
 #wrapper {
 	padding: 0;
 	margin: 0;
-	width: 1350px;
+	padding-left: 200px;
+	width: 1000px;
+	background: #FFFFFF;
 }
 
 #masthead {
@@ -409,7 +413,7 @@ li#eventtypes li{
 	z-index: 99;
 	top : 0;
 	left : 0;
-	width: 1050px;
+	width: 1250px;
 }
 
 #header {
@@ -436,10 +440,16 @@ li#eventtypes li{
 }
 
 #access {
-	width: 850px;
-	height: 140px;
+	float: left;
+	width: 1000px;
+	height: 300px;
 	background: rgba(255, 255, 255, 0.0);
-	background: url(images/nav_left.png) left 109px repeat-x rgba(255, 255, 255, 1);
+	background: url(images/navileiste.png) left 109px no-repeat rgba(255, 255, 255, 0.0);
+}
+
+#access .menu-header {
+	background: #FFFFFF;
+	margin: 0;
 }
 
 #access .menu-header, div.menu, #colophon {
@@ -503,11 +513,12 @@ li#eventtypes li{
 
 #topright {
 	position: absolute;
+	display: none;
 	left: 1050px;
 	top : 25px;
 	width: 100%;
 	height: 340px;
-	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
+	background: url(images/nav_right.jpg) left 84px no-repeat #FFFFFF;
 }
 
 /*#post-54 div.entry-content{
@@ -536,6 +547,7 @@ li#eventtypes li{
 	float: right;
 	width:65%;
 	padding-top: 10px;
+	padding-right: 75px;
 }
 
 #footer li.widget_nav_menu {
@@ -561,9 +573,9 @@ li#eventtypes li{
 
 #footer #site-info {
 	float: left;
-	padding-left:190px;
 	padding-top: 10px;
-	width:auto;
+	width:300px;
+	text-align: right;
 	font-weight:normal;
 }
 
@@ -606,7 +618,7 @@ li#eventtypes li{
 }
 
 #access ul li {
-        padding-right: 50px;
+        padding-right: 55px;
 }
 
 #access ul li ul li {
@@ -684,4 +696,94 @@ img.LinkImage  {
 #jquery-overlay {
 	width: 100%!important;
 	z-index: 100!important;
+}
+
+#main .widget-area ul {
+	margin-left: 0;
+	padding: 0;
+}
+
+#post-images {
+	position: fixed;
+	top: 310px;
+	left: 745px;
+	width: 240px;
+	z-index: 99;
+}
+
+#post-images div.image_big {
+	width: 100%;
+	margin: 0 auto;
+}
+
+#post-images div.image_big img {
+        width: 90%;
+	height: auto;
+        margin: 0 auto;
+}
+
+#post-images div.sponsor {
+        width: 100%;
+        margin: 0 auto;
+	padding-top: 20px;
+}
+
+#post-images div.sponsor img {
+	float: left;
+        width: 55px;
+        height: auto;
+	padding-top: 20px;
+}
+
+
+#single-post {
+	width: 550px;
+	font-size: 11pt!important;
+	font-family: Verdana;
+}
+
+#prev {
+	float: left;
+}
+
+#prev a {
+	width: 60px;
+	height: 28px;
+	display: block;
+	background: url(images/feil_links_kl.png) left 10px no-repeat rgba(255, 255, 255, 0.0);
+	font-size: 0;
+	float: left;
+	padding-top: 8px;
+}
+
+#prev a:hover {
+        font-size: 8pt;
+	text-align: right;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+#next {
+	float: right;
+}
+
+#next a {
+	width: 60px;
+        height: 28px;
+        display: block;
+        background: url(images/feil_rechts_kl.png) right 10px no-repeat rgba(255, 255, 255, 0.0);
+        font-size: 0;
+	float: right;
+        padding-top: 8px;
+}
+
+#next a:hover {
+        font-size: 8pt;
+        text-align: left;
+        text-decoration: none;
+        text-transform: uppercase;
+}
+
+#ec3_publish {
+	display: none!important;
 }

@@ -90,3 +90,8 @@
 	</div><!-- #header -->
 
 	<div id="main">
+	<?php if ( is_single() ) { ?>
+	<div id="post-images">
+		<?php freiland_the_postimages(); ?>
+	</div>
+	<?php } ?>

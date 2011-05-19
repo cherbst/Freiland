@@ -98,8 +98,6 @@ function freiland_filter_the_title( $post_title, $id ) {
   function freiland_get_event_content($content){
 	global $post;
 
-	$return  = freiland_get_post_image($post->ID,'image_big');
-	$return .= freiland_get_post_image($post->ID,'sponsor');
 	$return .= $content ;
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
@@ -150,7 +148,6 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
 
-	$return = freiland_get_post_image($post->ID,'image');
 	$return .= '<p>'. $subtitle .'</p>';
 	$return .= $content;
 	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
@@ -425,6 +422,17 @@ function freiland_subcategory_dropdown($cat_id){
 
 	return wp_get_attachment_image( $id,
 		'full',false,array('class' => 'aligncenter' ) );
+  }
+
+  function freiland_the_postimages(){
+	global $post;
+	if ( in_category('events') ){
+		echo freiland_get_post_image($post->ID,'image_big');
+		echo freiland_get_post_image($post->ID,'sponsor');
+	}
+	else if ( in_category('news') ){
+		echo freiland_get_post_image($post->ID,'image');
+	}
   }
 
 ?>
