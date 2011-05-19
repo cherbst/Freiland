@@ -181,7 +181,7 @@ jQuery(document).ready(function(){
 		var id = jQuery(this).attr('id');
 		var requestNextMonth = ( id == 'ec3_next' );
 		var fun = null;
-		var reload = !hrefLoaded(newMonthHref);
+		var reload = !hrefLoaded((requestNextMonth?next_href:prev_href));
 		if ( requestNextMonth ){
 			fun = ec3.go_next;
 		}else{
