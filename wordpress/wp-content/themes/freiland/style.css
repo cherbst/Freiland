@@ -517,7 +517,7 @@ li#eventtypes li{
 }*/
 
 #footer {
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	width: 1205px;
 	margin: 0;
