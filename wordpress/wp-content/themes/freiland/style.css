@@ -145,7 +145,6 @@ body.category-images #content > div img {
 	position: relative;
 	overflow: hidden;
 	z-index: 50;
-	padding-top: 20px;
 }
 
 .begin_date, .end_date {
@@ -167,7 +166,7 @@ body.category-images #content > div img {
 #event-listing .category-events .entry-content, #event-listing .category-events .entry-summary {
         clear: none;
         float: right;
-        width: 65%;
+        width: 470px;
         padding: 0;
 }
 
@@ -205,17 +204,18 @@ body.category-images #content > div img {
 }
 
 #event-listing .category-events .event_day {
-	width : 20%;
+	width : 25%;
 }
 
 #event-listing .category-events .event_date {
-	width : 35%;
+	width : 42%;
 }
 
 .event-type {
 	float: left;
 	font-size : 8pt;
-	width: 80px;
+	width: 60px;
+	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
 }
@@ -223,7 +223,7 @@ body.category-images #content > div img {
 .event-genre{
 	clear: both;
 	float: left;
-	margin-left: 90px;
+	margin-left: 70px;
 	font-size : 10pt;
 }
 
@@ -245,7 +245,7 @@ body.category-images #content > div img {
 
 .entry-date {
 	float : left;
-	width : 35%;
+	width : 250px;
 	margin-top: 5px;
 }
 
