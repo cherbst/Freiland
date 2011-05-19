@@ -72,8 +72,6 @@ class smwimport
 			    name as the key
 	   "favicon"	  : attribute value should be a URL. The favicon of this URL will be
 			    saved as a post meta with the key "favicon"
-	   "attachmentname" : attribute value becomes the name of all attachments for
-			      this post
 	   "attachment"   : attribute value becomes an attachment to the post
 			    The attribute value must be either an array containing the
 			    keys described in the attachment attribute mapping or a string
@@ -81,6 +79,10 @@ class smwimport
 			    The latter will be downloaded from the url given in the attachment_url option.
 			    The attachment ID will be stored as a post meta value under
 			    the key name.
+			    If there exists a key with the name 'attachmentkey_name', it is
+			    supposed to hold the name of the attachment.
+			    If the attachment is actually an array of attachments, the attachment_name
+			    attribue must also be an array of the same size.
 	   "globalattachment" : a special attachment where the attachment ID
 				will be stored in an option under the key name
 	   "calendar_start" : ( requires ec3 plugin ) 
@@ -141,7 +143,6 @@ class smwimport
 			'image_small' => 'attachment',
 			'image_big' => 'attachment',
 			'sponsor' => 'attachment',
-			'image_name' => 'attachmentname',
 			'banner' => 'globalattachment',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
@@ -157,7 +158,6 @@ class smwimport
 			'long_description' => 'post_content',
 			'subtitle' => 'meta',
 			'image' => 'attachment',
-			'image_name' => 'attachmentname',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
 		)	
@@ -171,7 +171,6 @@ class smwimport
 			'description' => 'post_content',
 			'subtitle' => 'meta',
 			'image' => 'attachment',
-			'image_name' => 'attachmentname',
 			'homepage' => array('meta','favicon'),
 			'homepagelabel' => 'meta',
 			'source' => 'meta',
@@ -396,9 +395,6 @@ class smwimport
 				case 'attachment':
 					$attachments[] = $key;
 					break;
-				case 'attachmentname':
-					$attachmentname = $value;
-					break;
 				case 'calendar_start':
 					$calendar['start'] = $value;
 					break;
@@ -416,7 +412,8 @@ class smwimport
 					break;
 				default:
 					// ignore some keys
-					if ( $key != 'uri' && $key != 'type' && $key != $mapping['primary_key'] )
+					if ( $key != 'uri' && $key != 'type' && $key != $mapping['primary_key'] &&
+						substr($key,-5) != '_name' )
 						error_log('smwimport: no mapping defined for:'.$key);
 			}
 		}
@@ -462,8 +459,9 @@ class smwimport
 				continue;
 			}
 
-			if ( $attachmentname != null )
-				$attach_arr['title'] = $attachmentname;
+			if ( isset($data[$attachmentname.'_name']) )
+				$attach_arr['title'] = $data[$attachmentname.'_name'][$key];
+
 			$ret = self::import_attachment_for_post($prim_key.$attachment.$key,$attach_arr,$ID);
 			if ( is_wp_error($ret) ){
 				$g_ret = $ret;
