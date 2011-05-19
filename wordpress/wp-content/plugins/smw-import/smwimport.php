@@ -170,6 +170,8 @@ class smwimport
 			'title' => 'post_title',
 			'description' => 'post_content',
 			'subtitle' => 'meta',
+			'image' => 'attachment',
+			'image_name' => 'attachmentname',
 			'homepage' => array('meta','favicon'),
 			'homepagelabel' => 'meta',
 			'source' => 'meta',
