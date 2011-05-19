@@ -159,7 +159,8 @@ class smwimport
 			'subtitle' => 'meta',
 			'image' => 'attachment',
 			'homepage' => 'meta',
-			'homepagelabel' => 'meta'
+			'homepagelabel' => 'meta',
+			'date' => 'post_date'
 		)	
 	),
 	'Pressebericht' => array(
