@@ -286,6 +286,8 @@ jQuery(document).ready(function(){
 			if (jQuery(this).attr('href') == value) {
 				jQuery.get(jQuery(this).attr('href'), function(data){
 					jQuery('#content #single-post').remove();
+					jQuery('#post-images').remove();
+					jQuery('#main').append(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
 					jQuery(listingElements).hide();
 					jQuery('html,body').scrollTop(0);
