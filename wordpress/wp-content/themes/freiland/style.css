@@ -393,7 +393,7 @@ li#eventtypes li{
 	padding: 0;
 	margin: 0;
 	padding-left: 200px;
-	width: 850px;
+	width: 1000px;
 	background: #FFFFFF;
 }
 
@@ -690,4 +690,43 @@ img.LinkImage  {
 #main .widget-area ul {
 	margin-left: 0;
 	padding: 0;
+}
+
+#post-images {
+	position: fixed;
+	top: 310px;
+	left: 745px;
+	width: 240px;
+	z-index: 99;
+}
+
+#post-images div.image_big {
+	width: 100%;
+	margin: 0 auto;
+}
+
+#post-images div.image_big img {
+        width: 90%;
+	height: auto;
+        margin: 0 auto;
+}
+
+#post-images div.sponsor {
+        width: 100%;
+        margin: 0 auto;
+	padding-top: 20px;
+}
+
+#post-images div.sponsor img {
+	float: left;
+        width: 55px;
+        height: auto;
+	padding-top: 20px;
+}
+
+
+#single-post {
+	width: 550px;
+	font-size: 11pt!important;
+	font-family: Verdana;
 }
