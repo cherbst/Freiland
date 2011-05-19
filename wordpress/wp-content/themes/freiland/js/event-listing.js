@@ -129,10 +129,10 @@ jQuery(document).ready(function(){
 
 	// load new events with ajax
 	// apend/prepend them to the list and filter them
-	loadNewEvents = function(href,append,callback){
+	loadNewEvents = function(append,callback){
 		if ( postreq > 0 ) return;
 		postreq++;
-	 	jQuery.get(href, function(data){
+	 	jQuery.get((append?next_href:prev_href), function(data){
 			var content = jQuery(data).find('#event-listing').contents();
 			if ( content.length > 0 ){
 				if ( append ){
@@ -178,7 +178,6 @@ jQuery(document).ready(function(){
 	       '#wp-calendar #prev > a,').live('click',function(){
 		if ( postreq > 0 ) return false;
 
-		var newMonthHref = jQuery(this).attr('href');
 		var id = jQuery(this).attr('id');
 		var requestNextMonth = ( id == 'ec3_next' );
 		var fun = null;
@@ -191,7 +190,7 @@ jQuery(document).ready(function(){
 		fun(function(curCal){
 			updateCal = false;
 			if ( reload ) 
-				loadNewEvents(newMonthHref,requestNextMonth,function(){
+				loadNewEvents(requestNextMonth,function(){
 					scrollToMonth(curCal,requestNextMonth,'slow',function(){
 						updateCal = true;
 					});
@@ -392,12 +391,12 @@ jQuery(document).ready(function(){
 //		debug('curPost:'+curPost.find('a').attr('title')+':updateCal:'+updateCal);
 		// scroll reached the bottom
  		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
-			loadNewEvents(next_href,true);
+			loadNewEvents(true);
 		}
 		// scroll reached the top
 		else if (elem.scrollTop() == 0 ){
 			var firstPost = jQuery('#event-listing > div:first');
-			loadNewEvents(prev_href,false,function(){
+			loadNewEvents(false,function(){
 				scrollToPost(firstPost,0);
 			});
 		}
