@@ -1,6 +1,7 @@
 
 jQuery(document).ready(function(){
-	var topmargin = jQuery('#event-listing > div.post:first').offset().top;
+
+	var topmargin = jQuery('#event-listing').offset().top;
 	// count ajax requests for posts
 	var postreq = 0;
 	var next_href = jQuery('#ec3_next:first').attr('href');
@@ -98,8 +99,10 @@ jQuery(document).ready(function(){
 			if ( callback ) callback();
 			return ;
 		}
-		var offset = post.offset().top - (topmargin);
-		jQuery('html,body').animate({scrollTop:offset},duration,callback);
+		curPost = post;
+		var cur = jQuery('#event-listing').offset();
+		var offset = cur.top - post.offset().top; 
+		jQuery('#event-listing').animate({ top: offset},duration,callback);
 	};
 
 	// scroll to next post following the given cal day
@@ -191,7 +194,7 @@ jQuery(document).ready(function(){
 						next_href = incrementHref(next_href);
 					else
 						prev_href = decrementHref(prev_href);
-					scrollToMonth(curCal,requestNextMonth,'slow',function(){
+					scrollToMonth(curCal,true,'slow',function(){
 						updateCal = true;
 					});
 				});
@@ -340,7 +343,7 @@ jQuery(document).ready(function(){
 
 	// update the current post to the first one shown
 	// call updateCalendar
-	updateCurPost = function(callback){
+/*	updateCurPost = function(callback){
 		var elem = jQuery(window);
 		if ( curPost.length != 0 && jQuery('#event-listing > div').filter(':visible').length > 0 ) {
 			var newPost = curPost;
@@ -401,6 +404,6 @@ jQuery(document).ready(function(){
 				scrollToPost(firstPost,0);
 			});
 		}
-	});
+	});*/
 });
 
