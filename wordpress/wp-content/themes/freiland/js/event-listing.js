@@ -102,7 +102,11 @@ jQuery(document).ready(function(){
 		curPost = post;
 		var cur = jQuery('#event-listing').offset();
 		var offset = cur.top - post.offset().top; 
-		jQuery('#event-listing').animate({ top: offset},duration,callback);
+		jQuery('#event-listing').animate({ top: offset},duration,function(){
+			if( jQuery('#event-listing > div:last').offset().top < 
+				jQuery('#footer').offset().top )
+				loadNewEvents(next_href,true,callback);
+		});
 	};
 
 	// scroll to next post following the given cal day
