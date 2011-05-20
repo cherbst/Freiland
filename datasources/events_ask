@@ -1,0 +1,24 @@
+{{#ask:[[Kategorie:Veranstaltung]]
+|?Genre=genre
+|?Titel=title
+|?Veranstaltungstyp=eventtype
+|?Anfangsdatum=date_begin
+|?Enddatum=date_end
+|?Hat Mindestalter=age
+|?Ort=location
+|?Haus(freiland)=house
+|?Raum(freiland)=room
+|?Beschreibung(kurz)=short_description
+|?Beschreibung(lang)=long_description
+|?Homepage
+|?Homepagelabel
+|?Veranstaltungsbild(gross)=image_big
+|?Bildname=image_big_name
+|?Veranstaltungsbild(main)=banner
+|?Bildname(main)=banner_name
+|?Bild(sponsor)=sponsor
+|?Bildname(sponsor)=sponsor_name
+|format=json
+|limit=20
+|offset=0
+}}
