@@ -144,6 +144,7 @@ class smwimport
 			'image_big' => 'attachment',
 			'sponsor' => 'attachment',
 			'banner' => 'globalattachment',
+			'subtitle' => 'meta',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
 		)	
