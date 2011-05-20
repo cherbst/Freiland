@@ -408,10 +408,26 @@ function freiland_subcategory_dropdown($cat_id){
   }
 
   function freiland_get_mainevent_banner(){
-	$id = get_option('banner');
-	if ( $id == false ) return;
+	$ids = get_option('banner');
+	if ( $ids == false ) return;
 
-	return wp_get_attachment_image( $id,
+	$next_id = false;
+	$today = time();
+	foreach ( $ids as $id ){
+		$attachment = get_post($id);
+		if ( !$attachment ) continue;
+		$post = get_post($attachment->post_parent);
+		if ( !$post ) continue;
+		$begin_date = get_post_meta($post->ID,'date_begin',true);
+		if ( $begin_date == "" ) continue;
+		$cur_time = strtotime($begin_date);
+		if ( $cur_time > $today ){
+			$next_id = $id;
+			break;
+		}
+	}
+	if ( !$next_id) return;
+	return wp_get_attachment_image( $next_id,
 		'full',false,array('class' => 'aligncenter' ) );
   }
 
