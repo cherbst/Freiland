@@ -477,8 +477,11 @@ class smwimport
 		}
 
 		if ( count($ids) == 1 ) $ids = $ids[0];
-		if ( $attachment == $globalattachment )
-			update_option($globalattachment,$ids);
+		if ( $attachment == $globalattachment ){
+			$val = get_option($globalattachment,array());
+			$val[] = $ids;
+			update_option($globalattachment,$val);
+		}
 		// store attachment ID as post meta
 		update_post_meta($ID,$attachment,$ids);
 	}
