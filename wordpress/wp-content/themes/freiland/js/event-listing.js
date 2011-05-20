@@ -222,6 +222,7 @@ jQuery(document).ready(function(){
 	subcatClicked = function(newCat){
 		// remove any single events
 		jQuery('#content #single-post').remove();
+		jQuery('#post-images').remove();
 		jQuery(listingElements).show();
 
 		curCat = newCat;
