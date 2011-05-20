@@ -26,12 +26,18 @@ add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
 
 
 function freiland_init_method() {
+	wp_register_script('jquery-mousewheel',
+	dirname(get_bloginfo('stylesheet_url')) . '/js/jquery.mousewheel.min.js',
+	array('jquery'));
 	wp_register_script('jquery-address',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/jquery.address-1.4.min.js',
 	array('jquery'));
 	wp_register_script('event-listing',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/event-listing.js',
 	array('jquery-address'));
+	wp_register_script('hidden-scroll',
+	dirname(get_bloginfo('stylesheet_url')) . '/js/hidden-scroll.js',
+	array('jquery-mousewheel'));
 	wp_register_script('freiland-gallery',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/freiland-gallery.js',
 	array('jquery'));
@@ -42,6 +48,7 @@ function freiland_enqueue_scripts() {
 		wp_enqueue_script('event-listing');
 	if ( in_category('images') )
 		wp_enqueue_script('freiland-gallery');
+	wp_enqueue_script('hidden-scroll');
 }
 
 function freiland_post_class_filter($classes) {
