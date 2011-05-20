@@ -14,10 +14,11 @@
 |?Homepagelabel
 |?Veranstaltungsbild(gross)=image_big
 |?Bildname=image_big_name
-|?Veranstaltungsbild(main)=banner
-|?Bildname(main)=banner_name
+|?Veranstaltungsbild(main)=image_main
+|?Bildname(main)=image_main_name
 |?Bild(sponsor)=sponsor
 |?Bildname(sponsor)=sponsor_name
+|?Untertitel=subtitle
 |format=json
 |limit=20
 |offset=0
