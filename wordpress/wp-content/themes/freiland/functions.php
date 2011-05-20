@@ -82,8 +82,8 @@ function freiland_filter_the_content( $post_content ) {
 }
 
 function freiland_filter_the_excerpt( $post_excerpt ) {
-       if ( in_category( 'news') )
-               return freiland_get_news_excerpt($post_excerpt);
+       if ( in_category( 'news') || in_category('press'))
+               return freiland_get_news_press_excerpt($post_excerpt);
        return $post_excerpt;
 }
 
@@ -147,7 +147,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $return;
   }
 
-  function freiland_get_news_excerpt($excerpt){
+  function freiland_get_news_press_excerpt($excerpt){
 	global $post;
 	$return = freiland_get_post_image($post->ID,'image');
 	return $return . $excerpt;
@@ -451,7 +451,7 @@ function freiland_subcategory_dropdown($cat_id){
 		echo freiland_get_post_image($post->ID,'image_big');
 		echo freiland_get_post_image($post->ID,'sponsor');
 	}
-	else if ( in_category('news') ){
+	else if ( in_category('news') || in_category('press') ){
 		echo freiland_get_post_image($post->ID,'image');
 	}
   }
