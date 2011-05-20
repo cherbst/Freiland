@@ -480,6 +480,8 @@ class smwimport
 		if ( count($ids) == 1 ) $ids = $ids[0];
 		if ( $attachment == $globalattachment ){
 			$val = get_option($globalattachment,array());
+			if ( !is_array($val) )
+				$val = array($val);
 			$val[] = $ids;
 			update_option($globalattachment,$val);
 		}
