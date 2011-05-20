@@ -412,7 +412,8 @@ function freiland_subcategory_dropdown($cat_id){
 	if ( $ids == false ) return;
 
 	$next_id = false;
-	$today = time();
+	$today = strtotime(date('Y-m-d'));
+	$next_time = null;
 	foreach ( $ids as $id ){
 		$attachment = get_post($id);
 		if ( !$attachment ) continue;
@@ -421,9 +422,9 @@ function freiland_subcategory_dropdown($cat_id){
 		$begin_date = get_post_meta($post->ID,'date_begin',true);
 		if ( $begin_date == "" ) continue;
 		$cur_time = strtotime($begin_date);
-		if ( $cur_time > $today ){
+		if ( $cur_time >= $today && ( $next_time == null || $cur_time <= $next_time ) ){
 			$next_id = $id;
-			break;
+			$next_time = $cur_time;
 		}
 	}
 	if ( !$next_id) return;
