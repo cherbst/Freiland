@@ -403,20 +403,12 @@ function freiland_subcategory_dropdown($cat_id){
 	return $return;
   }
 
-  function freiland_the_event_type(){
+  function freiland_the_event_meta($meta){
 	global $post;
-	$eventtype = get_post_meta($post->ID,'eventtype',true);
-	if ( is_array($eventtype) )
-		$eventtype = implode(" ",$eventtype);
-	echo $eventtype;
-  }
-
-  function freiland_the_event_genre(){
-	global $post;
-	$genre = get_post_meta($post->ID,'genre',true);
-	if ( is_array($genre) )
-		$genre = implode(" ",$genre);
-	echo $genre;
+	$value = get_post_meta($post->ID,$meta,true);
+	if ( is_array($value) )
+		$value = implode(" ",$value);
+	echo $value;
   }
 
   function freiland_get_mainevent_banner(){
