@@ -102,15 +102,27 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	if ( $homepage != null ){
+		$return .= '<p></p>';
 		if ( !is_array($homepage ) ){
 			$homepage = array($homepage);
 			$homepagelabel = array($homepagelabel);
 		}
 		foreach( $homepage as $key => $link ){
-			if ( isset($homepagelabel[$key]) )
-				$return .= '<p>'.$homepagelabel[$key].'</p>';
-			else $return .= '</br>';
-			$return .= '[embed]'.$link.'[/embed]';
+			$label = $homepagelabel[$key];
+			$shortcode = '[embed]'.$link.'[/embed]';
+			$embed = new WP_Embed();
+			$res = $embed->run_shortcode($shortcode);
+			if ( strpos($res,'<object') !== 0 ){
+				$return .= '<a href="'.$link.'"';
+				if ( $label ) 
+					$return .= ' title="'.$label.'"';
+				$return .= '>'.($label?$label:$link).'</a><p></p>';
+			}else{
+				if ( $label )
+					$return .= '<p>'.$label.'</p>';
+				else $return .= '</br>';
+				$return .= $res;
+			}
 		}
 		$return .= "\n";
 	}
