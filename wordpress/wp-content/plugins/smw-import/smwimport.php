@@ -460,8 +460,12 @@ class smwimport
 				continue;
 			}
 
-			if ( isset($data[$attachmentname.'_name']) )
-				$attach_arr['title'] = $data[$attachmentname.'_name'][$key];
+			$attachmentname = $attachment.'_name';
+			if ( isset($data[$attachmentname]) ){
+				if ( !is_array($data[$attachmentname]) )
+					$data[$attachmentname] = array($data[$attachmentname]);
+				$attach_arr['title'] = $data[$attachmentname][$key];
+			}
 
 			$ret = self::import_attachment_for_post($prim_key.$attachment.$key,$attach_arr,$ID);
 			if ( is_wp_error($ret) ){
