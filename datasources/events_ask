@@ -5,7 +5,7 @@
 |?Anfangsdatum=date_begin
 |?Enddatum=date_end
 |?Hat Mindestalter=age
-|?Ort=location
+|?Location(freiland)=location
 |?Haus(freiland)=house
 |?Raum(freiland)=room
 |?Beschreibung(kurz)=short_description
