@@ -370,11 +370,27 @@ jQuery(document).ready(function(){
 		if ( callback ) callback();
 	}
 
+	var checkForUpdate = function(){
+		var elem = jQuery(window);
+		var variance = 5;
+		// scroll reached the bottom
+ 		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
+			loadNewEvents(true);
+		}
+		// scroll reached the top
+		else if (elem.scrollTop() == 0 ){
+			var firstPost = jQuery('#event-listing > div:first');
+			loadNewEvents(false,function(){
+				scrollToPost(firstPost,0);
+			});
+		}
+	};
+	// on page load, check for update
+	checkForUpdate();
+
 	// update calendar and load new events when scrolling through event list
 	jQuery(document).scroll(function(e){
 		var elem = jQuery(window);
-		var variance = 5;
-
 		// XXX: workaround to prevent scrolling to top on ajax page reload
 		if ( pageLoaded ) {
 			if ( elem.scrollTop() == 0 )
@@ -390,17 +406,7 @@ jQuery(document).ready(function(){
 			updateCurPost();
 
 //		debug('curPost:'+curPost.find('a').attr('title')+':updateCal:'+updateCal);
-		// scroll reached the bottom
- 		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
-			loadNewEvents(true);
-		}
-		// scroll reached the top
-		else if (elem.scrollTop() == 0 ){
-			var firstPost = jQuery('#event-listing > div:first');
-			loadNewEvents(false,function(){
-				scrollToPost(firstPost,0);
-			});
-		}
+		checkForUpdate();
 	});
 });
 
