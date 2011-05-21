@@ -422,6 +422,10 @@ class smwimport
 	}
 	$prim_key = $data[$mapping['primary_key']];
 
+	// if title is empty, use primary key
+	if ( $postarr['post_title'] == '' )
+		$postarr['post_title'] = $prim_key;
+
 	// get top level category
 	$cat = get_category_by_slug($mapping['category']);
 	if ( !$cat )
@@ -429,9 +433,11 @@ class smwimport
 
 	// create the post
 	$ID = self::import_post($prim_key,$postarr,$cat->term_id);
-	if ( is_wp_error($ID) )
+	if ( is_wp_error($ID) ){
+		error_log('Could not import:'.$prim_key);
 		return $ID;
-	
+	}
+
 	$oldattachments = get_children( array( 'post_parent' => $ID, 
 		'post_type' => 'attachment', 'numberposts' => 999 ) );
 	// import attachments
