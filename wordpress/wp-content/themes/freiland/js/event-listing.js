@@ -93,6 +93,31 @@ jQuery(document).ready(function(){
 		return jQuery('#post-'+id);
 	};
 
+	// load new events with ajax
+	// apend/prepend them to the list and filter them
+	loadNewEvents = function(append,callback){
+		if ( postreq > 0 ) return;
+		postreq++;
+	 	jQuery.get((append?next_href:prev_href), function(data){
+			var content = jQuery(data).find('#event-listing').contents();
+			if ( content.length > 0 ){
+				if ( append ){
+					jQuery('#event-listing').append(content);
+				}else{
+					jQuery('#event-listing').prepend(content);
+				}
+				filterPosts(curCat);
+			}
+			if ( append )
+				next_href = incrementHref(next_href);
+			else
+				prev_href = decrementHref(prev_href);
+
+			if ( callback ) callback();
+			postreq--;
+		});
+	};
+
 	// scroll to given post
 	var scrollToPost = function(post,duration,callback){
 		if ( post.length == 0 || duration === false ){
@@ -132,31 +157,6 @@ jQuery(document).ready(function(){
 	scrollToMonth = function(curCal,first,scroll,callback){
 		if ( scroll === false ) return;
 		scrollToCalDay(getEventDay(curCal,first),scroll,callback);
-	};
-
-	// load new events with ajax
-	// apend/prepend them to the list and filter them
-	loadNewEvents = function(append,callback){
-		if ( postreq > 0 ) return;
-		postreq++;
-	 	jQuery.get((append?next_href:prev_href), function(data){
-			var content = jQuery(data).find('#event-listing').contents();
-			if ( content.length > 0 ){
-				if ( append ){
-					jQuery('#event-listing').append(content);
-				}else{
-					jQuery('#event-listing').prepend(content);
-				}
-				filterPosts(curCat);
-			}
-			if ( append )
-				next_href = incrementHref(next_href);
-			else
-				prev_href = decrementHref(prev_href);
-
-			if ( callback ) callback();
-			postreq--;
-		});
 	};
 
 	// parse a calendar month url into [begin,year,month,rest]
