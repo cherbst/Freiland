@@ -44,11 +44,12 @@ function freiland_init_method() {
 }
 
 function freiland_enqueue_scripts() {
-	if ( in_category('events') )
+	if ( in_category('events') ){
 		wp_enqueue_script('event-listing');
+		wp_enqueue_script('hidden-scroll');
+	}
 	if ( in_category('images') )
 		wp_enqueue_script('freiland-gallery');
-	wp_enqueue_script('hidden-scroll');
 }
 
 function freiland_post_class_filter($classes) {

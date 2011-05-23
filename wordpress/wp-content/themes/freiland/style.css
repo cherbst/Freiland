@@ -67,6 +67,10 @@ body, input, textarea, .page-title span, .pingback a.url {
 	width: 785px;
 	z-index: 96;
 	padding-left: 200px;
+}
+
+body.category-events #container {
+	position: relative;
 	height: 600px;
 	overflow: hidden;
 }
@@ -406,23 +410,20 @@ li#eventtypes li{
 	background: #FFFFFF;
 }
 
-#masthead {
-	position: absolute;
-	z-index: 99;
-	top : 0;
-	left : 0;
-	width: 1250px;
-}
-
 #header {
-	position: absolute;
+	position: fixed;
 	padding: 0px;
-	top: 25px;
+	top: 0;
+	padding-top:25px;
 	width: 1350px;
 	height: 163px;
 	z-index: 99;
 	background: #FFFFFF;
 	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
+}
+
+body.category-events #header {
+	position: absolute;
 }
 
 #branding {
@@ -526,13 +527,17 @@ li#eventtypes li{
 }*/
 
 #footer {
-	position: absolute;
+	position: fixed;
 	bottom: 0px;
 	width: 1205px;
 	margin: 0;
 	left : 0;
 	background: rgba(255, 255, 255, 0.9);
 	z-index: 99;
+}
+
+body.category-events #footer {
+	position: absolute;
 }
 
 #footer li {
