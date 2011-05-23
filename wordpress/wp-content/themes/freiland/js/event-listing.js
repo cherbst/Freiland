@@ -9,15 +9,27 @@ jQuery(document).ready(function(){
 	var curPost;
 	var updateCal = true;
 
+//	jQuery('#topright').show();
+//	jQuery('#topright').css('z-index',300);
 	var debug = function(text){
 		jQuery('#topright > span').append(text+"</br>");
 	};
 
+	getMonthContainer = function(month){
+		return jQuery('<div id="month_'+month+'" class="month_container"></div>');
+	};
+
+	// create initial month container
+	var curMonth = jQuery('#wp-calendar > table').first().attr('id').substring(4);
+	var monthContainer = getMonthContainer(curMonth);
+	monthContainer.append(jQuery('#event-listing').contents());
+	jQuery('#event-listing').append(monthContainer);
+
 	// filter posts for given category
 	// show 404 if no posts found
 	var filterPosts = function(cat,href){
-		var allPosts = jQuery('#event-listing > div.post');
-		var other = jQuery('#event-listing > div:not(.cat-id-'+cat+')');
+		var allPosts = jQuery('#event-listing > div > div.post');
+		var other = jQuery('#event-listing > div > div:not(.cat-id-'+cat+')');
 		var notfound = jQuery('.error404');
 		if ( allPosts.length == other.length ){
 			if ( notfound.length == 0 && postreq == 0 ){
@@ -33,23 +45,24 @@ jQuery(document).ready(function(){
 	};
 
 	var findNextCurPost = function(){
-		var newPost = curPost;
 		// select nearest visible post
-		if ( newPost.filter(':visible').length == 0 ){
-			var nextPost = newPost.nextAll(':visible').first();
-			var prevPost = newPost.prevAll(':visible').first();
+		if ( !curPost.is(':visible') ){
+			var allPosts = jQuery('#event-listing > div > div.post');
+			var visiblePosts = allPosts.filter(':visible');
 
-			if ( nextPost.length == 0 && prevPost.length == 0 )
+			if ( visiblePosts.length == 0 )
 				return;
-			if ( nextPost.length == 0 )
-				newPost = prevPost;
-			else if ( prevPost.length == 0 )
-				newPost = nextPost;
-			else if ( newPost.prevAll().index(prevPost) < newPost.nextAll().index(nextPost) )
-				newPost = prevPost;
-			else
-				newPost = nextPost;
-			curPost = newPost;
+			var oldIndex = allPosts.index(curPost);
+			var diff = allPosts.length - 1;
+			visiblePosts.each(function(){
+				var curIndex = allPosts.index(jQuery(this));
+				var newDiff = Math.abs( oldIndex - curIndex );
+				if ( newDiff  < diff ){
+					diff = newDiff;
+					curPost = jQuery(this);
+					if ( diff == 1 ) return false;
+				}
+			});
 		}
 		scrollToPost(curPost,0,function(){
 			if ( updateCal )
@@ -98,13 +111,18 @@ jQuery(document).ready(function(){
 	loadNewEvents = function(append,callback){
 		if ( postreq > 0 ) return;
 		postreq++;
-	 	jQuery.get((append?next_href:prev_href), function(data){
+		var href = (append?next_href:prev_href);
+	 	jQuery.get(href, function(data){
 			var content = jQuery(data).find('#event-listing').contents();
 			if ( content.length > 0 ){
+				var month = parseHref(href);
+				month = month[1] + '_' + month[2];
+				monthContainer = getMonthContainer(month);
+				monthContainer.append(content);
 				if ( append ){
-					jQuery('#event-listing').append(content);
+					jQuery('#event-listing').append(monthContainer);
 				}else{
-					jQuery('#event-listing').prepend(content);
+					jQuery('#event-listing').prepend(monthContainer);
 				}
 				filterPosts(curCat);
 			}
@@ -118,19 +136,60 @@ jQuery(document).ready(function(){
 		});
 	};
 
+	unloadMonths = function(){
+		var listing = jQuery('#event-listing');
+		var height = listing.height();
+		var container = jQuery('.month_container').first();
+				
+		if ( container.offset().top + container.height() < 0 ){
+			var next = container.next();
+			container.remove();
+			// adjust new top
+			var diff = height - listing.height();
+			listing.offset([listing.offset().top + diff,listing.offset().left]);
+			prev_href = incrementHref(prev_href);
+			container = next;
+			scrollToPost(curPost,0);
+		}
+
+		container = jQuery('.month_container').last();
+				
+		if ( container.offset().top > jQuery(window).height() ){
+			var prev = container.prev();
+			container.remove();
+			next_href = decrementHref(next_href);
+			container = prev;
+			scrollToPost(curPost,0);
+		}
+	}
+
 	// scroll to given post
 	var scrollToPost = function(post,duration,callback){
 		if ( post.length == 0 || duration === false ){
 			if ( callback ) callback();
 			return ;
 		}
+		if ( duration == null || duration == 'slow' )
+			duration = 600;
 		curPost = post;
 		var cur = jQuery('#event-listing').offset();
 		var offset = cur.top - post.offset().top; 
 		jQuery('#event-listing').animate({ top: offset},duration,function(){
-			if( jQuery('#event-listing > div:last').offset().top < 
+			if( jQuery('#event-listing').offset().top + jQuery('#event-listing').height() < 
 				jQuery('#footer').offset().top )
-				loadNewEvents(true,callback);
+				loadNewEvents(true,function(){
+					unloadMonths();
+					if ( callback ) callback();
+				});
+			else if( jQuery('#event-listing').offset().top > 0 )
+				loadNewEvents(false,function(){
+					unloadMonths();
+					if ( callback ) callback();
+				});
+			else{
+				unloadMonths();
+				if ( callback ) callback();
+			}
 		});
 	};
 
@@ -188,7 +247,7 @@ jQuery(document).ready(function(){
 		var id = jQuery(this).attr('id');
 		var requestNextMonth = ( id == 'ec3_next' );
 		var fun = null;
-		var reload = !hrefLoaded((requestNextMonth?next_href:prev_href));
+		var reload = !hrefLoaded(jQuery(this).attr('href'));
 		if ( requestNextMonth ){
 			fun = ec3.go_next;
 		}else{
@@ -198,11 +257,11 @@ jQuery(document).ready(function(){
 			updateCal = false;
 			if ( reload ) 
 				loadNewEvents(requestNextMonth,function(){
-					scrollToMonth(curCal,requestNextMonth,'slow',function(){
+					scrollToMonth(curCal,true,'slow',function(){
 						updateCal = true;
 					});
 				});
-			else scrollToMonth(curCal,'slow',function(){
+			else scrollToMonth(curCal,true,'slow',function(){
 				updateCal = true;
 			});
 		});
