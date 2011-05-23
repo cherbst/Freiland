@@ -144,6 +144,7 @@ class smwimport
 			'image_big' => 'attachment',
 			'sponsor' => 'attachment',
 			'banner' => 'globalattachment',
+			'subtitle' => 'meta',
 			'homepage' => 'meta',
 			'homepagelabel' => 'meta'
 		)	
@@ -421,6 +422,10 @@ class smwimport
 	}
 	$prim_key = $data[$mapping['primary_key']];
 
+	// if title is empty, use primary key
+	if ( $postarr['post_title'] == '' )
+		$postarr['post_title'] = $prim_key;
+
 	// get top level category
 	$cat = get_category_by_slug($mapping['category']);
 	if ( !$cat )
@@ -428,9 +433,11 @@ class smwimport
 
 	// create the post
 	$ID = self::import_post($prim_key,$postarr,$cat->term_id);
-	if ( is_wp_error($ID) )
+	if ( is_wp_error($ID) ){
+		error_log('Could not import:'.$prim_key);
 		return $ID;
-	
+	}
+
 	$oldattachments = get_children( array( 'post_parent' => $ID, 
 		'post_type' => 'attachment', 'numberposts' => 999 ) );
 	// import attachments
@@ -460,8 +467,12 @@ class smwimport
 				continue;
 			}
 
-			if ( isset($data[$attachmentname.'_name']) )
-				$attach_arr['title'] = $data[$attachmentname.'_name'][$key];
+			$attachmentname = $attachment.'_name';
+			if ( isset($data[$attachmentname]) ){
+				if ( !is_array($data[$attachmentname]) )
+					$data[$attachmentname] = array($data[$attachmentname]);
+				$attach_arr['title'] = $data[$attachmentname][$key];
+			}
 
 			$ret = self::import_attachment_for_post($prim_key.$attachment.$key,$attach_arr,$ID);
 			if ( is_wp_error($ret) ){
@@ -473,8 +484,13 @@ class smwimport
 		}
 
 		if ( count($ids) == 1 ) $ids = $ids[0];
-		if ( $attachment == $globalattachment )
-			update_option($globalattachment,$ids);
+		if ( $attachment == $globalattachment ){
+			$val = get_option($globalattachment,array());
+			if ( !is_array($val) )
+				$val = array($val);
+			$val[] = $ids;
+			update_option($globalattachment,$val);
+		}
 		// store attachment ID as post meta
 		update_post_meta($ID,$attachment,$ids);
 	}

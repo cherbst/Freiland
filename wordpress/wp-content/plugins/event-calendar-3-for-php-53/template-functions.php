@@ -77,7 +77,7 @@ function ec3_get_calendar_nav($date,$num_months)
   // Previous
   $prev=$date->prev_month();
   echo "\t<td id='prev'><a id='ec3_prev' href='" . $prev->month_link() . "'"
-     . '>&laquo;&nbsp;' . $prev->month_abbrev() . "</a></td>\n";
+     . '>' . $prev->month_abbrev() . "</a></td>\n";
 
   echo "\t<td><img id='ec3_spinner' style='display:none' src='" 
      . $ec3->myfiles . "/ec_load.gif' alt='spinner' />\n";
@@ -96,7 +96,7 @@ function ec3_get_calendar_nav($date,$num_months)
   // Next
   $next=$date->plus_months($num_months);
   echo "\t<td id='next'><a id='ec3_next' href='" . $next->month_link() . "'"
-     . '>' . $next->month_abbrev() . "&nbsp;&raquo;</a></td>\n";
+     . '>' . $next->month_abbrev() . "</a></td>\n";
 
   echo "</tr></tbody></table>\n";
 }

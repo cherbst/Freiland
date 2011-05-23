@@ -279,7 +279,7 @@ function ec3()
   {
     var prev=document.getElementById('ec3_prev');
     if(prev && prev.firstChild && prev.firstChild.nodeType==ec3.TEXT_NODE){
-      prev.firstChild.data='\u00ab\u00a0'+ec3.month_abbrev[prev_month0%12];
+      prev.firstChild.data=ec3.month_abbrev[prev_month0%12];
       if ( !ec3.use_ajax ){
 	 var month = prev_month0%12+1;
 	 var year = year_num;
@@ -291,7 +291,7 @@ function ec3()
     }
     var next=document.getElementById('ec3_next');
     if(next && next.firstChild && next.firstChild.nodeType==ec3.TEXT_NODE){
-      next.firstChild.data=ec3.month_abbrev[next_month0%12]+'\u00a0\u00bb';
+      next.firstChild.data=ec3.month_abbrev[next_month0%12];
       if ( !ec3.use_ajax ){
 	 var month = next_month0%12+1;
 	 var year = year_num;

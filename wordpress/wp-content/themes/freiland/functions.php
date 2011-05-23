@@ -89,8 +89,8 @@ function freiland_filter_the_content( $post_content ) {
 }
 
 function freiland_filter_the_excerpt( $post_excerpt ) {
-       if ( in_category( 'news') )
-               return freiland_get_news_excerpt($post_excerpt);
+       if ( in_category( 'news') || in_category('press'))
+               return freiland_get_news_press_excerpt($post_excerpt);
        return $post_excerpt;
 }
 
@@ -109,15 +109,27 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepage = get_post_meta($post->ID,'homepage',true);
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	if ( $homepage != null ){
+		$return .= '<p></p>';
 		if ( !is_array($homepage ) ){
 			$homepage = array($homepage);
 			$homepagelabel = array($homepagelabel);
 		}
 		foreach( $homepage as $key => $link ){
-			if ( isset($homepagelabel[$key]) )
-				$return .= '<p>'.$homepagelabel[$key].'</p>';
-			else $return .= '</br>';
-			$return .= '[embed]'.$link.'[/embed]';
+			$label = $homepagelabel[$key];
+			$shortcode = '[embed]'.$link.'[/embed]';
+			$embed = new WP_Embed();
+			$res = $embed->run_shortcode($shortcode);
+			if ( strpos($res,'<object') !== 0 ){
+				$return .= '<a href="'.$link.'"';
+				if ( $label ) 
+					$return .= ' title="'.$label.'"';
+				$return .= '>'.($label?$label:$link).'</a><p></p>';
+			}else{
+				if ( $label )
+					$return .= '<p>'.$label.'</p>';
+				else $return .= '</br>';
+				$return .= $res;
+			}
 		}
 		$return .= "\n";
 	}
@@ -142,7 +154,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $return;
   }
 
-  function freiland_get_news_excerpt($excerpt){
+  function freiland_get_news_press_excerpt($excerpt){
 	global $post;
 	$return = freiland_get_post_image($post->ID,'image');
 	return $return . $excerpt;
@@ -398,27 +410,36 @@ function freiland_subcategory_dropdown($cat_id){
 	return $return;
   }
 
-  function freiland_the_event_type(){
+  function freiland_the_event_meta($meta){
 	global $post;
-	$eventtype = get_post_meta($post->ID,'eventtype',true);
-	if ( is_array($eventtype) )
-		$eventtype = implode(" ",$eventtype);
-	echo $eventtype;
-  }
-
-  function freiland_the_event_genre(){
-	global $post;
-	$genre = get_post_meta($post->ID,'genre',true);
-	if ( is_array($genre) )
-		$genre = implode(" ",$genre);
-	echo $genre;
+	$value = get_post_meta($post->ID,$meta,true);
+	if ( is_array($value) )
+		$value = implode(" ",$value);
+	echo $value;
   }
 
   function freiland_get_mainevent_banner(){
-	$id = get_option('banner');
-	if ( $id == false ) return;
+	$ids = get_option('banner');
+	if ( $ids == false ) return;
 
-	return wp_get_attachment_image( $id,
+	$next_id = false;
+	$today = strtotime(date('Y-m-d'));
+	$next_time = null;
+	foreach ( $ids as $id ){
+		$attachment = get_post($id);
+		if ( !$attachment ) continue;
+		$post = get_post($attachment->post_parent);
+		if ( !$post ) continue;
+		$begin_date = get_post_meta($post->ID,'date_begin',true);
+		if ( $begin_date == "" ) continue;
+		$cur_time = strtotime($begin_date);
+		if ( $cur_time >= $today && ( $next_time == null || $cur_time <= $next_time ) ){
+			$next_id = $id;
+			$next_time = $cur_time;
+		}
+	}
+	if ( !$next_id) return;
+	return wp_get_attachment_image( $next_id,
 		'full',false,array('class' => 'aligncenter' ) );
   }
 
@@ -437,7 +458,7 @@ function freiland_subcategory_dropdown($cat_id){
 		echo freiland_get_post_image($post->ID,'image_big');
 		echo freiland_get_post_image($post->ID,'sponsor');
 	}
-	else if ( in_category('news') ){
+	else if ( in_category('news') || in_category('press') ){
 		echo freiland_get_post_image($post->ID,'image');
 	}
   }
