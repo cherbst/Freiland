@@ -60,10 +60,8 @@ $args = array_merge( $wp_query->query, array('posts_per_page' => -1 ));
 query_posts($args);
 
 /* show banner of main event */
+freiland_the_banner();
  ?>
-<div id="mainpost-banner">
-<?php echo freiland_get_mainevent_banner(); ?>
-</div>
 
 <div id="event-listing">
 <?php while ( have_posts() ) : the_post(); ?>
