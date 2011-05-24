@@ -158,7 +158,7 @@ function freiland_filter_the_title( $post_title, $id ) {
   function freiland_get_news_press_excerpt($excerpt){
 	global $post;
 	$return = freiland_get_post_image($post->ID,'image');
-	return $return . $excerpt;
+	return $return .'<div id="#summary-text">' . $excerpt . '</div>';
   }
 
   function freiland_get_news_content($content){
