@@ -57,11 +57,9 @@
 
 <?php while ( have_posts() ) : the_post(); $loopcounter++; ?>
 <?php /* show banner of main post */
-	if ( $loopcounter == 1 ){ ?>
-		<div id="mainpost-banner">
-		<?php echo freiland_get_news_banner(); ?>
-		</div>
-<?php	} ?>
+	if ( $loopcounter == 1 ){ 
+		freiland_the_banner(); 
+	} ?>
 
 <?php /* How to display posts of the Gallery format. The gallery category is the old way. */ ?>
 
