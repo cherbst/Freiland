@@ -445,7 +445,7 @@ li#eventtypes li{
 	position: fixed;
 	padding: 0px;
 	top: 0;
-	padding-top:25px;
+	padding-bottom:25px;
 	width: 1350px;
 	height: 163px;
 	z-index: 99;
