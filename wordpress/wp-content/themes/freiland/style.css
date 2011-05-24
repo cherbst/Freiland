@@ -349,14 +349,23 @@ text-decoration: none;
 	width:200px;
 }
 
+#wp-calendar tbody tr {
+	line-height: 13px;
+}
+
 #wp-calendar tbody td {
 	background : white;
+}
+
+#wp-calendar table th {
+	font-weight : normal;
+	line-height: 25px;
 }
 
 #wp-calendar tbody,thead {
 	color: black;
 	font-family: Helvetica;
-	font-size : 10pt;
+	font-size : 10pt !important;
 	text-transform: uppercase;
 }
 
@@ -368,7 +377,7 @@ text-decoration: none;
 	font-family: Helvetica;
 	font-size : 15pt;
 	font-weight : normal;
-	text-transform: uppercase;
+	line-height: 25px;
 }
 
 li#eventtypes{
@@ -769,13 +778,12 @@ img.LinkImage  {
 }
 
 #prev a {
-	width: 60px;
+	width: 40px;
 	height: 28px;
 	display: block;
 	background: url(images/feil_links_kl.png) left 10px no-repeat rgba(255, 255, 255, 0.0);
 	font-size: 0;
-	float: left;
-	padding-top: 8px;
+	padding-top: 10px;
 }
 
 #prev a:hover {
@@ -790,13 +798,12 @@ img.LinkImage  {
 }
 
 #next a {
-	width: 60px;
+	width: 40px;
         height: 28px;
         display: block;
         background: url(images/feil_rechts_kl.png) right 10px no-repeat rgba(255, 255, 255, 0.0);
         font-size: 0;
-	float: right;
-        padding-top: 8px;
+        padding-top: 10px;
 }
 
 #next a:hover {
