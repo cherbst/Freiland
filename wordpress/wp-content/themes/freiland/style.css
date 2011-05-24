@@ -141,6 +141,10 @@ body.category-images #content > div img {
 	padding-top: 28px;
 }
 
+body.category-events #mainpost-banner{
+	padding-bottom: 0;
+}
+
 #banner-container {
 	position: fixed;
         margin: 0;
