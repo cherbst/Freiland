@@ -22,8 +22,10 @@ get_header(); ?>
 					get_template_part( 'loop', 'events' );
 				else if ( in_category('news') )
 					get_template_part( 'loop', 'news' );
-				else
+				else{
+					freiland_the_banner();
 					get_template_part( 'loop', 'category' );
+				}
 				?>
 
 			</div><!-- #content -->
