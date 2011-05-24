@@ -169,7 +169,6 @@ body.category-images #content > div img {
 
 .begin_date, .end_date {
 	float: left;
-	margin-top: 5px;
 	margin-bottom: 35px;
 	width: auto;
 }
@@ -177,10 +176,6 @@ body.category-images #content > div img {
 .end_date {
 	border-left: solid #000000 3px;
 	padding-left: 10px;
-}
-
-#event-listing .category-events {
-	margin-bottom: 10px;
 }
 
 #event-listing .category-events .entry-content, #event-listing .category-events .entry-summary {
@@ -192,8 +187,8 @@ body.category-images #content > div img {
 
 #event-listing .begin_date {
 	float: none;
-	margin-top: 5px;
 	margin-bottom: 15px;
+	line-height: 18px;
 }
 
 #event-listing .end_date {
@@ -231,6 +226,10 @@ body.category-images #content > div img {
 	width : 42%;
 }
 
+#event-listing .category-events {
+	margin-bottom: 5px;
+}
+
 .event-type {
 	float: left;
 	font-size : 8pt;
@@ -238,6 +237,7 @@ body.category-images #content > div img {
 	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
+	line-height: 22px;
 }
 
 .event-genre{
@@ -245,6 +245,7 @@ body.category-images #content > div img {
 	float: left;
 	margin-left: 70px;
 	font-size : 10pt;
+	line-height: 10px;
 }
 
 .event-type, .event-genre {
@@ -293,6 +294,10 @@ body.category-news #content > div.first img {
 	display : none;
 }
 
+.entry-title {
+	text-transform:uppercase;	
+}
+
 .entry-title a:hover {
 color: rgba(0,0,0,0.5);
 text-decoration: none;
@@ -300,14 +305,12 @@ text-decoration: none;
 
 #content div.category-events .entry-title {
 	float: left;
-	font-size:22pt;
+	font-size:20pt;
 }
 
 #content #event-listing div.category-events .entry-title {
-        float: left;
         clear: none;
         max-width: 80%;
-	font-size:22pt;
 }
 
 .hentry{
