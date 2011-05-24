@@ -3,17 +3,18 @@ jQuery(document).ready(function(){
 	if ( elem.length == 0 )
 		elem = jQuery('#content');
 
-	var inittop = elem.offset().top;
+	var inittop = jQuery('#header').height();
 
 	elem.mousewheel(function(event, delta) {
 		var cur = elem.offset();
 		var v = 50;
 		var last = elem.children('div:last');
 		if( (last.offset().top + last.height() < 
-			jQuery('#container').offset().top + jQuery('#container').height()) && delta < 0 ||
+			jQuery('#container').offset().top + jQuery('#container').height() && delta < 0) ||
 		    (cur.top >= inittop && delta > 0 ) )
 			return true;
 		elem.offset({top:cur.top+(delta*v),left:cur.left});
+		elem.trigger('hiddenscroll');
 		return false;
 	});
 });

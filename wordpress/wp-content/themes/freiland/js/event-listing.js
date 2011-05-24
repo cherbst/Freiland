@@ -409,20 +409,28 @@ jQuery(document).ready(function(){
 
 	// update the current post to the first one shown
 	// call updateCalendar
-/*	updateCurPost = function(callback){
+	updateCurPost = function(callback){
 		var elem = jQuery(window);
 		if ( curPost.length != 0 && jQuery('#event-listing > div').filter(':visible').length > 0 ) {
 			var newPost = curPost;
 			while ( newPost.offset().top-(topmargin-newPost.height()) < elem.scrollTop() ){
 				var nextPost = newPost.nextAll(':visible').first();
-				if ( nextPost.length == 0 ) break;
+				if ( nextPost.length == 0 ){
+					nextPost = newPost.parent().next().children(':visible').first();
+					if ( nextPost.length == 0 )					
+						break;
+				}
 				newPost = nextPost;
 			}
 
 			// only go to prev month if there was no reload before
 			while ( newPost.offset().top-(topmargin+newPost.height()) > elem.scrollTop() ) {
 				var prevPost = newPost.prevAll(':visible').first();
-				if ( prevPost.length == 0 ) break;
+				if ( prevPost.length == 0 ){
+					prevPost = newPost.parent().prev().children(':visible').last();
+					if ( prevPost.length == 0 )
+						break;
+				}
 				newPost = prevPost;
 			}
 //			curPost.css('background','white');
@@ -435,7 +443,7 @@ jQuery(document).ready(function(){
 
 		if ( callback ) callback();
 	}
-
+/*
 	var checkForUpdate = function(){
 		var elem = jQuery(window);
 		var variance = 5;
@@ -453,10 +461,10 @@ jQuery(document).ready(function(){
 	};
 	// on page load, check for update
 	checkForUpdate();
-
+*/
 	// update calendar and load new events when scrolling through event list
-	jQuery(document).scroll(function(e){
-		var elem = jQuery(window);
+	jQuery('#event-listing').bind('hiddenscroll',function(e){
+/*		var elem = jQuery(window);
 		// XXX: workaround to prevent scrolling to top on ajax page reload
 		if ( pageLoaded ) {
 			if ( elem.scrollTop() == 0 )
@@ -464,7 +472,7 @@ jQuery(document).ready(function(){
 			pageLoaded = false;
 			return;
 		}
-
+*/
 		// do nothing when showing single posts
 		if ( jQuery('#single-post').length > 0 ) return;
 
@@ -472,8 +480,8 @@ jQuery(document).ready(function(){
 			updateCurPost();
 
 //		debug('curPost:'+curPost.find('a').attr('title')+':updateCal:'+updateCal);
-		checkForUpdate();
+//		checkForUpdate();
 	});
-	*/
+
 });
 
