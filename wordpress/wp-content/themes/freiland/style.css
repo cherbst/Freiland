@@ -62,7 +62,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 }
 
 #container {
-	position: relative;
+	position: absolute;
 	background: #FFFFFF;
 	width: 785px;
 	z-index: 96;
@@ -70,13 +70,12 @@ body, input, textarea, .page-title span, .pingback a.url {
 }
 
 body.category-events #container {
-	position: relative;
-	height: 600px;
+	height: 80%;
 	overflow: hidden;
 }
 
 #content {
-	position: relative;
+	position: absolute;
 	margin: 0;
 }
 
