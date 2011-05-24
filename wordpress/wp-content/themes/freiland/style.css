@@ -124,21 +124,41 @@ body.category-images #content > div img {
 	border: none;
 }
 
-#mainpost-banner{
+#mainpost-banner {
+	position: relative;
 	display: block;
-	width: 850px;
-	height: 200px;
-	background: #FFFFFF;
-	z-index: 98;
+	width: 785px!important;
+	max-height: 170px!important;
+	z-index: 99;
 	overflow: hidden;
+	padding-bottom: 150px;
+	padding-top: 28px;
 }
 
-#mainpost-banner img{
-        position: fixed;
-	z-index: 97;
-	width: 785px;
-	padding-bottom: 30px;
-	background: rgba(255, 255, 255, 0.9); 
+#banner-container {
+	position: fixed;
+        margin: 0;
+        z-index: 97;
+        width: 785px!important;
+        height: 140px!important;
+	background: #FFFFFF;
+}
+
+#upper-transparency {
+	position: fixed;
+	margin-top: 140px;
+	height: 30px!important;
+	width: 785px!important;
+	z-index: 99;
+	background: rgba(255, 255, 255, 0.9);
+}
+
+#mainpost-banner img {
+        position: relative;
+        margin: 0;
+        z-index: 97;
+        max-width: 785px!important;
+        height: 140px!important;
 }
 
 #event-listing{
@@ -300,7 +320,7 @@ text-decoration: none;
 	position: fixed;
 	left: 1000px;
 	width: 200px;
-	margin-top: 220px;
+	margin-top: 200px;
 }
 
 #primary a {
