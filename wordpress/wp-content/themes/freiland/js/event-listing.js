@@ -140,7 +140,7 @@ jQuery(document).ready(function(){
 		var listing = jQuery('#event-listing');
 		var height = listing.height();
 		var container = jQuery('.month_container').first();
-		var delta = 10;
+		var delta = 100;
 				
 		if ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
