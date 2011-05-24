@@ -140,8 +140,9 @@ jQuery(document).ready(function(){
 		var listing = jQuery('#event-listing');
 		var height = listing.height();
 		var container = jQuery('.month_container').first();
+		var delta = 10;
 				
-		if ( container.offset().top + container.height() < 0 ){
+		if ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
 			container.remove();
 			// adjust new top
@@ -154,7 +155,7 @@ jQuery(document).ready(function(){
 
 		container = jQuery('.month_container').last();
 				
-		if ( container.offset().top > jQuery(window).height() ){
+		if ( container.offset().top > jQuery(window).height() + delta ){
 			var prev = container.prev();
 			container.remove();
 			next_href = decrementHref(next_href);
@@ -443,45 +444,33 @@ jQuery(document).ready(function(){
 
 		if ( callback ) callback();
 	}
-/*
-	var checkForUpdate = function(){
-		var elem = jQuery(window);
-		var variance = 5;
+
+	var checkForUpdate = function(ontop,onbottom){
+
 		// scroll reached the bottom
- 		if (jQuery(document).height() <= (elem.scrollTop() + elem.height() + variance)) {
-			loadNewEvents(true);
+		if ( onbottom ) {
+			loadNewEvents(true,function(){
+				unloadMonths();
+			});
 		}
 		// scroll reached the top
-		else if (elem.scrollTop() == 0 ){
-			var firstPost = jQuery('#event-listing > div:first');
+		else if ( ontop ){
+			var firstPost = jQuery('#event-listing > div > div:first');
 			loadNewEvents(false,function(){
 				scrollToPost(firstPost,0);
 			});
 		}
 	};
-	// on page load, check for update
-	checkForUpdate();
-*/
+
 	// update calendar and load new events when scrolling through event list
-	jQuery('#event-listing').bind('hiddenscroll',function(e){
-/*		var elem = jQuery(window);
-		// XXX: workaround to prevent scrolling to top on ajax page reload
-		if ( pageLoaded ) {
-			if ( elem.scrollTop() == 0 )
-				scrollToPost(curPost);
-			pageLoaded = false;
-			return;
-		}
-*/
+	jQuery('#event-listing').bind('hiddenscroll',function(e,ontop,onbottom){
 		// do nothing when showing single posts
 		if ( jQuery('#single-post').length > 0 ) return;
 
 		if ( updateCal ) 
 			updateCurPost();
 
-//		debug('curPost:'+curPost.find('a').attr('title')+':updateCal:'+updateCal);
-//		checkForUpdate();
+		checkForUpdate(ontop,onbottom);
 	});
-
 });
 
