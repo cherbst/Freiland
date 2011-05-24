@@ -114,18 +114,17 @@ jQuery(document).ready(function(){
 		var href = (append?next_href:prev_href);
 	 	jQuery.get(href, function(data){
 			var content = jQuery(data).find('#event-listing').contents();
-			if ( content.length > 0 ){
-				var month = parseHref(href);
-				month = month[1] + '_' + month[2];
-				monthContainer = getMonthContainer(month);
-				monthContainer.append(content);
-				if ( append ){
-					jQuery('#event-listing').append(monthContainer);
-				}else{
-					jQuery('#event-listing').prepend(monthContainer);
-				}
-				filterPosts(curCat);
+			var month = parseHref(href);
+			month = month[1] + '_' + month[2];
+			monthContainer = getMonthContainer(month);
+			monthContainer.append(content);
+			if ( append ){
+				jQuery('#event-listing').append(monthContainer);
+			}else{
+				jQuery('#event-listing').prepend(monthContainer);
 			}
+			if ( content.length > 0 )
+				filterPosts(curCat);
 			if ( append )
 				next_href = incrementHref(next_href);
 			else
@@ -455,9 +454,8 @@ jQuery(document).ready(function(){
 		}
 		// scroll reached the top
 		else if ( ontop ){
-			var firstPost = jQuery('#event-listing > div > div:first');
 			loadNewEvents(false,function(){
-				scrollToPost(firstPost,0);
+				scrollToPost(curPost,0);
 			});
 		}
 	};
