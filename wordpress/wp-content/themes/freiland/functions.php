@@ -412,14 +412,23 @@ function freiland_subcategory_dropdown($cat_id){
   }
 
   function freiland_the_banner(){
-	$return .= '<div id="mainpost-banner">';
-	$return .= '<div id="banner-container">';
+	$id = 'mainpost-banner';
+	$div = '<div id="banner-container">';
+	$divend = '</div>';
+
 	if ( in_category('events') )
-		$return .= freiland_get_mainevent_banner();
+		$banner = freiland_get_mainevent_banner();
 	else if ( in_category('news') )
-		$return .= freiland_get_news_banner();
-	
-	$return .= '</div>';
+		$banner = freiland_get_news_banner();
+	else{
+		$id = 'empty-banner';
+		$banner = '';
+		$div    = '';
+		$divend = '';
+	}
+
+	$return .= '<div id="'.$id.'">';
+	$return .= $div . $banner .$divend;
 	$return .= '<div id="upper-transparency"></div>';
 	$return .= '</div>';
 	echo $return;
