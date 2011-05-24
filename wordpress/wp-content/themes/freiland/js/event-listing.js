@@ -332,6 +332,7 @@ jQuery(document).ready(function(){
 		if ( orgvalue == '' ){
 			// XXX: workaround to prevent scrolling to 0
 			pageLoaded = true;
+			jQuery('body').toggleClass('category-events',true);
 			subcatClicked(topCat);
 			return;
 		}
@@ -356,6 +357,7 @@ jQuery(document).ready(function(){
 					jQuery('#main').append(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
 					jQuery(listingElements).hide();
+					jQuery('body').toggleClass('category-events',false);
 					jQuery('html,body').scrollTop(0);
 				});
 			} 
