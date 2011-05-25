@@ -80,7 +80,7 @@ body.category-events #container {
 }
 
 /* gallery page */
-body.category-images #content , .single-format-gallery #content {
+body.category-images #content {
 	width: 300px;
 	float: left;
 	position: relative;
@@ -91,23 +91,20 @@ body.category-images #content , .single-format-gallery #content {
 body.category-images #gallery-description {
 	float: left;
 	margin-top: 400px;
-	max-width: 450px;
+	max-width: 550px;
 }
 
-body.category-images div.entry-content 
-.single-format-gallery div.entry-content {
+body.category-images div.entry-content {
 	padding: 0px; 
 }
 
-body.category-images div.hentry,
-.single-format-gallery div.hentry {
+body.category-images div.hentry {
 	margin: 0px;
 	padding: 0px;
 }
 
 body.category-images div.entry-content > p,
-body.category-images h2.entry-title,
-.single-format-gallery .entry-title {
+body.category-images h2.entry-title {
 	display: none;
 	font-size : 14pt;
 	text-transform:uppercase;	
@@ -117,40 +114,31 @@ body.category-images div.entry-content > div {
 	margin: 0px;
 }
 
-body.category-images #content > div img:hover,
-.single-format-gallery #content > div img:hover {
+body.category-images #content > div img:hover {
 	width: 80px;
 	height: 75px;
 	padding: 5px 5px 5px 5px;
 }
-
-body.category-images #content > div,
-.single-format-gallery #content > div {
+body.category-images #content > div {
 	float : left;
 }
 
-body.category-images #content > div img,
-.single-format-gallery #content > div img {
+body.category-images #content > div img {
 	width: 70px;
 	height: 65px;
 	padding: 10px 10px 10px 10px;
 	border: none;
 }
 
-body.single-format-gallery .entry-content > p,
-.single-format-gallery #nav-below {
-	display: none;
-}
-
 #mainpost-banner {
 	position: relative;
 	display: block;
 	width: 785px!important;
-	max-height: 170px!important;
+	max-height: 200px!important;
 	z-index: 99;
+	background: #FFFFFF;
 	overflow: hidden;
-	padding-bottom: 150px;
-	padding-top: 28px;
+	padding-bottom: 180px;
 }
 
 #banner-container {
@@ -158,7 +146,7 @@ body.single-format-gallery .entry-content > p,
         margin: 0;
         z-index: 97;
         width: 785px!important;
-        height: 140px!important;
+        height: 170px!important;
 	background: #FFFFFF;
 }
 
@@ -168,7 +156,7 @@ body.category-events #banner-container{
 
 #mainpost-banner #upper-transparency {
 	position: fixed;
-	margin-top: 140px;
+	margin-top: 170px;
 	height: 30px!important;
 	width: 785px!important;
 	z-index: 99;
@@ -177,6 +165,13 @@ body.category-events #banner-container{
 
 body.category-events #upper-transparency{
 	position: relative;
+}
+
+#empty-banner {
+	display: block;
+	max-height: 30px;
+	width: 785px;
+	padding-bottom: 50px;
 }
 
 #empty-banner #upper-transparency {
@@ -193,6 +188,7 @@ body.category-events #upper-transparency{
         z-index: 97;
         max-width: 785px!important;
         height: 140px!important;
+	top: 30px;
 }
 
 #event-listing{
@@ -849,6 +845,50 @@ img.LinkImage  {
 }
 
 #next a:hover {
+        font-size: 8pt;
+        text-align: left;
+        text-decoration: none;
+        text-transform: uppercase;
+}
+
+#nav-below {
+	width:400px;
+}
+
+.nav-previous {
+        float: left;
+}
+
+.nav-previous a {
+        width: 200px;
+        height: 28px;
+        display: block;
+        background: url(images/feil_links_kl.png) left 10px no-repeat rgba(255, 255, 255, 0.0);
+        font-size: 0;
+        padding-top: 10px;
+}
+
+.nav-previous a:hover {
+        font-size: 8pt;
+        text-align: right;
+        text-decoration: none;
+        text-transform: uppercase;
+}
+
+.nav-next {
+        float: right;
+}
+
+.nav-next a {
+        width: 200px;
+        height: 28px;
+        display: block;
+        background: url(images/feil_rechts_kl.png) right 10px no-repeat rgba(255, 255, 255, 0.0);
+        font-size: 0;
+        padding-top: 10px;
+}
+
+.nav-next a:hover {
         font-size: 8pt;
         text-align: left;
         text-decoration: none;
