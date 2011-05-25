@@ -913,3 +913,12 @@ ul.event-subcat li a {
 #ec3_publish {
 	display: none!important;
 }
+
+#lightbox-container-image-data {
+	overflow: hidden;
+	margin: 0;
+}
+
+#lightbox-secNav-btnClose img {
+	float: right;
+}
