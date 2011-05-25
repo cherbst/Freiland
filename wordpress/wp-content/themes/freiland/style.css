@@ -153,10 +153,6 @@ body.single-format-gallery .entry-content > p,
 	padding-top: 28px;
 }
 
-body.category-events #mainpost-banner{
-	padding-bottom: 0;
-}
-
 #banner-container {
 	position: fixed;
         margin: 0;
@@ -170,7 +166,7 @@ body.category-events #banner-container{
 	position: absolute;
 }
 
-#upper-transparency {
+#mainpost-banner #upper-transparency {
 	position: fixed;
 	margin-top: 140px;
 	height: 30px!important;
@@ -181,6 +177,14 @@ body.category-events #banner-container{
 
 body.category-events #upper-transparency{
 	position: relative;
+}
+
+#empty-banner #upper-transparency {
+        position: fixed;
+        height: 30px!important;
+        width: 785px!important;
+        z-index: 99;
+        background: rgba(255, 255, 255, 0.9);
 }
 
 #mainpost-banner img {
@@ -495,10 +499,10 @@ body.category-events #header {
 
 #access {
 	float: left;
-	width: 1000px;
-	height: 300px;
+	width: 785px;
+	height: 140px;
 	background: rgba(255, 255, 255, 0.0);
-	background: url(images/navileiste.png) left 109px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/nav_left.png) left 109px no-repeat rgba(255, 255, 255, 0.0);
 }
 
 #access .menu-header {
@@ -566,13 +570,16 @@ body.category-events #header {
 }
 
 #topright {
-	position: absolute;
-	display: none;
-	left: 1050px;
+	position: fixed;
 	top : 25px;
-	width: 100%;
-	height: 340px;
-	background: url(images/nav_right.jpg) left 84px no-repeat #FFFFFF;
+	left: 985px;
+	height: 280px;
+	width: 215px;
+	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
+}
+
+.category-events #topright {
+	position: absolute;
 }
 
 /*#post-54 div.entry-content{

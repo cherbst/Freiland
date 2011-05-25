@@ -424,9 +424,9 @@ function freiland_subcategory_dropdown($cat_id){
 	$div = '<div id="banner-container">';
 	$divend = '</div>';
 
-	if ( in_category('events') )
+	if ( in_category('events') && !is_single())
 		$banner = freiland_get_mainevent_banner();
-	else if ( in_category('news') )
+	else if ( in_category('news') && !is_single() )
 		$banner = freiland_get_news_banner();
 	else{
 		$id = 'empty-banner';
