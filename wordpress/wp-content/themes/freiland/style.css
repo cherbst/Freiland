@@ -150,6 +150,7 @@ body.category-images #content > div img {
 	height: 30px!important;
 	width: 785px!important;
 	z-index: 99;
+	background: rgb(255, 255, 255);
 	background: rgba(255, 255, 255, 0.9);
 }
 
@@ -165,6 +166,7 @@ body.category-images #content > div img {
         height: 30px!important;
         width: 785px!important;
         z-index: 99;
+        background: rgb(255, 255, 255);
         background: rgba(255, 255, 255, 0.9);
 }
 
@@ -483,7 +485,7 @@ li#eventtypes li{
 	float: left;
 	width: 785px;
 	height: 140px;
-	background: url(images/nav_left.png) left 109px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/nav_left.png) left 109px no-repeat rgb(255, 255, 255);
 }
 
 #access .menu-header {
@@ -501,12 +503,13 @@ li#eventtypes li{
 
 #access li:hover > a {
 	border-bottom: 6px solid rgb(196,81,157);
-	background: rgba(255, 255, 255, 0.0);
+	background: rgb(255, 255, 255);
 	color: #000000;
 }
 
 #access ul li ul li:hover > a {
         border-bottom: 0px solid rgb(196,81,157);
+        background: rgb(255, 255, 255);
         background: rgba(255, 255, 255, 0.9);
         color: #000000;
 }
@@ -518,6 +521,7 @@ li#eventtypes li{
 }
 
 #access ul ul a {
+	background: rgb(255,255,255);
 	background: rgba(255,255,255,0.9);
 	line-height: 1em;
 	padding: 2px;
@@ -540,6 +544,7 @@ li#eventtypes li{
 }
 
 #access ul ul a:hover {
+        background: rgb(255,255,255);
         background: rgba(255,255,255,0.9);
 }
 
@@ -571,6 +576,7 @@ li#eventtypes li{
 	width: 1205px;
 	margin: 0;
 	left : 0;
+	background: rgb(255, 255, 255);
 	background: rgba(255, 255, 255, 0.9);
 	z-index: 99;
 }
@@ -798,7 +804,7 @@ img.LinkImage  {
 	display: block;
 	background: url(images/feil_links_kl.png) 10px no-repeat;
 	background-position: left center;
-	background-color: rgba(255, 255, 255, 0.0);
+	background-color: rgb(255, 255, 255);
 	font-size: 0;
 	padding-top: 10px;
 }
@@ -820,7 +826,7 @@ img.LinkImage  {
         display: block;
 	background: url(images/feil_rechts_kl.png) 10px no-repeat;
 	background-position: right center;
-	background-color: rgba(255, 255, 255, 0.0);
+	background-color: rgb(255, 255, 255);
         font-size: 0;
         padding-top: 10px;
 }
@@ -846,7 +852,7 @@ img.LinkImage  {
         display: block;
 	background: url(images/feil_links_kl.png) 10px no-repeat;
 	background-position: left center;
-	background-color: rgba(255, 255, 255, 0.0);
+	background-color: rgb(255, 255, 255);
         font-size: 0;
         padding-top: 10px;
 }
@@ -868,7 +874,7 @@ img.LinkImage  {
         display: block;
 	background: url(images/feil_rechts_kl.png) 10px no-repeat;
 	background-position: right center;
-	background-color: rgba(255, 255, 255, 0.0);
+	background-color: rgb(255, 255, 255);
         font-size: 0;
         padding-top: 10px;
 }
@@ -906,7 +912,9 @@ ul.event-subcat li a {
 	text-decoration: none;
 	z-index: 99;
 	color: #000000;
-	background: url(images/feil_rechts_kl.png) left 5px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/feil_rechts_kl.png) 5px no-repeat;
+	background-position: left center;
+	background-color: rgb(255, 255, 255);
 }
 
 
