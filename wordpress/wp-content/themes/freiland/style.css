@@ -74,7 +74,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 }
 
 /* gallery page */
-body.category-images #content , .single-format-gallery #content {
+body.category-images #content {
 	width: 300px;
 	float: left;
 	position: relative;
@@ -85,23 +85,20 @@ body.category-images #content , .single-format-gallery #content {
 body.category-images #gallery-description {
 	float: left;
 	margin-top: 400px;
-	max-width: 450px;
+	max-width: 550px;
 }
 
-body.category-images div.entry-content 
-.single-format-gallery div.entry-content {
+body.category-images div.entry-content {
 	padding: 0px; 
 }
 
-body.category-images div.hentry,
-.single-format-gallery div.hentry {
+body.category-images div.hentry {
 	margin: 0px;
 	padding: 0px;
 }
 
 body.category-images div.entry-content > p,
-body.category-images h2.entry-title,
-.single-format-gallery .entry-title {
+body.category-images h2.entry-title {
 	display: none;
 	font-size : 14pt;
 	text-transform:uppercase;	
@@ -111,40 +108,31 @@ body.category-images div.entry-content > div {
 	margin: 0px;
 }
 
-body.category-images #content > div img:hover,
-.single-format-gallery #content > div img:hover {
+body.category-images #content > div img:hover {
 	width: 80px;
 	height: 75px;
 	padding: 5px 5px 5px 5px;
 }
-
-body.category-images #content > div,
-.single-format-gallery #content > div {
+body.category-images #content > div {
 	float : left;
 }
 
-body.category-images #content > div img,
-.single-format-gallery #content > div img {
+body.category-images #content > div img {
 	width: 70px;
 	height: 65px;
 	padding: 10px 10px 10px 10px;
 	border: none;
 }
 
-body.single-format-gallery .entry-content > p,
-.single-format-gallery #nav-below {
-	display: none;
-}
-
 #mainpost-banner {
 	position: relative;
 	display: block;
 	width: 785px!important;
-	max-height: 170px!important;
+	max-height: 200px!important;
 	z-index: 99;
+	background: #FFFFFF;
 	overflow: hidden;
-	padding-bottom: 150px;
-	padding-top: 28px;
+	padding-bottom: 180px;
 }
 
 #banner-container {
@@ -152,13 +140,13 @@ body.single-format-gallery .entry-content > p,
         margin: 0;
         z-index: 97;
         width: 785px!important;
-        height: 140px!important;
+        height: 170px!important;
 	background: #FFFFFF;
 }
 
 #mainpost-banner #upper-transparency {
 	position: fixed;
-	margin-top: 140px;
+	margin-top: 170px;
 	height: 30px!important;
 	width: 785px!important;
 	z-index: 99;
@@ -180,6 +168,7 @@ body.single-format-gallery .entry-content > p,
         z-index: 97;
         max-width: 785px!important;
         height: 140px!important;
+	top: 30px;
 }
 
 #event-listing{
