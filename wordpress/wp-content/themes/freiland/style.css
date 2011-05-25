@@ -483,7 +483,6 @@ li#eventtypes li{
 	float: left;
 	width: 785px;
 	height: 140px;
-	background: rgba(255, 255, 255, 0.0);
 	background: url(images/nav_left.png) left 109px no-repeat rgba(255, 255, 255, 0.0);
 }
 
@@ -797,7 +796,9 @@ img.LinkImage  {
 	width: 40px;
 	height: 28px;
 	display: block;
-	background: url(images/feil_links_kl.png) left 10px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/feil_links_kl.png) 10px no-repeat;
+	background-position: left center;
+	background-color: rgba(255, 255, 255, 0.0);
 	font-size: 0;
 	padding-top: 10px;
 }
@@ -817,7 +818,9 @@ img.LinkImage  {
 	width: 40px;
         height: 28px;
         display: block;
-        background: url(images/feil_rechts_kl.png) right 10px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/feil_rechts_kl.png) 10px no-repeat;
+	background-position: right center;
+	background-color: rgba(255, 255, 255, 0.0);
         font-size: 0;
         padding-top: 10px;
 }
@@ -841,7 +844,9 @@ img.LinkImage  {
         width: 200px;
         height: 28px;
         display: block;
-        background: url(images/feil_links_kl.png) left 10px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/feil_links_kl.png) 10px no-repeat;
+	background-position: left center;
+	background-color: rgba(255, 255, 255, 0.0);
         font-size: 0;
         padding-top: 10px;
 }
@@ -861,7 +866,9 @@ img.LinkImage  {
         width: 200px;
         height: 28px;
         display: block;
-        background: url(images/feil_rechts_kl.png) right 10px no-repeat rgba(255, 255, 255, 0.0);
+	background: url(images/feil_rechts_kl.png) 10px no-repeat;
+	background-position: right center;
+	background-color: rgba(255, 255, 255, 0.0);
         font-size: 0;
         padding-top: 10px;
 }
