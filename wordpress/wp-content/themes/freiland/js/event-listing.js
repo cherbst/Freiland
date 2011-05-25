@@ -277,7 +277,7 @@ jQuery(document).ready(function(){
 	// all elements that need to be shown/hidden when loading one event
 	var listingElements = '#mainpost-banner,#event-listing,#wp-calendar,#eventtypes';
 	// all event title links
-	var eventSelector = '#event-listing > div a';
+	var eventSelector = '#event-listing h2.entry-title > a';
 	// all subcategory links
 	var subcatSelector = '#eventtypes > ul > li > a,ul.children > li > a,ul.event-subcat > li > a';
 	// next/prev post
