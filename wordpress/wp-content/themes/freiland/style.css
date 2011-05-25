@@ -195,6 +195,7 @@ body.single-format-gallery .entry-content > p,
 #event-listing{
 	position: relative;
 	overflow: hidden;
+	width: 785px;
 	z-index: 50;
 }
 
@@ -219,7 +220,7 @@ body.single-format-gallery .entry-content > p,
 #event-listing .begin_date {
 	float: none;
 	margin-bottom: 15px;
-	line-height: 18px;
+	line-height: 30px;
 }
 
 #event-listing .end_date {
@@ -250,11 +251,17 @@ body.single-format-gallery .entry-content > p,
 }
 
 #event-listing .category-events .event_day {
-	width : 25%;
+	width : 70px;
+	margin-right:0;
 }
 
 #event-listing .category-events .event_date {
-	width : 42%;
+	width : 100px;
+}
+
+#event-listing .category-events .event_time {
+	width : 60px;
+	margin-right:0;
 }
 
 #event-listing .category-events {
@@ -277,6 +284,7 @@ body.single-format-gallery .entry-content > p,
 	margin-left: 70px;
 	font-size : 10pt;
 	line-height: 10px;
+	width: 100%;
 }
 
 .event-type, .event-genre {
@@ -371,7 +379,7 @@ text-decoration: none;
 	display: none;
 }
 
-#event-calendar table thead{
+#event-calendar table th{
 	border-bottom: 1px solid black;
 	border-top: 1px solid black;
 }
