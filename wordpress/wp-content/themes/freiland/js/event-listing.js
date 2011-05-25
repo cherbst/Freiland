@@ -289,6 +289,7 @@ jQuery(document).ready(function(){
 		// remove any single events
 		jQuery('#content #single-post').remove();
 		jQuery('#post-images').remove();
+		jQuery('body').toggleClass('category-events',true);
 		jQuery(listingElements).show();
 
 		curCat = newCat;
@@ -332,7 +333,6 @@ jQuery(document).ready(function(){
 		if ( orgvalue == '' ){
 			// XXX: workaround to prevent scrolling to 0
 			pageLoaded = true;
-			jQuery('body').toggleClass('category-events',true);
 			subcatClicked(topCat);
 			return;
 		}
