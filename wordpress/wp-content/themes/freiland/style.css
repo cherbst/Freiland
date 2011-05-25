@@ -873,6 +873,36 @@ img.LinkImage  {
         text-transform: uppercase;
 }
 
+ul.event-subcat {
+	display: block;
+	height: auto;
+	width: 550px!important;
+	margin: 0;
+	padding: 0;
+	padding-bottom: 25px;
+}
+
+ul.event-subcat li {
+	position: relative;
+	display: block;
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	width: 100px;
+	float: right;
+}
+
+ul.event-subcat li a {
+        display: block;
+	padding-left: 25px;
+	width: 100px;
+	text-decoration: none;
+	z-index: 99;
+	color: #000000;
+	background: url(images/feil_rechts_kl.png) left 5px no-repeat rgba(255, 255, 255, 0.0);
+}
+
+
 #ec3_publish {
 	display: none!important;
 }
