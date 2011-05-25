@@ -153,6 +153,13 @@ body.category-images #content > div img {
 	background: rgba(255, 255, 255, 0.9);
 }
 
+#empty-banner {
+	display: block;
+	max-height: 30px;
+	width: 785px;
+	padding-bottom: 50px;
+}
+
 #empty-banner #upper-transparency {
         position: fixed;
         height: 30px!important;
