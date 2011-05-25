@@ -102,7 +102,7 @@ jQuery(document).ready(function(){
 		var id = eventDay.attr('postids');
 		id=id.split(",");
 		if(!id) return jQuery();
-		id = id[0].trim();
+		id = parseInt(id[0],10);
 		return jQuery('#post-'+id);
 	};
 
