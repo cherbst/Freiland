@@ -862,6 +862,10 @@ img.LinkImage  {
 	width:400px;
 }
 
+#nav-below .meta-nav {
+	display: none;
+}
+
 .nav-previous {
         float: left;
 }
