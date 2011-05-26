@@ -524,7 +524,7 @@ body.category-events #header {
 }
 
 #access .menu-header {
-	background: #FFFFFF;
+	background: url(images/bgTrans.png) left 0 repeat;
 	margin: 0;
 }
 
@@ -615,7 +615,7 @@ body.category-events #header {
 	width: 1205px;
 	margin: 0;
 	left : 0;
-	background: rgb(255, 255, 255);
+	background: url(images/bgTrans.png) left 0 repeat;
 	background: rgba(255, 255, 255, 0.9);
 	z-index: 99;
 }
@@ -694,10 +694,6 @@ body.category-events #footer {
 	text-transform:uppercase;	
 	font-family: Helvetica!important;
 	font-size : 14pt;
-}
-
-#access .menu-header {
-	margin: 0;
 }
 
 #access a {
