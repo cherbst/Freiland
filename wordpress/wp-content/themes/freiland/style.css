@@ -412,6 +412,30 @@ body.category-news #content > div.first img {
 	border-top: 1px solid black;
 }
 
+#wp-calendar table{
+	table-layout:fixed;
+}
+
+#event-calendar #wp-calendar table td,
+#event-calendar #wp-calendar table.nav tr td {
+ padding: 2px;
+ border:none;
+ overflow: hidden;
+}
+
+#event-calendar #wp-calendar table td:hover,
+#event-calendar #wp-calendar table #today {
+ font-size: 12pt;
+ border:none;
+ padding:0;
+}
+
+#event-calendar #wp-calendar table td.pad:hover {
+ border:none;
+ padding:1;
+}
+
+
 #wp-calendar tbody tr {
 	line-height: 13px;
 }
