@@ -845,11 +845,13 @@ img.LinkImage  {
 	background-position: left center;
 	background-color: rgb(255, 255, 255);
 	font-size: 0;
+	line-height: 0;
 	padding-top: 10px;
 }
 
 #prev a:hover {
         font-size: 8pt;
+	line-height: 8pt;
 	text-align: right;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -867,11 +869,13 @@ img.LinkImage  {
 	background-position: right center;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
+	line-height: 0;
         padding-top: 10px;
 }
 
 #next a:hover {
         font-size: 8pt;
+	line-height: 8pt;
         text-align: left;
         text-decoration: none;
         text-transform: uppercase;
@@ -899,11 +903,13 @@ img.LinkImage  {
 	background-position: left center;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
+	line-height: 0;
         padding-top: 10px;
 }
 
 .nav-previous a:hover {
         font-size: 8pt;
+	line-height: 8pt;
         text-align: left;
         text-decoration: none;
         text-transform: uppercase;
@@ -923,11 +929,13 @@ img.LinkImage  {
 	background-position: right center;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
+	line-height: 0;
         padding-top: 10px;
 }
 
 .nav-next a:hover {
         font-size: 8pt;
+	line-height: 8pt;
         text-align: right;
         text-decoration: none;
         text-transform: uppercase;
