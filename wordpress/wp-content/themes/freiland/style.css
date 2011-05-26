@@ -851,7 +851,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
 	font-size: 0;
 	line-height: 0;
-	padding-top: 10px;
+	padding-top: 20px;
 }
 
 #prev a:hover {
@@ -875,7 +875,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 10px;
+        padding-top: 20px;
 }
 
 #next a:hover {
@@ -909,7 +909,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 10px;
+        padding-top: 20px;
 }
 
 .nav-previous a:hover {
@@ -935,7 +935,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 10px;
+        padding-top: 20px;
 }
 
 .nav-next a:hover {
@@ -968,6 +968,7 @@ ul.event-subcat li {
 ul.event-subcat li a {
         display: block;
 	padding-left: 25px;
+	padding-top: 0;
 	width: 100px;
 	text-decoration: none;
 	z-index: 99;
