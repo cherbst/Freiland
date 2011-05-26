@@ -220,6 +220,8 @@ body.single-format-gallery .entry-content > p,
         float: right;
         width: 470px;
         padding: 0;
+	position: relative;
+	top: 7px;
 }
 
 #event-listing .begin_date {
@@ -288,8 +290,9 @@ body.single-format-gallery .entry-content > p,
 	float: left;
 	margin-left: 70px;
 	font-size : 10pt;
-	line-height: 10px;
 	width: 100%;
+	position: relative;
+	top: -8px;
 }
 
 .event-type, .event-genre {
