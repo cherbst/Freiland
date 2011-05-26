@@ -232,6 +232,10 @@ body.single-format-gallery .entry-content > p,
 	top: 7px;
 }
 
+#event-listing .entry-title > a {
+	padding-top: 0;
+}
+
 #event-listing .begin_date {
 	float: none;
 	margin-bottom: 15px;
