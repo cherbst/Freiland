@@ -54,12 +54,14 @@ function ec3()
     }
   } );
 
-  function set_cur_cat(cat){
+  function set_cur_cat(cat,callback){
 	var reload = ( ec3.cat != null && ec3.cat != cat );
 	ec3.catClause="&cat="+cat;
 	ec3.cat=cat;
-	if ( reload )
+	if ( reload ){
+		ec3.callback = callback;
 		reloadCalendar();
+	}else if ( callback ) callback();
   }
   ec3.set_cur_cat=set_cur_cat;
 
@@ -561,7 +563,7 @@ function ec3()
         td.appendChild(a);
       }
     }
-    if ( ec3.callback ){ 
+    if ( ec3.callback ){
 	ec3.callback(ec3.currentCal);
 	ec3.callback = null;
     }
