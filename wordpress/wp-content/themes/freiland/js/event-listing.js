@@ -273,6 +273,8 @@ function event_listing(){
 
 		// load event listing
 		if ( orgvalue == '' ){
+			// XXX: workaround to prevent scrolling to 0
+			pageLoaded = true;
 			subcatClicked(topCat);
 			return;
 		}
