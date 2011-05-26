@@ -530,7 +530,7 @@ li#eventtypes li{
 
 #access ul li ul li:hover > a {
         border-bottom: 0px solid rgb(196,81,157);
-        background: rgb(255, 255, 255);
+	background: url(images/bgTrans.png) left 0 repeat;
         background: rgba(255, 255, 255, 0.9);
         color: #000000;
 }
@@ -542,7 +542,7 @@ li#eventtypes li{
 }
 
 #access ul ul a {
-	background: rgb(255,255,255);
+	background: url(images/bgTrans.png) left 0 repeat;
 	background: rgba(255,255,255,0.9);
 	line-height: 1em;
 	padding: 2px;
