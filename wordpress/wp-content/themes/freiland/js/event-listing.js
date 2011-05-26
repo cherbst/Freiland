@@ -9,7 +9,6 @@ jQuery(document).ready(function(){
 	var curPost;
 	var updateCal = true;
 
-//	jQuery('#topright').show();
 //	jQuery('#topright').css('z-index',300);
 	var debug = function(text){
 		jQuery('#topright > span').append(text+"</br>");
@@ -19,8 +18,21 @@ jQuery(document).ready(function(){
 		return jQuery('<div id="month_'+month+'" class="month_container"></div>');
 	};
 
+	getPostMonth = function(post){
+		return post.parent().attr('id').substring(6);
+	}
+
+	getCurCalendar = function(){
+		return	jQuery('#wp-calendar > table').filter(':visible').first();
+	}
+
+	getCurMonth = function(){
+		var cal = getCurCalendar();
+		return cal.attr('id').substring(4);
+	}
+
 	// create initial month container
-	var curMonth = jQuery('#wp-calendar > table').first().attr('id').substring(4);
+	var curMonth = getCurMonth();
 	var monthContainer = getMonthContainer(curMonth);
 	monthContainer.append(jQuery('#event-listing').contents());
 	jQuery('#event-listing').append(monthContainer);
@@ -45,8 +57,10 @@ jQuery(document).ready(function(){
 	};
 
 	var findNextCurPost = function(){
+		var scroll = false;
+
 		// select nearest visible post
-		if ( !curPost.is(':visible') ){
+		if ( !curPost.is(':visible') && getCurMonth() == getPostMonth(curPost) ){
 			var allPosts = jQuery('#event-listing > div > div.post');
 			var visiblePosts = allPosts.filter(':visible');
 
@@ -60,14 +74,27 @@ jQuery(document).ready(function(){
 				if ( newDiff  < diff ){
 					diff = newDiff;
 					curPost = jQuery(this);
+					scroll = true;
 					if ( diff == 1 ) return false;
 				}
 			});
+		}else{
+			 if ( getCurMonth() != getPostMonth(curPost) ){
+				// has calendar changed?
+				// new cur is first of new month
+				var newPost = getPostFromCalDay(getEventDay(getCurCalendar(),true));
+				if ( newPost.length > 0 ){
+					curPost = newPost;
+					scroll = true;
+				}
+			}
 		}
-		scrollToPost(curPost,0,function(){
-			if ( updateCal )
-				updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
-		});
+		if ( scroll ){
+			scrollToPost(curPost,0,function(){
+				if ( updateCal )
+					updateCalendar(getCurCalendar());
+			});
+		}
 	};
 
 	// return the categroy id of this element
@@ -292,17 +319,14 @@ jQuery(document).ready(function(){
 		jQuery('body').toggleClass('category-events',true);
 		jQuery(listingElements).show();
 
+		if(!newCat) return;
 		curCat = newCat;
-		ec3.set_cur_cat(curCat);
-		if(!curCat) return;
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
-		filterPosts(curCat,ec3.get_current_month_link(curCat));
-
-		if ( curCat == topCat )
-			scrollToPost(curPost,0);
-		else
+		ec3.set_cur_cat(curCat, function() {
+			filterPosts(curCat,ec3.get_current_month_link(curCat));
 			findNextCurPost();
+		});
 	};
 
 	// get a single post from 'data' and wrap it into a div
@@ -438,7 +462,7 @@ jQuery(document).ready(function(){
 //			curPost.css('background','white');
 			if ( newPost != curPost ){
 				curPost = newPost;
-				updateCalendar(jQuery('#wp-calendar > table').filter(':visible'));
+				updateCalendar(getCurCalendar());
 			}
 //			curPost.css('background','grey');
 		}
