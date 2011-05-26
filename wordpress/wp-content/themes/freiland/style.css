@@ -75,7 +75,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 
 /* gallery page */
 body.category-images #content , .single-format-gallery #content {
-	width: 300px;
+	width: 280px;
 	float: left;
 	position: relative;
 	left: -10px;
