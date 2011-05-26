@@ -357,8 +357,9 @@ body.category-news #content > div.first img {
 }
 
 .entry-title a:hover {
-color: rgba(0,0,0,0.5);
-text-decoration: none;
+	color: #AAAAAA;
+	color: rgba(0,0,0,0.5);
+	text-decoration: none;
 }
 
 #content div.category-events .entry-title {
