@@ -162,7 +162,7 @@ body.single-format-gallery .entry-content > p,
 	height: 30px!important;
 	width: 785px!important;
 	z-index: 99;
-	background: rgb(255, 255, 255);
+	background: url(images/bgTrans.png) left 0 repeat-x;
 	background: rgba(255, 255, 255, 0.9);
 }
 
@@ -178,7 +178,7 @@ body.single-format-gallery .entry-content > p,
         height: 30px!important;
         width: 785px!important;
         z-index: 99;
-        background: rgb(255, 255, 255);
+        background: url(images/bgTrans.png) left 0 repeat-x; 
         background: rgba(255, 255, 255, 0.9);
 }
 
