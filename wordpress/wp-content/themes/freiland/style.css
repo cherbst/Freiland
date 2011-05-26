@@ -38,6 +38,7 @@ body.category-events div.end_date {
 }
 */
 
+
 body{
 	background : white;
 	height: 100%;
@@ -50,6 +51,12 @@ body, input, textarea {
 body, input, textarea, .page-title span, .pingback a.url {
 	font-family: Verdana;
 	font-size: 11pt;
+}
+
+#content .entry-content, #content .entry-summary{
+	color: black;
+	font-size: 11pt;
+	line-height: 1.5;
 }
 
 #main { 
@@ -79,6 +86,10 @@ body.category-events #container {
 	margin: 0;
 	width: 785px;
 	padding-bottom: 50px;
+}
+
+.single #content{
+	width: 550px;
 }
 
 /* gallery page */
@@ -216,6 +227,7 @@ body.category-events #mainpost-banner #upper-transparency{
 	overflow: hidden;
 	width: 785px;
 	z-index: 50;
+	padding-top: 25px;
 }
 
 .begin_date, .end_date {
@@ -234,6 +246,12 @@ body.category-events #mainpost-banner #upper-transparency{
         float: right;
         width: 470px;
         padding: 0;
+	position: relative;
+	top: 7px;
+}
+
+#event-listing .entry-title > a {
+	padding-top: 0;
 }
 
 #event-listing .begin_date {
@@ -247,11 +265,15 @@ body.category-events #mainpost-banner #upper-transparency{
 	display: none;
 }
 
-.entry-summary a {
+.entry-summary a, .entry-content a {
 	display: block;
 	padding-top: 10px;
 	color: black;
 	text-decoration:none;
+}
+
+.entry-summary a:hover, .entry-content a:hover {
+	text-decoration:underline;
 }
 
 .event_day {
@@ -284,7 +306,8 @@ body.category-events #mainpost-banner #upper-transparency{
 }
 
 #event-listing .category-events {
-	margin-bottom: 5px;
+	padding-bottom: 15px;
+	padding-top: 0px;
 }
 
 .event-type {
@@ -302,8 +325,9 @@ body.category-events #mainpost-banner #upper-transparency{
 	float: left;
 	margin-left: 70px;
 	font-size : 10pt;
-	line-height: 10px;
 	width: 100%;
+	position: relative;
+	top: -8px;
 }
 
 .event-type, .event-genre {
@@ -352,8 +376,10 @@ body.category-news #content > div.first img {
 	display : none;
 }
 
-.entry-title {
-	text-transform:uppercase;	
+#content .entry-title {
+	font-size : 14pt;
+	text-transform:uppercase;
+	font-weight: normal;
 }
 
 .entry-title a:hover {
@@ -364,6 +390,7 @@ body.category-news #content > div.first img {
 #content div.category-events .entry-title {
 	float: left;
 	font-size:20pt;
+	font-weight: bold;
 }
 
 #content #event-listing div.category-events .entry-title {
@@ -380,7 +407,7 @@ body.category-news #content > div.first img {
 #primary {
 	position: absolute;
 	left: 1000px;
-	width: 200px;
+	width: 180px;
 	margin-top: 200px;
 }
 
@@ -401,10 +428,6 @@ body.category-news #content > div.first img {
 #event-calendar table th{
 	border-bottom: 1px solid black;
 	border-top: 1px solid black;
-}
-
-#wp-calendar {
-	width:200px;
 }
 
 #wp-calendar tbody tr {
@@ -636,13 +659,14 @@ body.category-events #footer {
 
 #footer li.widget_pages {
 	float: right;
-	width:65%;
+	width:380px;
 	padding-top: 10px;
-	padding-right: 75px;
+	padding-right: 65px;
 }
 
 #footer li.widget_nav_menu {
 	float: right;
+	padding-right: 5px;
 }
 
 #footer li a {
@@ -850,7 +874,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
 	font-size: 0;
 	line-height: 0;
-	padding-top: 10px;
+	padding-top: 20px;
 }
 
 #prev a:hover {
@@ -874,7 +898,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 10px;
+        padding-top: 20px;
 }
 
 #next a:hover {
@@ -908,7 +932,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 10px;
+        padding-top: 20px;
 }
 
 .nav-previous a:hover {
@@ -934,7 +958,7 @@ img.LinkImage  {
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 10px;
+        padding-top: 20px;
 }
 
 .nav-next a:hover {
@@ -967,6 +991,7 @@ ul.event-subcat li {
 ul.event-subcat li a {
         display: block;
 	padding-left: 25px;
+	padding-top: 0;
 	width: 100px;
 	text-decoration: none;
 	z-index: 99;
