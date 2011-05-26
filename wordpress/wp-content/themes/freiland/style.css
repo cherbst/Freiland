@@ -71,6 +71,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 #content {
 	position: relative;
 	margin: 0;
+	width: 785px;
 }
 
 /* gallery page */
