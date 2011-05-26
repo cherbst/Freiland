@@ -38,6 +38,7 @@ body.category-events div.end_date {
 }
 */
 
+
 body{
 	background : white;
 	padding-top : 160px;
@@ -51,6 +52,12 @@ body, input, textarea {
 body, input, textarea, .page-title span, .pingback a.url {
 	font-family: Verdana;
 	font-size: 11pt;
+}
+
+#content .entry-content, #content .entry-summary{
+	color: black;
+	font-size: 11pt;
+	line-height: 1.5;
 }
 
 #main { 
@@ -236,11 +243,15 @@ body.single-format-gallery .entry-content > p,
 	display: none;
 }
 
-.entry-summary a {
+.entry-summary a, .entry-content a {
 	display: block;
 	padding-top: 10px;
 	color: black;
 	text-decoration:none;
+}
+
+.entry-summary a:hover, .entry-content a:hover {
+	text-decoration:underline;
 }
 
 .event_day {
@@ -344,6 +355,7 @@ body.category-news #content > div.first img {
 }
 
 #content .entry-title {
+	font-size : 14pt;
 	text-transform:uppercase;
 	font-weight: normal;
 }
