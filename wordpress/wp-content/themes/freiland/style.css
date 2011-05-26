@@ -202,6 +202,7 @@ body.single-format-gallery .entry-content > p,
 	overflow: hidden;
 	width: 785px;
 	z-index: 50;
+	padding-top: 25px;
 }
 
 .begin_date, .end_date {
@@ -272,7 +273,8 @@ body.single-format-gallery .entry-content > p,
 }
 
 #event-listing .category-events {
-	margin-bottom: 5px;
+	padding-bottom: 15px;
+	padding-top: 0px;
 }
 
 .event-type {
