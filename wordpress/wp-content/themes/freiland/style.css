@@ -343,8 +343,9 @@ body.category-news #content > div.first img {
 	display : none;
 }
 
-.entry-title {
-	text-transform:uppercase;	
+#content .entry-title {
+	text-transform:uppercase;
+	font-weight: normal;
 }
 
 .entry-title a:hover {
@@ -355,6 +356,7 @@ body.category-news #content > div.first img {
 #content div.category-events .entry-title {
 	float: left;
 	font-size:20pt;
+	font-weight: bold;
 }
 
 #content #event-listing div.category-events .entry-title {
