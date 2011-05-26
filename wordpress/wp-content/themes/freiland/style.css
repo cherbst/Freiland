@@ -83,7 +83,7 @@ body.category-events #container {
 
 /* gallery page */
 body.category-images #content , .single-format-gallery #content {
-	width: 280px;
+	width: 270px;
 	float: left;
 	position: relative;
 	left: -10px;
