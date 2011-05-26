@@ -74,6 +74,10 @@ body, input, textarea, .page-title span, .pingback a.url {
 	width: 785px;
 }
 
+.single #content{
+	width: 550px;
+}
+
 /* gallery page */
 body.category-images #content , .single-format-gallery #content {
 	width: 270px;
