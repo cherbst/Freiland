@@ -389,7 +389,7 @@ body.category-news #content > div.first img {
 #primary {
 	position: fixed;
 	left: 1000px;
-	width: 200px;
+	width: 180px;
 	margin-top: 200px;
 }
 
@@ -410,10 +410,6 @@ body.category-news #content > div.first img {
 #event-calendar table th{
 	border-bottom: 1px solid black;
 	border-top: 1px solid black;
-}
-
-#wp-calendar {
-	width:200px;
 }
 
 #wp-calendar tbody tr {
@@ -637,13 +633,14 @@ li#eventtypes li{
 
 #footer li.widget_pages {
 	float: right;
-	width:65%;
+	width:380px;
 	padding-top: 10px;
-	padding-right: 75px;
+	padding-right: 65px;
 }
 
 #footer li.widget_nav_menu {
 	float: right;
+	padding-right: 5px;
 }
 
 #footer li a {
