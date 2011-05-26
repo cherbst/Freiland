@@ -871,10 +871,12 @@ img.LinkImage  {
 }
 
 .nav-previous a {
-        width: 200px;
+        width: 180px;
         height: 28px;
+	padding-left: 20px;
+	color: #000000!important;
         display: block;
-	background: url(images/feil_links_kl.png) 10px no-repeat;
+	background: url(images/feil_links_kl.png) left 10px no-repeat;
 	background-position: left center;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
@@ -883,7 +885,7 @@ img.LinkImage  {
 
 .nav-previous a:hover {
         font-size: 8pt;
-        text-align: right;
+        text-align: left;
         text-decoration: none;
         text-transform: uppercase;
 }
@@ -893,10 +895,12 @@ img.LinkImage  {
 }
 
 .nav-next a {
-        width: 200px;
+        width: 180px;
         height: 28px;
+	padding-right: 20px;
         display: block;
-	background: url(images/feil_rechts_kl.png) 10px no-repeat;
+	color: #000000!important;
+	background: url(images/feil_rechts_kl.png) right 10px no-repeat;
 	background-position: right center;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
@@ -905,7 +909,7 @@ img.LinkImage  {
 
 .nav-next a:hover {
         font-size: 8pt;
-        text-align: left;
+        text-align: right;
         text-decoration: none;
         text-transform: uppercase;
 }
