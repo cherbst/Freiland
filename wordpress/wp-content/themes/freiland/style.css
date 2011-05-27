@@ -201,7 +201,7 @@ body.category-events #banner-container{
 	height: 30px!important;
 	z-index: 99;
 	background: url(images/bgTrans.png) left 0 repeat-x;
-	background: rgba(255, 255, 255, 0.9);
+	/* background: rgba(255, 255, 255, 0.9); */
 }
 
 body.category-events #mainpost-banner #upper-transparency{
@@ -222,7 +222,7 @@ body.category-events #mainpost-banner #upper-transparency{
         width: 785px!important;
         z-index: 99;
         background: url(images/bgTrans.png) left 0 repeat-x; 
-        background: rgba(255, 255, 255, 0.9);
+        /* background: rgba(255, 255, 255, 0.9); */
 }
 
 #mainpost-banner img {
@@ -234,12 +234,16 @@ body.category-events #mainpost-banner #upper-transparency{
 	padding-top: 40px;
 }
 
-#event-listing{
+#event-listing {
 	position: relative;
 	overflow: hidden;
 	width: 785px;
 	z-index: 50;
-	padding-top: 25px;
+	padding-top: 170px;
+}
+
+#post-content {
+	padding-top: 170px;
 }
 
 .begin_date, .end_date {
