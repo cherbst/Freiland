@@ -59,6 +59,7 @@
 <?php /* show banner of main post */
 	if ( $loopcounter == 1 ){ 
 		freiland_the_banner(); 
+		?><div id="post-content"><?php
 	} ?>
 
 <?php /* How to display posts of the Gallery format. The gallery category is the old way. */ ?>
@@ -185,3 +186,4 @@
 					<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
 				</div><!-- #nav-below -->
 <?php endif; ?>
+</div> <!-- post-content -->
