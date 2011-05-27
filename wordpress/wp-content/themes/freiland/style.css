@@ -239,7 +239,7 @@ body.category-events #mainpost-banner #upper-transparency{
 	overflow: hidden;
 	width: 785px;
 	z-index: 50;
-	padding-top: 170px;
+	padding-top: 0;
 }
 
 #post-content {
@@ -698,7 +698,7 @@ body.category-events #header {
 #footer {
 	position: fixed;
 	bottom: 0px;
-	width: 100%;
+	width: 1200px;
 	margin: 0;
 	left : 0;
 	background: url(images/bgTrans.png) left 0 repeat;
