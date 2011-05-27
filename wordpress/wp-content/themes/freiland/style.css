@@ -173,7 +173,7 @@ body.single-format-gallery .entry-content > p,
 	height: 30px!important;
 	z-index: 99;
 	background: url(images/bgTrans.png) left 0 repeat-x;
-	background: rgba(255, 255, 255, 0.9);
+	/* background: rgba(255, 255, 255, 0.9); */
 }
 
 #empty-banner {
@@ -189,7 +189,7 @@ body.single-format-gallery .entry-content > p,
         width: 785px!important;
         z-index: 99;
         background: url(images/bgTrans.png) left 0 repeat-x; 
-        background: rgba(255, 255, 255, 0.9);
+        /* background: rgba(255, 255, 255, 0.9); */
 }
 
 
