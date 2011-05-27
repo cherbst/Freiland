@@ -202,12 +202,16 @@ body.single-format-gallery .entry-content > p,
 	padding-top: 40px;
 }
 
-#event-listing{
+#event-listing {
 	position: relative;
 	overflow: hidden;
 	width: 785px;
 	z-index: 50;
-	padding-top: 25px;
+	padding-top: 170px;
+}
+
+#post-content {
+	padding-top: 170px;
 }
 
 .begin_date, .end_date {
