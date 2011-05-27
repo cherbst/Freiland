@@ -112,7 +112,7 @@ var TagsToTip   = true      // false or true - if true, HTML elements to be conv
 
 
 
-config. Above           = true     // false or true - tooltip above mousepointer
+config. Above           = false     // false or true - tooltip above mousepointer
 
 config. BgColor         = '#FFFFFF' // Background colour (HTML colour value, in quotes)
 
@@ -138,7 +138,7 @@ config. CloseBtnText    = '&nbsp;X&nbsp;'   // Close button text (may also be an
 
 config. CopyContent     = true      // When converting a HTML element to a tooltip, copy only the element's content, rather than converting the element by its own
 
-config. Delay           = 400       // Time span in ms until tooltip shows up
+config. Delay           = 200       // Time span in ms until tooltip shows up
 
 config. Duration        = 0         // Time span in ms after which the tooltip disappears; 0 for infinite duration, < 0 for delay in ms _after_ the onmouseout until the tooltip disappears
 
@@ -168,9 +168,9 @@ config. JumpVert        = true      // false or true - jump vertically      "
 
 config. Left            = false     // false or true - tooltip on the left of the mouse
 
-config. OffsetX         = 5       // Horizontal offset of left-top corner from mousepointer
+config. OffsetX         = 5         // Horizontal offset of left-top corner from mousepointer
 
-config. OffsetY         = 135         // Vertical offset
+config. OffsetY         = -160         // Vertical offset
 
 config. Opacity         = 100       // Integer between 0 and 100 - opacity of tooltip in percent
 
