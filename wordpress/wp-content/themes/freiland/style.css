@@ -80,6 +80,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	padding-left: 200px;
 	position: relative;
 	height: 75%;
+	overflow: visible!important;
 }
 
 #container {
