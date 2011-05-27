@@ -43,6 +43,8 @@ body{
 	background : white;
 	padding-top : 160px;
 	padding-bottom : 150px;
+	width: 1200px;
+	height: 870px;
 }
 
 body, input, textarea {
@@ -65,7 +67,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	width: 1000px;
 	background: #FFFFFF;
 	z-index: 95;
-	padding: 0;
+	padding-left: 200px;
 }
 
 #container {
@@ -149,44 +151,40 @@ body.single-format-gallery .entry-content > p,
 }
 
 #mainpost-banner {
-	position: relative;
+	position: fixed;
 	display: block;
 	width: 785px!important;
-	max-height: 200px!important;
+	max-height: 240px!important;
 	z-index: 99;
-	background: #FFFFFF;
 	overflow: hidden;
-	padding-bottom: 180px;
+	top: 160px;
 }
 
 #banner-container {
-	position: fixed;
+	position: relative;
         margin: 0;
         z-index: 97;
-        width: 785px!important;
-        height: 170px!important;
+        max-height: 180px!important;
 	background: #FFFFFF;
 }
 
 #mainpost-banner #upper-transparency {
-	position: fixed;
-	margin-top: 170px;
+	position: relative;
 	height: 30px!important;
-	width: 785px!important;
 	z-index: 99;
 	background: url(images/bgTrans.png) left 0 repeat-x;
 	background: rgba(255, 255, 255, 0.9);
 }
 
 #empty-banner {
+	position: fixed;
 	display: block;
 	max-height: 30px;
 	width: 785px;
-	padding-bottom: 50px;
+	top: 160px;
 }
 
 #empty-banner #upper-transparency {
-        position: fixed;
         height: 30px!important;
         width: 785px!important;
         z-index: 99;
@@ -201,7 +199,7 @@ body.single-format-gallery .entry-content > p,
         z-index: 97;
         max-width: 785px!important;
         height: 140px!important;
-	top: 30px;
+	padding-top: 40px;
 }
 
 #event-listing{
@@ -513,25 +511,25 @@ li#eventtypes li{
 #wrapper {
 	padding: 0;
 	margin: 0;
-	padding-left: 200px;
-	width: 1000px;
+	width: 100%;
 	background: #FFFFFF;
 }
 
 #masthead {
-	position: fixed;
+	position: absolute;
 	z-index: 99;
 	top : 0;
 	left : 0;
-	width: 985px;
+	width: 995px;
+	height: 100%;
 }
 
 #header {
 	position: fixed;
 	padding: 0px;
-	top: 25px;
-	width: 100%;
-	height: 140px;
+	top: 0;
+	width: 1200px;
+	height: 160px;
 	z-index: 99;
 	background: #FFFFFF;
 	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
@@ -552,7 +550,7 @@ li#eventtypes li{
 #access {
 	float: left;
 	width: 785px;
-	height: 140px;
+	height: 100%;
 	background: url(images/nav_left.png) left 109px no-repeat rgb(255, 255, 255);
 }
 
@@ -624,9 +622,9 @@ li#eventtypes li{
 }
 
 #topright {
-	position: fixed;
+	position: absolute;
 	top : 25px;
-	left: 985px;
+	right: 0;
 	height: 280px;
 	width: 215px;
 	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
