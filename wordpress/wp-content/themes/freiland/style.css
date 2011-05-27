@@ -505,7 +505,16 @@ li#eventtypes li{
 }
 
 #site-title {
-	display: none;
+	font-size: 1pt;
+	color: #FFFFFF;
+}
+
+#site-title a {
+	display: block;
+	width: 200px;
+	height:150px;
+	color: #FFFFFF;
+	text-decoration: none;
 }
 
 #wrapper {
