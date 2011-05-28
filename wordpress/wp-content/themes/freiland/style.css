@@ -415,6 +415,11 @@ body.category-news #content > div.first img {
 	border-top: 1px solid black;
 }
 
+#event-calendar table.nav{
+	position: relative;
+	top: 5px;
+}
+
 #wp-calendar table{
 	table-layout:fixed;
 }
@@ -880,11 +885,10 @@ img.LinkImage  {
 	height: 28px;
 	display: block;
 	background: url(images/feil_links_kl.png) 10px no-repeat;
-	background-position: left center;
+	background-position: left top;
 	background-color: rgb(255, 255, 255);
 	font-size: 0;
 	line-height: 0;
-	padding-top: 20px;
 }
 
 #prev a:hover {
@@ -904,11 +908,10 @@ img.LinkImage  {
         height: 28px;
         display: block;
 	background: url(images/feil_rechts_kl.png) 10px no-repeat;
-	background-position: right center;
+	background-position: right top;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 20px;
 }
 
 #next a:hover {
