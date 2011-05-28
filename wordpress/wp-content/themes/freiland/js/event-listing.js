@@ -230,6 +230,7 @@ function event_listing(){
 		// remove any single events
 		jQuery('#content #single-post').remove();
 		jQuery('#post-images').remove();
+		jQuery('body').toggleClass('single',false);
 		jQuery(listingElements).show();
 
 		curCat = newCat;
@@ -299,6 +300,7 @@ function event_listing(){
 					jQuery('#main').append(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
 					jQuery(listingElements).hide();
+					jQuery('body').toggleClass('single',true);
 					jQuery('html,body').scrollTop(0);
 				});
 			} 
