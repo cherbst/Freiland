@@ -3,11 +3,11 @@ jQuery(document).ready(function(){
 	if ( elem.length == 0 )
 		elem = jQuery('#content');
 
-	var inittop = jQuery('#header').height();
 	var ontop = false;
 	var onbottom = false;
 
 	elem.mousewheel(function(event, delta) {
+		var inittop = event_listing.topmargin;
 		var cur = elem.offset();
 		var v = 50;
 		var ret = true;

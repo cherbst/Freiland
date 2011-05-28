@@ -26,6 +26,7 @@ function event_listing(){
 
 	function init(){
 		topmargin = jQuery('#event-listing').offset().top;
+		event_listing.topmargin = topmargin;
 		next_href = jQuery('#ec3_next:first').attr('href');
 		prev_href = jQuery('#ec3_prev:first').attr('href');
 		// create initial month container
