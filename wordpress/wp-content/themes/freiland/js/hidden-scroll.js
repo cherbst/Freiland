@@ -10,19 +10,22 @@ jQuery(document).ready(function(){
 	elem.mousewheel(function(event, delta) {
 		var cur = elem.offset();
 		var v = 50;
-		var last = elem.children('div:last');
 		var ret = true;
 		var trigger = !(ontop || onbottom);
-		if( last.offset().top + last.height() < 
-		    jQuery('#container').offset().top + jQuery('#container').height() &&
- 		    delta < 0){
+		var newTop = cur.top+(delta*v);
+		var minTop = 
+		    jQuery('#container').offset().top + jQuery('#container').height() - elem.height();
+		newTop = Math.max(newTop,minTop);
+		newTop = Math.min(newTop,inittop);
+
+		if( newTop <= minTop && delta < 0){
 			onbottom = true;
-		}else if (cur.top >= inittop && delta > 0 ){
+		}else if (newTop >= inittop && delta > 0 ){
 			ontop = true;
 		}else{
 			ontop = onbottom = false;
 			ret = false;
-			elem.offset({top:cur.top+(delta*v),left:cur.left});
+			elem.offset({top:newTop,left:cur.left});
 		}
 		if ( trigger )
 			elem.trigger('hiddenscroll',[ontop,onbottom]);
