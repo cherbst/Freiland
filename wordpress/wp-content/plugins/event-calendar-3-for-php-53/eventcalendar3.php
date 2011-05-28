@@ -265,8 +265,11 @@ function ec3_filter_posts_where($where)
 
 function ec3_filter_nextprev_join($join)
 {
-  global $ec3;
-  $join.=" LEFT JOIN $ec3->schedule ec3_sch ON ec3_sch.post_id=p.ID ";
+  global $ec3,$post;
+  $s = $post->ec3_schedule[0];
+  if ( $s ){
+	  $join.=" LEFT JOIN $ec3->schedule ec3_sch ON ec3_sch.post_id=p.ID ";
+  }
   return $join;
 }
 /** */
@@ -285,7 +288,9 @@ function ec3_filter_posts_join($join)
 
 function ec3_filter_nextprev_sort($orderby)
 {
-   global $ec3;
+  global $ec3,$post;
+  $s = $post->ec3_schedule[0];
+  if ( $s ){
    $ec3->order_by_start=true;
    $regexp="/(?<!DATE_FORMAT[(])\bp\.post_date\b( DESC\b| ASC\b)(.*)?/i";
    if(preg_match($regexp,$orderby,$match))
@@ -293,6 +298,7 @@ function ec3_filter_nextprev_sort($orderby)
     $orderby=preg_replace($regexp,'ec3_sch.start',$orderby);
     $orderby .= $match[1].' ,p.post_name '.$match[1].' '.$match[2];
    }
+  }
    return $orderby;
 }
 /** Change the order of event listings (only advanced mode). */

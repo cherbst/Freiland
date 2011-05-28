@@ -319,6 +319,7 @@ function event_listing(){
 		jQuery('#content #single-post').remove();
 		jQuery('#post-images').remove();
 		jQuery('body').toggleClass('category-events',true);
+		jQuery('body').toggleClass('single',false);
 		jQuery(listingElements).show();
 
 		if(!newCat) return;
@@ -384,6 +385,7 @@ function event_listing(){
 					jQuery('#content').append(getSinglePost(data));
 					jQuery(listingElements).hide();
 					jQuery('body').toggleClass('category-events',false);
+					jQuery('body').toggleClass('single',true);
 					jQuery('html,body').scrollTop(0);
 				});
 			} 

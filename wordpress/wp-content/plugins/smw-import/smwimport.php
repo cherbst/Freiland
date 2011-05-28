@@ -220,6 +220,8 @@ class smwimport
   static $fetch_time;
   // post time for creating posts
   static $posttime;
+  // array to remember post dates for uniqueness
+  static $global_post_dates;
 
   /* returns an array of the ids of all imported subcategories 
   */
@@ -363,6 +365,16 @@ class smwimport
 	return $attach_array;
   }
 
+  /* returns a unique post date based on $date for that category */
+  private static function get_unique_post_date($date,$cat){
+	$time = strtotime($date);
+	while ( isset(self::$global_post_dates[$cat][$time] ) )
+		$time++;
+
+	self::$global_post_dates[$cat][$time] = 1;	
+	return date("Y-m-d H:i:s",$time);
+  }
+
   /*  imports $data into a wordpress post according to $mapping
   */
   private static function import_post_type($mapping,$data){
@@ -379,6 +391,11 @@ class smwimport
 		'post_content' => '',	
 		'post_excerpt' => '');	
 
+	// get top level category
+	$cat = get_category_by_slug($mapping['category']);
+	if ( !$cat )
+		return new WP_Error('category_failed', __("Could not find top level category:").$mapping['category']);
+
 	foreach( $data as $key => $value ){
 		if ( is_array($attribute_mapping[$key]) )
 			$key_mapping = $attribute_mapping[$key];
@@ -390,6 +407,8 @@ class smwimport
 				case 'post_excerpt':
 				case 'post_content':
 				case 'post_date':
+					if ( $key_map == 'post_date' )
+						$value = self::get_unique_post_date($value,$cat->term_id);
 					$postarr[$key_map] = $value;
 					break;
 				case 'globalattachment':
@@ -425,11 +444,6 @@ class smwimport
 	// if title is empty, use primary key
 	if ( $postarr['post_title'] == '' )
 		$postarr['post_title'] = $prim_key;
-
-	// get top level category
-	$cat = get_category_by_slug($mapping['category']);
-	if ( !$cat )
-		return new WP_Error('category_failed', __("Could not find top level category:").$mapping['category']);
 
 	// create the post
 	$ID = self::import_post($prim_key,$postarr,$cat->term_id);
