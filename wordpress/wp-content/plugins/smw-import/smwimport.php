@@ -343,7 +343,8 @@ class smwimport
 		//if ($child->category_count == 0){
 		$objects = get_objects_in_term($category,'category');
 		if ( empty($objects) ){
-			error_log('Deleting empty subcategory:'.$category);
+			$cat = get_category($category);
+			error_log('Deleting empty subcategory:'.$cat->slug);
 			wp_delete_category( $category );
 		}
 	}
@@ -1067,8 +1068,8 @@ class smwimport
 		$attachment = array(
 			'post_mime_type' => $wp_filetype['type'],
 			'post_title' => $title,
-			'guid' => $localfile,
 			'post_excerpt' => $title,
+			'guid'	=> $remotefile,
 			'post_content' => '',
 			'post_status' => 'inherit'
 		);
@@ -1078,7 +1079,7 @@ class smwimport
 		add_post_meta($attach_id,"_prim_key",$prim_key,true);
 		add_post_meta($attach_id,"_post_type",'smwimport',true);
 	}else{
-		if ( $post->guid != $localfile ){
+		if ( $post->guid != $remotefile ){
 			error_log('Attachment changed:'. $post->ID);
 			// filename changed, delete this attachment and create a new one
 			wp_delete_post($post->ID,true);
