@@ -183,7 +183,7 @@ body.single-format-gallery .entry-content > p,
 body.category-events #mainpost-banner{
 	padding-bottom: 0;
 	position: relative;
-	top: -40px;
+	top: 0px;
 }
 
 #banner-container {
@@ -234,6 +234,10 @@ body.category-events #mainpost-banner #upper-transparency{
         max-width: 785px!important;
         height: 140px!important;
 	padding-top: 40px;
+}
+
+.category-events #mainpost-banner img {
+	padding-top: 0px;
 }
 
 #event-listing {
