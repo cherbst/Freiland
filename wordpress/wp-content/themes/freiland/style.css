@@ -335,7 +335,7 @@ body.category-events #mainpost-banner #upper-transparency{
 .event-type {
 	float: left;
 	font-size : 8pt;
-	width: 60px;
+	width: 70px;
 	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
@@ -345,7 +345,7 @@ body.category-events #mainpost-banner #upper-transparency{
 .event-genre{
 	clear: both;
 	float: left;
-	margin-left: 70px;
+	margin-left: 80px;
 	font-size : 10pt;
 	width: 100%;
 	position: relative;
