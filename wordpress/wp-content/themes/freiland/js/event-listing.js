@@ -17,6 +17,8 @@ function event_listing(){
 	// next/prev post
 	var nextPrevSelector = '.nav-previous > a,.nav-next > a';
 	var baseURL;
+	// pixel distance from visible area for loading/unloading new events
+	var delta = 100;
 
 
 //	jQuery('#topright').css('z-index',300);
@@ -75,7 +77,7 @@ function event_listing(){
 	// show 404 if no posts found
 	var filterPosts = function(cat,href){
 		var allPosts = jQuery('#event-listing > div > div.post');
-		var other = jQuery('#event-listing > div > div:not(.cat-id-'+cat+')');
+		var other = jQuery('#event-listing > div > div').not('.cat-id-'+cat);
 		var notfound = jQuery('.error404');
 		if ( allPosts.length == other.length ){
 			if ( notfound.length == 0 && postreq == 0 ){
@@ -113,7 +115,7 @@ function event_listing(){
 				}
 			});
 		}else{
-			 if ( getCurMonth() != getPostMonth(curPost) ){
+			if ( getCurMonth() != getPostMonth(curPost) ){
 				// has calendar changed?
 				// new cur is first of new month
 				var newPost = getPostFromCalDay(getEventDay(getCurCalendar(),true));
@@ -172,20 +174,22 @@ function event_listing(){
 			var content = jQuery(data).find('#event-listing').contents();
 			var month = event_listing.parseHref(href);
 			month = month[1] + '_' + month[2];
-			var monthContainer = getMonthContainer(month);
-			monthContainer.append(content);
-			if ( append ){
-				jQuery('#event-listing').append(monthContainer);
-			}else{
-				jQuery('#event-listing').prepend(monthContainer);
+			if ( content.filter('.cat-id-'+curCat).length > 0 ||
+			     month == getCurMonth() ){
+				var monthContainer = getMonthContainer(month);
+				monthContainer.append(content);
+				if ( append ){
+					jQuery('#event-listing').append(monthContainer);
+				}else{
+					jQuery('#event-listing').prepend(monthContainer);
+				}
+				if ( content.length > 0 )
+					filterPosts(curCat);
+				if ( append )
+					next_href = incrementHref(next_href);
+				else
+					prev_href = decrementHref(prev_href);
 			}
-			if ( content.length > 0 )
-				filterPosts(curCat);
-			if ( append )
-				next_href = incrementHref(next_href);
-			else
-				prev_href = decrementHref(prev_href);
-
 			if ( callback ) callback();
 			postreq--;
 		});
@@ -195,9 +199,8 @@ function event_listing(){
 		var listing = jQuery('#event-listing');
 		var height = listing.height();
 		var container = jQuery('.month_container').first();
-		var delta = 100;
 				
-		if ( container.offset().top + container.height() + delta < 0 ){
+		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
 			container.remove();
 			// adjust new top
@@ -210,7 +213,7 @@ function event_listing(){
 
 		container = jQuery('.month_container').last();
 				
-		if ( container.offset().top > jQuery('#container').offset().top +
+		while ( container.offset().top > jQuery('#container').offset().top +
 			jQuery('#container').height() + delta ){
 			var prev = container.prev();
 			container.remove();
@@ -233,17 +236,17 @@ function event_listing(){
 		var offset = cur.top - post.offset().top; 
 		jQuery('#event-listing').animate({ top: offset},duration,function(){
 			if( jQuery('#event-listing').offset().top + jQuery('#event-listing').height() < 
-				jQuery('#footer').offset().top )
+				jQuery('#footer').offset().top ){
 				loadNewEvents(true,function(){
 					unloadMonths();
 					if ( callback ) callback();
 				});
-			else if( jQuery('#event-listing').offset().top > 0 )
+			}else if( jQuery('#event-listing').offset().top > topmargin - delta ){
 				loadNewEvents(false,function(){
 					unloadMonths();
 					if ( callback ) callback();
 				});
-			else{
+			}else{
 				unloadMonths();
 				if ( callback ) callback();
 			}
