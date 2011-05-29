@@ -12,8 +12,11 @@ function innerScroll(elem){
 		var newTop = cur.top+(delta*v);
 		var minTop = 
 		    jQuery('#container').offset().top + jQuery('#container').height() - elem.height() - variance;
-		newTop = Math.max(newTop,minTop);
-		newTop = Math.min(newTop,inittop);
+
+		if ( delta < 0 )
+			newTop = Math.max(newTop,minTop);
+		else
+			newTop = Math.min(newTop,inittop);
 
 		if( newTop <= minTop && delta < 0){
 			onbottom = true;
