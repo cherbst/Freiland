@@ -1,20 +1,17 @@
-jQuery(document).ready(function(){
-	var elem = jQuery('#event-listing');
-	if ( elem.length == 0 )
-		elem = jQuery('#content');
-
+function innerScroll(elem){
 	var ontop = false;
 	var onbottom = false;
+	var inittop = elem.offset().top;
 
 	elem.mousewheel(function(event, delta) {
-		var inittop = event_listing.topmargin;
 		var cur = elem.offset();
 		var v = 50;
+		var variance = 100;
 		var ret = true;
 		var trigger = !(ontop || onbottom);
 		var newTop = cur.top+(delta*v);
 		var minTop = 
-		    jQuery('#container').offset().top + jQuery('#container').height() - elem.height();
+		    jQuery('#container').offset().top + jQuery('#container').height() - elem.height() - variance;
 		newTop = Math.max(newTop,minTop);
 		newTop = Math.min(newTop,inittop);
 
@@ -31,4 +28,4 @@ jQuery(document).ready(function(){
 			elem.trigger('hiddenscroll',[ontop,onbottom]);
 		return ret;
 	});
-});
+}

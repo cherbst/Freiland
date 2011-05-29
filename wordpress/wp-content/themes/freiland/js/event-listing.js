@@ -26,7 +26,11 @@ function event_listing(){
 
 	function init(){
 		topmargin = jQuery('#event-listing').offset().top;
-		event_listing.topmargin = topmargin;
+		var elem = jQuery('#event-listing');
+		if ( elem.length == 0 )
+			elem = jQuery('#content');
+		innerScroll(elem);	
+
 		next_href = jQuery('#ec3_next:first').attr('href');
 		prev_href = jQuery('#ec3_prev:first').attr('href');
 		// create initial month container
@@ -206,7 +210,8 @@ function event_listing(){
 
 		container = jQuery('.month_container').last();
 				
-		if ( container.offset().top > jQuery(window).height() + delta ){
+		if ( container.offset().top > jQuery('#container').offset().top +
+			jQuery('#container').height() + delta ){
 			var prev = container.prev();
 			container.remove();
 			next_href = decrementHref(next_href);
