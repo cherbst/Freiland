@@ -298,7 +298,7 @@ body.single-format-gallery .entry-content > p,
 .event-type {
 	float: left;
 	font-size : 8pt;
-	width: 60px;
+	width: 70px;
 	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
@@ -308,7 +308,7 @@ body.single-format-gallery .entry-content > p,
 .event-genre{
 	clear: both;
 	float: left;
-	margin-left: 70px;
+	margin-left: 80px;
 	font-size : 10pt;
 	width: 100%;
 	position: relative;
