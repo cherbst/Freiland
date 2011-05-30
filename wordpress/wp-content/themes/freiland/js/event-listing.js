@@ -342,13 +342,26 @@ function event_listing(){
 		initHrefs();
 	}
 
+	function onCategoryChanged(){
+		if ( curCat != topCat ){
+			keepOnlyCurrentMonth();
+		}
+		filterPosts(curCat);
+		findNextCurPost();
+	}
+
 	// filter posts when clicking on event sub categories
 	subcatClicked = function(newCat){
 		// remove any single events
-		jQuery('#content #single-post').remove();
-		jQuery('#post-images').remove();
-		jQuery('body').toggleClass('category-events',true);
-		jQuery('body').toggleClass('single',false);
+		var updateNeeded = false;
+		var singlePost = jQuery('#content #single-post');
+		if ( singlePost.length > 0 ){
+			updateNeeded = true;
+			singlePost.remove();
+			jQuery('#post-images').remove();
+			jQuery('body').toggleClass('category-events',true);
+			jQuery('body').toggleClass('single',false);
+		}
 		jQuery(listingElements).show();
 
 		if(!newCat) return;
@@ -356,12 +369,11 @@ function event_listing(){
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
 
-		if ( newCat != topCat )
-			keepOnlyCurrentMonth();
-
 		ec3.set_cur_cat(curCat, function() {
-			filterPosts(curCat);
-			findNextCurPost();
+			if ( updateNeeded )
+				updateCalendar(getCurCalendar(),onCategoryChanged);
+			else
+				onCategoryChanged();
 		});
 	};
 
@@ -404,6 +416,7 @@ function event_listing(){
 			if (jQuery(this).attr('href') == value) {
 				subcatClicked(getCatId(jQuery(this).parent()));
 				found = true;
+				return false;
 			}
 		});
 
@@ -413,6 +426,7 @@ function event_listing(){
 		jQuery(eventSelector + ',' + nextPrevSelector).filter(':visible').each(function() {
 			if (jQuery(this).attr('href') == value) {
 				jQuery.get(jQuery(this).attr('href'), function(data){
+					curPost = jQuery('#'+jQuery(data).find('div.post').attr('id'));
 					jQuery('#content #single-post').remove();
 					jQuery('#post-images').remove();
 					jQuery('#main').append(jQuery(data).find('#post-images'));
@@ -454,16 +468,23 @@ function event_listing(){
 	};
 
 	// update calendar to match current post month
-	updateCalendar = function(curCal){
+	updateCalendar = function(curCal,callback){
 		curCal = jQuery(curCal);
 		var calDate = curCal.attr('id').split('_');
 		var postDate = curPost.find('.begin_date').attr('id').split('_');	
 		calDate = new Date(calDate[1],calDate[2]-1,1).getTime();
 		postDate = new Date(postDate[0],postDate[1]-1,1).getTime();
 		if( calDate < postDate )
-			ec3.go_next(updateCalendar);
+			ec3.go_next(function(curCal){
+				updateCalendar(curCal,callback);
+			});
 		else if( calDate > postDate )
-			ec3.go_prev(updateCalendar);
+			ec3.go_prev(function(curCal){
+				updateCalendar(curCal,callback);
+			});
+		else if (callback){
+			 callback();
+		}
 	}
 
 	// update the current post to the first one shown
