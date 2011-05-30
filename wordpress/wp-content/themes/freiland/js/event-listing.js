@@ -138,7 +138,7 @@ function event_listing(){
 					curPost = newPost;
 					scroll = true;
 				}
-			}
+			}else scroll = true;
 		}
 		if ( scroll ){
 			scrollToPost(curPost,0,function(){
