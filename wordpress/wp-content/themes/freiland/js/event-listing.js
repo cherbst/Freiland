@@ -9,7 +9,7 @@ function event_listing(){
 	var curCat,topCat;
 	var updateCal = true;
 	// all elements that need to be shown/hidden when loading one event
-	var listingElements = '#mainpost-banner,#event-listing,#wp-calendar,#eventtypes';
+	var listingElements = '#mainpost-banner,#wp-calendar,#eventtypes';
 	// all event title links
 	var eventSelector = '#event-listing h2.entry-title > a';
 	// all subcategory links
@@ -347,6 +347,7 @@ function event_listing(){
 			keepOnlyCurrentMonth();
 		}
 		filterPosts(curCat);
+		jQuery('#event-listing').show();
 		findNextCurPost();
 	}
 
@@ -431,7 +432,7 @@ function event_listing(){
 					jQuery('#post-images').remove();
 					jQuery('#main').append(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
-					jQuery(listingElements).hide();
+					jQuery(listingElements + ",#event-listing").hide();
 					jQuery('body').toggleClass('category-events',false);
 					jQuery('body').toggleClass('single',true);
 					jQuery('html,body').scrollTop(0);
