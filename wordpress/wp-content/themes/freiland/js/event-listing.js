@@ -122,7 +122,7 @@ function event_listing(){
 			visiblePosts.each(function(){
 				var curIndex = allPosts.index(jQuery(this));
 				var newDiff = Math.abs( oldIndex - curIndex );
-				if ( newDiff  < diff ){
+				if ( newDiff  <= diff ){
 					diff = newDiff;
 					curPost = jQuery(this);
 					scroll = true;
