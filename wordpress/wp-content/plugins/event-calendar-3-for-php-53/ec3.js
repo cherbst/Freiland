@@ -59,7 +59,7 @@ function ec3()
 	ec3.catClause="&cat="+cat;
 	ec3.cat=cat;
 	if ( reload ){
-		ec3.callback = callback;
+		ec3.callback.push(callback);
 		reloadCalendar();
 	}else if ( callback ) callback();
   }
@@ -400,7 +400,7 @@ function ec3()
       // Add in the new first calendar
       // check the category
       if ( jQuery(newcal).data('category') != ec3.cat ){
-		ec3.callback = callback;
+		ec3.callback.push(callback);
 	      	newcal = reloadCalendar(newcal,year_num,month_num);
 		ec3.currentCal = newcal;
       } 
@@ -408,7 +408,7 @@ function ec3()
     }
     else
     {
-      ec3.callback = callback;
+      ec3.callback.push(callback);
       newcal=create_calendar(calendars[0],month_num,year_num);
       ec3.currentCal = newcal;
       pn.insertBefore( newcal, calendars[0] );
@@ -420,7 +420,7 @@ function ec3()
 
     // Re-write the forward & back buttons.
     rewrite_controls(year_num,month_num+10,month_num+calendars.length-1);
-    if ( !ec3.callback && callback ) callback(newcal);
+    if ( ec3.callback.length == 0 && callback ) callback(newcal);
     return newcal;
   }
   ec3.go_prev=go_prev;
@@ -476,7 +476,7 @@ function ec3()
     {
       // Add in the new last calendar
       if ( jQuery(newcal).data('category') != ec3.cat ){
-	     	ec3.callback = callback;
+	     	ec3.callback.push(callback);
 		newcal = reloadCalendar(newcal,year_num,month_num);
       		ec3.currentCal = newcal;
       } 
@@ -484,7 +484,7 @@ function ec3()
     }
     else
     {
-      ec3.callback = callback;
+      ec3.callback.push(callback);
       newcal=create_calendar(calendars[0],month_num,year_num);
       ec3.currentCal = newcal;
       if(last_cal.nextSibling)
@@ -499,7 +499,7 @@ function ec3()
 
     // Re-write the forward & back buttons.
     rewrite_controls(year_num,month_num-calendars.length+11,month_num);
-    if ( !ec3.callback && callback ) callback(newcal);
+    if ( ec3.callback.length == 0 && callback ) callback(newcal);
     return newcal;
   }
   ec3.go_next=go_next;
@@ -563,9 +563,9 @@ function ec3()
         td.appendChild(a);
       }
     }
-    if ( ec3.callback ){
-	ec3.callback(ec3.currentCal);
-	ec3.callback = null;
+    var c;
+    while ((c = ec3.callback.pop())){
+	c(ec3.currentCal);
     }
     if(typeof ec3_Popup != 'undefined')
     {
@@ -593,7 +593,7 @@ ec3.today_year_num=ec3.today.getFullYear();
 
 // Holds ongoing XmlHttp requests.
 ec3.reqs=new Array();
-ec3.callback=null;
+ec3.callback=new Array();
 
 ec3.ELEMENT_NODE=1;
 ec3.TEXT_NODE=3;
