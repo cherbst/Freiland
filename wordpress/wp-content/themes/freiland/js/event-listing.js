@@ -108,8 +108,6 @@ function event_listing(){
 	};
 
 	var findNextCurPost = function(){
-		var scroll = false;
-
 		// select nearest visible post
 		if ( !curPost.is(':visible') && getCurMonth() == getPostMonth(curPost) ){
 			var allPosts = jQuery('#event-listing > div > div.post');
@@ -125,7 +123,6 @@ function event_listing(){
 				if ( newDiff  < diff ){
 					diff = newDiff;
 					curPost = jQuery(this);
-					scroll = true;
 					if ( diff == 1 ) return false;
 				}
 			});
@@ -136,16 +133,13 @@ function event_listing(){
 				var newPost = getPostFromCalDay(getEventDay(getCurCalendar(),true));
 				if ( newPost.length > 0 ){
 					curPost = newPost;
-					scroll = true;
 				}
 			}
 		}
-		if ( scroll ){
-			scrollToPost(curPost,0,function(){
-				if ( updateCal )
-					updateCalendar(getCurCalendar());
-			});
-		}
+		scrollToPost(curPost,0,function(){
+			if ( updateCal )
+				updateCalendar(getCurCalendar());
+		});
 	};
 
 	// return the categroy id of this element
