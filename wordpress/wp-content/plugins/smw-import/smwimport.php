@@ -283,8 +283,16 @@ class smwimport
 	$content = str_replace(array("\r", "\r\n", "\n"),' ',$content);
 	$data = json_decode($content,true);
 
-	if ( !$data )
-		return new WP_Error('data_source_error', __("Could not decode source into json:").$url);	
+	if ( !$data ){
+		// try more robust JSON library
+		require_once( dirname(__FILE__) . '/lib/JSON.php');
+		$value = new Services_JSON(SERVICES_JSON_LOOSE_TYPE); 
+		$data = $value->decode($content);
+		if ( !$data )
+			return new WP_Error('data_source_error', __("Could not decode source into json:").$url);
+		$data['items'][] = new WP_Error('data_source_error', __("Could not fully decode source into json:").$url."\n" .
+				__("Imported data might be incomplete!"));
+	}
 	return $data['items'];
   }
 
@@ -808,6 +816,11 @@ class smwimport
 			continue;
 		}
 		foreach( $items as $item ){
+			if ( is_wp_error($item) ){
+				error_log($item->get_error_message());
+				$g_ret = $item;
+				continue;
+			}
 			$ret = self::import_data($item);
 			if ( is_wp_error($ret) ){
 				error_log($ret->get_error_message());
