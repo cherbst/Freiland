@@ -26,6 +26,11 @@ function event_listing(){
 		jQuery('#topright > span').append(text+"</br>");
 	};
 
+	function initHrefs(){
+		next_href = jQuery('#ec3_next:first').attr('href');
+		prev_href = jQuery('#ec3_prev:first').attr('href');
+	}
+
 	function init(){
 		topmargin = jQuery('#event-listing').offset().top;
 		var elem = jQuery('#event-listing');
@@ -33,12 +38,11 @@ function event_listing(){
 			elem = jQuery('#content');
 		innerScroll(elem);	
 
-		next_href = jQuery('#ec3_next:first').attr('href');
-		prev_href = jQuery('#ec3_prev:first').attr('href');
 		// create initial month container
 		var monthContainer = event_listing.getMonthContainer(getCurMonth());
 		monthContainer.append(jQuery('#event-listing').contents());
 		jQuery('#event-listing').append(monthContainer);
+		initHrefs();
 
 		// initialize current cat from 'events' menu item
 		curCat = event_listing.getCatId(jQuery('.current-menu-item'));
@@ -322,6 +326,11 @@ function event_listing(){
 	};
 	event_listing.nextPrevClicked = nextPrevClicked;
 
+	function keepOnlyCurrentMonth(){
+		jQuery('#event-listing > div.month_container').not('#month_'+getCurMonth()).remove();
+		initHrefs();
+	}
+
 	// filter posts when clicking on event sub categories
 	subcatClicked = function(newCat){
 		// remove any single events
@@ -335,6 +344,10 @@ function event_listing(){
 		curCat = newCat;
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
+
+		if ( newCat != topCat )
+			keepOnlyCurrentMonth();
+
 		ec3.set_cur_cat(curCat, function() {
 			filterPosts(curCat,ec3.get_current_month_link(curCat));
 			findNextCurPost();
