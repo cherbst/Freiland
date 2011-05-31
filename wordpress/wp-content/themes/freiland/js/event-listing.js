@@ -17,6 +17,7 @@ function event_listing(){
 	var subcatSelector = '#eventtypes > ul > li > a,ul.children > li > a,ul.event-subcat > li > a';
 	// next/prev post
 	var nextPrevSelector = '.nav-previous > a,.nav-next > a';
+	// the url of the site
 	var baseURL;
 
 
@@ -48,10 +49,11 @@ function event_listing(){
 
 	// filter posts for given category
 	// show 404 if no posts found
-	var filterPosts = function(cat,href){
+	var filterPosts = function(cat){
 		var allPosts = jQuery('#event-listing > div.post');
 		var other = jQuery('#event-listing > div:not(.cat-id-'+cat+')');
 		var notfound = jQuery('.error404');
+		var href = baseURL + '/events404';
 		if ( allPosts.length == other.length ){
 			if ( notfound.length == 0 && postreq == 0 ){
 				postreq++;
@@ -238,7 +240,7 @@ function event_listing(){
 		if(!curCat) return;
 		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
-		filterPosts(curCat,ec3.get_current_month_link(curCat));
+		filterPosts(curCat);
 
 		if ( curCat == topCat )
 			scrollToPost(curPost,0);
