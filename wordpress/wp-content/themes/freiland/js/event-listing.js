@@ -16,8 +16,6 @@ function event_listing(){
 	var subcatSelector = '#eventtypes > ul > li > a,ul.children > li > a,ul.event-subcat > li > a';
 	// next/prev post
 	var nextPrevSelector = '.nav-previous > a,.nav-next > a';
-	// the url of the events site
-	var eventUrl;
 	// the url of the site
 	var baseURL;
 	// pixel distance from visible area for loading/unloading new events
@@ -80,28 +78,21 @@ function event_listing(){
 		return cal.attr('id').substring(4);
 	}
 
-	function get404(){
-		var ret = '\
-			<div id="post-0" class="post error404 not-found">	\
-				<h1 class="entry-title">Keine Veranstaltungen gefunden</h1>	\
-				<div class="entry-content">	\
-					<p>Entschuldigung, aber für diesen monat sind in dieser Kategorie noch keine Veranstaltungen eingetragen worden. Der folgende link bringt sie zurück zur Veranstaltungsübersicht:</p> \
-					<a href="'+ eventUrl +'" title="Zeige alle Veranstaltungen">Zeige alle Veranstaltungen</a> \
-				</div><!-- .entry-content --> \
-			</div><!-- #post-0 -->';
-		return ret;
-	}
-
 	// filter posts for given category
 	// show 404 if no posts found
 	var filterPosts = function(cat){
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var other = jQuery('#event-listing > div > div').not('.cat-id-'+cat);
 		var notfound = jQuery('.error404');
+		var href = baseURL + '/events404';
 		if ( allPosts.length == other.length ){
-			if ( notfound.length == 0 ){ 
-				jQuery('#content').append(jQuery(get404()));
-			} else notfound.show();
+			 if ( notfound.length == 0 && postreq == 0 ){
+                                postreq++;
+                                jQuery.get(href, function(data){
+                                        jQuery('#content').append(jQuery(data).find('.error404'));
+                                        postreq--;
+                                });
+                        } else notfound.show();
 		}else notfound.hide();
 		allPosts.show();
 		other.hide();
