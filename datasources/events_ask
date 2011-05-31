@@ -1,4 +1,4 @@
-{{#ask:[[Kategorie:Veranstaltung]]
+{{#ask:[[Kategorie:Veranstaltung]][[veröffentlicht::ja]]
 |?Genre=genre
 |?Titel=title
 |?Veranstaltungstyp=eventtype
