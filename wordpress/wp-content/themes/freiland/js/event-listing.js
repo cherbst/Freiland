@@ -55,6 +55,10 @@ function event_listing(){
 		// the post which is currently on top
 		curPost = event_listing.getPostFromCalDay(jQuery('#today'));
 
+		// if there are no events left in this month, take the first 
+		// event from this month
+		if ( curPost.length == 0 )
+			curPost = jQuery('#event-listing > div > div.post').first();
 		// when loading the page, scroll to next active event
 		event_listing.scrollToPost(curPost,0);
 	};
@@ -66,6 +70,7 @@ function event_listing(){
 	event_listing.getMonthContainer = getMonthContainer;
 
 	getPostMonth = function(post){
+		if ( post.length == 0 ) return;
 		return post.parent().attr('id').substring(6);
 	}
 
