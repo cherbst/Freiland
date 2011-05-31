@@ -484,6 +484,10 @@ li#eventtypes li{
 	list-style: none;
 }
 
+#main .widget-area ul ul.event-categories{
+	padding-bottom:10px;
+}
+
 #footer-widget-area {
 	float : right;
 	width: 60%;
@@ -679,6 +683,10 @@ li#eventtypes li{
 	padding-right: 65px;
 }
 
+#footer li.widget_pages > ul {
+	padding-bottom: 5px;
+}
+
 #footer li.widget_nav_menu {
 	float: right;
 	padding-right: 5px;
@@ -691,7 +699,9 @@ li#eventtypes li{
 }
 
 #footer li:hover > a,
-#primary li:hover > a {
+#footer li:active > a,
+#primary li:hover > a,
+#primary li:active > a{
 	border-bottom: 3px solid rgb(196,81,157);
 	text-decoration: none;
 }
@@ -699,6 +709,7 @@ li#eventtypes li{
 #footer li.current_page_item > a,
 #primary li.current-cat > a {
 	border-bottom: 3px solid rgb(196,81,157);
+	text-decoration: none;
 }
 
 #footer #site-info {
