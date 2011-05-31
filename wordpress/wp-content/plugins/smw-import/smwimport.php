@@ -1044,6 +1044,7 @@ class smwimport
 			$category['cat_name'] = strtolower($subcat);
 			$category['category_nicename'] = sanitize_title($subcat);
 			$category['category_parent'] = $parent_id;
+			$category['category_description'] = $subcat;
 			$cat_id = self::create_category($category);
 			if ( is_wp_error($cat_id) ){
 				error_log('smwimport: could not create sub category:'.$subcat);
