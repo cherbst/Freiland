@@ -25,8 +25,9 @@ function innerScroll(elem){
 		}else{
 			ontop = onbottom = false;
 			ret = false;
-			elem.offset({top:newTop,left:cur.left});
 		}
+		if ( newTop != cur.top )
+			elem.offset({top:newTop,left:cur.left});
 		if ( trigger )
 			elem.trigger('hiddenscroll',[ontop,onbottom]);
 		return ret;
