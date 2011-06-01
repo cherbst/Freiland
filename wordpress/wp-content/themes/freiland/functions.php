@@ -322,8 +322,12 @@ function freiland_subcategory_dropdown($cat_id){
   function freiland_the_event_date(){
 	global $post;
 	$begin_date = get_post_meta($post->ID,'date_begin',true);
+	$end_date = get_post_meta($post->ID,'date_end',true);
+	$has_end_date = $end_date != "";
 	if ( $begin_date == "" ) return;
 	$begin_date = strtotime($begin_date);
+	$end_date = strtotime($end_date);
+	$has_end_date = ($has_end_date && ($end_date != $begin_date));
 	echo '<div class="begin_date" id="';
 	echo date("Y_n",$begin_date);
 	echo '">';
@@ -333,24 +337,20 @@ function freiland_subcategory_dropdown($cat_id){
 	echo '<div class="event_date">';
 	echo strftime("%d.%m.",$begin_date);
 	echo '</div>';
-	echo '<div class="event_time">';
-	echo strftime("%H:%M",$begin_date) . " UHR";
-	echo '</div>';
+	if ( !is_single() || !$has_end_date ){
+		echo '<div class="event_time">';
+		echo strftime("%H:%M",$begin_date) . " UHR";
+		echo '</div>';
+	}
 	echo '</div>';
 
-	$end_date = get_post_meta($post->ID,'date_end',true);
-	if ( $end_date == "" ) return;
-	$end_date = strtotime($end_date);
-	if ( $end_date == $begin_date ) return;
+	if ( !$has_end_date ) return;
 	echo '<div class="end_date">';
 	echo '<div class="event_day">';
 	echo strftime("%A",$end_date);
 	echo '</div>';
 	echo '<div class="event_date">';
 	echo strftime("%d.%m.",$end_date);
-	echo '</div>';
-	echo '<div class="event_time">';
-	echo strftime("%H:%M",$end_date) . " UHR";
 	echo '</div>';
 	echo '</div>';
   }
@@ -464,12 +464,10 @@ function freiland_subcategory_dropdown($cat_id){
   function freiland_the_postimages(){
 	global $post;
 	if ( in_category('events') ){
-		$big = freiland_get_post_image($post->ID,'image_big');
-		if (!$big){
-			$big = '<div class="empty-post-image"></div>';
-		}
-		echo $big;
+		echo '<div class="images">';
+		echo freiland_get_post_image($post->ID,'image_big');
 		echo freiland_get_post_image($post->ID,'sponsor');
+		echo '</div>';
 		// append link to the eventtype category
 		$eventtypes = get_post_meta($post->ID,'eventtype',true);
 		if ( $eventtypes ){ 

@@ -91,7 +91,7 @@
 
 	<div id="main">
 	<?php if ( is_single() ) { ?>
-	<div id="post-images">
+	<div id="post-images" class="<?php if ( in_category('events') ) echo "events"; else echo "other"; ?>">
 		<?php freiland_the_postimages(); ?>
 	</div>
 	<?php } ?>
