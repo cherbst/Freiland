@@ -127,23 +127,6 @@ function freiland_filter_the_title( $post_title, $id ) {
 		$return .= "\n";
 	}
 
-	// append link to the eventtype category
-	$eventtypes = get_post_meta($post->ID,'eventtype',true);
-	if ( $eventtypes ){ 
-		if ( !is_array($eventtypes) )
-			$eventtypes = array($eventtypes);
-		foreach ( $eventtypes as $eventtype ){
-			$eventcat = get_term_by('name', $eventtype, 'category');
-			if ( $eventcat )
-				$cats[] = $eventcat->term_id;
-		}
-		if ( $cats ){
-			$cats = implode(',',$cats);
-			$return .= '<ul class="event-subcat">';
-			$return .=  wp_list_categories ("echo=0&include=$cats&title_li=");
-			$return .= "</ul>";
-		}
-	}
 	return $return;
   }
 
@@ -475,6 +458,24 @@ function freiland_subcategory_dropdown($cat_id){
 	if ( in_category('events') ){
 		echo freiland_get_post_image($post->ID,'image_big');
 		echo freiland_get_post_image($post->ID,'sponsor');
+		// append link to the eventtype category
+		$eventtypes = get_post_meta($post->ID,'eventtype',true);
+		if ( $eventtypes ){ 
+			if ( !is_array($eventtypes) )
+				$eventtypes = array($eventtypes);
+			foreach ( $eventtypes as $eventtype ){
+				$eventcat = get_term_by('name', $eventtype, 'category');
+				if ( $eventcat )
+					$cats[] = $eventcat->term_id;
+			}
+			if ( $cats ){
+				$cats = implode(',',$cats);
+				$return .= '<ul class="event-subcat">';
+				$return .=  wp_list_categories ("echo=0&include=$cats&title_li=");
+				$return .= "</ul>";
+			}
+			echo $return;
+		}
 	}
 	else if ( in_category('news') || in_category('press') ){
 		echo freiland_get_post_image($post->ID,'image');
