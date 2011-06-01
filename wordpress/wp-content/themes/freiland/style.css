@@ -77,10 +77,10 @@ body, input, textarea, .page-title span, .pingback a.url {
 	width: 1000px;
 	background: #FFFFFF;
 	z-index: 95;
-	padding-left: 200px;
 	position: relative;
 	height: 75%;
 	overflow: visible!important;
+	padding: 40px 0 40px 200px;
 }
 
 #container {
