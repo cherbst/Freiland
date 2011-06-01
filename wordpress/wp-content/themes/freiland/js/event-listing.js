@@ -60,8 +60,6 @@ function event_listing(){
 		// event from this month
 		if ( curPost.length == 0 )
 			curPost = jQuery('#event-listing > div > div.post').first();
-		// when loading the page, scroll to next active event
-		event_listing.scrollToPost(curPost,0);
 	};
 	event_listing.init = init;
 
@@ -203,7 +201,7 @@ function event_listing(){
 					var curOffset = jQuery('#event-listing').offset();
 					var diff  = jQuery('#event-listing').height();
 					jQuery('#event-listing').prepend(monthContainer);
-					height = diff - jQuery('#event-listing').height();
+					diff = jQuery('#event-listing').height() - diff;
 					jQuery('#event-listing').offset({top:curOffset.top - diff,
 						left:curOffset.left});
 				}
@@ -228,18 +226,17 @@ function event_listing(){
 
 	unloadMonths = function(){
 		var listing = jQuery('#event-listing');
-		var height = listing.height();
 		var container = jQuery('.month_container').first();
 
 		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
+			var height = listing.height();
 			container.remove();
 			// adjust new top
 			var diff = height - listing.height();
 			listing.offset({top:listing.offset().top + diff,left:listing.offset().left});
 			prev_href = incrementHref(prev_href);
 			container = next;
-			scrollToPost(curPost,0);
 		}
 
 		container = jQuery('.month_container').last();
@@ -250,7 +247,6 @@ function event_listing(){
 			container.remove();
 			next_href = decrementHref(next_href);
 			container = prev;
-			scrollToPost(curPost,0);
 		}
 	}
 
@@ -264,16 +260,11 @@ function event_listing(){
 			duration = 600;
 		curPost = post;
 		var cur = jQuery('#event-listing').offset();
-		var offset = cur.top - post.offset().top; 
+		var offset = cur.top - post.offset().top;
 		jQuery('#event-listing').animate({ top: offset},duration,function(){
 			if( jQuery('#event-listing').offset().top + jQuery('#event-listing').height() < 
 				jQuery('#footer').offset().top ){
 				loadNewEvents(true,function(){
-					unloadMonths();
-					if ( callback ) callback();
-				});
-			}else if( jQuery('#event-listing').offset().top > topmargin - delta ){
-				loadNewEvents(false,function(){
 					unloadMonths();
 					if ( callback ) callback();
 				});
