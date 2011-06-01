@@ -117,6 +117,8 @@ body.category-events #container {
 .single #content{
 	width: 550px;
 	padding-bottom: 50px;
+	position: relative;
+	top: 30px;
 }
 
 /* gallery page */
