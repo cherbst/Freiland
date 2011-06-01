@@ -8,7 +8,8 @@ function innerScroll(elem){
 		var v = 50;
 		var variance = 100;
 		var ret = true;
-		var trigger = !(ontop || onbottom);
+		var triggerTop = !ontop;
+		var triggerBottom = !onbottom;
 		var newTop = cur.top+(delta*v);
 		var minTop = 
 		    jQuery('#container').offset().top + jQuery('#container').height() - elem.height() - variance;
@@ -20,16 +21,19 @@ function innerScroll(elem){
 
 		if( newTop <= minTop && delta < 0){
 			onbottom = true;
+			ontop = false;
 		}else if (newTop >= inittop && delta > 0 ){
 			ontop = true;
+			onbottom = false;
 		}else{
 			ontop = onbottom = false;
 			ret = false;
 		}
-		if ( newTop != cur.top )
+		if ( newTop < cur.top && delta < 0 || newTop > cur.top && delta > 0 )
 			elem.offset({top:newTop,left:cur.left});
-		if ( trigger )
-			elem.trigger('hiddenscroll',[ontop,onbottom]);
+		if ( triggerTop || triggerBottom ){
+			elem.trigger('hiddenscroll',[triggerTop && ontop,triggerBottom && onbottom]);
+		}
 		return ret;
 	});
 }
