@@ -200,7 +200,12 @@ function event_listing(){
 				if ( append ){
 					jQuery('#event-listing').append(monthContainer);
 				}else{
+					var curOffset = jQuery('#event-listing').offset();
+					var diff  = jQuery('#event-listing').height();
 					jQuery('#event-listing').prepend(monthContainer);
+					height = diff - jQuery('#event-listing').height();
+					jQuery('#event-listing').offset({top:curOffset.top - diff,
+						left:curOffset.left});
 				}
 				if ( content.length > 0 )
 					filterPosts(curCat);
@@ -225,13 +230,13 @@ function event_listing(){
 		var listing = jQuery('#event-listing');
 		var height = listing.height();
 		var container = jQuery('.month_container').first();
-				
+
 		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
 			container.remove();
 			// adjust new top
 			var diff = height - listing.height();
-			listing.offset([listing.offset().top + diff,listing.offset().left]);
+			listing.offset({top:listing.offset().top + diff,left:listing.offset().left});
 			prev_href = incrementHref(prev_href);
 			container = next;
 			scrollToPost(curPost,0);
@@ -239,7 +244,7 @@ function event_listing(){
 
 		container = jQuery('.month_container').last();
 				
-		while ( container.offset().top > jQuery('#container').offset().top +
+		while ( container.length > 0 && container.offset().top > jQuery('#container').offset().top +
 			jQuery('#container').height() + delta ){
 			var prev = container.prev();
 			container.remove();
