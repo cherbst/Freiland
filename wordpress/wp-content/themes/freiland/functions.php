@@ -162,7 +162,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 
 	$return .= '<p>'. $subtitle .'</p>';
 	$return .= $content;
-	$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
+	if ( is_single() )
+		$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
 	return $return;
   }
 
@@ -188,7 +189,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$return .= '<p>'. $subtitle .'</p>';
 	$return .= $content .'<p/>';
 	$return .= '<div class="source">'. $source .' '.$date->format('d.m.Y').'</div>';
-	$return .= '<div class="press_homepage"><a href="'.$homepage.'">'.$label.'</a></div>';
+	if ( is_single() )
+		$return .= '<div class="press_homepage"><a href="'.$homepage.'">'.$label.'</a></div>';
 	return $return;
   }
 
