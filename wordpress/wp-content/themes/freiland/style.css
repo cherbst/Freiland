@@ -1048,15 +1048,6 @@ img.LinkImage  {
         text-transform: uppercase;
 }
 
-ul.event-subcat {
-	display: block;
-	height: auto;
-	width: 550px!important;
-	margin: 0;
-	padding: 0;
-	padding-bottom: 25px;
-}
-
 ul.event-subcat li {
 	position: relative;
 	display: block;
@@ -1066,6 +1057,13 @@ ul.event-subcat li {
 	width: 100px;
 	float: right;
 }
+
+#post-images ul.event-subcat {
+	float: left;
+	padding-top:100px;
+	clear: both;
+}
+
 
 ul.event-subcat li a {
         display: block;
