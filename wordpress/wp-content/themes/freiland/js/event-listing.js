@@ -3,6 +3,7 @@ function event_listing(){
 	var topmargin;
 	// count ajax requests for posts
 	var postreq = 0;
+	var requests = new Array();
 	var next_href;
 	var prev_href;
 	var curPost;
@@ -175,9 +176,16 @@ function event_listing(){
 	};
 	event_listing.getPostFromCalDay = getPostFromCalDay;
 
+	function runRequestQueue(){
+		if ( requests.length > 0 ){
+			var f =	requests.shift();
+			f();
+		}
+	}
+
 	// load new events with ajax
 	// apend/prepend them to the list and filter them
-	function loadNewEvents(append,callback){
+	function doRequest(append,callback){
 		if ( postreq > 0 ) return;
 		postreq++;
 		var href = (append?next_href:prev_href);
@@ -203,8 +211,15 @@ function event_listing(){
 			}
 			if ( callback ) callback();
 			postreq--;
+			runRequestQueue();
 		});
 	};
+
+	function loadNewEvents(append,callback){
+		requests.push(function(){ doRequest(append,callback); });
+		if ( postreq == 0 )
+			runRequestQueue();
+	}
 
 	unloadMonths = function(){
 		var listing = jQuery('#event-listing');
