@@ -60,6 +60,17 @@ body, input, textarea, .page-title span, .pingback a.url {
 	color: black;
 	font-size: 11pt;
 	line-height: 1.5;
+	padding-top:20px;
+}
+
+#content .entry-summary img{
+	width: 230px;
+	height: auto;
+}
+
+.category-news #content .entry-summary img{
+	position: relative;
+	top: -53px;
 }
 
 #main { 
@@ -75,6 +86,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	background: #FFFFFF;
 	width: 785px;
 	z-index: 96;
+	top: -15px;
 }
 
 #content {
@@ -217,8 +229,9 @@ body.single-format-gallery .entry-content > p,
 
 .begin_date, .end_date {
 	float: left;
-	margin-bottom: 35px;
+	margin-bottom: 50px;
 	width: auto;
+	margin-left: 5px;
 }
 
 .end_date {
@@ -242,6 +255,7 @@ body.single-format-gallery .entry-content > p,
 #event-listing .begin_date {
 	float: none;
 	margin-bottom: 15px;
+	margin-left: 0;
 	line-height: 30px;
 }
 
@@ -261,33 +275,36 @@ body.single-format-gallery .entry-content > p,
 	text-decoration:underline;
 }
 
-.event_day {
+.event_day, .event_time{
 	float : left;
 	margin-right: 10px;
+	font-size:9pt;
+	margin-top: 13px;
+	text-transform:uppercase;
 }
 
 .event_date {
         float : left;
         margin-right: 10px;
+	font-size:36pt;
+	font-family:arial;
 }
 
-.event_time{
-        float : left;
-        margin-right: 10px;
-}
-
-#event-listing .category-events .event_day {
+#event-listing .category-events .event_day,
+#event-listing .category-events .event_time {
+	margin-top: 9px;
+	font-size:7pt;
 	width : 70px;
 	margin-right:0;
 }
 
 #event-listing .category-events .event_date {
 	width : 100px;
+	font-size:28pt;
 }
 
 #event-listing .category-events .event_time {
 	width : 60px;
-	margin-right:0;
 }
 
 #event-listing .category-events {
@@ -318,17 +335,6 @@ body.single-format-gallery .entry-content > p,
 .event-type, .event-genre {
 	color : rgb(196,81,157);
 	text-transform:uppercase;	
-}
-
-.event_date{
-	font-size:28pt;
-	font-family:arial;
-}
-
-.event_day, .event_time{
-	font-size:7pt;
-	margin-top: 9px;
-	text-transform:uppercase;
 }
 
 .entry-date {
@@ -842,22 +848,28 @@ img.LinkImage  {
 
 #post-images {
 	position: fixed;
-	top: 310px;
+	top: 385px;
 	left: 745px;
 	width: 240px;
 	z-index: 99;
 }
 
-#post-images div.empty-post-image {
-	min-height: 200px;
+#post-images > div.images{
+	padding-bottom: 370px;
 }
 
-#post-images div.image_big {
+#post-images.other {
+	top: 315px;
+}
+
+#post-images div.image_big,
+#post-images div.image {
 	width: 100%;
 	margin: 0 auto;
 }
 
-#post-images div.image_big img {
+#post-images div.image_big img,
+#post-images div.image img {
         width: 90%;
 	height: auto;
         margin: 0 auto;
@@ -879,7 +891,6 @@ img.LinkImage  {
 
 #single-post {
 	width: 550px;
-	font-size: 11pt!important;
 	font-family: Verdana;
 }
 
@@ -1009,7 +1020,6 @@ ul.event-subcat li {
 
 #post-images ul.event-subcat {
 	float: left;
-	padding-top:100px;
 	clear: both;
 }
 
