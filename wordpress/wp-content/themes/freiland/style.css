@@ -903,6 +903,10 @@ img.LinkImage  {
 	z-index: 99;
 }
 
+#post-images div.empty-post-image {
+	min-height: 200px;
+}
+
 #post-images div.image_big {
 	width: 100%;
 	margin: 0 auto;

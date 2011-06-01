@@ -464,7 +464,11 @@ function freiland_subcategory_dropdown($cat_id){
   function freiland_the_postimages(){
 	global $post;
 	if ( in_category('events') ){
-		echo freiland_get_post_image($post->ID,'image_big');
+		$big = freiland_get_post_image($post->ID,'image_big');
+		if (!$big){
+			$big = '<div class="empty-post-image"></div>';
+		}
+		echo $big;
 		echo freiland_get_post_image($post->ID,'sponsor');
 		// append link to the eventtype category
 		$eventtypes = get_post_meta($post->ID,'eventtype',true);
