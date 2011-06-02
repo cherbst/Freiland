@@ -99,7 +99,6 @@ body, input, textarea, .page-title span, .pingback a.url {
 	background: #FFFFFF;
 	width: 785px;
 	z-index: 96;
-	top: -15px;
 }
 
 body.category-events #container {
@@ -440,6 +439,10 @@ body.category-news #post-content > div.first img {
 	margin-bottom : 0;
 	overflow : hidden;
 	padding-top: 25px;
+}
+
+.single .hentry{
+	padding: 0;
 }
 
 #primary {
