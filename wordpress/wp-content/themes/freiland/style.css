@@ -238,6 +238,7 @@ body.single-format-gallery .entry-content > p,
 	margin-bottom: 50px;
 	width: auto;
 	margin-left: 5px;
+	line-height: 40px;
 }
 
 .end_date {
@@ -377,6 +378,7 @@ body.category-news #post-content > div.first img {
 	font-size : 14pt;
 	text-transform:uppercase;
 	font-weight: normal;
+	width: 100%;
 }
 
 .entry-title a:hover {
@@ -893,7 +895,6 @@ img.LinkImage  {
         height: auto;
 	padding-top: 20px;
 }
-
 
 #single-post {
 	width: 550px;
