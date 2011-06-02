@@ -47,7 +47,7 @@ body{
 	height: 870px;
 }
 
-body, input, textarea {
+#content, body, input, textarea {
 	color: black;
 }
 
