@@ -56,8 +56,7 @@ body.category-events{
         padding-bottom : 0;
 }
 
-
-body, input, textarea {
+#content, body, input, textarea {
 	color: black;
 }
 
