@@ -136,8 +136,14 @@ body.category-images #gallery-description {
 	max-width: 450px;
 }
 
-body.category-images div.entry-content 
-.single-format-gallery div.entry-content {
+.category-images #content div.entry-content, 
+.single-format-gallery #content div.entry-content {
+	padding: 0px;
+	line-height:1; 
+}
+
+.category-images #content div.entry-content a, 
+.single-format-gallery #content div.entry-content a {
 	padding: 0px; 
 }
 
