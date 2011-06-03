@@ -413,8 +413,6 @@ function freiland_subcategory_dropdown($cat_id){
 
 	if ( in_category('events') && !is_single())
 		$banner = freiland_get_mainevent_banner();
-	else if ( in_category('news') && !is_single() )
-		$banner = freiland_get_news_banner();
 	else{
 		$id = 'empty-banner';
 		$banner = '';

@@ -437,7 +437,7 @@ function event_listing(){
 					curPost = jQuery('#'+jQuery(data).find('div.post').attr('id'));
 					jQuery('#content #single-post').remove();
 					jQuery('#post-images').remove();
-					jQuery('#main').append(jQuery(data).find('#post-images'));
+					jQuery('#main').prepend(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
 					jQuery(listingElements + ",#event-listing").hide();
 					jQuery('body').toggleClass('category-events',false);
