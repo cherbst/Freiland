@@ -90,9 +90,9 @@ body, input, textarea, .page-title span, .pingback a.url {
 	background: #FFFFFF;
 	z-index: 95;
 	position: relative;
-	height: 75%;
+	height: 83%;
 	overflow: visible!important;
-	padding: 0 0 40px 200px;
+	padding: 0 0 0 200px;
 }
 
 #container {
