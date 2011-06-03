@@ -41,14 +41,6 @@ body.category-events div.end_date {
 
 body{
 	background : white;
-	padding-top : 160px;
-        padding-bottom : 150px;
-        width: 1170px;
-        height: 870px;
-
-}
-
-body.category-events{
 	height: 100%;
 	min-height: 870px;
 	position: absolute;
@@ -90,7 +82,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 
 #main { 
 	clear: both;
-	width: 1000px;
+	width: 970px;
 	background: #FFFFFF;
 	z-index: 95;
 	position: relative;
@@ -101,17 +93,14 @@ body, input, textarea, .page-title span, .pingback a.url {
 
 #container {
 	background: #FFFFFF;
+	height: 100%;
+	overflow: hidden;
 	width: 785px;
 	z-index: 96;
 }
 
-body.category-events #container {
-	height: 100%;
-	overflow: hidden;
-}
-
 #content {
-	position: absolute;
+	overflow: hidden;
 	margin: 0;
 	width: 785px;
 	padding-bottom: 50px;
@@ -195,16 +184,11 @@ body.single-format-gallery .entry-content > p,
 }
 
 #mainpost-banner {
-	position: fixed;
 	display: block;
 	width: 785px!important;
 	max-height: 240px!important;
 	z-index: 99;
 	overflow: hidden;
-	top: 160px;
-}
-
-body.category-events #mainpost-banner{
 	padding-bottom: 0;
 	position: relative;
 	top: 0px;
@@ -218,29 +202,20 @@ body.category-events #mainpost-banner{
 	background: #FFFFFF;
 }
 
-body.category-events #banner-container{
-	position: relative;
-}
-
 #mainpost-banner #upper-transparency {
 	position: relative;
 	height: 30px!important;
 	z-index: 99;
 	background: url(images/bgTrans.png) left 0 repeat-x;
 	/* background: rgba(255, 255, 255, 0.9); */
-}
-
-body.category-events #mainpost-banner #upper-transparency{
-	position: relative;
 	margin-top: 0;
 }
 
 #empty-banner {
-	position: fixed;
+	position: relative;
 	display: block;
 	max-height: 30px;
 	width: 785px;
-	top: 160px;
 }
 
 #empty-banner #upper-transparency {
@@ -257,10 +232,6 @@ body.category-events #mainpost-banner #upper-transparency{
         z-index: 97;
         max-width: 785px!important;
         height: 140px!important;
-	padding-top: 40px;
-}
-
-.category-events #mainpost-banner img {
 	padding-top: 0px;
 }
 
@@ -470,10 +441,10 @@ body.category-news #post-content > div.first img {
 }
 
 #primary {
-	position: fixed;
-	left: 985px;
+	position: relative;
 	width: 180px;
 	margin-top: 175px;
+	left: -30px;
 }
 
 #primary a {
@@ -634,7 +605,7 @@ li#eventtypes li{
 }
 
 #header {
-	position: fixed;
+	position: relative;
 	padding: 0px;
 	top: 0;
 	width: 1170px;
@@ -642,10 +613,6 @@ li#eventtypes li{
 	z-index: 99;
 	background: #FFFFFF;
 	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
-}
-
-body.category-events #header {
-	position: relative;
 }
 
 #branding {
@@ -743,10 +710,6 @@ body.category-events #header {
 	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
 }
 
-.category-events #topright {
-	position: absolute;
-}
-
 /*#post-54 div.entry-content{
 	width : 826px;
 	height : 1169px;
@@ -754,7 +717,7 @@ body.category-events #header {
 }*/
 
 #footer {
-	position: fixed;
+	position: absolute;
 	bottom: 0px;
 	width: 1200px;
 	margin: 0;
@@ -762,10 +725,6 @@ body.category-events #header {
 	background: url(images/bgTrans.png) left 0 repeat;
 	background: rgba(255, 255, 255, 0.9);
 	z-index: 99;
-}
-
-body.category-events #footer {
-	position: absolute;
 }
 
 #footer li {
@@ -943,11 +902,12 @@ img.LinkImage  {
 }
 
 #post-images {
-	position: fixed;
-	top: 385px;
-	left: 745px;
+	float: right;
+	padding-right: 185px;
 	width: 240px;
 	z-index: 99;
+	position: relative;
+	top: 200px;
 }
 
 #post-images > div.images{
@@ -955,7 +915,7 @@ img.LinkImage  {
 }
 
 #post-images.other {
-	top: 230px;
+	top: 100px;
 }
 
 #post-images div.image_big,
