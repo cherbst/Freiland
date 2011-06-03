@@ -10,6 +10,7 @@
 get_header(); ?>
 
 		<div id="container">
+			<?php freiland_the_banner(); ?>
 			<div id="content" role="main">
 
 				<?php
@@ -20,13 +21,10 @@ get_header(); ?>
 				 */
 				if ( in_category('events') )
 					get_template_part( 'loop', 'events' );
-				else if ( in_category('news') ){
-					freiland_the_banner();
+				else if ( in_category('news') )
 					get_template_part( 'loop', 'news' );
-				}else{
-					freiland_the_banner();
+				else
 					get_template_part( 'loop', 'category' );
-				}
 				?>
 
 			</div><!-- #content -->
