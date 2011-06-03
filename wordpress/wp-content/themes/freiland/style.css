@@ -43,7 +43,7 @@ body{
 	background : white;
 	padding-top : 160px;
         padding-bottom : 150px;
-        width: 1200px;
+        width: 1170px;
         height: 870px;
 
 }
@@ -54,6 +54,7 @@ body.category-events{
 	position: absolute;
 	padding-top : 0;
         padding-bottom : 0;
+	width: 1170px;
 }
 
 #content, body, input, textarea {
@@ -69,17 +70,22 @@ body, input, textarea, .page-title span, .pingback a.url {
 	color: black;
 	font-size: 11pt;
 	line-height: 1.5;
-	padding-top:20px;
+	padding-top:16px;
+}
+
+.entry-content .subtitle {
+	margin-bottom: 5px;
+}
+
+#content .entry-summary .image,
+#content .entry-summary .image_big {
+	float: right;
 }
 
 #content .entry-summary img{
 	width: 230px;
+	margin-left: 20px;
 	height: auto;
-}
-
-.category-news #content .entry-summary img{
-	position: relative;
-	top: -53px;
 }
 
 #main { 
@@ -90,11 +96,10 @@ body, input, textarea, .page-title span, .pingback a.url {
 	position: relative;
 	height: 75%;
 	overflow: visible!important;
-	padding: 40px 0 40px 200px;
+	padding: 5px 0 40px 200px;
 }
 
 #container {
-	position: relative;
 	background: #FFFFFF;
 	width: 785px;
 	z-index: 96;
@@ -113,7 +118,7 @@ body.category-events #container {
 }
 
 .single #content{
-	width: 550px;
+	width: 530px;
 	padding-bottom: 50px;
 	position: relative;
 	top: 30px;
@@ -125,6 +130,7 @@ body.category-images #content , .single-format-gallery #content {
 	float: left;
 	position: relative;
 	left: -10px;
+	top: 20px;
 	overflow: hidden;
 }
 
@@ -266,10 +272,6 @@ body.category-events #mainpost-banner #upper-transparency{
 	padding-top: 0;
 }
 
-#post-content {
-	padding-top: 170px;
-}
-
 .begin_date, .end_date {
 	float: left;
 	margin-bottom: 40px;
@@ -315,6 +317,11 @@ body.category-events #mainpost-banner #upper-transparency{
 	text-decoration:none;
 }
 
+.entry-summary .image > a, 
+.entry-content .image a {
+	padding-top: 0;
+}
+	
 .entry-summary a:hover, .entry-content a:hover {
 	text-decoration:underline;
 }
@@ -408,14 +415,24 @@ body.page #content > div.page > h1 {
 }
 
 body.category-news #post-content > div.first img {
-	display : none;
+	display : inline;
+}
+
+.category-news #banner-container {
+	display:none;
 }
 
 #content .entry-title {
 	font-size : 14pt;
 	text-transform:uppercase;
 	font-weight: normal;
-	width: 100%;
+	width: 530px;
+}
+
+#content .entry-title img {
+	padding-bottom: 0;
+	margin-bottom: 0;
+	max-height: 16px;
 }
 
 .entry-title a:hover {
@@ -437,7 +454,15 @@ body.category-news #post-content > div.first img {
 .hentry{
 	margin-bottom : 0;
 	overflow : hidden;
-	padding-top: 25px;
+	padding: 25px 0 45px 0;
+}
+
+.single .hentry{
+	padding-bottom: 0;
+}
+
+.page .hentry{
+	padding-top: 6px;
 }
 
 .single .hentry{
@@ -445,7 +470,7 @@ body.category-news #post-content > div.first img {
 }
 
 #primary {
-	position: absolute;
+	position: fixed;
 	left: 985px;
 	width: 180px;
 	margin-top: 175px;
@@ -604,7 +629,7 @@ li#eventtypes li{
 	z-index: 99;
 	top : 0;
 	left : 0;
-	width: 995px;
+	width: 985px;
 	height: 100%;
 }
 
@@ -612,7 +637,7 @@ li#eventtypes li{
 	position: fixed;
 	padding: 0px;
 	top: 0;
-	width: 1200px;
+	width: 1170px;
 	height: 160px;
 	z-index: 99;
 	background: #FFFFFF;
@@ -714,7 +739,7 @@ body.category-events #header {
 	top : 25px;
 	right: 0;
 	height: 280px;
-	width: 215px;
+	width: 185px;
 	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
 }
 
@@ -753,7 +778,7 @@ body.category-events #footer {
 	float: right;
 	width:380px;
 	padding-top: 10px;
-	padding-right: 65px;
+	padding-right: 50px;
 }
 
 #footer li.widget_pages > ul {
@@ -762,7 +787,7 @@ body.category-events #footer {
 
 #footer li.widget_nav_menu {
 	float: right;
-	padding-right: 5px;
+	padding-right: 15px;
 }
 
 #footer li a {
@@ -787,10 +812,12 @@ body.category-events #footer {
 
 #footer #site-info {
 	float: left;
-	padding-top: 10px;
+	padding-top: 12px;
 	width:300px;
+	font-size: 9pt;
 	text-align: right;
 	font-weight:normal;
+	text-transform:uppercase;	
 }
 
 #footer #menu-extern li{
@@ -858,6 +885,7 @@ ul.Linklist {
 	font-family: Arial;
 	text-transform:uppercase;
 	font-size: 12pt;
+	line-height: 1.4;
 	list-style-type: none; 
 	margin-left: 0px;
 	padding-left: 0px;
@@ -866,6 +894,7 @@ ul.Linklist {
 ul.Linklist a {
 	color:black;
 	text-decoration:none;
+	padding-top: 0;
 }
 
 ul.Linklist span.link-description {
@@ -926,7 +955,7 @@ img.LinkImage  {
 }
 
 #post-images.other {
-	top: 315px;
+	top: 230px;
 }
 
 #post-images div.image_big,
@@ -937,9 +966,9 @@ img.LinkImage  {
 
 #post-images div.image_big img,
 #post-images div.image img {
-        width: 90%;
+        width: 230px;
 	height: auto;
-        margin: 0 auto;
+	margin-left: 20px;
 }
 
 #post-images div.sponsor {
@@ -956,7 +985,7 @@ img.LinkImage  {
 }
 
 #single-post {
-	width: 550px;
+	width: 530px;
 	font-family: Verdana;
 }
 

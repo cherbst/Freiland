@@ -151,7 +151,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
 
-	$return .= '<p>'. $subtitle .'</p>';
+	if ( $subtitle )
+		$return .= '<div class="subtitle">'. $subtitle .'</div>';
 	$return .= $content;
 	if ( is_single() )
 		$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
@@ -177,7 +178,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$homepagelabel = get_post_meta($post->ID,'homepagelabel',true);
 	$label = ($homepagelabel==null)?$homepage:$homepagelabel;
 
-	$return .= '<p>'. $subtitle .'</p>';
+	if ( $subtitle )
+		$return .= '<div class="subtitle">'. $subtitle .'</div>';
 	$return .= $content .'<p/>';
 	$return .= '<div class="source">'. $source .' '.$date->format('d.m.Y').'</div>';
 	if ( is_single() )
@@ -225,7 +227,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$favicon = get_post_meta($id,'favicon',true);
 
 	if ( $favicon != null )
-		$return = '<img src="'.$favicon.'" class="alignleft"/>';
+		$return = '<img src="'.$favicon.'" class="alignright"/>';
 
 	return $return;
   }
