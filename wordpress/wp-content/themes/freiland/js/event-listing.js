@@ -299,7 +299,7 @@ function event_listing(){
 				jQuery.get(jQuery(this).attr('href'), function(data){
 					jQuery('#content #single-post').remove();
 					jQuery('#post-images').remove();
-					jQuery('#main').append(jQuery(data).find('#post-images'));
+					jQuery('#main').prepend(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
 					jQuery(listingElements).hide();
 					jQuery('body').toggleClass('single',true);
