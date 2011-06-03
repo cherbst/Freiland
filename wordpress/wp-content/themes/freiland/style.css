@@ -43,7 +43,7 @@ body{
 	background : white;
 	padding-top : 160px;
 	padding-bottom : 150px;
-	width: 1200px;
+	width: 1170px;
 	height: 870px;
 }
 
@@ -405,7 +405,7 @@ body.category-news #post-content > div.first img {
 
 #primary {
 	position: fixed;
-	left: 985px;
+	left: 990px;
 	width: 180px;
 	margin-top: 175px;
 }
@@ -557,7 +557,7 @@ li#eventtypes li{
 	z-index: 99;
 	top : 0;
 	left : 0;
-	width: 995px;
+	width: 985px;
 	height: 100%;
 }
 
@@ -565,7 +565,7 @@ li#eventtypes li{
 	position: fixed;
 	padding: 0px;
 	top: 0;
-	width: 1200px;
+	width: 1170px;
 	height: 160px;
 	z-index: 99;
 	background: #FFFFFF;
@@ -663,7 +663,7 @@ li#eventtypes li{
 	top : 25px;
 	right: 0;
 	height: 280px;
-	width: 215px;
+	width: 185px;
 	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
 }
 
@@ -694,7 +694,7 @@ li#eventtypes li{
 	float: right;
 	width:380px;
 	padding-top: 10px;
-	padding-right: 65px;
+	padding-right: 50px;
 }
 
 #footer li.widget_pages > ul {
@@ -703,7 +703,7 @@ li#eventtypes li{
 
 #footer li.widget_nav_menu {
 	float: right;
-	padding-right: 5px;
+	padding-right: 15px;
 }
 
 #footer li a {
@@ -728,10 +728,12 @@ li#eventtypes li{
 
 #footer #site-info {
 	float: left;
-	padding-top: 10px;
+	padding-top: 12px;
 	width:300px;
+	font-size: 9pt;
 	text-align: right;
 	font-weight:normal;
+	text-transform:uppercase;	
 }
 
 #footer #menu-extern li{
