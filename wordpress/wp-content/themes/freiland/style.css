@@ -375,10 +375,6 @@ body.page #content > div.page > h1 {
 	display : none;
 }
 
-body.category-news #post-content > div.first img {
-	display : inline;
-}
-
 .category-news #banner-container {
 	display:none;
 }

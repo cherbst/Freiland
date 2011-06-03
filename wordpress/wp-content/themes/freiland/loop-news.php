@@ -55,12 +55,7 @@
 	 */
  ?>
 
-<?php while ( have_posts() ) : the_post(); $loopcounter++; ?>
-<?php /* show banner of main post */
-	if ( $loopcounter == 1 ){ 
-		freiland_the_banner(); 
-		?><div id="post-content"><?php
-	} ?>
+<?php while ( have_posts() ) : the_post(); ?>
 
 <?php /* How to display posts of the Gallery format. The gallery category is the old way. */ ?>
 
@@ -134,7 +129,7 @@
 <?php /* How to display all other posts. */ ?>
 
 	<?php else : ?>
-		<div id="post-<?php the_ID(); ?>" <?php if ( $loopcounter == 1 ) post_class('first'); else post_class(); ?>>
+		<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 			<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php printf( esc_attr__( 'Permalink to %s', 'twentyten' ), the_title_attribute( 'echo=0' ) ); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 
 			<div class="entry-meta">
@@ -186,4 +181,3 @@
 					<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentyten' ) ); ?></div>
 				</div><!-- #nav-below -->
 <?php endif; ?>
-</div> <!-- post-content -->
