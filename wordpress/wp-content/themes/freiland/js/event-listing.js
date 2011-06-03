@@ -444,7 +444,7 @@ function event_listing(){
 					jQuery(listingElements + ",#event-listing").hide();
 					jQuery('body').toggleClass('category-events',false);
 					jQuery('body').toggleClass('single',true);
-					jQuery('html,body').scrollTop(0);
+					scrollDiv.css({top:0});
 				});
 			} 
 		});
