@@ -10,7 +10,7 @@ function event_listing(){
 	var curCat,topCat;
 	var updateCal = true;
 	// all elements that need to be shown/hidden when loading one event
-	var listingElements = '#mainpost-banner,#wp-calendar,#eventtypes';
+	var listingElements = '#banner-container,#wp-calendar,#eventtypes';
 	// all event title links
 	var eventSelector = '#event-listing h2.entry-title > a';
 	// all subcategory links
