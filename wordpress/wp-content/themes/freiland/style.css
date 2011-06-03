@@ -219,12 +219,12 @@ body.single-format-gallery .entry-content > p,
 	display: block;
 	max-height: 30px;
 	width: 785px;
+        z-index: 99;
 }
 
 #empty-banner #upper-transparency {
         height: 30px!important;
         width: 785px!important;
-        z-index: 99;
         background: url(images/bgTrans.png) left 0 repeat-x; 
         /* background: rgba(255, 255, 255, 0.9); */
 }
