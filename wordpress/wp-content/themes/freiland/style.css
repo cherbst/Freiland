@@ -203,6 +203,7 @@ body.single-format-gallery .entry-content > p,
         z-index: 97;
         max-height: 180px!important;
 	background: #FFFFFF;
+	padding-top: 30px;
 }
 
 #mainpost-banner #upper-transparency {
