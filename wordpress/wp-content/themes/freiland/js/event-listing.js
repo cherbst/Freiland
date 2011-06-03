@@ -21,6 +21,7 @@ function event_listing(){
 	var baseURL;
 	// pixel distance from visible area for loading/unloading new events
 	var delta = 100;
+	var scrollDiv;
 
 
 //	jQuery('#topright').css('z-index',300);
@@ -34,11 +35,14 @@ function event_listing(){
 	}
 
 	function init(){
-		topmargin = jQuery('#event-listing').offset().top;
-		var elem = jQuery('#event-listing');
-		if ( elem.length == 0 )
-			elem = jQuery('#content');
-		innerScroll(elem);	
+		scrollDiv = jQuery('#content');
+		topmargin = scrollDiv.offset().top;
+		innerScroll(scrollDiv);	
+
+		// update calendar and load new events when scrolling through event list
+		scrollDiv.bind('hiddenscroll',function(e,ontop,onbottom){
+			event_listing.onScrolled(ontop,onbottom);
+		});
 
 		// create initial month container
 		var monthContainer = event_listing.getMonthContainer(getCurMonth());
@@ -198,11 +202,11 @@ function event_listing(){
 				if ( append ){
 					jQuery('#event-listing').append(monthContainer);
 				}else{
-					var curOffset = jQuery('#event-listing').offset();
-					var diff  = jQuery('#event-listing').height();
+					var curOffset = scrollDiv.offset();
+					var diff  = scrollDiv.height();
 					jQuery('#event-listing').prepend(monthContainer);
-					diff = jQuery('#event-listing').height() - diff;
-					jQuery('#event-listing').offset({top:curOffset.top - diff,
+					diff = scrollDiv.height() - diff;
+					scrollDiv.offset({top:curOffset.top - diff,
 						left:curOffset.left});
 				}
 				if ( content.length > 0 )
@@ -225,16 +229,15 @@ function event_listing(){
 	}
 
 	unloadMonths = function(){
-		var listing = jQuery('#event-listing');
 		var container = jQuery('.month_container').first();
 
 		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
-			var height = listing.height();
+			var height = scrollDiv.height();
 			container.remove();
 			// adjust new top
-			var diff = height - listing.height();
-			listing.offset({top:listing.offset().top + diff,left:listing.offset().left});
+			var diff = height - scrollDiv.height();
+			scrollDiv.offset({top:scrollDiv.offset().top + diff,left:scrollDiv.offset().left});
 			prev_href = incrementHref(prev_href);
 			container = next;
 		}
@@ -259,10 +262,10 @@ function event_listing(){
 		if ( duration == null || duration == 'slow' )
 			duration = 600;
 		curPost = post;
-		var cur = jQuery('#event-listing').offset();
+		var cur = scrollDiv.offset();
 		var offset = cur.top - post.offset().top;
-		jQuery('#event-listing').animate({ top: offset},duration,function(){
-			if( jQuery('#event-listing').offset().top + jQuery('#event-listing').height() < 
+		scrollDiv.animate({ top: offset},duration,function(){
+			if( scrollDiv.offset().top + scrollDiv.height() < 
 				jQuery('#footer').offset().top ){
 				loadNewEvents(true,function(){
 					unloadMonths();
@@ -576,11 +579,6 @@ jQuery(document).ready(function(){
 	jQuery('td.ec3_postday > a').live('click',function(){
 		event_listing.scrollToCalDay(jQuery(this).parent());
 		return false;
-	});
-
-	// update calendar and load new events when scrolling through event list
-	jQuery('#event-listing').bind('hiddenscroll',function(e,ontop,onbottom){
-		event_listing.onScrolled(ontop,onbottom);
 	});
 
 	// scroll to first of month when clicking on month link
