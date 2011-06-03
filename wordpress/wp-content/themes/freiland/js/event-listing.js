@@ -37,7 +37,6 @@ function event_listing(){
 	function init(){
 		scrollDiv = jQuery('#content');
 		topmargin = scrollDiv.offset().top;
-		innerScroll(scrollDiv);	
 
 		// update calendar and load new events when scrolling through event list
 		scrollDiv.bind('hiddenscroll',function(e,ontop,onbottom){

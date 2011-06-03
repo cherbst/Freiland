@@ -37,3 +37,7 @@ function innerScroll(elem){
 		return ret;
 	});
 }
+		
+jQuery(document).ready(function(){
+	innerScroll(jQuery('#content'));
+});
