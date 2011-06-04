@@ -868,6 +868,12 @@ img.LinkImage  {
 	padding: 0;
 }
 
+#land_box > img {
+	width: 490px;
+	position: relative;
+	top: -30px;
+}
+
 #legende_box {
 	padding-top: 400px;
 }
