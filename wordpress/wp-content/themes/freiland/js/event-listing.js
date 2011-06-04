@@ -85,21 +85,32 @@ function event_listing(){
 		return cal.attr('id').substring(4);
 	}
 
+	function get404(){
+		var href = baseURL + '/events404';
+		postreq++;
+		jQuery.get(href, function(data){
+			jQuery('#content').append(jQuery(data).find('.error404'));
+			postreq--;
+			runRequestQueue();
+		});
+	}
+
 	// filter posts for given category
 	// show 404 if no posts found
 	var filterPosts = function(cat){
+		if ( curCat != topCat ){
+			keepOnlyCurrentMonth();
+		}
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var other = jQuery('#event-listing > div > div').not('.cat-id-'+cat);
 		var notfound = jQuery('.error404');
-		var href = baseURL + '/events404';
 		if ( allPosts.length == other.length ){
-			 if ( notfound.length == 0 && postreq == 0 ){
-                                postreq++;
-                                jQuery.get(href, function(data){
-                                        jQuery('#content').append(jQuery(data).find('.error404'));
-                                        postreq--;
-                                });
+			 if ( notfound.length == 0 ){
+				requests.push(function(){ get404(); });
+				if ( postreq == 0 )
+					runRequestQueue();
                         } else notfound.show();
+			scrollDiv.css({top:0});
 		}else notfound.hide();
 		allPosts.show();
 		other.hide();
@@ -208,12 +219,11 @@ function event_listing(){
 					scrollDiv.offset({top:curOffset.top - diff,
 						left:curOffset.left});
 				}
-				if ( content.length > 0 )
-					filterPosts(curCat);
 				if ( append )
 					next_href = incrementHref(next_href);
 				else
 					prev_href = decrementHref(prev_href);
+				filterPosts(curCat);
 			}
 			if ( callback ) callback();
 			postreq--;
@@ -352,9 +362,6 @@ function event_listing(){
 	}
 
 	function onCategoryChanged(){
-		if ( curCat != topCat ){
-			keepOnlyCurrentMonth();
-		}
 		filterPosts(curCat);
 		jQuery('#event-listing').show();
 		findNextCurPost();
