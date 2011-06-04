@@ -195,22 +195,29 @@ function event_listing(){
 		}
 	}
 
+	function loadEvents(href,callback){
+		jQuery.get(href, function(data){
+			var content = jQuery(data).find('#event-listing').contents();
+			var month = event_listing.parseHref(href);
+			month = month[1] + '_' + month[2];
+			var monthContainer = getMonthContainer(month);
+			monthContainer.append(content);
+			if ( callback ) callback(monthContainer,month);
+		});
+	}
+
 	// load new events with ajax
 	// apend/prepend them to the list and filter them
 	function doRequest(append,callback){
 		if ( postreq > 0 ) return;
 		postreq++;
 		var href = (append?next_href:prev_href);
-	 	jQuery.get(href, function(data){
-			var content = jQuery(data).find('#event-listing').contents();
-			var month = event_listing.parseHref(href);
-			month = month[1] + '_' + month[2];
-			if ( content.filter('.cat-id-'+curCat).length > 0 ||
+		loadEvents(href,function(monthContainer,month){
+			if ( monthContainer.children().filter('.cat-id-'+curCat).length > 0 ||
 			     month == getCurMonth() ){
-				var monthContainer = getMonthContainer(month);
-				monthContainer.append(content);
 				if ( append ){
 					jQuery('#event-listing').append(monthContainer);
+					next_href = incrementHref(next_href);
 				}else{
 					var curOffset = scrollDiv.offset();
 					var diff  = scrollDiv.height();
@@ -218,11 +225,8 @@ function event_listing(){
 					diff = scrollDiv.height() - diff;
 					scrollDiv.offset({top:curOffset.top - diff,
 						left:curOffset.left});
-				}
-				if ( append )
-					next_href = incrementHref(next_href);
-				else
 					prev_href = decrementHref(prev_href);
+				}
 				filterPosts(curCat);
 			}
 			if ( callback ) callback();
@@ -550,11 +554,8 @@ function event_listing(){
 			});
 		}
 		// scroll reached the top
-		else if ( ontop ){
-			loadNewEvents(false,function(){
-				scrollToPost(curPost,0);
-			});
-		}
+		else if ( ontop )
+			loadNewEvents(false);
 	};
 
 	function onScrolled(ontop,onbottom){
