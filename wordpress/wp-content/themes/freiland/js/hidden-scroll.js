@@ -4,6 +4,8 @@ function innerScroll(elem){
 
 	elem.css('position','relative');
 	elem.css('top',0);
+	elem.css('overflow-y','hidden');
+	elem.css('height','auto');
 	elem.mousewheel(function(event, delta) {
 		var v = 50;
 		var variance = 100;

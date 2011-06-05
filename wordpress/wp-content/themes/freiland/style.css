@@ -104,10 +104,12 @@ body, input, textarea, .page-title span, .pingback a.url {
 }
 
 #content {
-	overflow: hidden;
+	overflow-x: hidden;
+	overflow-y: scroll;
 	margin: 0;
 	width: 785px;
 	padding-bottom: 50px;
+	height: 90%;
 }
 
 .single #content{
