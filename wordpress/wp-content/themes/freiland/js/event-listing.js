@@ -73,7 +73,7 @@ function event_listing(){
 
 	getPostMonth = function(post){
 		if ( post.length == 0 ) return;
-		return post.parent().attr('id').substring(6);
+		return post.find('.begin_date').attr('id');
 	}
 
 	getCurCalendar = function(){
@@ -375,8 +375,18 @@ function event_listing(){
 	subcatClicked = function(newCat){
 		// remove any single events
 		var updateNeeded = false;
+		var reloadHref = false;
 		var singlePost = jQuery('#content #single-post');
+		var post = singlePost.find('div.post');
+		var singlePostId;
 		if ( singlePost.length > 0 ){
+			singlePostId = post.attr('id');
+			var pDate = getPostMonth(post);
+			if ( jQuery('#month_' + pDate).length == 0 ){
+				var href = parseHref(next_href);
+				var date = pDate.split('_');
+				reloadHref = buildHref(href,date[0],date[1]);
+			}
 			updateNeeded = true;
 			singlePost.remove();
 			jQuery('#post-images').remove();
@@ -391,9 +401,17 @@ function event_listing(){
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
 
 		ec3.set_cur_cat(curCat, function() {
-			if ( updateNeeded )
-				updateCalendar(getCurCalendar(),onCategoryChanged);
-			else
+			if ( updateNeeded ){
+				if ( reloadHref )
+					loadEvents(reloadHref,function(monthContainer){
+						jQuery('#event-listing > div.month_container').remove();
+						jQuery('#event-listing').append(monthContainer);
+						curPost = jQuery('#'+singlePostId);
+						updateCalendar(getCurCalendar(),onCategoryChanged);
+					});
+				else
+					updateCalendar(getCurCalendar(),onCategoryChanged);
+			}else
 				onCategoryChanged();
 		});
 	};
@@ -447,7 +465,6 @@ function event_listing(){
 		jQuery(eventSelector + ',' + nextPrevSelector).filter(':visible').each(function() {
 			if (jQuery(this).attr('href') == value) {
 				jQuery.get(jQuery(this).attr('href'), function(data){
-					curPost = jQuery('#'+jQuery(data).find('div.post').attr('id'));
 					jQuery('#content #single-post').remove();
 					jQuery('#post-images').remove();
 					jQuery('#main').prepend(jQuery(data).find('#post-images'));
@@ -462,6 +479,11 @@ function event_listing(){
 	};
 	event_listing.addressChanged = addressChanged;
 
+	function buildHref(href,year,month){
+		if ( month < 10 ) month = "0" + month;
+		return (href[0] + year + "" + month  + href[3]);
+	}
+
 	// return the url pointing to the previous month of given url
 	decrementHref = function(href){
 		href = parseHref(href);
@@ -471,8 +493,7 @@ function event_listing(){
 			year--;
 			month=12;
 		}
-		if ( month < 10 ) month = "0" + month;
-		return (href[0] + year + "" + month  + href[3]);
+		return buildHref(href,year,month);
 	};
 
 	// return the url pointing to the next month of given url
@@ -484,15 +505,14 @@ function event_listing(){
 			year++;
 			month=1;
 		}
-		if ( month < 10 ) month = "0" + month;
-		return (href[0] + year + "" + month  + href[3]);
+		return buildHref(href,year,month);
 	};
 
 	// update calendar to match current post month
 	updateCalendar = function(curCal,callback){
 		curCal = jQuery(curCal);
 		var calDate = curCal.attr('id').split('_');
-		var postDate = curPost.find('.begin_date').attr('id').split('_');	
+		var postDate = getPostMonth(curPost).split('_');	
 		calDate = new Date(calDate[1],calDate[2]-1,1).getTime();
 		postDate = new Date(postDate[0],postDate[1]-1,1).getTime();
 		if( calDate < postDate )
@@ -510,7 +530,7 @@ function event_listing(){
 
 	// update the current post to the first one shown
 	// call updateCalendar
-	updateCurPost = function(callback){
+	updateCurPost = function(){
 		var elem = jQuery(window);
 		if ( curPost.length != 0 && jQuery('#event-listing > div').filter(':visible').length > 0 ) {
 			var newPost = curPost;
@@ -541,8 +561,6 @@ function event_listing(){
 			}
 //			curPost.css('background','grey');
 		}
-
-		if ( callback ) callback();
 	};
 
 	var checkForUpdate = function(ontop,onbottom){
