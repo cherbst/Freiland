@@ -205,31 +205,29 @@ body.single-format-gallery .entry-content > p,
         z-index: 97;
         max-height: 180px!important;
 	background: #FFFFFF;
-	padding-top: 30px;
+	padding-top: 40px;
 }
 
 #mainpost-banner #upper-transparency {
 	position: relative;
-	height: 30px!important;
+	height: 35px!important;
 	z-index: 99;
 	background: url(images/bgTrans.png) left 0 repeat-x;
-	/* background: rgba(255, 255, 255, 0.9); */
 	margin-top: 0;
 }
 
 #empty-banner {
 	position: relative;
 	display: block;
-	max-height: 30px;
+	max-height: 35px;
 	width: 785px;
         z-index: 99;
 }
 
 #empty-banner #upper-transparency {
-        height: 30px!important;
+        height: 35px!important;
         width: 785px!important;
         background: url(images/bgTrans.png) left 0 repeat-x; 
-        /* background: rgba(255, 255, 255, 0.9); */
 }
 
 #mainpost-banner img {
@@ -437,7 +435,7 @@ body.page #content > div.page > h1 {
 #primary {
 	position: relative;
 	width: 180px;
-	margin-top: 175px;
+	margin-top: 220px;
 }
 
 #primary a {
@@ -625,6 +623,7 @@ li#eventtypes li{
 	width: 785px;
 	height: 100%;
 	background: url(images/nav_left.png) left 109px no-repeat rgb(255, 255, 255);
+	margin-top: 5px;
 }
 
 #access .menu-header {
@@ -704,7 +703,7 @@ li#eventtypes li{
 
 #topright {
 	position: absolute;
-	top : 25px;
+	top : 30px;
 	right: 0;
 	height: 280px;
 	width: 185px;
