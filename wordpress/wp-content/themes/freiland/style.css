@@ -586,7 +586,7 @@ li#eventtypes li{
 	top: 0;
 	width: 1170px;
 	height: 160px;
-	z-index: 99;
+	z-index: 100;
 	background: #FFFFFF;
 	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
 }
@@ -643,8 +643,7 @@ li#eventtypes li{
 }
 
 #access ul ul a {
-	background: url(images/bgTrans.png) left 0 repeat;
-	background: rgba(255,255,255,0.9);
+	background: transparent;
 	line-height: 1em;
 	padding: 2px;
 	height: auto;
@@ -660,9 +659,18 @@ li#eventtypes li{
 	width:auto;
 }
 
+#access ul.children{
+	background: url(images/bgTrans.png) left 0 repeat;
+	z-index: 100;
+}
+
+#access ul.children li{
+	clear:both;
+	min-width:0;
+}
+
 #access ul ul li {
-	min-width: 100px;
-	width:100%;
+	width:auto;
 }
 
 #access ul ul a:hover {
