@@ -6,7 +6,8 @@ function innerScroll(elem){
 	elem.css('top',0);
 	elem.css('overflow-y','hidden');
 	elem.css('height','auto');
-	elem.mousewheel(function(event, delta) {
+
+	function scrollElem(delta){
 		var v = 50;
 		var variance = 100;
 		var ret = true;
@@ -37,6 +38,21 @@ function innerScroll(elem){
 			elem.trigger('hiddenscroll',[triggerTop && ontop,triggerBottom && onbottom]);
 		}
 		return ret;
+	}
+
+	jQuery(document).keydown(function(event){
+		var delta = 0;
+		if ( event.which == 40 )
+			delta = -1;
+		else if ( event.which == 38 )
+			delta = 1;
+		if ( delta != 0 )
+			if ( !scrollElem(delta) )
+				event.preventDefault();
+	});
+
+	elem.mousewheel(function(event, delta) {
+		return scrollElem(delta);
 	});
 }
 		
