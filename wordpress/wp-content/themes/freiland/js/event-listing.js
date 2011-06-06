@@ -99,7 +99,9 @@ function event_listing(){
 	// show 404 if no posts found
 	var filterPosts = function(cat){
 		if ( curCat != topCat ){
-			keepOnlyCurrentMonth();
+			var id = '#month_'+getCurMonth();
+			if ( jQuery(id).children().filter('.cat-id-'+curCat).length == 0 )
+				keepOnlyCurrentMonth();
 		}
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var other = jQuery('#event-listing > div > div').not('.cat-id-'+cat);
@@ -566,14 +568,12 @@ function event_listing(){
 	var checkForUpdate = function(ontop,onbottom){
 
 		// scroll reached the bottom
-		if ( onbottom ) {
-			loadNewEvents(true,function(){
-				unloadMonths();
-			});
-		}
+		if ( onbottom )
+			loadNewEvents(true,unloadMonths);
+
 		// scroll reached the top
 		else if ( ontop )
-			loadNewEvents(false);
+			loadNewEvents(false,unloadMonths);
 	};
 
 	function onScrolled(ontop,onbottom){
