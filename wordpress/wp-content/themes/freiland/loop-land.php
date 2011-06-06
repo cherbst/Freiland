@@ -40,9 +40,6 @@
 				<span id="land_wk">
 					<img class="tooltip" src="<?php echo $url; ?>broken_fingaz.jpg" /> 
 				</span>
-				<span id="land_lager">
-					<img class="tooltip" src="<?php echo $url; ?>broken_fingaz.jpg" /> 
-				</span>
 				<span id="land_aquarium">
 					<img class="tooltip" src="<?php echo $url; ?>broken_fingaz.jpg" /> 
 				</span>
@@ -50,20 +47,18 @@
 				<img class="alignleft" usemap="#map" src="<?php echo $url; ?>lageplan.png" alt="" />
 				<map name="map">
 
-				<area onmouseover="TagToTip('land_bba')" onmouseout="UnTip()" shape="rectangle" 
-					coords="30,240,200,320" href="#" alt="<?php echo $bba; ?>" />
+				<area onmouseover="TagToTip('land_bba')" onmouseout="UnTip()" shape="poly" 
+					coords="60,280,200,210,220,250,80,320" href="#" alt="<?php echo $bba; ?>" />
 				<area onmouseover="TagToTip('land_cafe')" onmouseout="UnTip()" shape="rectangle" 
-					coords="210,230,230,260" href="#" alt="<?php echo $cafe; ?>" />
+					coords="200,410,230,490" href="#" alt="<?php echo $cafe; ?>" />
 				<area onmouseover="TagToTip('land_spartacus')" onmouseout="UnTip()" shape="rectangle" 
-					coords="80,350,110,480" href="#" alt="<?php echo $spartacus; ?>" />
+					coords="85,380,115,485" href="#" alt="<?php echo $spartacus; ?>" />
 				<area onmouseover="TagToTip('land_jfb')" onmouseout="UnTip()" shape="rectangle" 
-					coords="130,350,160,450" href="#" alt="<?php echo $jfb; ?>" />
+					coords="80,375,100,510" href="#" alt="<?php echo $jfb; ?>" />
 				<area onmouseover="TagToTip('land_wk')" onmouseout="UnTip()" shape="rectangle" 
-					coords="190,370,220,450" href="#" alt="<?php echo $wk; ?>" />
-				<area onmouseover="TagToTip('land_lager')" onmouseout="UnTip()" shape="rectangle" 
-					coords="100,470,170,500" href="#" alt="<?php echo $lager; ?>" />
+					coords="175,515,225,550" href="#" alt="<?php echo $wk; ?>" />
 				<area onmouseover="TagToTip('land_aquarium')" onmouseout="UnTip()" shape="rectangle" 
-					coords="175,480,220,500" href="#" alt="<?php echo $aquarium; ?>" />
+					coords="220,215,240,225" href="#" alt="<?php echo $aquarium; ?>" />
 				</map>
 
 				<div id="legende_box">
