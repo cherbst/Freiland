@@ -920,7 +920,7 @@ img.LinkImage  {
 	width: 240px;
 	z-index: 99;
 	position: relative;
-	top: 175px;
+	top: 335px;
 }
 
 #post-images > div.images{
@@ -928,7 +928,7 @@ img.LinkImage  {
 }
 
 #post-images.other {
-	top: 70px;
+	top: 230px;
 }
 
 #post-images div.image_big,
