@@ -867,7 +867,12 @@ img.LinkImage  {
 }
 
 #legende_box {
-	padding-top: 400px;
+	padding-top: 350px;
+	float:right;
+}
+
+#legende_box > img{
+	height: 200px;
 }
 
 #start_box {
