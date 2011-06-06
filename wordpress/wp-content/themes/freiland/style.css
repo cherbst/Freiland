@@ -90,7 +90,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	background: #FFFFFF;
 	z-index: 95;
 	position: relative;
-	height: 83%;
+	height: 100%;
 	overflow: visible!important;
 	padding: 0 0 0 200px;
 }
@@ -196,7 +196,7 @@ body.single-format-gallery .entry-content > p,
 	overflow: hidden;
 	padding-bottom: 0;
 	position: relative;
-	top: 0px;
+	padding-top: 160px;
 }
 
 #banner-container {
@@ -222,6 +222,7 @@ body.single-format-gallery .entry-content > p,
 	max-height: 35px;
 	width: 785px;
         z-index: 99;
+	padding-top: 160px;
 }
 
 #empty-banner #upper-transparency {
@@ -435,7 +436,7 @@ body.page #content > div.page > h1 {
 #primary {
 	position: relative;
 	width: 180px;
-	margin-top: 220px;
+	top: 380px;
 }
 
 #primary a {
@@ -596,7 +597,7 @@ li#eventtypes li{
 }
 
 #header {
-	position: relative;
+	position: absolute;
 	padding: 0px;
 	top: 0;
 	width: 1170px;
