@@ -878,6 +878,15 @@ img.LinkImage  {
 	padding: 0;
 }
 
+#tooltips {
+	display: none;
+}
+
+img.tooltip {
+	width: 100px;
+	height: auto;
+}
+
 #land_box > img {
 	width: 490px;
 	position: relative;

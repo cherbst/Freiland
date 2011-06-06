@@ -45,9 +45,8 @@ function freiland_init_method() {
 
 function freiland_enqueue_scripts() {
 	wp_enqueue_script('hidden-scroll');
-	if ( in_category('events') ){
+	if ( in_category('events') )
 		wp_enqueue_script('event-listing');
-	}
 	if ( in_category('images') )
 		wp_enqueue_script('freiland-gallery');
 }
