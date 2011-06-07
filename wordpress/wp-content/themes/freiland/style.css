@@ -390,6 +390,30 @@ body.page #content > div.page > h1 {
 	display : none;
 }
 
+/* land pages */
+body.page-child #content > div.page > h1,
+body.page-child #content > div.page > .entry-content {
+	display : block;
+	float: left;
+	padding-left: 530px;
+	width: 255px;
+}
+
+body.page-child #content > div.page > h1 {
+	padding-bottom: 15px;
+	padding-left: 550px;
+	background: url(images/feil_rechts_kl.png) no-repeat;
+	background-position: 525px 5px;
+	background-color: rgb(255, 255, 255);
+}
+
+.page-child #content > div.page > img {
+	width: 500px;
+	height: auto;
+	position: absolute;
+	float: left;
+}
+
 .category-news #banner-container {
 	display:none;
 }
@@ -656,7 +680,8 @@ li#eventtypes li{
 
 #access li.current-menu-item > a, 
 #access li.current-category-ancestor > a, 
-#access li.current-post-ancestor > a {
+#access li.current-post-ancestor > a,
+#access li.current-page-ancestor > a {
 	border-bottom: 6px solid rgb(196,81,157);
 }
 
