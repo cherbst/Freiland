@@ -108,13 +108,11 @@ body, input, textarea, .page-title span, .pingback a.url {
 	overflow-y: scroll;
 	margin: 0;
 	width: 785px;
-	padding-bottom: 50px;
 	height: 90%;
 }
 
 .single #content{
 	width: 530px;
-	padding-bottom: 50px;
 	position: relative;
 }
 
@@ -860,6 +858,11 @@ li#eventtypes li{
 
 #access #submenu a {
 	line-height : 30px;
+}
+
+#content h2{
+	font-size: 12pt;
+	margin-bottom: 4px;
 }
 
 #content h1.link-category{
