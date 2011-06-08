@@ -23,7 +23,7 @@
 ?>
 
 			<div id="site-info">
-				<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home">© 
+				<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><span id="copyright">©</span> 
 					<?php echo date("Y")." "; bloginfo( 'name' ); ?>
 				</a>
 			</div><!-- #site-info -->

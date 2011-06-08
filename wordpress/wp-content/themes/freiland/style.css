@@ -860,6 +860,12 @@ li#eventtypes li{
 	font-weight:normal;
 	text-transform:uppercase;	
 }
+#footer #site-info #copyright{
+	font-size: 14pt;
+	position: relative;
+	top:3px;
+	padding-right: 4px;
+}
 
 #footer #menu-extern li{
 	float : left;
