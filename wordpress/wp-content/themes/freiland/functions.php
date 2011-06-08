@@ -32,12 +32,12 @@ function freiland_init_method() {
 	wp_register_script('jquery-address',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/jquery.address-1.4.min.js',
 	array('jquery'));
-	wp_register_script('event-listing',
-	dirname(get_bloginfo('stylesheet_url')) . '/js/event-listing.js',
-	array('jquery-address'));
 	wp_register_script('hidden-scroll',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/hidden-scroll.js',
 	array('jquery-mousewheel'));
+	wp_register_script('event-listing',
+	dirname(get_bloginfo('stylesheet_url')) . '/js/event-listing.js',
+	array('jquery-address','hidden-scroll'));
 	wp_register_script('freiland-gallery',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/freiland-gallery.js',
 	array('jquery'));

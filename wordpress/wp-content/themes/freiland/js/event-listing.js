@@ -382,6 +382,7 @@ function event_listing(){
 		var post = singlePost.find('div.post');
 		var singlePostId;
 		if ( singlePost.length > 0 ){
+			innerScroll.resetTopmargin();
 			singlePostId = post.attr('id');
 			var pDate = getPostMonth(post);
 			if ( jQuery('#month_' + pDate).length == 0 ){
@@ -475,6 +476,7 @@ function event_listing(){
 					jQuery('body').toggleClass('category-events',false);
 					jQuery('body').toggleClass('single',true);
 					scrollDiv.css({top:0});
+					innerScroll.setTopmargin(scrollDiv.offset().top);
 				});
 			} 
 		});

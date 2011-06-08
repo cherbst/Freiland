@@ -1,11 +1,23 @@
 function innerScroll(elem){
 	var ontop = false;
 	var onbottom = false;
+	var topmargin = elem.offset().top;
+	var originalTopmargin = topmargin;
 
 	elem.css('position','relative');
 	elem.css('top',0);
 	elem.css('overflow-y','hidden');
 	elem.css('height','auto');
+
+	function setTopmargin(margin){
+		topmargin = margin;
+	};
+	innerScroll.setTopmargin = setTopmargin;
+
+	function resetTopmargin(){
+		topmargin = originalTopmargin;
+	};
+	innerScroll.resetTopmargin = resetTopmargin;
 
 	function scrollElem(delta){
 		var v = 50;
@@ -15,7 +27,7 @@ function innerScroll(elem){
 		var triggerBottom = !onbottom;
 		var curTop = parseInt(elem.css('top'),10);
 		var newTop = curTop+(delta*v);
-		var minTop = - elem.height() + elem.parent().height()/2;
+		var minTop = jQuery('#footer').offset().top - elem.height() - topmargin;
 
 		if ( delta < 0 )
 			newTop = Math.max(newTop,minTop);
