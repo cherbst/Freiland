@@ -132,6 +132,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	font-size: 10pt;
 	padding-top: 12px;
 	padding-right: 20px;
+	width: 225px;
 }
 
 #content .newsletter input {
@@ -171,10 +172,6 @@ body, input, textarea, .page-title span, .pingback a.url {
 #content .newsletter td {
 	padding: 0;
 	border: none;
-}
-
-#content .newsletter td.label {
-	padding-right: 15px;
 }
 
 /* 404 page */

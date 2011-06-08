@@ -20,12 +20,12 @@
 			<form action="#" method="post">
 				<table border="0" cellpadding="0" cellspacing="0">
 				    <tr>
-      					<td class="label">NAME</td>
-					<td><input name="name" type="text" size="30" maxlength="30"></td>
+      					<td align="right" class="label">NAME</td>
+					<td align="right"><input name="name" type="text" size="30" maxlength="30"></td>
 				    </tr>
 				    <tr>
-					<td class="label">EMAIL</td>
-					<td><input name="zuname" type="text" size="30" maxlength="40"></td>
+					<td align="right" class="label">EMAIL</td>
+					<td align="right"><input name="zuname" type="text" size="30" maxlength="40"></td>
 				    </tr>
 				    <tr>
 					<td></td><td align="right"><input id="submit" type="submit" value="send"></td>
