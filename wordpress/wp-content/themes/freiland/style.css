@@ -208,7 +208,6 @@ body.single-format-gallery .entry-content > p,
         z-index: 97;
         max-height: 180px!important;
 	background: #FFFFFF;
-	padding-top: 40px;
 }
 
 #mainpost-banner #upper-transparency {
@@ -240,7 +239,7 @@ body.single-format-gallery .entry-content > p,
         z-index: 97;
         max-width: 785px!important;
         height: 140px!important;
-	padding-top: 0px;
+	padding-top: 40px;
 }
 
 #event-listing {
