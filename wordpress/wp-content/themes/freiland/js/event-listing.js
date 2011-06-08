@@ -89,7 +89,8 @@ function event_listing(){
 		var href = baseURL + '/events404';
 		postreq++;
 		jQuery.get(href, function(data){
-			jQuery('#content').append(jQuery(data).find('.error404'));
+			if( jQuery('.error404').length == 0 )
+				jQuery('#content').append(jQuery(data).find('.error404'));
 			postreq--;
 			runRequestQueue();
 		});
