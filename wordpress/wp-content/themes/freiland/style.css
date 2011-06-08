@@ -39,7 +39,7 @@ body.category-events div.end_date {
 */
 
 
-body{
+body,html{
 	background : white;
 	height: 100%;
 	min-height: 870px;
@@ -91,7 +91,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	z-index: 95;
 	position: relative;
 	height: 100%;
-	overflow: visible!important;
+	overflow: hidden;
 	padding: 0 0 0 200px;
 }
 
@@ -612,6 +612,7 @@ li#eventtypes li{
 	width: 1170px;
 	height: 100%;
 	background: #FFFFFF;
+	overflow:hidden;
 }
 
 #masthead {
