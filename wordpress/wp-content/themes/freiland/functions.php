@@ -41,9 +41,13 @@ function freiland_init_method() {
 	wp_register_script('freiland-gallery',
 	dirname(get_bloginfo('stylesheet_url')) . '/js/freiland-gallery.js',
 	array('jquery'));
+	wp_register_script('link-targets',
+	dirname(get_bloginfo('stylesheet_url')) . '/js/link-targets.js',
+	array('jquery'));
 }
 
 function freiland_enqueue_scripts() {
+	wp_enqueue_script('link-targets');
 	wp_enqueue_script('hidden-scroll');
 	if ( in_category('events') )
 		wp_enqueue_script('event-listing');
@@ -120,7 +124,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 			$embed = new WP_Embed();
 			$res = $embed->run_shortcode($shortcode);
 			if ( strpos($res,'<object') !== 0 ){
-				$return .= '<a href="'.$link.'"';
+				$return .= '<a href="'.$link.'" target="_blank"';
 				if ( $label ) 
 					$return .= ' title="'.$label.'"';
 				$return .= '>'.($label?$label:$link).'</a><p></p>';
@@ -143,6 +147,11 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $return .'<div id="summary-text">' . $excerpt . '</div>';
   }
 
+  function freiland_get_homepage($homepage,$label){
+	if ( is_single() && $homepage && $homepage != '' )
+		return '<div class="homepage"><a href="'.$homepage.'">'.$label.'</a></div>';
+  }
+
   function freiland_get_news_content($content){
 	global $post;
 	$subtitle = get_post_meta($post->ID,'subtitle',true);
@@ -153,8 +162,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 	if ( $subtitle )
 		$return .= '<div class="subtitle">'. $subtitle .'</div>';
 	$return .= $content;
-	if ( is_single() )
-		$return .= '<p><a href="'.$homepage.'">'.$label.'</a></p>';
+	$return .= freiland_get_homepage($homepage,$label);
 	return $return;
   }
 
@@ -181,8 +189,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 		$return .= '<div class="subtitle">'. $subtitle .'</div>';
 	$return .= $content .'<p/>';
 	$return .= '<div class="source">'. $source .' '.$date->format('d.m.Y').'</div>';
-	if ( is_single() )
-		$return .= '<div class="press_homepage"><a href="'.$homepage.'">'.$label.'</a></div>';
+	$return .= freiland_get_homepage($homepage,$label);
 	return $return;
   }
 
