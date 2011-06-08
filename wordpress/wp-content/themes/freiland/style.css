@@ -147,9 +147,17 @@ body, input, textarea, .page-title span, .pingback a.url {
 #content .newsletter #submit {
 	background: url(images/feil_oben_rechts.png) no-repeat;
 	background-position: bottom right;
-	width: 20px;
+	width: 80px;
 	height: 30px;
+	padding-top: 15px;
 	border: none;
+	line-height: 0px;
+	font-size: 0px;
+}
+
+#content .newsletter #submit:hover {
+	line-height: 15px;
+	font-size: 10pt;
 }
 
 #content .newsletter table {
@@ -860,6 +868,7 @@ li#eventtypes li{
 	font-weight:normal;
 	text-transform:uppercase;	
 }
+
 #footer #site-info #copyright{
 	font-size: 14pt;
 	position: relative;

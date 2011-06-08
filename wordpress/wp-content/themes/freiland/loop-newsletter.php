@@ -28,7 +28,7 @@
 					<td><input name="zuname" type="text" size="30" maxlength="40"></td>
 				    </tr>
 				    <tr>
-					<td></td><td align="right"><input id="submit" type="submit" value=""></td>
+					<td></td><td align="right"><input id="submit" type="submit" value="send"></td>
 				    </tr>
 				</table>
 			</form>
