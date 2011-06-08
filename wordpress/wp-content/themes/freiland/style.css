@@ -677,7 +677,7 @@ li#eventtypes li{
 #access ul li ul li:hover > a {
         border-bottom: 0px solid rgb(196,81,157);
 	background: url(images/bgTrans.png) left 0 repeat;
-        background: rgba(255, 255, 255, 0.9);
+	background-color: transparent;
         color: #000000;
 }
 
@@ -719,16 +719,14 @@ li#eventtypes li{
 	width:auto;
 }
 
-#access ul ul a:hover {
-        background: rgb(255,255,255);
-        background: rgba(255,255,255,0.9);
-}
-
-
 #access ul.children li > a {
 	color : rgb(196,81,157);
 	font-size : 8pt;
 	font-family:Arial;
+}
+
+#access ul.children li.current-cat > a {
+	color : black;
 }
 
 #topright {
