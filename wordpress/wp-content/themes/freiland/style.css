@@ -746,6 +746,7 @@ li#eventtypes li{
 #footer {
 	position: absolute;
 	bottom: 0px;
+	padding-bottom: 14px;
 	width: 1200px;
 	margin: 0;
 	left : 0;
