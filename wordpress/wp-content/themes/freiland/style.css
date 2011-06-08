@@ -116,6 +116,59 @@ body, input, textarea, .page-title span, .pingback a.url {
 	position: relative;
 }
 
+/* newsletter page */
+.newsletter #newsletter_box {
+	padding-top: 30px;
+}
+
+.newsletter #newsletter_box img {
+	width: 770px;
+	padding-right: 15px;
+}
+
+.newsletter #input {
+	float: right;
+	font-family:arial;
+	font-size: 10pt;
+	padding-top: 12px;
+	padding-right: 20px;
+}
+
+#content .newsletter input {
+	display: inline;
+	height: 11px;
+	line-height: 15px;
+	font-size: 10pt;
+	border: solid black 1px;
+	width: 160px;
+	background: white;
+}
+
+#content .newsletter #submit {
+	background: url(images/feil_oben_rechts.png) no-repeat;
+	background-position: bottom right;
+	width: 20px;
+	height: 30px;
+	border: none;
+}
+
+#content .newsletter table {
+	border: none;
+}
+
+#content .newsletter tr {
+	line-height: 20px;
+}
+
+#content .newsletter td {
+	padding: 0;
+	border: none;
+}
+
+#content .newsletter td.label {
+	padding-right: 15px;
+}
+
 /* 404 page */
 .error404 .entry-content {
 	width: 530px;

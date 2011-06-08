@@ -25,6 +25,8 @@ get_header(); ?>
 			 */
 			if ( is_page('land') )
 				get_template_part( 'loop', 'land' );
+			else if ( is_page('newsletter') )
+				get_template_part( 'loop', 'newsletter' );
 			else
 				get_template_part( 'loop', 'page' );
 			?>
