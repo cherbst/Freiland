@@ -11,7 +11,7 @@
 
 <?php if ( have_posts() ) while ( have_posts() ) : the_post(); ?>
 
-	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+	<div id="post-<?php the_ID(); ?>" <?php post_class('land'); ?>>
 		<div class="entry-content">
 			<?php 
 				$url = dirname(get_bloginfo('stylesheet_url')).'/images/';
