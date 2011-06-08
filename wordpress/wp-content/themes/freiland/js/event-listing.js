@@ -401,7 +401,7 @@ function event_listing(){
 
 		if(!newCat) return;
 		curCat = newCat;
-		jQuery('#eventtypes > ul > li').removeClass('current-cat'); 
+		jQuery('#eventtypes > ul > li,.children > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
 
 		ec3.set_cur_cat(curCat, function() {
