@@ -691,13 +691,13 @@ li#eventtypes li{
 
 #footer #menu-extern li{
 	float : left;
+	margin-right: 20px;
 }
 
 #footer #menu-extern span{
 	display:block;
 	height: 25px;
 	width:  25px;
-	margin-right: 20px;
 }
 
 #footer #menu-extern a[title="twitter"] span{
