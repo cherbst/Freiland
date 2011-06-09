@@ -152,13 +152,13 @@ body, input, textarea, .page-title span, .pingback a.url {
 	height: 30px;
 	padding-top: 15px;
 	border: none;
-	line-height: 0px;
-	font-size: 0px;
+	line-height: 15px;
+	font-size: 10pt;
+	color: transparent;
 }
 
 #content .newsletter #submit:hover {
-	line-height: 15px;
-	font-size: 10pt;
+	color: black;
 }
 
 #content .newsletter table {
@@ -1087,23 +1087,24 @@ img.tooltip {
 	float: left;
 }
 
-#prev a {
+#prev a, #next a {
 	width: 40px;
 	height: 28px;
 	display: block;
 	background: url(images/feil_links_kl.png) 10px no-repeat;
 	background-position: left top;
 	background-color: rgb(255, 255, 255);
-	font-size: 0;
-	line-height: 0;
-}
-
-#prev a:hover {
         font-size: 8pt;
 	line-height: 8pt;
+	color: transparent;
 	text-align: right;
 	text-decoration: none;
 	text-transform: uppercase;
+}
+
+#prev a:hover,
+#next a:hover {
+	color: black;
 }
 
 #next {
@@ -1111,22 +1112,9 @@ img.tooltip {
 }
 
 #next a {
-	width: 40px;
-        height: 28px;
-        display: block;
 	background: url(images/feil_rechts_kl.png) 10px no-repeat;
 	background-position: right top;
-	background-color: rgb(255, 255, 255);
-        font-size: 0;
-	line-height: 0;
-}
-
-#next a:hover {
-        font-size: 8pt;
-	line-height: 8pt;
-        text-align: left;
-        text-decoration: none;
-        text-transform: uppercase;
+	text-align: left;
 }
 
 #nav-below {
@@ -1141,52 +1129,47 @@ img.tooltip {
         float: left;
 }
 
-.nav-previous a {
+.nav-previous a,
+.nav-previous a:link,
+.nav-previous a:visited,
+.nav-next a,
+.nav-next a:link,
+.nav-next a:visited {
         width: 180px;
         height: 28px;
-	padding-left: 20px;
-	color: #000000!important;
+	color: transparent;
         display: block;
-	background: url(images/feil_links_kl.png) left 10px no-repeat;
-	background-position: left center;
 	background-color: rgb(255, 255, 255);
-        font-size: 0;
-	line-height: 0;
-        padding-top: 20px;
-}
-
-.nav-previous a:hover {
         font-size: 8pt;
 	line-height: 8pt;
-        text-align: left;
+        padding-top: 20px;
         text-decoration: none;
         text-transform: uppercase;
+}
+
+.nav-previous a{
+	padding-left: 20px;
+	background: url(images/feil_links_kl.png) left 10px no-repeat;
+	background-position: left center;
+        text-align: left;
+}
+
+.nav-previous a:hover,
+.nav-next a:hover {
+	color: black;
 }
 
 .nav-next {
         float: right;
 }
 
-.nav-next a {
-        width: 180px;
-        height: 28px;
+.nav-next a,
+.nav-next a:link,
+.nav-next a:visited {
 	padding-right: 20px;
-        display: block;
-	color: #000000!important;
 	background: url(images/feil_rechts_kl.png) right 10px no-repeat;
 	background-position: right center;
-	background-color: rgb(255, 255, 255);
-        font-size: 0;
-	line-height: 0;
-        padding-top: 20px;
-}
-
-.nav-next a:hover {
-        font-size: 8pt;
-	line-height: 8pt;
         text-align: right;
-        text-decoration: none;
-        text-transform: uppercase;
 }
 
 ul.event-subcat li {
