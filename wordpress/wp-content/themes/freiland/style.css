@@ -345,8 +345,12 @@ body.single-format-gallery .entry-content > p,
 	padding-top: 0;
 }
 	
-.entry-summary a:hover, .entry-content a:hover {
+.entry-summary a:hover, .homepage a:hover {
 	text-decoration:underline;
+}
+
+.homepage > a {
+	color : rgb(196,81,157);
 }
 
 .event_day, .event_time{
