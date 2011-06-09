@@ -221,7 +221,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 			$attach_id = intval($attach_id);
 			$return .= '<a rel="lightbox" href="'.wp_get_attachment_url($attach_id).'">';
 			$return .= wp_get_attachment_image( $attach_id,
-				'thumbnail',false,array('class' => 'alignright' ) );
+				'small',false,array('class' => 'alignright' ) );
 			$return .= '</a>';
 		}
 		$return .= '</div>';
