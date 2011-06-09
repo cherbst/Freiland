@@ -205,11 +205,13 @@ function event_listing(){
 		if ( monthContainer ){
 			if ( callback ) callback(monthContainer,month);
 			return;
-		} 
+		}
+		ec3.set_spinner(1);
 		jQuery.get(href, function(data){
 			var content = jQuery(data).find('#event-listing').contents();
 			monthContainer = getMonthContainer(month);
 			monthContainer.append(content);
+			ec3.set_spinner(0);
 			if ( callback ) callback(monthContainer,month);
 		});
 	}
