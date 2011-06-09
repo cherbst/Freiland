@@ -539,7 +539,7 @@ function event_listing(){
 		var elem = jQuery(window);
 		if ( curPost.length != 0 && jQuery('#event-listing > div').filter(':visible').length > 0 ) {
 			var newPost = curPost;
-			while ( newPost.offset().top-(topmargin-newPost.height()) < elem.scrollTop() ){
+			while ( newPost.offset().top-(topmargin-newPost.height()) < 0 ){
 				var nextPost = newPost.nextAll(':visible').first();
 				if ( nextPost.length == 0 ){
 					nextPost = newPost.parent().next().children(':visible').first();
@@ -550,7 +550,7 @@ function event_listing(){
 			}
 
 			// only go to prev month if there was no reload before
-			while ( newPost.offset().top-(topmargin+newPost.height()) > elem.scrollTop() ) {
+			while ( newPost.offset().top-(topmargin+newPost.height()) > 0 ) {
 				var prevPost = newPost.prevAll(':visible').first();
 				if ( prevPost.length == 0 ){
 					prevPost = newPost.parent().prev().children(':visible').last();
