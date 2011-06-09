@@ -631,7 +631,7 @@ li#eventtypes li{
 	margin-right : 0px;
 }
 
-#footer-widget-area div#first li.widget_pages li {
+#footer-widget-area div#first li.flexipages_widget li {
 	display : inline;
 	padding-right: 2%;
 }
@@ -820,15 +820,19 @@ li#eventtypes li{
 	text-transform:uppercase;	
 }
 
-#footer li.widget_pages {
+#footer li.flexipages_widget {
 	float: right;
 	width:380px;
 	padding-top: 10px;
 	padding-right: 50px;
 }
 
-#footer li.widget_pages > ul {
+#footer li.flexipages_widget > ul {
 	padding-bottom: 5px;
+}
+
+#footer li.flexipages_widget > h3 {
+	display: none;
 }
 
 #footer li.widget_nav_menu {
