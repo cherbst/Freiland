@@ -124,10 +124,10 @@ function freiland_filter_the_title( $post_title, $id ) {
 			$embed = new WP_Embed();
 			$res = $embed->run_shortcode($shortcode);
 			if ( strpos($res,'<object') !== 0 ){
-				$return .= '<a href="'.$link.'" target="_blank"';
+				$return .= '<div class="homepage"><a href="'.$link.'"';
 				if ( $label ) 
 					$return .= ' title="'.$label.'"';
-				$return .= '>'.($label?$label:$link).'</a><p></p>';
+				$return .= '>'.($label?$label:$link).'</a></div><p></p>';
 			}else{
 				if ( $label )
 					$return .= '<p>'.$label.'</p>';
