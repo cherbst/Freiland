@@ -250,7 +250,7 @@ body.single-format-gallery .entry-content > p,
 	overflow: hidden;
 	padding-bottom: 0;
 	position: relative;
-	padding-top: 160px;
+	padding-top: 145px;
 }
 
 #banner-container {
@@ -264,18 +264,18 @@ body.single-format-gallery .entry-content > p,
 #empty-banner {
 	position: relative;
 	display: block;
-	max-height: 35px;
+	max-height: 50px;
 	width: 785px;
         z-index: 99;
-	padding-top: 160px;
+	padding-top: 145px;
 }
 
 #upper-transparency {
 	z-index: 99;
-        height: 35px;
+        height: 50px;
         width: 785px;
 	margin-top: 0;
-        background: url(images/bgTrans.png) left 0 repeat-x; 
+        background: url(images/bgTransTD.png) left 0 repeat-x; 
 }
 
 #mainpost-banner img {
@@ -621,12 +621,12 @@ li#eventtypes li{
 #footer {
 	position: absolute;
 	bottom: 0px;
-	padding-bottom: 14px;
+	padding-bottom: 15px;
 	width: 1200px;
 	margin: 0;
 	left : 0;
-	background: url(images/bgTrans.png) left 0 repeat;
-	background: rgba(255, 255, 255, 0.9);
+	background: url(images/bgTransDT.png) repeat-x;
+	background-position: left bottom;
 	z-index: 99;
 }
 
@@ -719,7 +719,7 @@ li#eventtypes li{
 
 #colophon {
 	border-top: none;
-	margin-top:5px;
+	margin-top:40px;
 	padding:0; 
 	height: 35px;
 }
@@ -764,7 +764,7 @@ li#eventtypes li{
 	padding: 0px;
 	top: 0;
 	width: 1170px;
-	height: 160px;
+	height: 145px;
 	z-index: 100;
 	background: #FFFFFF;
 }
