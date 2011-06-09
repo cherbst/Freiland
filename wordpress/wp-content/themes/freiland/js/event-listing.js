@@ -199,11 +199,16 @@ function event_listing(){
 	}
 
 	function loadEvents(href,callback){
+		var month = event_listing.parseHref(href);
+		month = month[1] + '_' + month[2];
+		var monthContainer = jQuery('#event-listing').data('month_'+month);
+		if ( monthContainer ){
+			if ( callback ) callback(monthContainer,month);
+			return;
+		} 
 		jQuery.get(href, function(data){
 			var content = jQuery(data).find('#event-listing').contents();
-			var month = event_listing.parseHref(href);
-			month = month[1] + '_' + month[2];
-			var monthContainer = getMonthContainer(month);
+			monthContainer = getMonthContainer(month);
 			monthContainer.append(content);
 			if ( callback ) callback(monthContainer,month);
 		});
@@ -250,7 +255,7 @@ function event_listing(){
 		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
 			var height = scrollDiv.height();
-			container.remove();
+			jQuery('#event-listing').data(container.attr('id'),container.detach());
 			// adjust new top
 			var diff = height - scrollDiv.height();
 			scrollDiv.offset({top:scrollDiv.offset().top + diff,left:scrollDiv.offset().left});
@@ -263,7 +268,7 @@ function event_listing(){
 		while ( container.length > 0 && container.offset().top > jQuery('#container').offset().top +
 			jQuery('#container').height() + delta ){
 			var prev = container.prev();
-			container.remove();
+			jQuery('#event-listing').data(container.attr('id'),container.detach());
 			next_href = decrementHref(next_href);
 			container = prev;
 		}
