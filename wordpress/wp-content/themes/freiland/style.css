@@ -32,13 +32,6 @@ div.filter_genre{ display : none; }
 div.filter_house{ display : none; }
 div.filter_room{ display : none; }
 
-/* deprecated: hide end_date in event category page 
-body.category-events div.end_date {
-	display : none;
-}
-*/
-
-
 body,html{
 	background : white;
 	height: 100%;
@@ -268,14 +261,6 @@ body.single-format-gallery .entry-content > p,
 	background: #FFFFFF;
 }
 
-#mainpost-banner #upper-transparency {
-	position: relative;
-	height: 35px!important;
-	z-index: 99;
-	background: url(images/bgTrans.png) left 0 repeat-x;
-	margin-top: 0;
-}
-
 #empty-banner {
 	position: relative;
 	display: block;
@@ -285,9 +270,11 @@ body.single-format-gallery .entry-content > p,
 	padding-top: 160px;
 }
 
-#empty-banner #upper-transparency {
-        height: 35px!important;
-        width: 785px!important;
+#upper-transparency {
+	z-index: 99;
+        height: 35px;
+        width: 785px;
+	margin-top: 0;
         background: url(images/bgTrans.png) left 0 repeat-x; 
 }
 
@@ -430,22 +417,6 @@ body.single-format-gallery .entry-content > p,
 	margin-top: 5px;
 }
 
-/* depricated with new div #event-listing
-body.category-events .entry-content, body.category-events .entry-summary {
-	clear: none;
-	float: right;
-	width: 65%;
-	padding: 0;
-}
-
-body.category-events .entry-content {
-	clear: none;
-	float : right;
-	width : 65%;
-	padding-top : 0;
-}
-*/
-
 body.page #content > div.page > h1 {
 	display : none;
 }
@@ -533,6 +504,7 @@ body.page-child #content > div.page > h1 {
 	text-transform:uppercase;	
 }
 
+/* event calendar */
 #event-calendar .widget-title{
 	display: none;
 }
@@ -603,6 +575,7 @@ body.page-child #content > div.page > h1 {
 	padding-left: 5px;
 }
 
+/* event types in side bar */
 li#eventtypes{
 	float: right;
 	text-align: right;
@@ -616,14 +589,15 @@ li#eventtypes li{
 	padding-bottom:10px;
 }
 
-#footer-widget-area {
-	float : right;
-	width: 60%;
-}
-
 #main .widget-area ul {
 	margin-left: 20px;
 	padding: 0 20px 0 0;
+}
+
+/* footer */
+#footer-widget-area {
+	float : right;
+	width: 60%;
 }
 
 #footer-widget-area div#first {
@@ -639,168 +613,6 @@ li#eventtypes li{
 #footer-widget-area #first ul{
 	margin:0;
 }
-
-#colophon {
-	border-top: none;
-	margin-top:5px;
-	padding:0; 
-	height: 35px;
-}
-
-#site-description {
-	display: none;
-}
-
-#site-title {
-	font-size: 1pt;
-	color: #FFFFFF;
-}
-
-#site-title a {
-	display: block;
-	width: 200px;
-	height:150px;
-	color: #FFFFFF;
-	text-decoration: none;
-}
-
-#wrapper {
-	padding: 0;
-	margin: 0;
-	width: 1170px;
-	height: 100%;
-	background: #FFFFFF;
-	overflow:hidden;
-}
-
-#masthead {
-	position: absolute;
-	z-index: 99;
-	top : 0;
-	left : 0;
-	width: 985px;
-	height: 100%;
-}
-
-#header {
-	position: absolute;
-	padding: 0px;
-	top: 0;
-	width: 1170px;
-	height: 160px;
-	z-index: 100;
-	background: #FFFFFF;
-	/* background: url(images/nav_left.png) left 84px repeat-x rgba(255, 255, 255, 0.9); */
-}
-
-#branding {
-	float: left;
-	width: 200px;
-	/* min-width: 142px; */
-	height: 150px;
-	background: url(images/logo_digital.png) center no-repeat #FFFFFF;
-}
-
-#branding img {
-	display: none;
-}
-
-#access {
-	float: left;
-	width: 785px;
-	height: 100%;
-	background: url(images/nav_left.png) left 109px no-repeat rgb(255, 255, 255);
-	margin-top: 5px;
-}
-
-#access .menu-header {
-	background: url(images/bgTrans100.png) left 0 repeat;
-	margin: 0;
-}
-
-#access .menu-header, div.menu, #colophon {
-	width: 100%;
-}
-
-#access li > a, #access ul ul > a {
-        color: #000000;
-}
-
-#access li:hover > a {
-	border-bottom: 6px solid rgb(196,81,157);
-	background: rgb(255, 255, 255);
-	color: #000000;
-}
-
-#access ul li ul li:hover > a {
-        border-bottom: 0px solid rgb(196,81,157);
-	background: url(images/bgTrans.png) left 0 repeat;
-	background-color: transparent;
-        color: #000000;
-}
-
-#access li.current-menu-item > a, 
-#access li.current-category-ancestor > a, 
-#access li.current-post-ancestor > a,
-#access li.current-page-ancestor > a {
-	border-bottom: 6px solid rgb(196,81,157);
-}
-
-#access ul ul a {
-	background: transparent;
-	line-height: 1em;
-	padding: 2px;
-	height: auto;
-	width: auto;
-}
-
-#access ul li ul.children li > a {
-	font-size: 9pt;
-	font-style: normal!important;
-}
-
-#access ul ul {
-	width:auto;
-}
-
-#access ul.children{
-	background: url(images/bgTrans.png) left 0 repeat;
-	z-index: 100;
-}
-
-#access ul.children li{
-	clear:both;
-	min-width:0;
-}
-
-#access ul ul li {
-	width:auto;
-}
-
-#access ul.children li > a {
-	color : rgb(196,81,157);
-	font-size : 8pt;
-	font-family:Arial;
-}
-
-#access ul.children li.current-cat > a {
-	color : black;
-}
-
-#topright {
-	position: absolute;
-	top : 30px;
-	right: 0;
-	height: 280px;
-	width: 185px;
-	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
-}
-
-/*#post-54 div.entry-content{
-	width : 826px;
-	height : 1169px;
-	background: url(images/Lageplan.jpg) left;
-}*/
 
 #footer {
 	position: absolute;
@@ -898,6 +710,162 @@ li#eventtypes li{
 
 #footer #menu-extern a[title="diaspora"] span{
 	background: url(images/diaspora_icon.png) center no-repeat #FFFFFF;
+}
+
+
+#colophon {
+	border-top: none;
+	margin-top:5px;
+	padding:0; 
+	height: 35px;
+}
+
+#site-description {
+	display: none;
+}
+
+#site-title {
+	font-size: 1pt;
+	color: #FFFFFF;
+}
+
+#site-title a {
+	display: block;
+	width: 200px;
+	height:150px;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#wrapper {
+	padding: 0;
+	margin: 0;
+	width: 1170px;
+	height: 100%;
+	background: #FFFFFF;
+	overflow:hidden;
+}
+
+#masthead {
+	position: absolute;
+	z-index: 99;
+	top : 0;
+	left : 0;
+	width: 985px;
+	height: 100%;
+}
+
+#header {
+	position: absolute;
+	padding: 0px;
+	top: 0;
+	width: 1170px;
+	height: 160px;
+	z-index: 100;
+	background: #FFFFFF;
+}
+
+#branding {
+	float: left;
+	width: 200px;
+	height: 150px;
+	background: url(images/logo_digital.png) center no-repeat #FFFFFF;
+}
+
+#branding img {
+	display: none;
+}
+
+/* main menu */
+#access {
+	float: left;
+	width: 785px;
+	height: 100%;
+	background: url(images/nav_left.png) left 109px no-repeat rgb(255, 255, 255);
+	margin-top: 5px;
+}
+
+#access .menu-header {
+	background: url(images/bgTrans100.png) left 0 repeat;
+	margin: 0;
+}
+
+#access .menu-header, div.menu, #colophon {
+	width: 100%;
+}
+
+#access li > a, #access ul ul > a {
+        color: #000000;
+}
+
+#access li:hover > a {
+	border-bottom: 6px solid rgb(196,81,157);
+	background: rgb(255, 255, 255);
+	color: #000000;
+}
+
+#access ul li ul li:hover > a {
+        border-bottom: 0px solid rgb(196,81,157);
+	background: url(images/bgTrans.png) left 0 repeat;
+	background-color: transparent;
+        color: #000000;
+}
+
+#access li.current-menu-item > a, 
+#access li.current-category-ancestor > a, 
+#access li.current-post-ancestor > a,
+#access li.current-page-ancestor > a {
+	border-bottom: 6px solid rgb(196,81,157);
+}
+
+#access ul ul a {
+	background: transparent;
+	line-height: 1em;
+	padding: 2px;
+	height: auto;
+	width: auto;
+}
+
+#access ul li ul.children li > a {
+	font-size: 9pt;
+	font-style: normal!important;
+}
+
+#access ul ul {
+	width:auto;
+}
+
+#access ul.children{
+	background: url(images/bgTrans.png) left 0 repeat;
+	z-index: 100;
+}
+
+#access ul.children li{
+	clear:both;
+	min-width:0;
+}
+
+#access ul ul li {
+	width:auto;
+}
+
+#access ul.children li > a {
+	color : rgb(196,81,157);
+	font-size : 8pt;
+	font-family:Arial;
+}
+
+#access ul.children li.current-cat > a {
+	color : black;
+}
+
+#topright {
+	position: absolute;
+	top : 30px;
+	right: 0;
+	height: 280px;
+	width: 185px;
+	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
 }
 
 #access ul.menu {
@@ -1087,23 +1055,31 @@ img.tooltip {
 	float: left;
 }
 
-#prev a {
+#prev a,
+#next a {
 	width: 40px;
 	height: 28px;
 	display: block;
-	background: url(images/feil_links_kl.png) 10px no-repeat;
-	background-position: left top;
 	background-color: rgb(255, 255, 255);
 	font-size: 0;
 	line-height: 0;
 }
 
-#prev a:hover {
+#prev a:hover,
+#next a:hover {
         font-size: 8pt;
 	line-height: 8pt;
-	text-align: right;
 	text-decoration: none;
 	text-transform: uppercase;
+}
+
+#prev a{
+	background: url(images/feil_links_kl.png) 10px no-repeat;
+	background-position: left top;
+}
+
+#prev a:hover {
+	text-align: right;
 }
 
 #next {
@@ -1111,22 +1087,12 @@ img.tooltip {
 }
 
 #next a {
-	width: 40px;
-        height: 28px;
-        display: block;
 	background: url(images/feil_rechts_kl.png) 10px no-repeat;
 	background-position: right top;
-	background-color: rgb(255, 255, 255);
-        font-size: 0;
-	line-height: 0;
 }
 
 #next a:hover {
-        font-size: 8pt;
-	line-height: 8pt;
         text-align: left;
-        text-decoration: none;
-        text-transform: uppercase;
 }
 
 #nav-below {
@@ -1141,26 +1107,34 @@ img.tooltip {
         float: left;
 }
 
-.nav-previous a {
+.nav-previous a,
+.nav-next a {
         width: 180px;
         height: 28px;
-	padding-left: 20px;
 	color: #000000!important;
-        display: block;
-	background: url(images/feil_links_kl.png) left 10px no-repeat;
-	background-position: left center;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
         padding-top: 20px;
+        display: block;
+}
+
+.nav-previous a:hover,
+.nav-next a:hover {
+        font-size: 8pt;
+	line-height: 8pt;
+        text-decoration: none;
+        text-transform: uppercase;
+}
+
+.nav-previous a {
+	padding-left: 20px;
+	background: url(images/feil_links_kl.png) left 10px no-repeat;
+	background-position: left center;
 }
 
 .nav-previous a:hover {
-        font-size: 8pt;
-	line-height: 8pt;
         text-align: left;
-        text-decoration: none;
-        text-transform: uppercase;
 }
 
 .nav-next {
@@ -1168,25 +1142,13 @@ img.tooltip {
 }
 
 .nav-next a {
-        width: 180px;
-        height: 28px;
 	padding-right: 20px;
-        display: block;
-	color: #000000!important;
 	background: url(images/feil_rechts_kl.png) right 10px no-repeat;
 	background-position: right center;
-	background-color: rgb(255, 255, 255);
-        font-size: 0;
-	line-height: 0;
-        padding-top: 20px;
 }
 
 .nav-next a:hover {
-        font-size: 8pt;
-	line-height: 8pt;
         text-align: right;
-        text-decoration: none;
-        text-transform: uppercase;
 }
 
 ul.event-subcat li {
