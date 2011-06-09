@@ -326,6 +326,7 @@ function ec3()
       }
     }
   }
+  ec3.set_spinner = set_spinner;
 
   var get_current_month_link = function(cat){
 	var calendars=get_calendars();
