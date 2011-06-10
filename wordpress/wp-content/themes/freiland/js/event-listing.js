@@ -89,8 +89,10 @@ function event_listing(){
 		var href = baseURL + '/events404';
 		postreq++;
 		jQuery.get(href, function(data){
-			if( jQuery('.error404').length == 0 )
+			if( jQuery('.error404').length == 0 ){
 				jQuery('#content').append(jQuery(data).find('.error404'));
+				innerScroll.updateDimensions();
+			}
 			postreq--;
 			runRequestQueue();
 		});
@@ -113,10 +115,11 @@ function event_listing(){
 				if ( postreq == 0 )
 					runRequestQueue();
                         } else notfound.show();
-			scrollDiv.css({top:0});
+			innerScroll.setTop(0);
 		}else notfound.hide();
 		allPosts.show();
 		other.hide();
+		innerScroll.updateDimensions();	
 	};
 
 	var findNextCurPost = function(){
@@ -229,14 +232,13 @@ function event_listing(){
 					jQuery('#event-listing').append(monthContainer);
 					next_href = incrementHref(next_href);
 				}else{
-					var curOffset = scrollDiv.offset();
 					var diff  = scrollDiv.height();
 					jQuery('#event-listing').prepend(monthContainer);
 					diff = scrollDiv.height() - diff;
-					scrollDiv.offset({top:curOffset.top - diff,
-						left:curOffset.left});
+					innerScroll.setRelativeTop( - diff );
 					prev_href = decrementHref(prev_href);
 				}
+				innerScroll.updateDimensions();	
 				filterPosts(curCat);
 			}
 			if ( callback ) callback();
@@ -260,7 +262,7 @@ function event_listing(){
 			jQuery('#event-listing').data(container.attr('id'),container.detach());
 			// adjust new top
 			var diff = height - scrollDiv.height();
-			scrollDiv.offset({top:scrollDiv.offset().top + diff,left:scrollDiv.offset().left});
+			innerScroll.setRelativeTop(diff);
 			prev_href = incrementHref(prev_href);
 			container = next;
 		}
@@ -378,6 +380,7 @@ function event_listing(){
 	function onCategoryChanged(){
 		filterPosts(curCat);
 		jQuery('#event-listing').show();
+		innerScroll.updateDimensions();
 		findNextCurPost();
 	}
 
@@ -417,6 +420,7 @@ function event_listing(){
 					loadEvents(reloadHref,function(monthContainer){
 						jQuery('#event-listing > div.month_container').remove();
 						jQuery('#event-listing').append(monthContainer);
+						innerScroll.updateDimensions();	
 						curPost = jQuery('#'+singlePostId);
 						updateCalendar(getCurCalendar(),onCategoryChanged);
 					});
