@@ -260,52 +260,6 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $ret;
   }
 
-function freiland_subcategory_dropdown($cat_id){
-	$filtercats = get_categories( "hide_empty=0&parent=$cat_id" );
-	if ( empty($filtercats) ) return;
-?>
-	<form name="categoryfilterform" method="post" action="">
-	<input type="hidden" name="hiddencategoryfilter" value="Y">
-
-<?php
-	global $query_string;
-	parse_str( $query_string, $query_args );
-
-	$filtered = false;
-	foreach( $filtercats as $filtercat ){
-		$name = 'filter_'.$filtercat->slug; 
-    		if( isset($_POST[ 'hiddencategoryfilter' ]) && $_POST['hiddencategoryfilter'] == 'Y' ) {
-			if ( $_POST[$name] ){
-				$query_args['category__and'][] = (int)$_POST[$name];
-				$filtered = true;
-			}
-		}
-
-		$args = array('hide_empty' => 0, 
-			'name' => $name, 
-			'orderby' => 'name',
-			'selected' => $_POST[$name],
-			'show_option_all'    => "Show all $filtercat->name"."s" ,
-			'hierarchical' => true,
-			'parent' => $filtercat->term_id );  ?>
-
-		<div class="<?php echo $name ?>"><p><?php _e("Filter by $filtercat->name:", 'freiland-category' ); 
-			wp_dropdown_categories($args); ?>
-		</p></div>
-  <?php }
-	if ( $filtered )
-		query_posts($query_args);
-
-	if ( ! empty($filtercats) ){ ?>
-		<p class="submit">
-			<input type="submit" name="filter" class="button-primary" 
-				value="<?php esc_attr_e('Filter posts') ?>" />
-		</p>
-  <?php	} ?>
-	</form>
-<?php 
-  }
-
   function freiland_query_only_events(){
 	if ( freiland_load_ec3() ){
 		// if ec3 is installed we only show posts from its event category
@@ -364,19 +318,6 @@ function freiland_subcategory_dropdown($cat_id){
 	echo strftime("%d.%m.",$end_date);
 	echo '</div>';
 	echo '</div>';
-  }
-
-  function freiland_get_exclude_subcats($cat){
-	// exclude categories which have no active posts
-	if ( !freiland_load_ec3() ) return;
-	$cats = get_categories( "parent=".$cat->term_id );
-	foreach( $cats as $c ){
-		if ( ec3_util_get_active_event_count($c->term_id) == 0 )
-			$exclude[] = $c->term_id;
-	}
-
-	if ( !empty($exclude) )
-		return implode(',',$exclude);
   }
 
   function freiland_get_event_locations($echo=1){
