@@ -3,6 +3,8 @@ function innerScroll(elem){
 	var onbottom = false;
 	var topmargin = elem.offset().top;
 	var originalTopmargin = topmargin;
+	var drag = false;
+	var oldY;
 
 	elem.css('position','relative');
 	elem.css('top',0);
@@ -19,8 +21,8 @@ function innerScroll(elem){
 	};
 	innerScroll.resetTopmargin = resetTopmargin;
 
-	function scrollElem(delta){
-		var v = 50;
+	function scrollElem(delta,v){
+		if ( !v ) v = 50;
 		var variance = 100;
 		var ret = true;
 		var triggerTop = !ontop;
@@ -65,6 +67,28 @@ function innerScroll(elem){
 
 	elem.mousewheel(function(event, delta) {
 		return scrollElem(delta);
+	});
+
+	elem.mousedown(function(event){
+		event.stopPropagation();
+		event.preventDefault();
+		drag = true;
+		oldY = event.pageY;
+	});
+
+	elem.mouseup(function(){
+		drag = false;
+	});
+	elem.mouseout(function(){
+		drag = false;
+	});
+
+	elem.mousemove(function(event){
+		if ( drag ){
+			scrollElem(event.pageY - oldY,1);
+			oldY = event.pageY;
+			return false;
+		}
 	});
 }
 		
