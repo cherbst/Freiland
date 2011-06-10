@@ -101,6 +101,31 @@ function ec3_get_calendar_nav($date,$num_months)
   echo "</tr></tbody></table>\n";
 }
 
+function ec3_util_get_month($order){
+  	global $ec3, $wpdb;
+	$field = ($order=='ASC'?'start':'end');
+	$sql= 
+	"SELECT ec3_sch.$field FROM $wpdb->posts 
+	 INNER JOIN wp_ec3_schedule ec3_sch 
+		ON ec3_sch.post_id=id 
+	 ORDER BY ec3_sch.$field $order LIMIT 1";
+	$res = $wpdb->get_results($sql);
+	if ( $res && isset($res[0]) ){
+		error_log($date);
+		$date = mysql2date('Y_n',$res[0]->$field);
+		return $date;
+	}
+	return $date = date('Y_n');
+}
+
+function ec3_util_first_month(){
+	return ec3_util_get_month("ASC");
+}
+
+function ec3_util_last_month(){
+	return ec3_util_get_month("DESC");
+}
+
 function ec3_util_get_active_event_count($cat){
   	global $ec3, $wpdb;
 	$sql= 

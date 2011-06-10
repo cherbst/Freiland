@@ -25,6 +25,28 @@ function ec3()
 {
   var callback = null;
 
+  getCurCalendar = function(){
+	return	jQuery('#wp-calendar > table').filter(':visible').first();
+  }
+
+  getCurMonth = function(){
+	var cal = getCurCalendar();
+	return cal.attr('id').substring(4);
+  }
+
+  function showControls(prev,next){
+      var curMonth = getCurMonth();
+      if ( curMonth == ec3.first_month )
+	 jQuery(prev).hide();
+      else
+	 jQuery(prev).show();
+
+      if ( curMonth == ec3.last_month ) 
+	jQuery(next).hide();
+      else
+	 jQuery(next).show();
+  }
+
   WindowOnload( function()
   {
     // Overwrite the href links in ec3_prev & ec3_next to activate EC3.
@@ -51,6 +73,7 @@ function ec3()
         ec3.month_of_year[i]=unencode(ec3.month_of_year[i]);
       for(var j=0; j<ec3.month_abbrev.length; j++)
         ec3.month_abbrev[j]=unencode(ec3.month_abbrev[j]);
+      showControls(prev,next);
     }
   } );
 
@@ -274,7 +297,6 @@ function ec3()
   }
   ec3.get_calendars=get_calendars;
 
-
   /** Changes the link text in the forward and backwards buttons.
    *  Parameters are the 0-based month numbers. */
   function rewrite_controls(year_num,prev_month0,next_month0)
@@ -291,6 +313,7 @@ function ec3()
             prev.href+='&cat='+ec3.event_category; // use event category
       }
     }
+
     var next=document.getElementById('ec3_next');
     if(next && next.firstChild && next.firstChild.nodeType==ec3.TEXT_NODE){
       next.firstChild.data=ec3.month_abbrev[next_month0%12];
@@ -303,6 +326,7 @@ function ec3()
             next.href+='&cat='+ec3.event_category; // use event category
       }
     }
+    showControls(prev,next);
   }
 
   /** Turn the busy spinner on or off. */

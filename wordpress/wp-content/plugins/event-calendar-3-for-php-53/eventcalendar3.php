@@ -89,6 +89,8 @@ function ec3_action_wp_head()
 	ec3.use_ajax=<?php echo $ec3->use_ajax; ?>;
 	ec3.event_category=<?php echo $ec3->event_category; ?>;
 	ec3.viewpostsfor="<?php echo __('View posts for %1$s %2$s'); ?>";
+	ec3.first_month="<?php echo ec3_util_first_month(); ?>";
+	ec3.last_month="<?php echo ec3_util_last_month(); ?>";
 	// --></script>
 
 <?php if(!$ec3->nocss): ?>
