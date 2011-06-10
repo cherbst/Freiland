@@ -9,7 +9,7 @@ function innerScroll(elem){
 	elem.css('position','relative');
 	elem.css('top',0);
 	elem.css('overflow-y','hidden');
-	elem.css('height','auto');
+	elem.height('auto');
 
 	function getMinTop(){
 		return jQuery('#footer').offset().top - elem.height() - topmargin;
@@ -70,6 +70,8 @@ function innerScroll(elem){
 		elem.draggable( "option", "containment",  
 			[0,Math.min(getMinTop() + topmargin,topmargin),0,  topmargin]);
 	}
+	// on each mousedown, re-compute the containment
+	elem.mousedown(setContainment);
 
 	elem.draggable({
 		start: function(event,ui){
@@ -87,17 +89,14 @@ function innerScroll(elem){
 		axis: "y",
 		cancel: "#summary-text,p"
 	});
-	setContainment();
 
 	function setTopmargin(margin){
 		topmargin = margin;
-		setContainment();
 	};
 	innerScroll.setTopmargin = setTopmargin;
 
 	function resetTopmargin(){
 		topmargin = originalTopmargin;
-		setContainment();
 	};
 	innerScroll.resetTopmargin = resetTopmargin;
 
@@ -120,8 +119,6 @@ function innerScroll(elem){
 		elem.css({top:offset});
 	};
 	innerScroll.setTop = setTop;
-
-	jQuery(window).resize(setContainment);
 }
 		
 jQuery(document).ready(function(){

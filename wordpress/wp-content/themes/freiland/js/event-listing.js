@@ -91,7 +91,6 @@ function event_listing(){
 		jQuery.get(href, function(data){
 			if( jQuery('.error404').length == 0 ){
 				jQuery('#content').append(jQuery(data).find('.error404'));
-				innerScroll.updateDimensions();
 			}
 			postreq--;
 			runRequestQueue();
@@ -380,7 +379,6 @@ function event_listing(){
 	function onCategoryChanged(){
 		filterPosts(curCat);
 		jQuery('#event-listing').show();
-		innerScroll.updateDimensions();
 		findNextCurPost();
 	}
 
@@ -420,7 +418,6 @@ function event_listing(){
 					loadEvents(reloadHref,function(monthContainer){
 						jQuery('#event-listing > div.month_container').remove();
 						jQuery('#event-listing').append(monthContainer);
-						innerScroll.updateDimensions();	
 						curPost = jQuery('#'+singlePostId);
 						updateCalendar(getCurCalendar(),onCategoryChanged);
 					});
