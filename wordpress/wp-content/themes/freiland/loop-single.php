@@ -33,6 +33,7 @@
 					<div class="nav-next"><?php next_post_link( '%link', '%title <span class="meta-nav">' . _x( '&rarr;', 'Next post link', 'twentyten' ) . '</span>', TRUE ); ?></div>
 				</div><!-- #nav-below -->
 
+				<?php freiland_the_eventtypes_list() ?>
 				<?php comments_template( '', true ); ?>
 
 <?php endwhile; // end of the loop. ?>

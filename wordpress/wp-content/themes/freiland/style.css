@@ -1165,9 +1165,10 @@ ul.event-subcat li {
 	float: right;
 }
 
-#post-images ul.event-subcat {
+ul.event-subcat {
 	float: left;
 	clear: both;
+	padding-left: 362px;
 }
 
 
