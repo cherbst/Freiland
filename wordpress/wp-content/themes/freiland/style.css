@@ -532,6 +532,7 @@ body.page-child #content > div.page > h1 {
  padding: 2px;
  border:none;
  overflow: hidden;
+ min-width: 44px;
 }
 
 #event-calendar #wp-calendar table td:hover,
