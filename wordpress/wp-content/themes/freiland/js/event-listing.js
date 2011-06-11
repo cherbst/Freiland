@@ -77,7 +77,7 @@ function event_listing(){
 	}
 
 	getCurCalendar = function(){
-		return	jQuery('#wp-calendar > table').filter(':visible').first();
+		return	jQuery('#ec3_cal_tables > table').filter(':visible').first();
 	}
 
 	getCurMonth = function(){
@@ -398,7 +398,8 @@ function event_listing(){
 				var href = parseHref(next_href);
 				var date = pDate.split('_');
 				reloadHref = buildHref(href,date[0],date[1]);
-			}
+			}else
+				curPost = jQuery('#'+singlePostId);
 			updateNeeded = true;
 			singlePost.remove();
 			jQuery('#post-images').remove();
