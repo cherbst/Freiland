@@ -1122,6 +1122,8 @@ img.tooltip {
 
 .nav-previous, .nav-next {
         width: 190px;
+        min-width: 190px;
+        min-height: 20px;
 }
 
 .nav-previous a,
