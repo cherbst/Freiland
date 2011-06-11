@@ -399,7 +399,7 @@ function event_listing(){
 				var date = pDate.split('_');
 				reloadHref = buildHref(href,date[0],date[1]);
 			}else
-				curPost = jQuery('#'+singlePostId);
+				curPost = jQuery('#'+singlePostId).prevAll('.cat-id-'+newCat).last();
 			updateNeeded = true;
 			singlePost.remove();
 			jQuery('#post-images').remove();
@@ -419,7 +419,7 @@ function event_listing(){
 					loadEvents(reloadHref,function(monthContainer){
 						jQuery('#event-listing > div.month_container').remove();
 						jQuery('#event-listing').append(monthContainer);
-						curPost = jQuery('#'+singlePostId);
+						curPost = jQuery('#'+singlePostId).prevAll('.cat-id-'+curCat).last();
 						updateCalendar(getCurCalendar(),function(){
 							initHrefs();
 							onCategoryChanged();
