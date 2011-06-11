@@ -420,7 +420,10 @@ function event_listing(){
 						jQuery('#event-listing > div.month_container').remove();
 						jQuery('#event-listing').append(monthContainer);
 						curPost = jQuery('#'+singlePostId);
-						updateCalendar(getCurCalendar(),onCategoryChanged);
+						updateCalendar(getCurCalendar(),function(){
+							initHrefs();
+							onCategoryChanged();
+						});
 					});
 				else
 					updateCalendar(getCurCalendar(),onCategoryChanged);
