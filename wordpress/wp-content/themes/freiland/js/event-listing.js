@@ -382,6 +382,14 @@ function event_listing(){
 		findNextCurPost();
 	}
 
+	function getFirstMatchingPost(cat,id){
+		var post = jQuery('#'+id);
+		var newPost = post.prevAll('.cat-id-'+cat).last();
+		if ( newPost.length == 0 )
+			newPost = post;
+		return newPost; 
+	};
+
 	// filter posts when clicking on event sub categories
 	subcatClicked = function(newCat){
 		// remove any single events
@@ -399,7 +407,7 @@ function event_listing(){
 				var date = pDate.split('_');
 				reloadHref = buildHref(href,date[0],date[1]);
 			}else
-				curPost = jQuery('#'+singlePostId).prevAll('.cat-id-'+newCat).last();
+				curPost = getFirstMatchingPost(newCat,singlePostId);
 			updateNeeded = true;
 			singlePost.remove();
 			jQuery('#post-images').remove();
@@ -419,7 +427,7 @@ function event_listing(){
 					loadEvents(reloadHref,function(monthContainer){
 						jQuery('#event-listing > div.month_container').remove();
 						jQuery('#event-listing').append(monthContainer);
-						curPost = jQuery('#'+singlePostId).prevAll('.cat-id-'+curCat).last();
+						curPost = getFirstMatchingPost(curCat,singlePostId);
 						updateCalendar(getCurCalendar(),function(){
 							initHrefs();
 							onCategoryChanged();
