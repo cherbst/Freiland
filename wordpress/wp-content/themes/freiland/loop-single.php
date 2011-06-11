@@ -30,6 +30,7 @@
 
 				<div id="nav-below" class="navigation">
 					<div class="nav-previous"><?php previous_post_link( '%link', '<span class="meta-nav">' . _x( '&larr;', 'Previous post link', 'twentyten' ) . '</span> %title', TRUE ); ?></div>
+					<div id="freiland_spinner"><img src="<?php echo dirname(get_bloginfo('stylesheet_url')) . '/images/fr_load.gif'; ?>" alt='spinner' /></div>
 					<div class="nav-next"><?php next_post_link( '%link', '%title <span class="meta-nav">' . _x( '&rarr;', 'Next post link', 'twentyten' ) . '</span>', TRUE ); ?></div>
 				</div><!-- #nav-below -->
 

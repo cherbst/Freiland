@@ -1104,6 +1104,14 @@ img.tooltip {
         text-align: left;
 }
 
+/* spinner */
+#freiland_spinner {
+	width: 20px;
+	padding-top: 15px;
+	float: left;
+	display: none;
+}
+
 #nav-below {
 	width:400px;
 }
@@ -1112,13 +1120,13 @@ img.tooltip {
 	display: none;
 }
 
-.nav-previous {
-        float: left;
+.nav-previous, .nav-next {
+        width: 190px;
 }
 
 .nav-previous a,
 .nav-next a {
-        width: 180px;
+        width: 170px;
         height: 28px;
 	color: #000000!important;
 	background-color: rgb(255, 255, 255);
@@ -1144,10 +1152,6 @@ img.tooltip {
 
 .nav-previous a:hover {
         text-align: left;
-}
-
-.nav-next {
-        float: right;
 }
 
 .nav-next a {

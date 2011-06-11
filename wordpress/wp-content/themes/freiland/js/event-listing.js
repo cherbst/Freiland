@@ -476,6 +476,8 @@ function event_listing(){
 		// load post content
 		jQuery(eventSelector + ',' + nextPrevSelector).filter(':visible').each(function() {
 			if (jQuery(this).attr('href') == value) {
+				var spinner = jQuery('#freiland_spinner');
+				if ( spinner.length > 0 ) spinner.show();
 				jQuery.get(jQuery(this).attr('href'), function(data){
 					jQuery('#content #single-post').remove();
 					jQuery('#post-images').remove();
@@ -486,6 +488,7 @@ function event_listing(){
 					jQuery('body').toggleClass('single',true);
 					scrollDiv.css({top:0});
 					innerScroll.setTopmargin(scrollDiv.offset().top);
+					if ( spinner.length > 0 ) spinner.hide();
 				});
 			} 
 		});
@@ -601,7 +604,7 @@ function event_listing(){
 
 event_listing();
 jQuery(document).ready(function(){
-	if ( jQuery('#event_listing').length == 0 )
+	if ( jQuery('#event-listing').length == 0 )
 		return;
 	event_listing.init();	
 
