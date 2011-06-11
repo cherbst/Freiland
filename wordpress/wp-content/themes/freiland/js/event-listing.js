@@ -601,6 +601,8 @@ function event_listing(){
 
 event_listing();
 jQuery(document).ready(function(){
+	if ( jQuery('#event_listing').length == 0 )
+		return;
 	event_listing.init();	
 
 	// get the events of next/prev month
