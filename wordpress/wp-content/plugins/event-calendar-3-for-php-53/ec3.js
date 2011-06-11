@@ -26,7 +26,7 @@ function ec3()
   var callback = null;
 
   getCurCalendar = function(){
-	return	jQuery('#wp-calendar > table').filter(':visible').first();
+	return	jQuery('#ec3_cal_tables > table').filter(':visible').first();
   }
 
   getCurMonth = function(){
@@ -281,7 +281,7 @@ function ec3()
   /** Obtain an array of all the calendar tables. */
   function get_calendars()
   {
-    var div=document.getElementById('wp-calendar');
+    var div=document.getElementById('ec3_cal_tables');
     if ( !div ) return 0;
     var result=new Array();
     for(var i=0; i<div.childNodes.length; i++)
