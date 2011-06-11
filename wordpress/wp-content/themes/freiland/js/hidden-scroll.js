@@ -87,7 +87,7 @@ function innerScroll(elem){
 			scrollElem(delta,false,1);
 		},
 		axis: "y",
-		cancel: "#summary-text,p"
+		cancel: "#summary-text,p,a"
 	});
 
 	function setTopmargin(margin){
