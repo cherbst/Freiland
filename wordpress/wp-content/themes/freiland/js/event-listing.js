@@ -188,18 +188,20 @@ function event_listing(){
 		loadEvents(href,function(monthContainer,month){
 			if ( monthContainer.children().filter('.cat-id-'+curCat).length > 0 ||
 			     month == getCurMonth() ){
+				var diff  = scrollDiv.height();
 				if ( append ){
 					jQuery('#event-listing').append(monthContainer);
 					next_href = incrementHref(next_href);
 				}else{
-					var diff  = scrollDiv.height();
 					jQuery('#event-listing').prepend(monthContainer);
-					diff = scrollDiv.height() - diff;
-					innerScroll.setRelativeTop( - diff );
 					prev_href = decrementHref(prev_href);
 				}
 				innerScroll.updateDimensions();	
 				filterPosts(curCat);
+				if ( !append && curPost.is(':visible')){
+					diff = scrollDiv.height() - diff;
+					innerScroll.setRelativeTop( - diff );
+				}
 			}
 			if ( callback ) callback();
 			postreq--;
@@ -517,8 +519,7 @@ function event_listing(){
 	// update the current post to the first one shown
 	// call updateCalendar
 	updateCurPost = function(){
-		var elem = jQuery(window);
-		if ( curPost.length != 0 && jQuery('#event-listing > div').filter(':visible').length > 0 ) {
+		if ( curPost.length != 0 ) {
 			var newPost = curPost;
 			while ( newPost.offset().top-(topmargin-newPost.height()) < 0 ){
 				var nextPost = newPost.nextAll(':visible').first();
