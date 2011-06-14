@@ -113,6 +113,8 @@ function freiland_filter_the_title( $post_title, $id ) {
 		$return .= '<p></p>';
 		if ( !is_array($homepage ) ){
 			$homepage = array($homepage);
+		}
+		if ( !is_array($homepagelabel ) ){
 			$homepagelabel = array($homepagelabel);
 		}
 		foreach( $homepage as $key => $link ){
