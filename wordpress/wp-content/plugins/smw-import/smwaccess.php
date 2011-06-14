@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class smwaccess
 {
    const smwcookie = "/tmp/.smwcookie";
+   static $options = null;
 
    static function login($url,$user,$pass){
 	if ( !function_exists('curl_init') ) return false;
@@ -27,14 +28,21 @@ class smwaccess
 	@unlink(self::smwcookie);
 	$content=self::get_content($url);
 	preg_match('/<input.*wpLoginToken.*value="([a-f0-9]+)"/',$content,$matches);
-	$token = $matches[1];
-	preg_match('/<form.*userlogin.*action="(.+)"/',$content,$matches);
-	$login_url = parse_url($url);
-	$action = $login_url['scheme'].'://'.$login_url['host'].html_entity_decode($matches[1]);
-	$user=urlencode($user);
+	
+	if ( isset($matches[1]) ){
+		$token = $matches[1];
+		preg_match('/<form.*userlogin.*action="(.+)"/',$content,$matches);
+		$login_url = parse_url($url);
+		$action = $login_url['scheme'].'://'.$login_url['host'].html_entity_decode($matches[1]);
+		$user=urlencode($user);
 
-	$postdata="wpName=$user&wpPassword=$pass&wpRemember=1&wpLoginToken=$token";
-	return self::get_content($action,$postdata);
+		$postdata="wpName=$user&wpPassword=$pass&wpRemember=1&wpLoginToken=$token";
+		return self::get_content($action,$postdata);
+	}else{ // try http basic auth
+		self::$options = array( CURLOPT_HTTPAUTH => CURLAUTH_ANY,
+				  CURLOPT_USERPWD  => $user.':'.$pass );
+		return self::get_content($url);
+	}
    }
 
    static function get_content($url,$postdata = null){
@@ -54,6 +62,10 @@ class smwaccess
 	if ( $postdata !== null ){
 		curl_setopt ($ch, CURLOPT_POSTFIELDS, $postdata);
 		curl_setopt ($ch, CURLOPT_POST, 1);
+	}
+	if ( self::$options !== null ){
+		foreach( self::$options as $opt => $val )
+			curl_setopt ($ch, $opt, $val);
 	}
 	$result = curl_exec ($ch);
 	curl_close($ch);
