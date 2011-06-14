@@ -101,8 +101,30 @@ function ec3_get_calendar_nav($date,$num_months)
   echo "</tr></tbody></table>\n";
 }
 
+function ec3_util_nearest_month(){
+  	global $wpdb;
+	$curMonth = date('Y-m'); 
+
+	$reqs = array( array( '>=' ,'ASC' ), array('<=','DESC'));
+
+	foreach( $reqs as $req ){  
+		$sql= 
+		"SELECT ec3_sch.start FROM $wpdb->posts 
+		 INNER JOIN wp_ec3_schedule ec3_sch 
+			ON ec3_sch.post_id=id
+		 WHERE start ". $req[0]  ." '$curMonth'
+		 ORDER BY ec3_sch.start ". $req[1]." LIMIT 1";
+		$res = $wpdb->get_results($sql);
+		if ( $res && isset($res[0]) )
+			return strtotime($res[0]->start);
+	}
+
+	// nothing found, return current time
+	return time();
+}
+
 function ec3_util_get_month($order){
-  	global $ec3, $wpdb;
+  	global $wpdb;
 	$field = ($order=='ASC'?'start':'end');
 	$sql= 
 	"SELECT ec3_sch.$field FROM $wpdb->posts 
@@ -111,11 +133,9 @@ function ec3_util_get_month($order){
 	 ORDER BY ec3_sch.$field $order LIMIT 1";
 	$res = $wpdb->get_results($sql);
 	if ( $res && isset($res[0]) ){
-		error_log($date);
-		$date = mysql2date('Y_n',$res[0]->$field);
-		return $date;
+		return mysql2date('Y_n',$res[0]->$field);
 	}
-	return $date = date('Y_n');
+	return date('Y_n');
 }
 
 function ec3_util_first_month(){
