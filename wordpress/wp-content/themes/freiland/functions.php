@@ -376,6 +376,7 @@ function freiland_filter_the_title( $post_title, $id ) {
   function freiland_get_mainevent_banner(){
 	$ids = get_option('banner');
 	if ( $ids == false ) return;
+	if ( !is_array($ids) ) $ids = array($ids);
 
 	$next_id = false;
 	$today = strtotime(date('Y-m-d'));
