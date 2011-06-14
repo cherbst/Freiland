@@ -123,48 +123,7 @@ function event_listing(){
 		innerScroll.updateDimensions();	
 	};
 
-	var findNextCurPost = function(){
-		var scroll = false;
-
-		// select nearest visible post
-		if ( !curPost.is(':visible') && getCurMonth() == getPostMonth(curPost) ){
-			var allPosts = jQuery('#event-listing > div > div.post');
-			var visiblePosts = allPosts.filter(':visible');
-
-			if ( visiblePosts.length == 0 )
-				return;
-			var oldIndex = allPosts.index(curPost);
-			var diff = allPosts.length - 1;
-			visiblePosts.each(function(){
-				var curIndex = allPosts.index(jQuery(this));
-				var newDiff = Math.abs( oldIndex - curIndex );
-				if ( newDiff  <= diff ){
-					diff = newDiff;
-					curPost = jQuery(this);
-					scroll = true;
-					if ( diff == 1 ) return false;
-				}
-			});
-		}else{
-			if ( getCurMonth() != getPostMonth(curPost) ){
-				// has calendar changed?
-				// new cur is first of new month
-				var newPost = getPostFromCalDay(getEventDay(getCurCalendar(),true));
-				if ( newPost.length > 0 ){
-					curPost = newPost;
-					scroll = true;
-				}
-			}else scroll = true;
-		}
-		if ( scroll ){
-			scrollToPost(curPost,0,function(){
-				if ( updateCal )
-					updateCalendar(getCurCalendar());
-			});
-		}
-	};
-
-	// return the categroy id of this element
+	// return the category id of this element
 	function getCatId(elem){
 		var cat = elem.attr('class');
     		var xCat=new RegExp('.*cat-item-([0-9]+)');
@@ -306,7 +265,7 @@ function event_listing(){
 	event_listing.scrollToCalDay = scrollToCalDay;
 
 	// return the first/last event day from given calendar
-	getEventDay = function(curCal,first){
+	function getEventDay(curCal,first){
 		var days = jQuery(curCal).find('td.ec3_eventday');
 		if ( days.length == 0 ) return jQuery();
 		return (first?days.first():days.last());
@@ -378,7 +337,7 @@ function event_listing(){
 	function onCategoryChanged(){
 		filterPosts(curCat);
 		jQuery('#event-listing').show();
-		findNextCurPost();
+		scrollToMonth(getCurCalendar(),true,0);
 	}
 
 	function getFirstMatchingPost(cat,id){
@@ -550,9 +509,7 @@ function event_listing(){
 			ec3.go_prev(function(curCal){
 				updateCalendar(curCal,callback);
 			});
-		else if (callback){
-			 callback();
-		}
+		else if (callback) callback();
 	}
 
 	// update the current post to the first one shown
