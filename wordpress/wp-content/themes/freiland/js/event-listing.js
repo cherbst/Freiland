@@ -249,12 +249,6 @@ function event_listing(){
 	};
 
 	function loadNewEvents(append,callback){
-		if (  append && getCurMonth() == ec3.last_month ||
-		     !append && getCurMonth() == ec3.first_month ){
-			if ( callback ) callback();
-			return;
-		}
-
 		requests.push(function(){ doRequest(append,callback); });
 		if ( postreq == 0 )
 			runRequestQueue();
@@ -597,13 +591,12 @@ function event_listing(){
 	};
 
 	var checkForUpdate = function(ontop,onbottom){
-
 		// scroll reached the bottom
-		if ( onbottom )
+		if ( onbottom && getCurMonth() != ec3.last_month )
 			loadNewEvents(true,unloadMonths);
 
 		// scroll reached the top
-		else if ( ontop )
+		else if ( ontop && getCurMonth() != ec3.first_month )
 			loadNewEvents(false,unloadMonths);
 	};
 
