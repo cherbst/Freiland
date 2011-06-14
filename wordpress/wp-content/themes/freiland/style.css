@@ -540,6 +540,7 @@ body.page-child #content > div.page > h1 {
 
 #event-calendar #wp-calendar table.nav tr td {
  min-width: 44px;
+ min-height: 32px;
 }
 
 #event-calendar #wp-calendar table td:hover,
