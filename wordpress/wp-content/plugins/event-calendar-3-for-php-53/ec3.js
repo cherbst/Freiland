@@ -23,7 +23,6 @@ function WindowOnload(f)
 // namespace
 function ec3()
 {
-  var callback = null;
 
   getCurCalendar = function(){
 	return	jQuery('#ec3_cal_tables > table').filter(':visible').first();
@@ -82,8 +81,7 @@ function ec3()
 	ec3.catClause="&cat="+cat;
 	ec3.cat=cat;
 	if ( reload ){
-		ec3.callback.push(callback);
-		reloadCalendar();
+		reloadCalendar(null,null,null,callback);
 	}else if ( callback ) callback();
   }
   ec3.set_cur_cat=set_cur_cat;
@@ -130,7 +128,7 @@ function ec3()
 	return month;
   }
   
-  function reloadCalendar(curcal,year_num,month_num){
+  function reloadCalendar(curcal,year_num,month_num,callback){
 	var pn = null;
 	if ( !curcal ){
 		var calendars=get_calendars();
@@ -151,7 +149,7 @@ function ec3()
 	newcal=create_calendar(curcal,month_num,year_num);
 	pn.insertBefore( newcal, curcal );
 	jQuery(curcal).remove();
-	loadDates(month_num,year_num);
+	loadDates(month_num,year_num,callback);
 	return newcal;	
   };
 
@@ -260,12 +258,12 @@ function ec3()
 
 
   /** Dispatch an XMLHttpRequest for a month of calendar entries. */
-  function loadDates(month_num,year_num)
+  function loadDates(month_num,year_num,callback)
   {
     var req=new XMLHttpRequest();
     if(req)
     {
-      ec3.reqs.push(req);
+      ec3.reqs.push([req,callback]);
       req.onreadystatechange=process_xml;
       var xml=
         ec3.home+'/?ec3_xml='+year_num+'_'+month_num;
@@ -402,6 +400,7 @@ function ec3()
   /** Called when the user clicks the 'previous month' button. */
   function go_prev(callback)
   {
+    var load = false;
     var calendars=get_calendars();
     if(!calendars)
       return;
@@ -425,19 +424,19 @@ function ec3()
       // Add in the new first calendar
       // check the category
       if ( jQuery(newcal).data('category') != ec3.cat ){
-		ec3.callback.push(callback);
-	      	newcal = reloadCalendar(newcal,year_num,month_num);
+		load = true;
+	      	newcal = reloadCalendar(newcal,year_num,month_num,callback);
 		ec3.currentCal = newcal;
       } 
       newcal.style.display=ec3.calendar_display;
     }
     else
     {
-      ec3.callback.push(callback);
+      load = true;
       newcal=create_calendar(calendars[0],month_num,year_num);
       ec3.currentCal = newcal;
       pn.insertBefore( newcal, calendars[0] );
-      loadDates(month_num,year_num);
+      loadDates(month_num,year_num,callback);
     }
     // Hide the last calendar
     ec3.calendar_display=calendars[calendars.length-1].style.display;
@@ -445,7 +444,7 @@ function ec3()
 
     // Re-write the forward & back buttons.
     rewrite_controls(year_num,month_num+10,month_num+calendars.length-1);
-    if ( ec3.callback.length == 0 && callback ) callback(newcal);
+    if ( !load && callback ) callback(newcal);
     return newcal;
   }
   ec3.go_prev=go_prev;
@@ -478,6 +477,7 @@ function ec3()
   /** Called when the user clicks the 'next month' button. */
   function go_next(callback)
   {
+    var load = false;
     var calendars=get_calendars();
     if(!calendars)
       return;
@@ -501,22 +501,22 @@ function ec3()
     {
       // Add in the new last calendar
       if ( jQuery(newcal).data('category') != ec3.cat ){
-	     	ec3.callback.push(callback);
-		newcal = reloadCalendar(newcal,year_num,month_num);
+		load = true;
+		newcal = reloadCalendar(newcal,year_num,month_num,callback);
       		ec3.currentCal = newcal;
       } 
       newcal.style.display=ec3.calendar_display;
     }
     else
     {
-      ec3.callback.push(callback);
+      load = true;
       newcal=create_calendar(calendars[0],month_num,year_num);
       ec3.currentCal = newcal;
       if(last_cal.nextSibling)
         pn.insertBefore(newcal,last_cal.nextSibling);
       else
         pn.appendChild(newcal);
-      loadDates(month_num,year_num);
+      loadDates(month_num,year_num,callback);
     }
     // Hide the first calendar
     ec3.calendar_display=calendars[0].style.display;
@@ -524,7 +524,7 @@ function ec3()
 
     // Re-write the forward & back buttons.
     rewrite_controls(year_num,month_num-calendars.length+11,month_num);
-    if ( ec3.callback.length == 0 && callback ) callback(newcal);
+    if ( !load && callback ) callback(newcal);
     return newcal;
   }
   ec3.go_next=go_next;
@@ -537,14 +537,16 @@ function ec3()
     var busy=0;
     for(var i=0; i<ec3.reqs.length; i++)
     {
-      var req=ec3.reqs[i];
+      var req=ec3.reqs[i][0];
       if(req)
       {
         if(req.readyState==4)
         {
+	  callback = ec3.reqs[i][1];
           ec3.reqs[i]=0;
           if(req.status==200)
             update_days(req.responseXML.documentElement);
+	  if ( callback ) callback(getCurCalendar());
         }
         else
           busy=1;
@@ -588,10 +590,6 @@ function ec3()
         td.appendChild(a);
       }
     }
-    var c;
-    while ((c = ec3.callback.pop())){
-	c(ec3.currentCal);
-    }
     if(typeof ec3_Popup != 'undefined')
     {
       var month=
@@ -618,7 +616,6 @@ ec3.today_year_num=ec3.today.getFullYear();
 
 // Holds ongoing XmlHttp requests.
 ec3.reqs=new Array();
-ec3.callback=new Array();
 
 ec3.ELEMENT_NODE=1;
 ec3.TEXT_NODE=3;
