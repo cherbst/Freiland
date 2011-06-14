@@ -206,7 +206,7 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id,$cat = 0)
          AND post_date<NOW()
      )";
   }*/
-  $sql.=' ORDER BY id, allday DESC, start_date, is_event DESC';
+  $sql.=' ORDER BY post_title ASC, start_date, is_event DESC';
   $calendar_entries = $wpdb->get_results($sql);
 
   $calendar_days = array(); // result
