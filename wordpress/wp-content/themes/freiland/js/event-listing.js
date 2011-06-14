@@ -247,6 +247,12 @@ function event_listing(){
 	};
 
 	function loadNewEvents(append,callback){
+		if (  append && getCurMonth() == ec3.last_month ||
+		     !append && getCurMonth() == ec3.first_month ){
+			if ( callback ) callback();
+			return;
+		}
+
 		requests.push(function(){ doRequest(append,callback); });
 		if ( postreq == 0 )
 			runRequestQueue();
