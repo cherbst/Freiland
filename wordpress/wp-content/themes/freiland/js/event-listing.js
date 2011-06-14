@@ -3,6 +3,9 @@ function event_listing(){
 	var topmargin;
 	// count ajax requests for posts
 	var postreq = 0;
+	// count requests for next/prev month, only one should 
+	// be processed at a time
+	var nextPrevReq = 0;
 	var requests = new Array();
 	var next_href;
 	var prev_href;
@@ -344,7 +347,8 @@ function event_listing(){
 	}
 
 	function nextPrevClicked(elem){
-		if ( postreq > 0 ) return false;
+		if ( nextPrevReq > 0 ) return false;
+		nextPrevReq++;
 
 		var id = elem.attr('id');
 		var requestNextMonth = ( id == 'ec3_next' );
@@ -361,10 +365,12 @@ function event_listing(){
 				loadNewEvents(requestNextMonth,function(){
 					scrollToMonth(curCal,true,'slow',function(){
 						updateCal = true;
+						nextPrevReq--;
 					});
 				});
 			else scrollToMonth(curCal,true,'slow',function(){
 				updateCal = true;
+				nextPrevReq--;
 			});
 		});
 	};
