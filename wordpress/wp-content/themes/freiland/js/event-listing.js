@@ -337,7 +337,9 @@ function event_listing(){
 	function onCategoryChanged(){
 		filterPosts(curCat);
 		jQuery('#event-listing').show();
-		scrollToMonth(getCurCalendar(),true,0);
+		if ( !curPost.is(':visible') || curCat != topCat ){
+			scrollToMonth(getCurCalendar(),true,0);
+		}else scrollToPost(curPost,0);
 	}
 
 	function getFirstMatchingPost(cat,id){
