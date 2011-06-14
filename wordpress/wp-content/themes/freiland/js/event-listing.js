@@ -19,8 +19,7 @@ function event_listing(){
 	var nextPrevSelector = '.nav-previous > a,.nav-next > a';
 	// the url of the site
 	var baseURL;
-	// pixel distance from visible area for loading/unloading new events
-	var delta = 100;
+	// the div that is scrolled
 	var scrollDiv;
 
 
@@ -260,6 +259,8 @@ function event_listing(){
 
 	unloadMonths = function(){
 		var container = jQuery('.month_container').first();
+		// pixel distance from visible area for unloading months
+		var delta = 100;
 
 		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
@@ -295,16 +296,8 @@ function event_listing(){
 		var cur = scrollDiv.offset();
 		var offset = cur.top - post.offset().top;
 		scrollDiv.animate({ top: offset},duration,function(){
-			if( scrollDiv.offset().top + scrollDiv.height() < 
-				jQuery('#footer').offset().top ){
-				loadNewEvents(true,function(){
-					unloadMonths();
-					if ( callback ) callback();
-				});
-			}else{
-				unloadMonths();
-				if ( callback ) callback();
-			}
+			innerScroll.positionChanged();
+			if ( callback ) callback();
 		});
 	};
 	event_listing.scrollToPost = scrollToPost;

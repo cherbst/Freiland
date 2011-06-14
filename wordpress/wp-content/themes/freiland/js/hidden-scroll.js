@@ -27,16 +27,17 @@ function innerScroll(elem){
 		var curTop = getTop();
 		var newTop = curTop+(delta*v);
 		var minTop = getMinTop();
+		var allmost = 50;
 
 		if ( delta < 0 )
 			newTop = Math.max(newTop,minTop);
 		else
 			newTop = Math.min(newTop,0);
 
-		if( newTop <= minTop && delta < 0){
+		if( newTop <= minTop + allmost && delta < 0){
 			onbottom = true;
 			ontop = false;
-		}else if (newTop >= 0 && delta > 0 ){
+		}else if (newTop >= - allmost && delta > 0 ){
 			ontop = true;
 			onbottom = false;
 		}else{
@@ -50,6 +51,13 @@ function innerScroll(elem){
 		}
 		return ret;
 	}
+
+	function positionChanged(){
+		// call to trigger ontop/onbottom events
+		scrollElem(-1,false);
+		scrollElem(1,false);
+	}
+	innerScroll.positionChanged = positionChanged;
 
 	jQuery(document).keydown(function(event){
 		var delta = 0;
