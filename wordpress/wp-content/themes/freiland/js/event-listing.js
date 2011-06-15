@@ -302,6 +302,11 @@ function event_listing(){
 	}
 	event_listing.parseHref = parseHref;
 
+	function getTimeFromMonth(month){
+		month = month.split('_');
+		return new Date(month[0],month[1]-1,1).getTime();
+	}
+
 	// test if the month of href is between prev_href and next_href
 	hrefLoaded = function(href){
 		href = parseHref(href);
@@ -574,15 +579,15 @@ function event_listing(){
 	var checkForUpdate = function(ontop,onbottom){
 		// scroll reached the bottom
 		if ( onbottom ){
-			var nextMonth = getMonthIdFromHref(decrementHref(next_href));
-			if ( nextMonth != ec3.last_month )
+			var nextMonth = getTimeFromMonth(getMonthIdFromHref(next_href));
+			if ( nextMonth <= getTimeFromMonth(ec3.last_month) )
 				loadNewEvents(true,unloadMonths);
 		}
 
 		// scroll reached the top
 		else if ( ontop ){
-			var prevMonth = getMonthIdFromHref(incrementHref(prev_href));
-			if ( prevMonth != ec3.first_month )
+			var prevMonth = getTimeFromMonth(getMonthIdFromHref(prev_href));
+			if ( prevMonth >= getTimeFromMonth(ec3.first_month) )
 				loadNewEvents(false,unloadMonths);
 		}
 	};
