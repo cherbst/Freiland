@@ -99,6 +99,10 @@ function event_listing(){
 		});
 	}
 
+	function getLastPostHeight(){
+		return jQuery('#event-listing > div > div.post').filter(':visible').last().height();
+	};
+
 	// filter posts for given category
 	// show 404 if no posts found
 	var filterPosts = function(cat){
@@ -110,6 +114,8 @@ function event_listing(){
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var other = jQuery('#event-listing > div > div').not('.cat-id-'+cat);
 		var notfound = jQuery('.error404');
+		var postsToShow = false;
+
 		if ( allPosts.length == other.length ){
 			 if ( notfound.length == 0 ){
 				requests.push(function(){ get404(); });
@@ -120,10 +126,12 @@ function event_listing(){
 			innerScroll.setScrollableToTop(false);
 		}else{
 			notfound.hide();
-			innerScroll.setScrollableToTop(true);
+			postsToShow = true;
 		}
 		allPosts.show();
 		other.hide();
+		if ( postsToShow )
+			innerScroll.setScrollableToTop(true,getLastPostHeight());
 		innerScroll.updateDimensions();	
 	};
 
@@ -342,6 +350,7 @@ function event_listing(){
 
 	function onCategoryChanged(){
 		filterPosts(curCat);
+		innerScroll.setScrollableToTop(true,getLastPostHeight());
 		jQuery('#event-listing').show();
 		if ( !curPost.is(':visible') || curCat != topCat ||
 			getCurMonth() != getPostMonth(curPost) ){
@@ -366,7 +375,6 @@ function event_listing(){
 		var post = singlePost.find('div.post');
 		var singlePostId;
 
-		innerScroll.setScrollableToTop(true);
 		if ( singlePost.length > 0 ){
 			innerScroll.resetTopmargin();
 			singlePostId = post.attr('id');

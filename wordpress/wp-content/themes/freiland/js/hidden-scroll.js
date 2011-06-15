@@ -8,6 +8,7 @@ function innerScroll(elem){
 	// if the elem should be allowed to scroll until the top
 	var scrollableToTop = false;
 	var allmost = 50;
+	var topScrollMargin = 50;
 
 	elem.css('position','relative');
 	elem.css('top',0);
@@ -32,7 +33,7 @@ function innerScroll(elem){
 		var minTop = getMinTop();
 
 		if ( delta < 0 )
-			newTop = Math.max(newTop,scrollableToTop? -elem.height()+allmost:minTop);
+			newTop = Math.max(newTop,scrollableToTop? -elem.height()+topScrollMargin:minTop);
 		else
 			newTop = Math.min(newTop,0);
 
@@ -78,7 +79,7 @@ function innerScroll(elem){
 
 	function setContainment(){
 		var containment = scrollableToTop?
-			[0, - elem.height() + topmargin + allmost,0,  topmargin]:
+			[0, - elem.height() + topmargin + topScrollMargin,0,  topmargin]:
 			[0,Math.min(getMinTop() + topmargin,topmargin),0,  topmargin];
 
 		elem.draggable( "option", "containment", containment );
@@ -133,8 +134,10 @@ function innerScroll(elem){
 	};
 	innerScroll.setTop = setTop;
 
-	function setScrollableToTop(val){
+	function setScrollableToTop(val,margin){
 		scrollableToTop = val;
+		if ( margin != 'undefined' && margin != null)
+			topScrollMargin = margin;
 	}
 	innerScroll.setScrollableToTop = setScrollableToTop;
 }
