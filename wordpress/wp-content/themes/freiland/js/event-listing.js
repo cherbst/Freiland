@@ -118,7 +118,10 @@ function event_listing(){
                         } else notfound.show();
 			innerScroll.setTop(0);
 			innerScroll.setScrollableToTop(false);
-		}else notfound.hide();
+		}else{
+			notfound.hide();
+			innerScroll.setScrollableToTop(true);
+		}
 		allPosts.show();
 		other.hide();
 		innerScroll.updateDimensions();	
