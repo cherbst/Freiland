@@ -1,16 +1,18 @@
 <?php
 /*
-Plugin Name: Event Calendar 3 for PHP 5.3
-Plugin URI: http://wordpress.org/extend/plugins/event-calendar-3-for-php-53/
-Description: Manage future events as an online calendar. Display upcoming events in a dynamic calendar, on a listings page, or as a list in the sidebar. You can subscribe to the calendar from iCal (OSX) or Sunbird. Change settings on the <a href="options-general.php?page=ec3_admin">Event Calendar Options</a> screen.
-Version: 3.1.5
-Author: Alex Tingle (PHP 5.3 version by Stig Ulfsby)
-Author URI: http://blog.firetree.net/
+Plugin Name: Category Event Calendar 
+Plugin URI: http://wordpress.org/extend/plugins/category-event-calendar/
+Description: This plugin is based on the event calendar 3 for php 5.3 plugin written by Alex Tingle. 
+It adds support for events using multiple categories. Other features were also added as needed.
+This is the original description: Manage future events as an online calendar. Display upcoming events in a dynamic calendar, on a listings page, or as a list in the sidebar. You can subscribe to the calendar from iCal (OSX) or Sunbird. Change settings on the <a href="options-general.php?page=ec3_admin">Event Calendar Options</a> screen.
+Version: 1.0
+Author: Christoph Herbst (Original version by Alex Tingle (PHP 5.3 version by Stig Ulfsby))
+Author URI: 
 Licence: GPL2
 */
 
 /*
-Copyright (c) 2005-2011, Alex Tingle.
+Copyright (c) 2011, Christoph Herbst.
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
