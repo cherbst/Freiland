@@ -503,6 +503,11 @@ function event_listing(){
 		return buildHref(href,year,month);
 	};
 
+	function getMonthIdFromHref(href){
+		href = parseHref(href);
+		return href[1]+'_'+href[2]
+	}
+
 	// update calendar to match current post month
 	updateCalendar = function(curCal,callback){
 		curCal = jQuery(curCal);
@@ -557,12 +562,18 @@ function event_listing(){
 
 	var checkForUpdate = function(ontop,onbottom){
 		// scroll reached the bottom
-		if ( onbottom && getCurMonth() != ec3.last_month )
-			loadNewEvents(true,unloadMonths);
+		if ( onbottom ){
+			var nextMonth = getMonthIdFromHref(decrementHref(next_href));
+			if ( nextMonth != ec3.last_month )
+				loadNewEvents(true,unloadMonths);
+		}
 
 		// scroll reached the top
-		else if ( ontop && getCurMonth() != ec3.first_month )
-			loadNewEvents(false,unloadMonths);
+		else if ( ontop ){
+			var prevMonth = getMonthIdFromHref(incrementHref(prev_href));
+			if ( prevMonth != ec3.first_month )
+				loadNewEvents(false,unloadMonths);
+		}
 	};
 
 	function onScrolled(ontop,onbottom){
