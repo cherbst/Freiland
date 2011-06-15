@@ -117,6 +117,7 @@ function event_listing(){
 					runRequestQueue();
                         } else notfound.show();
 			innerScroll.setTop(0);
+			innerScroll.setScrollableToTop(false);
 		}else notfound.hide();
 		allPosts.show();
 		other.hide();
@@ -361,6 +362,8 @@ function event_listing(){
 		var singlePost = jQuery('#content #single-post');
 		var post = singlePost.find('div.post');
 		var singlePostId;
+
+		innerScroll.setScrollableToTop(true);
 		if ( singlePost.length > 0 ){
 			innerScroll.resetTopmargin();
 			singlePostId = post.attr('id');
@@ -463,6 +466,7 @@ function event_listing(){
 					jQuery('body').toggleClass('single',true);
 					scrollDiv.css({top:0});
 					innerScroll.setTopmargin(scrollDiv.offset().top);
+					innerScroll.setScrollableToTop(false);
 					if ( spinner.length > 0 ) spinner.hide();
 				});
 			} 
