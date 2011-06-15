@@ -383,8 +383,9 @@ function ec3_filter_query_vars_xml()
   if(count($components)>=2)
   {
     $date=new ec3_Date($components[0],$components[1]);
+    $cat = $components[2];
     $end=$date->next_month();
-    $calendar_days=ec3_util_calendar_days($date->month_id(),$end->month_id(),$components[2]);
+    $calendar_days=ec3_util_calendar_days($date->month_id(),$end->month_id(),$cat);
     @header('Content-type: text/xml');
     echo '<?xml version="1.0" encoding="'.get_option('blog_charset')
     .    '" standalone="yes"?>';
@@ -404,7 +405,10 @@ function ec3_filter_query_vars_xml()
         .    " titles='$titles' ids='$ids' link='" . $date->day_link() . "'/>\n";
       }
     }
-    echo "</month></calendar>\n";
+    echo "</month>";
+    echo "<firstmonth id='". ec3_util_first_month($cat) ."' />\n";
+    echo "<lastmonth id='". ec3_util_last_month($cat) ."' />\n";
+    echo "</calendar>\n";
     exit(0);
   }
 }

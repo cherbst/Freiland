@@ -123,13 +123,19 @@ function ec3_util_nearest_month(){
 	return time();
 }
 
-function ec3_util_get_month($order){
-  	global $wpdb;
+function ec3_util_get_month($order,$cat = null){
+  	global $wpdb,$ec3;
+
+	if ( $cat === null ) 
+		$cat = $ec3->event_category;
 	$field = ($order=='ASC'?'start':'end');
 	$sql= 
 	"SELECT ec3_sch.$field FROM $wpdb->posts 
+	 INNER JOIN $wpdb->term_relationships 
+		ON (id = object_id) 
 	 INNER JOIN wp_ec3_schedule ec3_sch 
 		ON ec3_sch.post_id=id 
+	 WHERE term_taxonomy_id IN ($cat) 
 	 ORDER BY ec3_sch.$field $order LIMIT 1";
 	$res = $wpdb->get_results($sql);
 	if ( $res && isset($res[0]) ){
@@ -138,12 +144,12 @@ function ec3_util_get_month($order){
 	return date('Y_n');
 }
 
-function ec3_util_first_month(){
-	return ec3_util_get_month("ASC");
+function ec3_util_first_month($cat){
+	return ec3_util_get_month("ASC",$cat);
 }
 
-function ec3_util_last_month(){
-	return ec3_util_get_month("DESC");
+function ec3_util_last_month($cat){
+	return ec3_util_get_month("DESC",$cat);
 }
 
 function ec3_util_get_active_event_count($cat){

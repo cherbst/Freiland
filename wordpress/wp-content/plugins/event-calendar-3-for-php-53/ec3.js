@@ -34,16 +34,26 @@ function ec3()
   }
 
   function showControls(prev,next){
-      var curMonth = getCurMonth();
-      if ( curMonth == ec3.first_month )
-	 jQuery(prev).hide();
-      else
-	 jQuery(prev).show();
+    	if ( !prev) 
+	  prev=document.getElementById('ec3_prev');
+	if ( !next )
+    	  next=document.getElementById('ec3_next');
+	var fMonth = ec3.first_month.split('_');
+	var lMonth = ec3.last_month.split('_');
+	var cMonth = getCurMonth().split('_');
+	fMonth = new Date(fMonth[0],fMonth[1]-1,1).getTime();
+	lMonth = new Date(lMonth[0],lMonth[1]-1,1).getTime();
+	cMonth = new Date(cMonth[0],cMonth[1]-1,1).getTime();
+	
+	if ( cMonth <= fMonth )
+	  jQuery(prev).hide();
+	else
+	  jQuery(prev).show();
 
-      if ( curMonth == ec3.last_month ) 
-	jQuery(next).hide();
-      else
-	 jQuery(next).show();
+	if ( cMonth >= lMonth ) 
+	  jQuery(next).hide();
+	else
+	  jQuery(next).show();
   }
 
   WindowOnload( function()
@@ -590,6 +600,12 @@ function ec3()
         td.appendChild(a);
       }
     }
+    var month_id=month_xml.getElementsByTagName('firstmonth');
+    if ( month_id ) ec3.first_month = month_id[0].getAttribute('id');
+    month_id=month_xml.getElementsByTagName('lastmonth');
+    if ( month_id ) ec3.last_month = month_id[0].getAttribute('id');
+    showControls();
+
     if(typeof ec3_Popup != 'undefined')
     {
       var month=
