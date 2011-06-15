@@ -144,11 +144,11 @@ function ec3_util_get_month($order,$cat = null){
 	return date('Y_n');
 }
 
-function ec3_util_first_month($cat){
+function ec3_util_first_month($cat = null){
 	return ec3_util_get_month("ASC",$cat);
 }
 
-function ec3_util_last_month($cat){
+function ec3_util_last_month($cat = null){
 	return ec3_util_get_month("DESC",$cat);
 }
 
