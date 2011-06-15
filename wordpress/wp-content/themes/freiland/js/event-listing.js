@@ -454,7 +454,7 @@ function event_listing(){
 		// load post content
 		jQuery(eventSelector + ',' + nextPrevSelector).filter(':visible').each(function() {
 			if (jQuery(this).attr('href') == value) {
-				var spinner = jQuery('#freiland_spinner');
+				var spinner = jQuery('#freiland_spinner,#ec3_spinner');
 				if ( spinner.length > 0 ) spinner.show();
 				jQuery.get(jQuery(this).attr('href'), function(data){
 					jQuery('#content #single-post').remove();
