@@ -22,14 +22,15 @@ class smwaccess
    const smwcookie = "/tmp/.smwcookie";
    static $options = null;
 
-   static function login($url,$user,$pass){
+   static function login($url = null,$user,$pass){
 	if ( !function_exists('curl_init') ) return false;
 
 	@unlink(self::smwcookie);
-	$content=self::get_content($url);
-	preg_match('/<input.*wpLoginToken.*value="([a-f0-9]+)"/',$content,$matches);
+	// form based auth
+	if ( $url !== null ){
+		$content=self::get_content($url);
+		preg_match('/<input.*wpLoginToken.*value="([a-f0-9]+)"/',$content,$matches);
 	
-	if ( isset($matches[1]) ){
 		$token = $matches[1];
 		preg_match('/<form.*userlogin.*action="(.+)"/',$content,$matches);
 		$login_url = parse_url($url);
@@ -38,10 +39,10 @@ class smwaccess
 
 		$postdata="wpName=$user&wpPassword=$pass&wpRemember=1&wpLoginToken=$token";
 		return self::get_content($action,$postdata);
-	}else{ // try http basic auth
+	}else{ // http basic auth
 		self::$options = array( CURLOPT_HTTPAUTH => CURLAUTH_ANY,
 				  CURLOPT_USERPWD  => $user.':'.$pass );
-		return self::get_content($url);
+		return true;
 	}
    }
 

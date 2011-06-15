@@ -793,9 +793,10 @@ class smwimport
 
 	// login to data source server if auth details are given
 	$login_url = get_option('smwimport_login_url');
-	if ( $login_url != "" ){
-		$username = get_option('smwimport_username');
-		$password = get_option('smwimport_password');
+	$username = get_option('smwimport_username');
+	$password = get_option('smwimport_password');
+	if ( $username != "" ){
+		if ( $login_url == "" ) $login_url = null;
 		$ret = smwaccess::login($login_url,$username,$password);
 		if ( $ret === false )
 			return new WP_Error('curl_not_installed',

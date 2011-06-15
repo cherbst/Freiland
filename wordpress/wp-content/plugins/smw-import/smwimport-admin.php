@@ -207,7 +207,7 @@ function smwimport_settings_page() {
 <input type="text" name="smwimport_attachment_url" value="<?php echo $attachment_url; ?>" size="80">
 </p>
 
-<p><?php _e("Url to login page (optional):", 'menu-smwimport' ); ?> 
+<p><?php _e("Url to login page (for form-based auth):", 'menu-smwimport' ); ?> 
 <input type="text" name="smwimport_login_url" value="<?php echo $login_url; ?>" size="80">
 </p>
 
