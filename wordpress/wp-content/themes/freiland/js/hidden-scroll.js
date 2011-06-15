@@ -45,10 +45,11 @@ function innerScroll(elem){
 			onbottom = false;
 		}else{
 			ontop = onbottom = false;
-			ret = false;
 		}
-		if ( (newTop < curTop && delta < 0 || newTop > curTop && delta > 0 ) && move )
+		if ( (newTop < curTop && delta < 0 || newTop > curTop && delta > 0 ) && move ){
+			ret = false;
 			elem.css('top',newTop);
+		}
 		if ( triggerTop || triggerBottom ){
 			elem.trigger('hiddenscroll',[triggerTop && ontop,triggerBottom && onbottom]);
 		}
