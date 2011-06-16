@@ -357,22 +357,22 @@ function event_listing(){
 		}else{
 			fun = ec3.go_prev;
 		}
+
+		var callback = function(curCal){
+			return function(){ 
+				scrollToMonth(curCal,true,'slow',function(){
+					updateCal = true;
+					nextPrevReq--;
+				});
+			};
+		};
+
 		fun(function(curCal){
 			updateCal = false;
 			if ( reload ) 
-				loadNewEvents(requestNextMonth,function(){
-					scrollToMonth(curCal,true,'slow',function(){
-						updateCal = true;
-						nextPrevReq--;
-					});
-				});
+				loadNewEvents(requestNextMonth,callback(curCal));
 			else
-				filterPosts(curCat,null,function(){
-					scrollToMonth(curCal,true,'slow',function(){
-						updateCal = true;
-						nextPrevReq--;
-					});
-				});
+				filterPosts(curCat,null,callback(curCal));
 		});
 	};
 	event_listing.nextPrevClicked = nextPrevClicked;
@@ -385,7 +385,6 @@ function event_listing(){
 			}else scrollToPost(curPost,0);
 		},function(){
 			innerScroll.setScrollableToTop(true,getLastPostHeight());
-			jQuery('#event-listing').show();
 		});
 	}
 
