@@ -111,6 +111,7 @@ function event_listing(){
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var curMonthPosts = jQuery(monthId).children();
 		var other, toShow;
+		var duration = 'slow';
 
 		if ( curCat != topCat && curMonthPosts.filter(filter).length == 0 ){
 			// keep only posts of current month
@@ -127,7 +128,7 @@ function event_listing(){
 		var postsToShow = ( allPosts.length != other.length );
 		var notfound = jQuery('.error404');
 
-		toHide.fadeOut('slow');
+		toHide.fadeOut(duration);
 
 		toHide.promise().done(function(){
 			if ( !postsToShow ){
@@ -143,10 +144,12 @@ function event_listing(){
 			}
 			notfound.hide();
 
-			var firstPost = curPost.is(':visible')?curPost:allPosts.filter(':visible').first();
-			var diff;
-			if ( firstPost.length > 0 )
-				diff = firstPost.offset().top;
+			if ( !onShown ){
+				var firstPost = curPost.is(':visible')?curPost:allPosts.filter(':visible').first();
+				var diff;
+				if ( firstPost.length > 0 )
+					diff = firstPost.offset().top;
+			}
 
 			toShow.css('opacity',0);
 			toShow.show();
@@ -158,11 +161,12 @@ function event_listing(){
 				innerScroll.setRelativeTop( diff );
 			}
 
-			toShow.fadeTo('slow',1);
+			toShow.fadeTo(duration,1);
 			toShow.promise().done(function(){
 				innerScroll.updateDimensions();
 				innerScroll.setScrollableToTop(true,getLastPostHeight());
 				if ( callback ) callback();
+			//	alert('shown');
 			});
 		});
 	};
