@@ -453,6 +453,10 @@ body.page-child #content > div.page > h1 {
 	display:none;
 }
 
+div.post {
+	background: white;
+}
+
 #content .entry-title {
 	font-size : 14pt;
 	text-transform:uppercase;
