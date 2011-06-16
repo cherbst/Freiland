@@ -103,36 +103,60 @@ function event_listing(){
 		return jQuery('#event-listing > div > div.post').filter(':visible').last().height();
 	};
 
-	// filter posts for given category
-	// show 404 if no posts found
-	var filterPosts = function(cat){
-		if ( curCat != topCat ){
-			var id = '#month_'+getCurMonth();
-			if ( jQuery(id).children().filter('.cat-id-'+curCat).length == 0 )
-				keepOnlyCurrentMonth();
-		}
-		var allPosts = jQuery('#event-listing > div > div.post');
-		var other = jQuery('#event-listing > div > div').not('.cat-id-'+cat);
+	function showPosts(postsToShow,toShow,duration,callback){
 		var notfound = jQuery('.error404');
-		var postsToShow = false;
-
-		if ( allPosts.length == other.length ){
+		if ( !postsToShow ){
 			 if ( notfound.length == 0 ){
 				requests.push(function(){ get404(); });
 				if ( postreq == 0 )
-					runRequestQueue();
-                        } else notfound.show();
+				runRequestQueue();
+       	                } else notfound.show();
 			innerScroll.setTop(0);
 			innerScroll.setScrollableToTop(false);
 		}else{
 			notfound.hide();
-			postsToShow = true;
-		}
-		allPosts.show();
-		other.hide();
-		if ( postsToShow )
 			innerScroll.setScrollableToTop(true,getLastPostHeight());
-		innerScroll.updateDimensions();	
+		}
+		if ( toShow.length > 0 )
+			toShow.fadeIn(duration,function(){
+				innerScroll.updateDimensions();
+				if ( callback ) callback();
+			});
+		else{
+			innerScroll.updateDimensions();
+			if ( callback ) callback();
+		}
+	};
+
+	// filter posts for given category
+	// show 404 if no posts found
+	var filterPosts = function(cat,duration,callback){
+		console.log(getCurMonth());
+		var monthId = '#month_'+getCurMonth();
+		var filter = '.cat-id-'+cat;
+		var allPosts = jQuery('#event-listing > div > div.post');
+		var curMonthPosts = jQuery(monthId).children();
+		var other, toShow;
+
+		if ( curCat != topCat && curMonthPosts.filter(filter).length == 0 ){
+			// keep only posts of current month
+			other = jQuery('.month_container').not(monthId)
+				.children().add(curMonthPosts.not(filter));
+			toShow = curMonthPosts.filter(filter).not(':visible');
+		}else{
+			// keep all posts matching filter
+			other = allPosts.not(filter);
+			toShow = allPosts.filter(filter).not(':visible');
+		}
+
+		var toHide = other.filter(':visible');
+		var postsToShow = ( allPosts.length != other.length );
+
+		if ( toHide.length > 0 )
+			toHide.fadeOut(duration,function(){
+				showPosts(postsToShow,toShow,duration,callback);
+			});
+		else showPosts(postsToShow,toShow,duration,callback);
 	};
 
 	// return the category id of this element
@@ -198,22 +222,19 @@ function event_listing(){
 		postreq++;
 		var href = (append?next_href:prev_href);
 		loadEvents(href,function(monthContainer,month){
-			if ( monthContainer.children().filter('.cat-id-'+curCat).length > 0 ||
-			     month == getCurMonth() ){
-				var diff  = scrollDiv.height();
-				if ( append ){
-					jQuery('#event-listing').append(monthContainer);
-					next_href = incrementHref(next_href);
-				}else{
-					jQuery('#event-listing').prepend(monthContainer);
-					prev_href = decrementHref(prev_href);
-				}
-				innerScroll.updateDimensions();	
-				filterPosts(curCat);
-				if ( !append && curPost.is(':visible')){
-					diff = scrollDiv.height() - diff;
-					innerScroll.setRelativeTop( - diff );
-				}
+			var diff  = scrollDiv.height();
+			if ( append ){
+				jQuery('#event-listing').append(monthContainer);
+				next_href = incrementHref(next_href);
+			}else{
+				jQuery('#event-listing').prepend(monthContainer);
+				prev_href = decrementHref(prev_href);
+			}
+			innerScroll.updateDimensions();	
+			filterPosts(curCat,0);
+			if ( !append && curPost.is(':visible')){
+				diff = scrollDiv.height() - diff;
+				innerScroll.setRelativeTop( - diff );
 			}
 			if ( callback ) callback();
 			postreq--;
@@ -340,27 +361,26 @@ function event_listing(){
 						nextPrevReq--;
 					});
 				});
-			else scrollToMonth(curCal,true,'slow',function(){
-				updateCal = true;
-				nextPrevReq--;
-			});
+			else
+				filterPosts(curCat,'slow',function(){
+					scrollToMonth(curCal,true,'slow',function(){
+						updateCal = true;
+						nextPrevReq--;
+					});
+				});
 		});
 	};
 	event_listing.nextPrevClicked = nextPrevClicked;
 
-	function keepOnlyCurrentMonth(){
-		jQuery('#event-listing > div.month_container').not('#month_'+getCurMonth()).remove();
-		initHrefs();
-	}
-
 	function onCategoryChanged(){
-		filterPosts(curCat);
-		innerScroll.setScrollableToTop(true,getLastPostHeight());
-		jQuery('#event-listing').show();
-		if ( !curPost.is(':visible') || curCat != topCat ||
-			getCurMonth() != getPostMonth(curPost) ){
-			scrollToMonth(getCurCalendar(),true,0);
-		}else scrollToPost(curPost,0);
+		filterPosts(curCat,'slow',function(){
+			innerScroll.setScrollableToTop(true,getLastPostHeight());
+			jQuery('#event-listing').show();
+			if ( !curPost.is(':visible') || curCat != topCat ||
+				getCurMonth() != getPostMonth(curPost) ){
+				scrollToMonth(getCurCalendar(),true,0);
+			}else scrollToPost(curPost,0);
+		});
 	}
 
 	function getFirstMatchingPost(cat,id){
