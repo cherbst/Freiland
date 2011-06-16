@@ -103,35 +103,9 @@ function event_listing(){
 		return jQuery('#event-listing > div > div.post').filter(':visible').last().height();
 	};
 
-	function showPosts(postsToShow,toShow,duration,callback){
-		var notfound = jQuery('.error404');
-		if ( !postsToShow ){
-			 if ( notfound.length == 0 ){
-				requests.push(function(){ get404(); });
-				if ( postreq == 0 )
-				runRequestQueue();
-       	                } else notfound.show();
-			innerScroll.setTop(0);
-			innerScroll.setScrollableToTop(false);
-		}else{
-			notfound.hide();
-			innerScroll.setScrollableToTop(true,getLastPostHeight());
-		}
-		if ( toShow.length > 0 )
-			toShow.fadeIn(duration,function(){
-				innerScroll.updateDimensions();
-				if ( callback ) callback();
-			});
-		else{
-			innerScroll.updateDimensions();
-			if ( callback ) callback();
-		}
-	};
-
 	// filter posts for given category
 	// show 404 if no posts found
-	var filterPosts = function(cat,duration,callback){
-		console.log(getCurMonth());
+	var filterPosts = function(cat,onShown,callback){
 		var monthId = '#month_'+getCurMonth();
 		var filter = '.cat-id-'+cat;
 		var allPosts = jQuery('#event-listing > div > div.post');
@@ -151,12 +125,46 @@ function event_listing(){
 
 		var toHide = other.filter(':visible');
 		var postsToShow = ( allPosts.length != other.length );
+		var notfound = jQuery('.error404');
 
-		if ( toHide.length > 0 )
-			toHide.fadeOut(duration,function(){
-				showPosts(postsToShow,toShow,duration,callback);
+		toHide.fadeOut('slow');
+
+		toHide.promise().done(function(){
+			if ( !postsToShow ){
+				if ( notfound.length == 0 ){
+					requests.push(function(){ get404(); });
+					if ( postreq == 0 )
+						runRequestQueue();
+				} else notfound.show();
+				innerScroll.setTop(0);
+				innerScroll.setScrollableToTop(false);
+				if ( callback ) callback();
+				return;
+			}
+			notfound.hide();
+
+			var firstPost = curPost.is(':visible')?curPost:allPosts.filter(':visible').first();
+			var diff;
+			if ( firstPost.length > 0 )
+				diff = firstPost.offset().top;
+
+			toShow.css('opacity',0);
+			toShow.show();
+
+			if ( onShown )
+				onShown();
+			else if ( firstPost.length > 0 ){
+				diff = diff - firstPost.offset().top;
+				innerScroll.setRelativeTop( diff );
+			}
+
+			toShow.fadeTo('slow',1);
+			toShow.promise().done(function(){
+				innerScroll.updateDimensions();
+				innerScroll.setScrollableToTop(true,getLastPostHeight());
+				if ( callback ) callback();
 			});
-		else showPosts(postsToShow,toShow,duration,callback);
+		});
 	};
 
 	// return the category id of this element
@@ -222,7 +230,7 @@ function event_listing(){
 		postreq++;
 		var href = (append?next_href:prev_href);
 		loadEvents(href,function(monthContainer,month){
-			var diff  = scrollDiv.height();
+			monthContainer.children().hide();
 			if ( append ){
 				jQuery('#event-listing').append(monthContainer);
 				next_href = incrementHref(next_href);
@@ -230,15 +238,12 @@ function event_listing(){
 				jQuery('#event-listing').prepend(monthContainer);
 				prev_href = decrementHref(prev_href);
 			}
-			innerScroll.updateDimensions();	
-			filterPosts(curCat,0);
-			if ( !append && curPost.is(':visible')){
-				diff = scrollDiv.height() - diff;
-				innerScroll.setRelativeTop( - diff );
-			}
-			if ( callback ) callback();
-			postreq--;
-			runRequestQueue();
+			filterPosts(curCat,null,function(){
+				innerScroll.updateDimensions();	
+				if ( callback ) callback();
+				postreq--;
+				runRequestQueue();
+			});
 		});
 	};
 
@@ -362,7 +367,7 @@ function event_listing(){
 					});
 				});
 			else
-				filterPosts(curCat,'slow',function(){
+				filterPosts(curCat,null,function(){
 					scrollToMonth(curCal,true,'slow',function(){
 						updateCal = true;
 						nextPrevReq--;
@@ -373,13 +378,14 @@ function event_listing(){
 	event_listing.nextPrevClicked = nextPrevClicked;
 
 	function onCategoryChanged(){
-		filterPosts(curCat,'slow',function(){
-			innerScroll.setScrollableToTop(true,getLastPostHeight());
-			jQuery('#event-listing').show();
+		filterPosts(curCat,function(){
 			if ( !curPost.is(':visible') || curCat != topCat ||
 				getCurMonth() != getPostMonth(curPost) ){
 				scrollToMonth(getCurCalendar(),true,0);
 			}else scrollToPost(curPost,0);
+		},function(){
+			innerScroll.setScrollableToTop(true,getLastPostHeight());
+			jQuery('#event-listing').show();
 		});
 	}
 
@@ -497,7 +503,8 @@ function event_listing(){
 					jQuery('#post-images').remove();
 					jQuery('#main').prepend(jQuery(data).find('#post-images'));
 					jQuery('#content').append(getSinglePost(data));
-					jQuery(listingElements + ",#event-listing").hide();
+					jQuery(listingElements).hide();
+					jQuery('#event-listing > div > div.post').hide();
 					jQuery('body').toggleClass('category-events',false);
 					jQuery('body').toggleClass('single',true);
 					scrollDiv.css({top:0});
