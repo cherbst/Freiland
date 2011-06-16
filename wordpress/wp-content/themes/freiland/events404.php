@@ -17,7 +17,7 @@ get_header(); ?>
 			<div id="post-0" class="post error404 not-found">
 				<h1 class="entry-title"><?php the_title(); ?></h1>
 				<div class="entry-content">
-					<p><?php the_content(); ?></p>
+					<p><?php echo get_the_content(); ?></p>
 					<?php 
 						$cat = get_category_by_slug('events');
 						// Get the URL of this category
