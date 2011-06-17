@@ -40,7 +40,7 @@ function innerScroll(elem){
 			if ( !fitsInView() )
 				nav.fadeIn('fast');
 		},function(event){
-			if ( elem.find('#'+jQuery(event.relatedTarget).attr('id')).length == 0 )
+			if ( elem.find(jQuery(event.relatedTarget)).length == 0 )
 				nav.fadeOut('fast');
 		});
 		elem.hover(function(){
