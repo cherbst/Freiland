@@ -110,7 +110,6 @@ function freiland_filter_the_title( $post_title, $id ) {
 
 
   function freiland_get_gallery_content($content){
-	error_log('Adding gallery content');
 	return $content . '[gallery  lightboxsize="large"]';
   }
 
