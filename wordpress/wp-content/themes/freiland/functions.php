@@ -88,6 +88,8 @@ function freiland_filter_the_content( $post_content ) {
                return freiland_get_news_content($post_content);
        else if ( in_category( 'press') )
                return freiland_get_press_content($post_content);
+       else if ( in_category( 'images') )
+               return freiland_get_gallery_content($post_content);
 	else if ( is_page( 'links') )
                return freiland_get_links_content($post_content);
        return $post_content;
@@ -106,6 +108,11 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $post_title;
 }
 
+
+  function freiland_get_gallery_content($content){
+	error_log('Adding gallery content');
+	return $content . '[gallery  lightboxsize="large"]';
+  }
 
   function freiland_get_event_content($content){
 	global $post;
