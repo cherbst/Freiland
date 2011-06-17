@@ -74,7 +74,7 @@ function innerScroll(elem){
 				event.preventDefault();
 	});
 
-	elem.mousewheel(function(event, delta) {
+	elem.parent().mousewheel(function(event, delta) {
 		return scrollElem(delta,true);
 	});
 
