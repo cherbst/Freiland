@@ -68,6 +68,9 @@ function innerScroll(elem){
 			clearInterval(intervalId);
 			intervalId = false;
 			return false;
+		}).mouseleave(function(){
+			clearInterval(intervalId);
+			intervalId = false;
 		}).click(function(){
 			return false;
 		});
