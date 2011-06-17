@@ -616,6 +616,46 @@ li#eventtypes li{
 }
 
 /* footer */
+
+/* inner scroll nav */
+#scrollNav {
+	position: absolute;
+	top: 50px;
+	width: 1070px;
+	text-align: center;
+	display: none;
+}
+
+#scrollNav > a, #scrollNav > a:hover {
+	line-height: 0;
+	font-size: 0;
+	color: black;
+	height: 20px;
+	width: 20px;
+	text-decoration: none;
+}
+
+#scrollNav > a:hover {
+	text-decoration: underline;
+}
+
+#scrollUp > div, #scrollDown > div {
+	width: 50%;
+	height: 20px;
+}
+
+#scrollUp > div {
+	background: url(images/upnav.png) no-repeat;
+	background-position: 98% center;
+	float: left;
+}
+
+#scrollDown > div {
+	background: url(images/downnav.png) no-repeat;
+	background-position: 2% center;
+	float: right;
+}
+
 #footer-widget-area {
 	float : right;
 	width: 60%;

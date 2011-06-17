@@ -15,12 +15,65 @@ function innerScroll(elem){
 	elem.css('overflow-y','hidden');
 	elem.height('auto');
 
+
+	function animateScroll(delta){
+//		var newTop = getTop() + offset;
+		var v = 100;
+		elem.promise().done(function(){
+			var newTop = getNewTop(delta,v);
+			if ( newTop != getTop() )
+				elem.animate({ top: newTop},'slow',function(){
+					positionChanged();
+				});
+		});
+	}
+
+	function addControls(){
+		var nav = jQuery('<div id="scrollNav"><a id="scrollUp" href="#"><div></div></a>'+
+			  	'<a id="scrollDown"href="#" ><div></div></a></div>');
+		jQuery('#footer').append(nav);
+		jQuery('#footer').hover(function(){
+			if ( elem.height() > elem.parent().height() - topmargin )
+				nav.fadeIn('fast');
+		},function(event){
+			if ( elem.find('#'+jQuery(event.relatedTarget).attr('id')).length == 0 )
+				nav.fadeOut('fast');
+		});
+		elem.hover(function(){
+			if ( elem.height() > elem.parent().height() - topmargin )
+				nav.fadeIn('fast');
+		},function(event){
+			if ( jQuery(event.relatedTarget).attr('id') != 'footer' )
+				nav.fadeOut('fast');
+		});
+		nav.fadeOut('slow');
+		jQuery('#scrollUp').click(function(){
+			animateScroll(1);
+			return false;
+		});
+		jQuery('#scrollDown').click(function(){
+			animateScroll(-1);
+			return false;
+		});
+	};
+	addControls();
+
+
 	function getMinTop(){
 		return jQuery('#footer').offset().top - elem.height() - topmargin;
 	}
 
 	function getTop(){
 		return (parseInt(elem.css('top'),10) || 0 );
+	}
+	
+	function getNewTop(delta,v){
+		var newTop = getTop()+(delta*v);
+		if ( delta < 0 )
+			newTop = Math.max(newTop,scrollableToTop? -elem.height()+topScrollMargin:getMinTop());
+		else
+			newTop = Math.min(newTop,0);
+		return newTop;
 	}
 
 	function scrollElem(delta,move,v){
@@ -29,13 +82,8 @@ function innerScroll(elem){
 		var triggerTop = !ontop;
 		var triggerBottom = !onbottom;
 		var curTop = getTop();
-		var newTop = curTop+(delta*v);
 		var minTop = getMinTop();
-
-		if ( delta < 0 )
-			newTop = Math.max(newTop,scrollableToTop? -elem.height()+topScrollMargin:minTop);
-		else
-			newTop = Math.min(newTop,0);
+		var newTop = getNewTop(delta,v);
 
 		if( newTop <= minTop + allmost && delta < 0){
 			onbottom = true;
