@@ -32,6 +32,7 @@ function innerScroll(elem){
 		return ( !scrollableToTop && elem.height() < elem.parent().height() - topmargin - jQuery('#footer').height() );
 	}
 
+	// add scroll navigation
 	function addControls(){
 		var nav = jQuery('<div id="scrollNav"><a id="scrollUp" href="#"><div></div></a>'+
 			  	'<a id="scrollDown"href="#" ><div></div></a></div>');
@@ -50,18 +51,28 @@ function innerScroll(elem){
 			if ( jQuery(event.relatedTarget).attr('id') != 'footer' )
 				nav.fadeOut('fast');
 		});
-		nav.fadeOut('slow');
-		jQuery('#scrollUp').click(function(){
-			animateScroll(1);
+
+		var intervalId;
+		jQuery('#scrollUp,#scrollDown').mousedown(function(){
+			var source = jQuery(this);
+			intervalId = true;
+			animateScroll(source.attr('id')=='scrollUp'?1:-1);
+			elem.promise().done( function(){
+				if ( intervalId )
+					intervalId = setInterval(function(){
+						scrollElem(source.attr('id')=='scrollUp'?1:-1,true,10);
+					}, 10);
+			});
 			return false;
-		});
-		jQuery('#scrollDown').click(function(){
-			animateScroll(-1);
+		}).mouseup(function() {
+			clearInterval(intervalId);
+			intervalId = false;
+			return false;
+		}).click(function(){
 			return false;
 		});
 	};
 	addControls();
-
 
 	function getMinTop(){
 		return jQuery('#footer').offset().top - elem.height() - topmargin;
