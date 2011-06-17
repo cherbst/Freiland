@@ -386,8 +386,6 @@ function event_listing(){
 				getCurMonth() != getPostMonth(curPost) ){
 				scrollToMonth(getCurCalendar(),true,0);
 			}else scrollToPost(curPost,0);
-		},function(){
-			innerScroll.setScrollableToTop(true,getLastPostHeight());
 		});
 	}
 
