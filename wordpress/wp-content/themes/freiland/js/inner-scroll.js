@@ -28,19 +28,23 @@ function innerScroll(elem){
 		});
 	}
 
+	function fitsInView(){
+		return ( !scrollableToTop && elem.height() < elem.parent().height() - topmargin - jQuery('#footer').height() );
+	}
+
 	function addControls(){
 		var nav = jQuery('<div id="scrollNav"><a id="scrollUp" href="#"><div></div></a>'+
 			  	'<a id="scrollDown"href="#" ><div></div></a></div>');
 		jQuery('#footer').append(nav);
 		jQuery('#footer').hover(function(){
-			if ( elem.height() > elem.parent().height() - topmargin )
+			if ( !fitsInView() )
 				nav.fadeIn('fast');
 		},function(event){
 			if ( elem.find('#'+jQuery(event.relatedTarget).attr('id')).length == 0 )
 				nav.fadeOut('fast');
 		});
 		elem.hover(function(){
-			if ( elem.height() > elem.parent().height() - topmargin )
+			if ( !fitsInView() )
 				nav.fadeIn('fast');
 		},function(event){
 			if ( jQuery(event.relatedTarget).attr('id') != 'footer' )
