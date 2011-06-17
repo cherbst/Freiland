@@ -441,8 +441,6 @@ class smwimport
 		}
 	}
 
-	$postarr['post_content'] .= '[gallery]';
-
 	if (!is_dir($gallery_folder))
 		return new WP_Error('no_directory', __("The given gallery folder is not a directory:").$gallery_folder);
 	if (!($dh = opendir($gallery_folder)))
