@@ -116,6 +116,7 @@ function innerScroll(elem){
 	innerScroll.resetTopmargin = resetTopmargin;
 
 	function updateDimensions(){
+		ontop = onbottom = false;
 		setContainment();
 	};
 	innerScroll.updateDimensions = updateDimensions;

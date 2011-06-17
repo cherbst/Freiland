@@ -166,7 +166,6 @@ function event_listing(){
 				innerScroll.updateDimensions();
 				innerScroll.setScrollableToTop(true,getLastPostHeight());
 				if ( callback ) callback();
-			//	alert('shown');
 			});
 		});
 	};
