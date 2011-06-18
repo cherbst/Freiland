@@ -147,6 +147,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	border: none;
 	line-height: 0px;
 	font-size: 0px;
+	text-transform:uppercase;	
 }
 
 #content .newsletter #submit:hover {
@@ -351,6 +352,7 @@ body.single-format-gallery .entry-content > p,
 
 .homepage > a {
 	color : rgb(196,81,157);
+	font-family:arial;
 }
 
 .event_day, .event_time{
@@ -959,13 +961,16 @@ li#eventtypes li{
 	line-height : 30px;
 }
 
+#content h1, #content h2, #content h3 {
+	font-family: Arial, Verdana, 'Nimbus Sans L', sans-serif;
+}
+
 #content h2{
 	font-size: 12pt;
 	margin-bottom: 4px;
 }
 
 #content h1.link-category{
-	font-family: Arial;
 	text-transform:uppercase;	
 	font-size: 20pt;
 	line-height: 1;
@@ -1057,7 +1062,7 @@ img.tooltip {
 #post-images {
 	float: right;
 	padding-right: 185px;
-	width: 240px;
+	width: 230px;
 	z-index: 99;
 	position: relative;
 	top: 335px;
@@ -1075,6 +1080,7 @@ img.tooltip {
 #post-images div.image {
 	width: 100%;
 	margin: 0 auto;
+	overflow: hidden;
 }
 
 #post-images div.image_big img,
@@ -1082,19 +1088,22 @@ img.tooltip {
         width: 230px;
 	height: auto;
 	margin-left: 20px;
+	margin-bottom:0;
 }
 
 #post-images div.sponsor {
         width: 100%;
         margin: 0 auto;
-	padding-top: 20px;
+	overflow: hidden;
 }
 
 #post-images div.sponsor img {
-	float: left;
+	float: right;
         width: 55px;
         height: auto;
 	padding-top: 20px;
+	padding-left: 20px;
+	margin-left: 0px;
 }
 
 #single-post {
