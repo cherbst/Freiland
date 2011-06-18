@@ -1241,6 +1241,9 @@ ul.event-subcat li a {
 	text-decoration: none;
 	z-index: 99;
 	color: #000000;
+	font-family: arial;
+	font-size: 8pt;
+        text-transform: uppercase;
 	background: url(images/feil_rechts_kl.png) 5px no-repeat;
 	background-position: left center;
 	background-color: rgb(255, 255, 255);
