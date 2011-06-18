@@ -138,7 +138,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 				$return .= '<div class="homepage"><a href="'.$link.'"';
 				if ( $label ) 
 					$return .= ' title="'.$label.'"';
-				$return .= '>'.($label?$label:$link).'</a></div><p></p>';
+				$return .= '>'.($label?$label:$link).'</a></div>';
 			}else{
 				if ( $label )
 					$return .= '<p>'.$label.'</p>';
