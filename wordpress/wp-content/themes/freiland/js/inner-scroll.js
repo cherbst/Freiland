@@ -9,6 +9,7 @@ function innerScroll(elem){
 	var scrollableToTop = false;
 	var allmost = 50;
 	var topScrollMargin = 50;
+	var intervalId;
 
 	elem.css('position','relative');
 	elem.css('top',0);
@@ -17,11 +18,12 @@ function innerScroll(elem){
 
 
 	function animateScroll(delta){
-//		var newTop = getTop() + offset;
 		var v = 100;
+		// throttle animations
+		if ( elem.queue().length >= 2 ) return;
 		elem.promise().done(function(){
 			var newTop = getNewTop(delta,v);
-			if ( newTop != getTop() )
+			if ( newTop != getTop() && intervalId === false )
 				elem.animate({ top: newTop},'slow',function(){
 					positionChanged();
 				});
@@ -52,16 +54,16 @@ function innerScroll(elem){
 				nav.fadeOut('fast');
 		});
 
-		var intervalId;
 		jQuery('#scrollUp,#scrollDown').mousedown(function(){
 			var source = jQuery(this);
-			intervalId = true;
 			animateScroll(source.attr('id')=='scrollUp'?1:-1);
+			intervalId = true;
 			elem.promise().done( function(){
-				if ( intervalId )
+				if ( intervalId === true && elem.queue().length == 0 ){
 					intervalId = setInterval(function(){
 						scrollElem(source.attr('id')=='scrollUp'?1:-1,true,10);
 					}, 10);
+				}
 			});
 			return false;
 		}).mouseup(function() {
