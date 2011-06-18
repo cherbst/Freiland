@@ -203,11 +203,29 @@
 			objImagePreloader.onload = function() {
 				$('#lightbox-image').attr('src',settings.imageArray[settings.activeImage][0]);
 				// Perfomance an effect in the image container resizing it
-				var height = $('#jquery-overlay').height();
-				height -= 2 * $('#jquery-lightbox').offset().top;
-				height = Math.min( objImagePreloader.height, height);
+				var maxHeight = $('#jquery-overlay').height() - 2 * $('#jquery-lightbox').offset().top;
+				var maxWidth = $('#jquery-overlay').width() - settings.containerBorderSize * 2;
+
+				var height = objImagePreloader.height;
+				var width = objImagePreloader.width;
+				var oldHeight = height, oldWidth = width;
+
+				while ( height > maxHeight || width > maxWidth ){
+					if ( height > maxHeight ){
+						console.log('HEIGH:'+width+':'+objImagePreloader.width);
+						height = maxHeight;
+						width = oldWidth*height/oldHeight;
+					}else if ( width > maxWidth ){
+						console.log('WIDTH:'+width+':'+objImagePreloader.width);
+						width = maxWidth;
+						height = oldHeight*width/oldWidth;
+					}
+					oldHeight = height;
+					oldWidth = width;
+				}
 				$('#lightbox-image').css('height',height);
-				_resize_container_image_box(objImagePreloader.width,height);
+				$('#lightbox-image').css('width',width);
+				_resize_container_image_box(width,height);
 				//	clear onLoad, IE behaves irratically with animated gifs otherwise
 				objImagePreloader.onload=function(){};
 			};
@@ -246,18 +264,12 @@
 		 *
 		 */
 		function _show_image() {
-			var width = $('#lightbox-image').width();
-			var containerWidth = width + settings.containerBorderSize * 2; // Plus the image´s width and the left and right padding value
- 			$('#lightbox-container-image-box').animate({ width: containerWidth },
-				settings.containerResizeSpeed, function(){
-				$('#lightbox-loading').hide();
-				$('#lightbox-image').fadeIn(function() {
-					_show_image_data();
-					_set_navigation();
-				});
-				$('#lightbox-container-image-data-box').css({ width: width  });
-				_preload_neighbor_images();
+			$('#lightbox-loading').hide();
+			$('#lightbox-image').fadeIn(function() {
+				_show_image_data();
+				_set_navigation();
 			});
+			_preload_neighbor_images();
 		};
 		/**
 		 * Show the image information
