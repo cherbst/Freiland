@@ -1251,6 +1251,7 @@ ul.event-subcat li a {
 	display: none!important;
 }
 
+/* lightbox */
 #lightbox-container-image-data {
 	overflow: hidden;
 	margin: 0;
@@ -1259,3 +1260,8 @@ ul.event-subcat li a {
 #lightbox-secNav-btnClose img {
 	float: right;
 }
+
+#lightbox-image-details {
+	color : rgb(196,81,157);
+}
+
