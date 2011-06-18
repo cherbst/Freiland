@@ -510,6 +510,7 @@ function event_listing(){
 					scrollDiv.css({top:0});
 					innerScroll.setTopmargin(scrollDiv.offset().top);
 					innerScroll.setScrollableToTop(false);
+					innerScroll.updateDimensions();	
 					if ( spinner.length > 0 ) spinner.hide();
 				});
 			} 

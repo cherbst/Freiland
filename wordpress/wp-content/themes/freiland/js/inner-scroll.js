@@ -183,6 +183,7 @@ function innerScroll(elem){
 
 	function updateDimensions(){
 		ontop = onbottom = false;
+		if ( fitsInView() ) elem.mouseleave();
 		setContainment();
 	};
 	innerScroll.updateDimensions = updateDimensions;
