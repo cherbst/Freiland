@@ -9,7 +9,8 @@ function innerScroll(elem){
 	var scrollableToTop = false;
 	var allmost = 50;
 	var topScrollMargin = 50;
-	var intervalId;
+	var intervalId = false;
+	var fireScroll = true;
 
 	elem.css('position','relative');
 	elem.css('top',0);
@@ -96,6 +97,10 @@ function innerScroll(elem){
 		return newTop;
 	}
 
+	function allowedToMove(newTop,curTop,delta){
+		return  (newTop < curTop && delta < 0 || newTop > curTop && delta > 0 );
+	}
+
 	function scrollElem(delta,move,v){
 		if ( !v ) v = 50;
 		var ret = true;
@@ -114,7 +119,7 @@ function innerScroll(elem){
 		}else{
 			ontop = onbottom = false;
 		}
-		if ( (newTop < curTop && delta < 0 || newTop > curTop && delta > 0 ) && move ){
+		if ( allowedToMove(newTop,curTop,delta) && move ){
 			ret = false;
 			elem.css('top',newTop);
 		}
@@ -143,7 +148,15 @@ function innerScroll(elem){
 	});
 
 	elem.parent().mousewheel(function(event, delta) {
-		return scrollElem(delta,true);
+		if ( !allowedToMove(getTop()+delta,getTop(),delta) )
+			return true;
+
+		if ( fireScroll ){
+			fireScroll = false;
+			setTimeout(function(){ fireScroll = true; },100);
+			return scrollElem(delta,true);
+		}
+		return false;
 	});
 
 	function setContainment(){
