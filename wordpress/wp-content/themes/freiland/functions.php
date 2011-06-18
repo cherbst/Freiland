@@ -49,7 +49,8 @@ function freiland_init_method() {
 
 function freiland_enqueue_scripts() {
 	wp_enqueue_script('link-targets');
-	wp_enqueue_script('inner-scroll');
+	if ( !is_page('newsletter') )
+		wp_enqueue_script('inner-scroll');
 	if ( in_category('events') )
 		wp_enqueue_script('event-listing');
 	if ( in_category('images') )
