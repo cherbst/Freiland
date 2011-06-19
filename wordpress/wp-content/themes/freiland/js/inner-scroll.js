@@ -10,7 +10,10 @@ function innerScroll(elem){
 	var allmost = 50;
 	var topScrollMargin = 50;
 	var intervalId = false;
+	// used to throttle mouse wheel events
 	var fireScroll = true;
+	// set if an animation is running
+	var animating = false;
 
 	elem.css('position','relative');
 	elem.css('top',0);
@@ -18,18 +21,41 @@ function innerScroll(elem){
 	elem.height('auto');
 
 
-	function animateScroll(delta){
+	// scroll the elem to the give top value
+	function scrollToTop(newTop,duration,callback){
+		elem.animate({ top: newTop},duration,function(){
+			animating = false;
+			positionChanged();
+			if ( callback ) callback();
+		});
+	}
+
+	// scroll the elem by the given delta
+	function scrollByDelta(delta){
 		var v = 100;
 		// throttle animations
 		if ( elem.queue().length >= 2 ) return;
 		elem.promise().done(function(){
+			animating = true;
 			var newTop = getNewTop(delta,v);
 			if ( newTop != getTop() && intervalId === false )
-				elem.animate({ top: newTop},'slow',function(){
-					positionChanged();
-				});
+				scrollToTop(newTop,'slow');
 		});
 	}
+
+	// scroll elem to the given child
+	function scrollToChild(child,duration,callback){
+		animating = true;
+		var cur = elem.offset();
+		var newTop = cur.top - child.offset().top;
+		scrollToTop(newTop,duration,callback);
+	}
+	innerScroll.scrollToChild = scrollToChild;
+
+	function isAnimating(){
+		return animating;
+	}
+	innerScroll.isAnimating = isAnimating;
 
 	function fitsInView(){
 		return ( !scrollableToTop && elem.height() < elem.parent().height() - topmargin - jQuery('#footer').height() );
@@ -57,7 +83,7 @@ function innerScroll(elem){
 
 		jQuery('#scrollUp,#scrollDown').mousedown(function(){
 			var source = jQuery(this);
-			animateScroll(source.attr('id')=='scrollUp'?1:-1);
+			scrollByDelta(source.attr('id')=='scrollUp'?1:-1);
 			intervalId = true;
 			elem.promise().done( function(){
 				if ( intervalId === true && elem.queue().length == 0 ){
@@ -134,7 +160,6 @@ function innerScroll(elem){
 		scrollElem(-1,false);
 		scrollElem(1,false);
 	}
-	innerScroll.positionChanged = positionChanged;
 
 	jQuery(document).keydown(function(event){
 		var delta = 0;

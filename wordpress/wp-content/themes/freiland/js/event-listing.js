@@ -261,6 +261,11 @@ function event_listing(){
 		// pixel distance from visible area for unloading months
 		var delta = 100;
 
+		// if an animation is in progress, do not interfere
+		if ( innerScroll.isAnimating() ) {
+			setTimeout("unloadMonths()",100);
+			return;
+		}
 		while ( container.offset().top + container.height() + delta < 0 ){
 			var next = container.next();
 			var height = scrollDiv.height();
@@ -292,12 +297,7 @@ function event_listing(){
 		if ( duration == null || duration == 'slow' )
 			duration = 600;
 		curPost = post;
-		var cur = scrollDiv.offset();
-		var offset = cur.top - post.offset().top;
-		scrollDiv.animate({ top: offset},duration,function(){
-			innerScroll.positionChanged();
-			if ( callback ) callback();
-		});
+		innerScroll.scrollToChild(post,duration,callback);
 	};
 	event_listing.scrollToPost = scrollToPost;
 
