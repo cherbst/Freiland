@@ -1,8 +1,8 @@
-function innerScroll(elem){
+function innerScroll(){
 	var ontop = false;
 	var onbottom = false;
-	var topmargin = elem.offset().top;
-	var originalTopmargin = topmargin;
+	var topmargin;
+	var originalTopmargin;
 	var oldY;
 	var dragging = false;
 	// if the elem should be allowed to scroll until the top
@@ -14,12 +14,26 @@ function innerScroll(elem){
 	var fireScroll = true;
 	// set if an animation is running
 	var animating = false;
+	// the element being scrolled
+	var elem;
 
-	elem.css('position','relative');
-	elem.css('top',0);
-	elem.css('overflow-y','hidden');
-	elem.height('auto');
 
+	function init(e){
+		elem = e;
+		elem.css('position','relative');
+		elem.css('top',0);
+		elem.css('overflow-y','hidden');
+		elem.height('auto');
+ 		topmargin = elem.offset().top;
+		originalTopmargin = topmargin;
+		innerScroll.addControls();
+		// on each mousedown, re-compute the containment
+		elem.mousedown(innerScroll.setContainment);
+		jQuery(document).keydown(innerScroll.onKeyDown);
+		elem.parent().mousewheel(innerScroll.onMousewheel);
+		setDragEvents();
+	}
+	innerScroll.init = init;
 
 	// scroll the elem to the give top value
 	function scrollToTop(newTop,duration,callback){
@@ -104,7 +118,7 @@ function innerScroll(elem){
 			return false;
 		});
 	};
-	addControls();
+	innerScroll.addControls = addControls;
 
 	function getMinTop(){
 		return jQuery('#footer').offset().top - elem.height() - topmargin;
@@ -161,7 +175,7 @@ function innerScroll(elem){
 		scrollElem(1,false);
 	}
 
-	jQuery(document).keydown(function(event){
+	function onKeyDown(event){
 		var delta = 0;
 		if ( event.which == 40 )
 			delta = -1;
@@ -170,9 +184,10 @@ function innerScroll(elem){
 		if ( delta != 0 )
 			if ( !scrollElem(delta,true) )
 				event.preventDefault();
-	});
+	}
+	innerScroll.onKeyDown = onKeyDown;
 
-	elem.parent().mousewheel(function(event, delta) {
+	function onMousewheel(event, delta) {
 		if ( !allowedToMove(getTop()+delta,getTop(),delta) )
 			return true;
 
@@ -182,7 +197,8 @@ function innerScroll(elem){
 			return scrollElem(delta,true);
 		}
 		return false;
-	});
+	}
+	innerScroll.onMousewheel = onMousewheel;
 
 	function setContainment(){
 		var containment = scrollableToTop?
@@ -191,25 +207,27 @@ function innerScroll(elem){
 
 		elem.draggable( "option", "containment", containment );
 	}
-	// on each mousedown, re-compute the containment
-	elem.mousedown(setContainment);
+	innerScroll.setContainment = setContainment;
 
-	elem.draggable({
-		start: function(event,ui){
-			dragging = true;
-			oldY = ui.position.top;
-		},
-		stop: function(){
-			dragging = false;
-		}, 
-		drag: function(event,ui) {
-			var delta = ui.position.top - oldY;
-			oldY = ui.position.top;
-			scrollElem(delta,false,1);
-		},
-		axis: "y",
-		cancel: "#summary-text,p,a"
-	});
+	function setDragEvents(){
+		elem.draggable({
+			start: function(event,ui){
+				dragging = true;
+				oldY = ui.position.top;
+			},
+			stop: function(){
+				dragging = false;
+			}, 
+			drag: function(event,ui) {
+				var delta = ui.position.top - oldY;
+				oldY = ui.position.top;
+				scrollElem(delta,false,1);
+			},
+			axis: "y",
+			cancel: "#summary-text,p,a"
+		});
+	}
+	innerScroll.setDragEvents = setDragEvents;
 
 	function setTopmargin(margin){
 		topmargin = margin;
@@ -250,7 +268,8 @@ function innerScroll(elem){
 	}
 	innerScroll.setScrollableToTop = setScrollableToTop;
 }
-		
+
+innerScroll();
 jQuery(document).ready(function(){
-	innerScroll(jQuery('#content'));
+	innerScroll.init(jQuery('#content'));
 });
