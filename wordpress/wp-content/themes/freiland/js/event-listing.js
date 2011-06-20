@@ -105,7 +105,13 @@ function event_listing(){
 
 	// filter posts for given category
 	// show 404 if no posts found
-	var filterPosts = function(cat,onShown,callback){
+	function filterPosts(cat,onShown,callback){
+		// wait until animations are finished
+		if ( innerScroll.isAnimating() ) {
+			setTimeout(function(){filterPosts(cat,onShown,callback);},100);
+			return;
+		}
+
 		var monthId = '#month_'+getCurMonth();
 		var filter = '.cat-id-'+cat;
 		var allPosts = jQuery('#event-listing > div > div.post');
