@@ -65,6 +65,9 @@ function event_listing(){
 		// event from this month
 		if ( curPost.length == 0 )
 			curPost = jQuery('#event-listing > div > div.post').first();
+
+		// pretend we are on top to pre-load previous month
+		event_listing.checkForUpdate(true,false);
 	};
 	event_listing.init = init;
 
@@ -610,7 +613,7 @@ function event_listing(){
 		}
 	};
 
-	var checkForUpdate = function(ontop,onbottom){
+	function checkForUpdate(ontop,onbottom){
 		// scroll reached the bottom
 		if ( onbottom ){
 			var nextMonth = getTimeFromMonth(getMonthIdFromHref(next_href));
@@ -625,6 +628,7 @@ function event_listing(){
 				loadNewEvents(false,unloadMonths);
 		}
 	};
+	event_listing.checkForUpdate = checkForUpdate;
 
 	function onScrolled(ontop,onbottom){
 		// do nothing when showing single posts
