@@ -1104,7 +1104,7 @@ img.tooltip {
 
 #post-images div.sponsor img {
 	float: right;
-        width: 55px;
+        max-width: 55px;
         height: auto;
 	padding-top: 20px;
 	padding-left: 20px;
