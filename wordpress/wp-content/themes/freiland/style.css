@@ -978,6 +978,7 @@ li#eventtypes li{
 	text-transform:uppercase;	
 	font-size: 20pt;
 	line-height: 1;
+	margin-bottom:  6px;
 }
 
 ul.Linklist {
@@ -987,7 +988,7 @@ ul.Linklist {
 	line-height: 1.4;
 	list-style-type: none; 
 	margin-left: 0px;
-	padding-left: 0px;
+	padding-left: 4px;
 }
 
 ul.Linklist a {
