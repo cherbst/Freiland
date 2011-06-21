@@ -169,7 +169,6 @@ class smwimport
 		$objects = get_objects_in_term($category,'category');
 		if ( empty($objects) ){
 			$cat = get_category($category);
-			error_log('Deleting empty subcategory:'.$cat->slug);
 			wp_delete_category( $category );
 		}
 	}
@@ -464,7 +463,6 @@ class smwimport
 	$uploads = wp_upload_dir();
 	if (substr($gallery_folder,-1) != '/' ) $gallery_folder .= '/';
  
-	error_log("Importing gallery folder:".$gallery_folder);
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
 			continue;
@@ -586,7 +584,6 @@ class smwimport
 
 	self::load_ec3();
 	foreach($posts as $post){
-		error_log('Deleting post:'.$post->post_title.':'.$post->ID);
 		self::delete_post_dates($post->ID);
 		wp_delete_post($post->ID,true);
 	}
@@ -949,13 +946,11 @@ class smwimport
 		add_post_meta($attach_id,"_post_type",'smwimport',true);
 	}else{
 		if ( $post->guid != $remotefile ){
-			error_log('Attachment changed:'. $post->ID);
 			// filename changed, delete this attachment and create a new one
 			wp_delete_post($post->ID,true);
 			$attach_id = self::import_attachment_for_post($prim_key,$data,$post_id,$download);
 		}else{
 			//XXX: update the attachment? then we need a hash or something
-			error_log('Attachment already exists:'. $post->ID);
 			// only update title
 			$post->post_title = $title;
 			$post->post_excerpt = $title;
