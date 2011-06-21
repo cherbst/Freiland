@@ -36,6 +36,9 @@ class smwimport
   static $posttime;
   // array to remember post dates for uniqueness
   static $global_post_dates;
+  // array to hold all imported posts
+  // is used to delete posts which are not available in the sources
+  static $global_imported_posts;
 
   /* returns an array of the ids of all imported subcategories 
   */
@@ -484,9 +487,11 @@ class smwimport
 				continue;
 			}
 		}else{
-			// attachment already exist
+			// attachment already exists
 			$attach_id = $attachment->ID;
 			unset($attachments[$attach_id]);
+			// mark the attachment as imported
+			unset(self::$global_imported_posts[$attach_id]);
 		}
 
 		if ( $file == $featured_image )
@@ -571,6 +576,19 @@ class smwimport
 	}
   }
 
+  /* delete all posts in $posts and leftover empty subcategories */
+  private static function delete_posts($posts){
+	global $smw_mapping;
+
+	self::load_ec3();
+	foreach($posts as $post){
+		error_log('Deleting post:'.$post->post_title.':'.$post->ID);
+		self::delete_post_dates($post->ID);
+		wp_delete_post($post->ID,true);
+	}
+	return self::delete_empty_subcategories($smw_mapping);
+  }
+
   /* public function
      Deletes all imported data ( posts, attachments, links, categories )
   */
@@ -579,12 +597,7 @@ class smwimport
 	self::delete_links();
 	$posts = self::get_smwimport_posts();
 
-	self::load_ec3();
-	foreach($posts as $post){
-		self::delete_post_dates($post->ID);
-		wp_delete_post($post->ID,true);
-	}
-	self::delete_empty_subcategories($smw_mapping);
+	self::delete_posts($posts);
   }
 
   /* public function
@@ -597,6 +610,8 @@ class smwimport
 	self::$fetch_time = 0;
 	self::$posttime = time();
 	self::delete_links();
+
+	self::$global_imported_posts = self::get_smwimport_posts();
 
 	$sources = array();
 	if ( self::$import_tests ){
@@ -649,7 +664,15 @@ class smwimport
 	delete_option('category_children');
 	// XXX: needed to make permalinks work (not documented)
 	$wp_rewrite->flush_rules();
-	$ret = self::delete_empty_subcategories($smw_mapping);
+
+	// delete leftover posts that are not available in the sources anymore 
+	// only if import was successful
+	$ret = true;
+	if ( is_wp_error($g_ret) )
+		error_log('Import was not successful. Not deleting leftover posts!');
+	else
+		$ret = self::delete_posts(self::$global_imported_posts);
+
 	if ( is_wp_error($ret) ) $g_ret = $ret;
 	if ( !is_wp_error($g_ret) ){
 		$g_ret  = 'The import took '.(time() - self::$start_time).' seconds.'."\n";
@@ -700,6 +723,7 @@ class smwimport
   }
 
   /*  returns an array of all imported posts + attachments
+  *   the array keys are the post IDs 
   */
   private static function get_smwimport_posts(){
 	$args = array(
@@ -714,7 +738,10 @@ class smwimport
 	$args['post_type'] = 'attachment';
 	$args['post_status'] = null;
 	$attachments = get_posts($args);
-	return array_merge($posts,$attachments);	
+	$all_posts = array_merge($posts,$attachments);
+	foreach ( $all_posts as $post )
+		$ret[$post->ID] = $post;
+	return $ret;
   }
 
   /*  return a post with the specified $prim_key inside $category_id
@@ -752,8 +779,11 @@ class smwimport
 		$post['post_category'] = $postarr['post_category'];
 		$diff = array_diff_assoc($postarr,$post);
 		// the post did not change, so just return the ID
-		if ( empty($diff) )
+		if ( empty($diff) ){
+			// mark the post as imported
+			unset(self::$global_imported_posts[$ID]);
 			return $ID;
+		}
 	}
 	// make sure each post has a different publish date
 	// otherwise the 'next_post', 'previous_post' queries get confused
@@ -763,6 +793,8 @@ class smwimport
 
 	$ID = wp_insert_post($postarr,true);
 	if ( is_wp_error($ID) ) return $ID;
+	// mark the post as imported
+	unset(self::$global_imported_posts[$ID]);
 	add_post_meta($ID,"_prim_key",$prim_key,true);
 	add_post_meta($ID,"_post_type",'smwimport',true);
 	return $ID;
@@ -925,6 +957,10 @@ class smwimport
 			$post->post_excerpt = $title;
 			$attach_id = wp_update_post($post);
 		}
+	}
+	if ( !is_wp_error($attach_id) ){
+		// mark the attachment as imported
+		unset(self::$global_imported_posts[$attach_id]);
 	}
 	return $attach_id;
   }
