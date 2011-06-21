@@ -734,9 +734,8 @@ li#eventtypes li{
 }
 
 #footer #site-info {
-	float: left;
 	padding-top: 12px;
-	width:300px;
+	width:312px;
 	font-size: 9pt;
 	text-align: right;
 	font-weight:normal;
@@ -963,16 +962,16 @@ li#eventtypes li{
 
 #content h1, #content h2, #content h3 {
 	font-family: Arial, Verdana, 'Nimbus Sans L', sans-serif;
+	text-transform:uppercase;	
+	margin-bottom: 4px;
 }
 
 #content h2{
 	font-size: 12pt;
-	margin-bottom: 4px;
-	font-weight: bold;
 }
 
 #content h3{
-	font-style: italic;
+	font-size: 10pt;
 }
 
 #content h1.link-category{
