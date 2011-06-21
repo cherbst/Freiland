@@ -643,7 +643,12 @@ class smwimport
 		}
 		$items = call_user_func($source,$key);
 		if ( is_wp_error($items) ){
+			if ( is_array($source) ) 
+				// source is a class function
+				$source = $source[0].'::'.$source[1];
+			$source .= '('.$key.')';
 			error_log("smwimport: could not import from:".$source);
+			error_log($items->get_error_message());
 			$g_ret = $items;
 			continue;
 		}
