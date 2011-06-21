@@ -209,7 +209,7 @@ und Asi & Jaycop (Hip Hop/Potsdam)',
   static function get_galleries(){
 	$gallery_folder =  dirname(__FILE__) . '/../../themes/freiland/gallery';
 	if (!($dh = opendir($gallery_folder)))
-		return;
+		return new WP_Error('smwimport-test',__('Could not get test galleries from:').$gallery_folder);
 
 	while (($dir = readdir($dh)) !== false) {
 		if ( $dir == '.' || $dir == '..' ) continue;
