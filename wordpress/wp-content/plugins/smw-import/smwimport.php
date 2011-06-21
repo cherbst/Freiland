@@ -77,7 +77,7 @@ class smwimport
 
 	$data_sources = array();
 	for( $i = 0; $i< $num_sources; $i++ )
-		$data_sources[get_option( 'smwimport_data_source'.$i )] = array(self,get_data_from_source);
+		$data_sources[get_option( 'smwimport_data_source'.$i )] = array('self','get_data_from_source');
 
 	if (empty($data_sources)) 
 		return array(new WP_Error('no_data_sources', __("No data sources defined.")));
@@ -216,6 +216,8 @@ class smwimport
 		'post_title' => '',
 		'post_content' => '',	
 		'post_excerpt' => '');	
+	$globalattachment = null;
+	$favicon = null;
 
 	// get top level category
 	$cat = get_category_by_slug($mapping['category']);
@@ -426,8 +428,10 @@ class smwimport
 		'post_title' => '',
 		'post_content' => '',
 		'post_excerpt' => '');
+	$featured_image = null;
 
 	foreach( $data as $key => $value ){
+		if ( !isset($attribute_mapping[$key]) ) continue;
 		switch($attribute_mapping[$key]){
 			case 'description':
 				$postarr['post_content'] = $value;
@@ -551,10 +555,10 @@ class smwimport
 	if ( $mapping == null )
 		return new WP_Error('no_mapping', __("No mapping defined for:").$data['type']);
 
-	$importer = array( 'post' => import_post_type,
-			   'attachment' => import_attachment_type,
-			   'link' => import_link_type,
-			   'gallery' => import_gallery_type);
+	$importer = array( 'post' => 'import_post_type',
+			   'attachment' => 'import_attachment_type',
+			   'link' => 'import_link_type',
+			   'gallery' => 'import_gallery_type');
 
 	if ( !isset( $importer[$mapping['type']]) )
 		return new WP_Error('undefined_type',__('smwimport: Undefined wordpress import type:').$mapping['type']);
@@ -853,7 +857,7 @@ class smwimport
   private static function import_post_dates($post_id,$action,$start,$end){
 	$ret = true;
 	// this requires the ec3 plugin
-	if ( class_exists(ec3_admin) ) 
+	if ( class_exists('ec3_admin') ) 
 		$ret = self::import_ec3_post_dates($post_id,$action,$start,$end);
 
 	// set meta data for the-events-calender
@@ -861,7 +865,7 @@ class smwimport
 	update_post_meta($post_id,"_EventStartDate",$start);
 	$end = ( $end == null?$start:$end );
 	update_post_meta($post_id,"_EventEndDate",$end);
-	return $true;
+	return $ret;
   }
 
   /*  Attaches a post to categories. The categories are created if they do not
