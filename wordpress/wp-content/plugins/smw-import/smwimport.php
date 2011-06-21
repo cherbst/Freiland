@@ -532,8 +532,16 @@ class smwimport
 			$categories[] = $mapping['default_category'];
 	}
 
-	foreach( $categories as $cat_name )
-		$link['link_category'][] = self::create_link_category($cat_name);
+	foreach( $categories as $cat_name ){
+		if (! is_array($cat_name) ) $cat_name = array($cat_name);
+		foreach( $cat_name as $cat ){
+			$cat_id = self::create_link_category($cat);
+			if ( is_wp_error($cat_id) )
+				error_log('Could not create link category:'.$cat.':'.$cat_id->get_error_message());
+			else
+				$link['link_category'][] = $cat_id;
+		}
+	}
 	return self::import_link($link);
   }
 
@@ -690,10 +698,14 @@ class smwimport
   /*  return the id of a link category, create it if it does not exist
   */
   private static function create_link_category($cat_name){
-	if ( !$cat = term_exists( $cat_name, 'link_category' ) ) {
+	if ( !($cat = term_exists( $cat_name, 'link_category' )) ) {
 		$cat = wp_insert_term( $cat_name, 'link_category' );
 	}
-	return $cat['term_id'];
+
+	if ( is_wp_error($cat) )
+		return $cat;
+	else
+		return $cat['term_id'];
   }
 
   /*  return the id of the link category into which links will be imported
