@@ -1100,13 +1100,13 @@ img.tooltip {
         width: 100%;
         margin: 0 auto;
 	overflow: hidden;
+	padding-top: 20px;
 }
 
 #post-images div.sponsor img {
 	float: right;
-        max-width: 55px;
+        width: 55px;
         height: auto;
-	padding-top: 20px;
 	padding-left: 20px;
 	margin-left: 0px;
 }
