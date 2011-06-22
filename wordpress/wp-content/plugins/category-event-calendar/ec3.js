@@ -575,6 +575,12 @@ function ec3()
   /** Adds links to the calendar for each day listed in the XML. */
   function update_days(month_xml)
   {
+    var month_id=month_xml.getElementsByTagName('firstmonth');
+    if ( month_id ) ec3.first_month = month_id[0].getAttribute('id');
+    month_id=month_xml.getElementsByTagName('lastmonth');
+    if ( month_id ) ec3.last_month = month_id[0].getAttribute('id');
+    showControls();
+
     var days=month_xml.getElementsByTagName('day');
     if(!days)
       return;
@@ -600,11 +606,6 @@ function ec3()
         td.appendChild(a);
       }
     }
-    var month_id=month_xml.getElementsByTagName('firstmonth');
-    if ( month_id ) ec3.first_month = month_id[0].getAttribute('id');
-    month_id=month_xml.getElementsByTagName('lastmonth');
-    if ( month_id ) ec3.last_month = month_id[0].getAttribute('id');
-    showControls();
 
     if(typeof ec3_Popup != 'undefined')
     {
