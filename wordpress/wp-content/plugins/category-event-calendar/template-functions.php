@@ -131,11 +131,13 @@ function ec3_util_get_month($order,$cat = null){
 	$field = ($order=='ASC'?'start':'end');
 	$sql= 
 	"SELECT ec3_sch.$field FROM $wpdb->posts 
-	 INNER JOIN $wpdb->term_relationships 
+	 INNER JOIN $wpdb->term_relationships tr
 		ON (id = object_id) 
+	 INNER JOIN $wpdb->term_taxonomy tt
+		ON ( tt.term_taxonomy_id = tr.term_taxonomy_id) 
 	 INNER JOIN wp_ec3_schedule ec3_sch 
 		ON ec3_sch.post_id=id 
-	 WHERE term_taxonomy_id IN ($cat) 
+	 WHERE tt.term_id IN ($cat) 
 	 ORDER BY ec3_sch.$field $order LIMIT 1";
 	$res = $wpdb->get_results($sql);
 	if ( $res && isset($res[0]) ){
@@ -185,10 +187,11 @@ function ec3_util_calendar_days($begin_month_id,$end_month_id,$cat = 0)
        LEAST(end,'$end_date') AS end_date,
        allday,
        1 AS is_event
-     FROM $wpdb->posts,$ec3->schedule,$wpdb->term_relationships
+     FROM $wpdb->posts,$ec3->schedule,$wpdb->term_relationships,$wpdb->term_taxonomy
      WHERE post_status='publish'
-       AND id = wp_term_relationships.object_id
-       AND wp_term_relationships.term_taxonomy_id IN ($cat) 
+       AND id = $wpdb->term_relationships.object_id
+       AND $wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id
+       AND $wpdb->term_taxonomy.term_id = $cat
        AND post_type='post'
        AND post_id=id
        AND end>='$begin_date'
