@@ -154,21 +154,6 @@ function ec3_util_last_month($cat = null){
 	return ec3_util_get_month("DESC",$cat);
 }
 
-function ec3_util_get_active_event_count($cat){
-  	global $ec3, $wpdb;
-	$sql= 
-	"SELECT COUNT(*) AS count FROM $wpdb->posts  
-	 INNER JOIN $wpdb->term_relationships 
-		ON (id = object_id) 
-	 LEFT JOIN wp_ec3_schedule ec3_sch 
-		ON ec3_sch.post_id=id AND ec3_sch.end>='$ec3->today'  
-	 WHERE ( term_taxonomy_id IN ($cat) ) AND 
-		post_type = 'post' AND (post_status = 'publish') AND 
-		ec3_sch.post_id IS NOT NULL";
- 	$res = $wpdb->get_results($sql);
-	return $res[0]->count;
-}
-
 /** Generates an array of all 'ec3_Day's between the start of
  *  begin_month & end_month. Indexed by day_id.
  *  month_id is in the form: ec3_<year_num>_<month_num> */
