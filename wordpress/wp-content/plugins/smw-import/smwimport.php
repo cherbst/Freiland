@@ -302,7 +302,9 @@ class smwimport
 		$ids = array();
 		foreach ( $attach_arrs as $key => $attach_arr ){
 			if ( $attach_arr === false ){
-				error_log('Could not get smw attachment:'.$attachment);
+				$g_ret = new WP_Error('attach_err', 
+					__("Could not get smw attachment:").$attachment);
+				error_log($g_ret->get_error_message());
 				continue;
 			}
 
