@@ -181,8 +181,8 @@ class smwimport
   */
   private static function convert_smw_attachment_to_array($attachment){
 	$array = explode(':',$attachment);
-	if ( !isset($array[1]) ) return false;
-	$file = $array[1];
+	if ( count($array) < 2 ) return false;
+	$file = $array[count($array)-1];
 	$attachment_url = get_option('smwimport_attachment_url');
 	$attach_array = array( 'title' => $file,
 			       'file' => $file,
