@@ -673,7 +673,7 @@ class smwimport
 	$ret = true;
 	if ( is_wp_error($g_ret) )
 		error_log('Import was not successful. Not deleting leftover posts!');
-	else
+	else if (!empty(self::$global_imported_posts))
 		$ret = self::delete_posts(self::$global_imported_posts);
 
 	if ( is_wp_error($ret) ) $g_ret = $ret;
