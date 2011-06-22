@@ -279,8 +279,6 @@ class smwimport
 		return $ID;
 	}
 
-	$oldattachments = get_children( array( 'post_parent' => $ID, 
-		'post_type' => 'attachment', 'numberposts' => 999 ) );
 	// import attachments
 	foreach( $attachments as $attachment ){
 		$attach_arr = $data[$attachment];
@@ -321,7 +319,6 @@ class smwimport
 				continue;
 			}
 			$ids[] = $ret;
-			unset($oldattachments[$ret]);
 		}
 
 		if ( count($ids) == 1 ) $ids = $ids[0];
@@ -335,10 +332,6 @@ class smwimport
 		// store attachment ID as post meta
 		update_post_meta($ID,$attachment,$ids);
 	}
-
-	// delete old attachments that are no longer used
-	foreach( array_keys($oldattachments) as $attach_id )
-		wp_delete_post($attach_id,true);
 
 	// import dates
 	if ( is_array($calendar) ){
@@ -458,8 +451,6 @@ class smwimport
 	// set gallery format
 	set_post_format($ID,'gallery');
 
-	$attachments = get_children( array( 'post_parent' => $ID, 'post_type' => 'attachment', 'numberposts' => 999 ) );
-
 	$uploads = wp_upload_dir();
 	if (substr($gallery_folder,-1) != '/' ) $gallery_folder .= '/';
  
@@ -491,7 +482,6 @@ class smwimport
 		}else{
 			// attachment already exists
 			$attach_id = $attachment->ID;
-			unset($attachments[$attach_id]);
 			// mark the attachment as imported
 			unset(self::$global_imported_posts[$attach_id]);
 		}
@@ -501,9 +491,6 @@ class smwimport
 	}
 	closedir($dh);
 
-	// delete all attachments that have no image in folder
-	foreach( array_keys($attachments) as $attach_id )
-		wp_delete_post($attach_id,true);
 	return $ID;
   }
 
