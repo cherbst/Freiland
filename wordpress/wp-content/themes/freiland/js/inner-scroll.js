@@ -17,7 +17,6 @@ function innerScroll(){
 	// the element being scrolled
 	var elem;
 
-
 	function init(e){
 		elem = e;
 		elem.css('position','relative');
@@ -26,7 +25,7 @@ function innerScroll(){
 		elem.height('auto');
  		topmargin = elem.offset().top;
 		originalTopmargin = topmargin;
-		innerScroll.addControls();
+		innerScroll.addControls(jQuery('#footer'),elem.parent());
 		// on each mousedown, re-compute the containment
 		elem.mousedown(innerScroll.setContainment);
 		jQuery(document).keydown(innerScroll.onKeyDown);
@@ -76,22 +75,22 @@ function innerScroll(){
 	}
 
 	// add scroll navigation
-	function addControls(){
+	function addControls(container,hoverElem){
 		var nav = jQuery('<div id="scrollNav"><a id="scrollUp" href="#"><div></div></a>'+
 			  	'<a id="scrollDown"href="#" ><div></div></a></div>');
-		jQuery('#footer').append(nav);
-		jQuery('#footer').hover(function(){
+		container.append(nav);
+		container.hover(function(){
 			if ( !fitsInView() )
 				nav.fadeIn('fast');
 		},function(event){
-			if ( elem.find(jQuery(event.relatedTarget)).length == 0 )
+			if ( hoverElem.find(jQuery(event.relatedTarget)).length == 0 )
 				nav.fadeOut('fast');
 		});
-		elem.hover(function(){
+		hoverElem.hover(function(){
 			if ( !fitsInView() )
 				nav.fadeIn('fast');
 		},function(event){
-			if ( jQuery(event.relatedTarget).attr('id') != 'footer' )
+			if ( jQuery(event.relatedTarget).attr('id') != container.attr('id') )
 				nav.fadeOut('fast');
 		});
 
