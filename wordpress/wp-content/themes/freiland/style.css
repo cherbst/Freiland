@@ -427,6 +427,17 @@ body.page #content > div.page > h1 {
 	display : none;
 }
 
+/* email images */
+span#officemail {
+	background: url(images/officemail.jpg) no-repeat;
+	display: inline-block;
+	height: 17px;
+	width: 210px;
+	position: relative;
+	top: 3px;
+}
+
+
 /* land pages */
 body.page-child #content > div.page > h1,
 body.page-child #content > div.page > .entry-content {
