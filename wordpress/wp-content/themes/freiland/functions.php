@@ -20,10 +20,10 @@ add_filter( 'excerpt_length', 'freiland_filter_excerpt_length',999);
 add_filter( 'the_title', 'freiland_filter_the_title',7,2 );
 add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
 add_filter( 'nav_menu_css_class', 'freiland_filter_menu_classes',11,2 );
+add_filter( 'embed_oembed_html', 'freiland_add_video_wmode_transparent', 10, 3);
 add_filter( 'post_class', 'freiland_post_class_filter');
 add_action( 'init', 'freiland_init_method');
 add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
-
 
 function freiland_init_method() {
 	$jsurl = dirname(get_bloginfo('stylesheet_url')) . '/js';
@@ -56,6 +56,15 @@ function freiland_enqueue_scripts() {
 	}
 	if ( in_category('images') )
 		wp_enqueue_script('freiland-gallery');
+}
+
+function freiland_add_video_wmode_transparent($html, $url, $attr) {
+   if (strpos($html, "<embed src=" ) !== false) {
+    	$html = str_replace('</param><embed', '</param><param name="wmode" value="opaque"></param><embed wmode="opaque" ', $html);
+   		return $html;
+   } else {
+        return $html;
+   }
 }
 
 function freiland_post_class_filter($classes) {
