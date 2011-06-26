@@ -1248,7 +1248,7 @@ ul.event-subcat li {
 	padding: 0;
 	list-style-type: none;
 	width: 100px;
-	float: right;
+	float: left;
 }
 
 ul.event-subcat {
