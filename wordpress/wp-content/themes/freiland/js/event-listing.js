@@ -93,11 +93,13 @@ function event_listing(){
 	function get404(){
 		var href = baseURL + 'events404/';
 		postreq++;
+		ec3.set_spinner(1);
 		jQuery.get(href, function(data){
 			if( jQuery('.error404').length == 0 ){
 				jQuery('#content').append(jQuery(data).find('.error404'));
 			}
 			postreq--;
+			ec3.set_spinner(0);
 			runRequestQueue();
 		});
 	}
