@@ -175,7 +175,9 @@ function event_listing(){
 			toShow.fadeTo(duration,1);
 			toShow.promise().done(function(){
 				innerScroll.updateDimensions();
-				innerScroll.setScrollableToTop(true,getLastPostHeight());
+				// not set scrollable when showing single posts
+				if ( jQuery('#single-post').length == 0 )
+					innerScroll.setScrollableToTop(true,getLastPostHeight());
 				if ( callback ) callback();
 			});
 		});
