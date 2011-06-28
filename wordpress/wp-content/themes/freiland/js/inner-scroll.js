@@ -16,6 +16,10 @@ function innerScroll(){
 	var animating = false;
 	// the element being scrolled
 	var elem;
+	// scroll controls
+	var controls;
+	// is mouse over scroll elem
+	var mouseOverElem = false;
 
 	function init(e){
 		elem = e;
@@ -73,27 +77,40 @@ function innerScroll(){
 	innerScroll.isAnimating = isAnimating;
 
 	function fitsInView(){
-		return ( !scrollableToTop && elem.height() < elem.parent().height() - topmargin - jQuery('#footer').height() );
+		return ( scrollableToTop && topScrollMargin >= elem.height() || 
+			!scrollableToTop && elem.height() < elem.parent().height() - 
+				topmargin - jQuery('#footer').height() );
+	}
+
+	function updateControls(){
+		if ( !fitsInView() && mouseOverElem )
+			controls.fadeIn('fast');
+		else if ( fitsInView() || !mouseOverElem )
+			controls.fadeOut('fast');
 	}
 
 	// add scroll navigation
 	function addControls(container,hoverElem){
-		var nav = jQuery('<div id="scrollNav"><a id="scrollUp" href="#"><div></div></a>'+
+		controls = jQuery('<div id="scrollNav"><a id="scrollUp" href="#"><div></div></a>'+
 			  	'<a id="scrollDown"href="#" ><div></div></a></div>');
-		container.append(nav);
+		container.append(controls);
 		container.hover(function(){
-			if ( !fitsInView() )
-				nav.fadeIn('fast');
+			mouseOverElem = true;
+			updateControls();
 		},function(event){
-			if ( hoverElem.find(jQuery(event.relatedTarget)).length == 0 )
-				nav.fadeOut('fast');
+			if ( hoverElem.find(jQuery(event.relatedTarget)).length == 0 ){
+				mouseOverElem = false;
+				updateControls();
+			}
 		});
 		hoverElem.hover(function(){
-			if ( !fitsInView() )
-				nav.fadeIn('fast');
+			mouseOverElem = true;
+			updateControls();
 		},function(event){
-			if ( jQuery(event.relatedTarget).attr('id') != container.attr('id') )
-				nav.fadeOut('fast');
+			if ( jQuery(event.relatedTarget).attr('id') != container.attr('id') ){
+				mouseOverElem = false;
+				updateControls();
+			}
 		});
 
 		jQuery('#scrollUp,#scrollDown').mousedown(function(){
@@ -242,7 +259,6 @@ function innerScroll(){
 
 	function updateDimensions(){
 		ontop = onbottom = false;
-		if ( fitsInView() ) elem.mouseleave();
 		setContainment();
 	};
 	innerScroll.updateDimensions = updateDimensions;
@@ -266,6 +282,7 @@ function innerScroll(){
 		scrollableToTop = val;
 		if ( margin != 'undefined' && margin != null)
 			topScrollMargin = margin;
+		updateControls();
 	}
 	innerScroll.setScrollableToTop = setScrollableToTop;
 }
