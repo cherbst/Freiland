@@ -105,7 +105,10 @@ function event_listing(){
 	}
 
 	function getLastPostHeight(){
-		return jQuery('#event-listing > div > div.post').filter(':visible').last().height();
+		var lastPost = jQuery('#event-listing > div > div.post').filter(':visible').last();
+		var padding = (parseInt(lastPost.css('padding-top')) || 0)
+			    + (parseInt(lastPost.css('padding-bottom')) || 0);
+		return lastPost.height() + padding;
 	};
 
 	// filter posts for given category
