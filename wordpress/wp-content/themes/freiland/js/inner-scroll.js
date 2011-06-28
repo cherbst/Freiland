@@ -53,6 +53,8 @@ function innerScroll(){
 			var newTop = getNewTop(delta,v);
 			if ( newTop != getTop() && intervalId === false )
 				scrollToTop(newTop,'slow');
+			else
+				animating = false;
 		});
 	}
 
