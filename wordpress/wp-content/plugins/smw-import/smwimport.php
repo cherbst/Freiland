@@ -455,7 +455,8 @@ class smwimport
 
 	$uploads = wp_upload_dir();
 	if (substr($gallery_folder,-1) != '/' ) $gallery_folder .= '/';
- 
+
+	$g_ret = $ID; 
 	while (($file = readdir($dh)) !== false) {
 		if ( filetype($gallery_folder . $file) != 'file' )
 			continue;
@@ -475,9 +476,14 @@ class smwimport
 			// attachment is new
 			$data['url'] = $uploads['path'] . '/' . wp_unique_filename($uploads['path'],$file);
 			// create a symlink in the upload folder
-			symlink( $gallery_folder . $file, $data['url'] );
+			if ( !symlink( $gallery_folder . $file, $data['url'] ) ){
+				$g_ret = new WP_Error('symlink_error', __('Could not create symlink for image:').$file);
+				error_log($g_ret->get_error_message());
+				continue;
+			}
 			$attach_id = self::import_attachment_for_post($prim_key.$file,$data,$ID,false);
 			if ( is_wp_error($attach_id) ) {
+				$g_ret = $attach_id;
 				error_log('Importing image failed:'.$attach_id->get_error_message());
 				continue;
 			}
@@ -493,7 +499,7 @@ class smwimport
 	}
 	closedir($dh);
 
-	return $ID;
+	return $g_ret;
   }
 
   /*  imports $data into a wordpress link according to $mapping
