@@ -106,8 +106,8 @@ function event_listing(){
 
 	function getLastPostHeight(){
 		var lastPost = jQuery('#event-listing > div > div.post').filter(':visible').last();
-		var padding = (parseInt(lastPost.css('padding-top')) || 0)
-			    + (parseInt(lastPost.css('padding-bottom')) || 0);
+		var padding = (parseInt(lastPost.css('padding-top'),10) || 0)
+			    + (parseInt(lastPost.css('padding-bottom'),10) || 0);
 		return lastPost.height() + padding;
 	};
 
@@ -487,6 +487,13 @@ function event_listing(){
 	};
 	event_listing.initAddress = initAddress;
 
+	function setPostImageTop(){
+		var top = jQuery('#single-post .entry-content').offset().top;
+		top += (parseInt(jQuery('#single-post .entry-content').css('padding-top'),10)||0);
+		var left = jQuery('#post-images').offset().left;
+		jQuery('#post-images').offset({top:top,left:left});	
+	}
+
 	function addressChanged(event){
 		var orgvalue = event.value.replace(/^\//, '');
 		var value = baseURL + event.value.replace(/^\//, '');
@@ -524,6 +531,7 @@ function event_listing(){
 					jQuery('body').toggleClass('category-events',false);
 					jQuery('body').toggleClass('single',true);
 					scrollDiv.css({top:0});
+					setPostImageTop();
 					innerScroll.setTopmargin(scrollDiv.offset().top);
 					innerScroll.setScrollableToTop(false);
 					innerScroll.updateDimensions();	
