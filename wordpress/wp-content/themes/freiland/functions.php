@@ -22,9 +22,12 @@ add_filter( 'walker_nav_menu_start_el', 'freiland_filter_start_el',11,2 );
 add_filter( 'nav_menu_css_class', 'freiland_filter_menu_classes',11,2 );
 add_filter( 'embed_oembed_html', 'freiland_add_video_wmode_transparent', 10, 3);
 add_filter( 'post_class', 'freiland_post_class_filter');
+add_filter( 'query_vars', 'freiland_add_query_vars');
+add_filter( 'category_template', 'freiland_get_category_template' );
 add_action( 'init', 'freiland_init_method');
 add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
 
+// hook add_query_vars function into query_vars
 function freiland_init_method() {
 	$jsurl = dirname(get_bloginfo('stylesheet_url')) . '/js';
 	if ( !is_admin() ){
@@ -56,6 +59,22 @@ function freiland_enqueue_scripts() {
 	}
 	if ( in_category('images') )
 		wp_enqueue_script('freiland-gallery');
+}
+
+/* add the query param for bare event listing */
+function freiland_add_query_vars($aVars) {
+    $aVars[] = "ajax_list";    
+    return $aVars;
+}
+
+/* if the query param 'ajax_list' is set, use ajax template for the event list */
+function freiland_get_category_template($template) {
+	global $wp_query;
+	if ( in_category('events') && isset($wp_query->query_vars['ajax_list']) && 
+		$wp_query->query_vars['ajax_list'] == "1" ){
+		return dirname($template) . '/event-listing.php';
+	}
+	return $template;
 }
 
 function freiland_add_video_wmode_transparent($html, $url, $attr) {

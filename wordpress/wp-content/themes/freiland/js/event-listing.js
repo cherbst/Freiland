@@ -32,8 +32,9 @@ function event_listing(){
 	};
 
 	function initHrefs(){
-		next_href = jQuery('#ec3_next:first').attr('href');
-		prev_href = jQuery('#ec3_prev:first').attr('href');
+		var param = "&ajax_list=1";
+		next_href = jQuery('#ec3_next:first').attr('href') + param;
+		prev_href = jQuery('#ec3_prev:first').attr('href') + param;
 	}
 
 	function init(){
@@ -249,7 +250,7 @@ function event_listing(){
 		ec3.set_spinner(1);
 		request = jQuery.get(href, function(data){
 			jQuery('#event-listing').data('request_'+month,null);
-			var content = jQuery(data).find('#event-listing').contents();
+			var content = jQuery(data).contents();
 			monthContainer = getMonthContainer(month);
 			monthContainer.append(content);
 			jQuery('#event-listing').data('month_'+month,monthContainer);

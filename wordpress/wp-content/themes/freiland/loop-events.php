@@ -53,37 +53,9 @@
 	 *
 	 * Without further ado, the loop:
 	 */
-
-/* prevent pagination */
-global $wp_query;
-$args = array_merge( $wp_query->query, array('posts_per_page' => -1 ));
-query_posts($args);
 ?>
 
-<div id="event-listing">
-<?php while ( have_posts() ) : the_post(); ?>
-
-	<div id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
-
-		<div class="entry-date">
-			<?php freiland_the_event_date(); ?>
-		</div><!-- .entry-date -->
-
-		<div class="entry-content">
-			<div class="event-type">
-				<?php freiland_the_event_meta('eventtype'); ?>
-			</div>
-			<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
-			<div class="event-genre">
-				<?php freiland_the_event_meta('subtitle'); ?>
-			</div>
-		</div><!-- .entry-content -->
-	</div><!-- #post-## -->
-
-		<?php comments_template( '', true ); ?>
-
-<?php endwhile; // End the loop. Whew. ?>
-</div>
+<?php include("event-listing.php"); ?>
 
 <?php /* Display navigation to next/previous pages when applicable */ ?>
 <?php if (  $wp_query->max_num_pages > 1 ) : ?>
