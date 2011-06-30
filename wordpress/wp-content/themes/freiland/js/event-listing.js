@@ -66,7 +66,10 @@ function event_listing(){
 		if ( curPost.length == 0 )
 			curPost = jQuery('#event-listing > div > div.post').first();
 
-		// pretend we are on top to pre-load previous month
+		// preload prev and next month
+		event_listing.loadEvents(prev_href);
+		event_listing.loadEvents(next_href);
+		// pretend we are on top to show previous month
 		event_listing.checkForUpdate(true,false);
 	};
 	event_listing.init = init;
@@ -228,19 +231,34 @@ function event_listing(){
 		var month = event_listing.parseHref(href);
 		month = month[1] + '_' + month[2];
 		var monthContainer = jQuery('#event-listing').data('month_'+month);
+		// the events have already been loaded
 		if ( monthContainer ){
 			if ( callback ) callback(monthContainer,month);
 			return;
 		}
+		var request = jQuery('#event-listing').data('request_'+month);
+		// a request for these events is ongoing
+		if ( request ){
+			request.done(function(){
+				// request is done, get the events again
+				loadEvents(href,callback);	
+			});
+			return;
+		}
+		// make the ajax request
 		ec3.set_spinner(1);
-		jQuery.get(href, function(data){
+		request = jQuery.get(href, function(data){
+			jQuery('#event-listing').data('request_'+month,null);
 			var content = jQuery(data).find('#event-listing').contents();
 			monthContainer = getMonthContainer(month);
 			monthContainer.append(content);
+			jQuery('#event-listing').data('month_'+month,monthContainer);
 			ec3.set_spinner(0);
 			if ( callback ) callback(monthContainer,month);
 		});
+		jQuery('#event-listing').data('request_'+month,request);
 	}
+	event_listing.loadEvents = loadEvents;
 
 	// load new events with ajax
 	// apend/prepend them to the list and filter them
