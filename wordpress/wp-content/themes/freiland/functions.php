@@ -70,7 +70,7 @@ function freiland_add_query_vars($aVars) {
 /* if the query param 'ajax_list' is set, use ajax template for the event list */
 function freiland_get_category_template($template) {
 	global $wp_query;
-	if ( in_category('events') && isset($wp_query->query_vars['ajax_list']) && 
+	if ( isset($wp_query->query_vars['ajax_list']) && 
 		$wp_query->query_vars['ajax_list'] == "1" ){
 		return dirname($template) . '/event-listing.php';
 	}
