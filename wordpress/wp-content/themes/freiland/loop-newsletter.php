@@ -17,7 +17,7 @@
 			<?php the_content(); ?>
 		</div><!-- .entry-content -->
 		<div id="input">
-			<form action="#" method="post">
+			<form action="http://groups.google.com/a/yourdomain.com/group/yourgroupname/boxsubscribe">
 				<table border="0" cellpadding="0" cellspacing="0">
 				    <tr>
       					<td align="right" class="label">NAME</td>
@@ -25,10 +25,10 @@
 				    </tr>
 				    <tr>
 					<td align="right" class="label">EMAIL</td>
-					<td align="right"><input name="zuname" type="text" size="30" maxlength="40"></td>
+					<td align="right"><input name="email" type="text" size="30" maxlength="40"></td>
 				    </tr>
 				    <tr>
-					<td></td><td align="right"><input id="submit" type="submit" value="send"></td>
+					<td></td><td align="right"><input id="submit" type="submit" name="sub" value="send"></td>
 				    </tr>
 				</table>
 			</form>
