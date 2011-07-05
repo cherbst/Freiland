@@ -39,6 +39,9 @@ class smwimport
   // array to hold all imported posts
   // is used to delete posts which are not available in the sources
   static $global_imported_posts;
+  // array to hold all imported links
+  // is used to delete links which are not available in the sources
+  static $global_imported_links;
 
   /* returns an array of the ids of all imported subcategories 
   */
@@ -597,10 +600,10 @@ class smwimport
      Deletes all imported data ( posts, attachments, links, categories )
   */
   public static function delete_all_imported(){
-	global $smw_mapping;
-	self::delete_links();
-	$posts = self::get_smwimport_posts();
+	$links = self::get_smwimport_links();
+	self::delete_links($links);
 
+	$posts = self::get_smwimport_posts();
 	self::delete_posts($posts);
   }
 
@@ -613,8 +616,8 @@ class smwimport
 	self::$start_time = time();
 	self::$fetch_time = 0;
 	self::$posttime = time();
-	self::delete_links();
 
+	self::$global_imported_links = self::get_smwimport_links();
 	self::$global_imported_posts = self::get_smwimport_posts();
 
 	$sources = array();
@@ -679,8 +682,13 @@ class smwimport
 	$ret = true;
 	if ( is_wp_error($g_ret) )
 		error_log('Import was not successful. Not deleting leftover posts!');
-	else if (!empty(self::$global_imported_posts))
-		$ret = self::delete_posts(self::$global_imported_posts);
+	else{
+		if (!empty(self::$global_imported_posts))
+			$ret = self::delete_posts(self::$global_imported_posts);
+		if ( is_wp_error($ret) ) $g_ret = $ret;
+		if (!empty(self::$global_imported_links))
+			$ret = self::delete_links(self::$global_imported_links);
+	}
 
 	if ( is_wp_error($ret) ) $g_ret = $ret;
 	if ( !is_wp_error($g_ret) ){
@@ -703,36 +711,57 @@ class smwimport
 		return $cat['term_id'];
   }
 
-  /*  return the id of the link category into which links will be imported
+  /*  deletes imported links given in $links
   */
-  private static function get_link_category() {
-	$link_categories = get_terms('link_category', 'fields=ids&slug=smwimport&hide_empty=0');
-	if (empty($link_categories)) 
-		return new WP_Error('no_link_category', __("Link category 'smwimport' does not exist!"));
-	return $link_categories[0];
+  private static function delete_links($links) {
+	$saved_links = self::get_smwimport_links();
+	foreach($links as $url => $id){
+		wp_delete_link($id);
+		unset($saved_links[$url]);
+	}
+	update_option('_smwimportlinks',$saved_links);
   }
 
-  /*  deletes all imported links
+  /* 
+	updates the imported links option
   */
-  private static function delete_links() {
-	$cat = self::get_link_category();
-	if ( is_wp_error($cat) )
-		return $cat;
-	$args = array( 'category' => (string)$cat );
-	$links = get_bookmarks($args);
-	foreach($links as $link)
-		wp_delete_link($link->link_id);
+  private static function save_link_id($id,$url){
+	$val = self::get_smwimport_links();
+	if ( !is_array($val) )
+		$val = array($val);
+	$val[$url] = $id;
+	update_option('_smwimportlinks',$val);
+	unset(self::$global_imported_links[$url]);
+  }
+
+  /*
+	gets the id of the imported link according to the url
+	if it exists
+  */
+  private static function get_link_id($url){
+	$val = self::get_smwimport_links();
+	if ( isset($val[$url]) ) return $val[$url];
+	return -1;
+  }
+
+  /* gets the array of all imported links */
+  private static function get_smwimport_links(){
+	return get_option('_smwimportlinks',array());
   }
 
   /*  imports $link
       $link must be an array expected by wp_insert_link
   */
   private static function import_link($link) {
-	$cat = self::get_link_category();
-	if ( is_wp_error($cat) )
-		return $cat;
-	$link['link_category'][] = $cat;
-	return wp_insert_link($link,true);
+	$ID = self::get_link_id($link['link_url']);
+	if ( $ID != -1 ) $link['link_id'] = $ID;
+
+	$ID = wp_insert_link($link,true);
+
+	if ( is_wp_error($ID) )
+		return $ID;
+	self::save_link_id($ID,$link['link_url']);
+	return $ID;
   }
 
   /*  returns an array of all imported posts + attachments
