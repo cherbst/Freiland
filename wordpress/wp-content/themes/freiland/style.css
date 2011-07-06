@@ -200,6 +200,11 @@ body.category-images #gallery-description {
 	padding: 0px; 
 }
 
+body.category-images div.error404 .entry-title{
+	position: relative;
+	left: 10px;
+}
+
 body.category-images div.hentry,
 .single-format-gallery div.hentry {
 	margin: 0px;
