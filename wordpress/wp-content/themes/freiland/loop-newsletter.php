@@ -28,10 +28,11 @@
 					<td align="right"><input name="email" type="text" size="30" maxlength="40"></td>
 				    </tr>
 				    <tr>
-					<td></td><td align="right"><input id="submit" type="submit" name="sub" value="send"></td>
+					<td></td><td align="right"><input disabled id="submit" type="submit" name="sub" value="send"></td>
 				    </tr>
 				</table>
 			</form>
+			<p>Sorry, der Newsletter ist zur Zeit noch nicht verfügbar. </p>
 		</div>
 	</div><!-- #post-## -->
 
