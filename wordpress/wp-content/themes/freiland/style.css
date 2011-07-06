@@ -439,6 +439,10 @@ span#officemail {
 
 
 /* land pages */
+body.page-child #content > div.page {
+	min-height: 620px;
+}
+
 body.page-child #content > div.page > h1,
 body.page-child #content > div.page > .entry-content {
 	display : block;
