@@ -83,9 +83,9 @@ function innerScroll(){
 	}
 
 	function updateControls(){
-		if ( !fitsInView() && mouseOverElem )
+		if ( !fitsInView() && mouseOverElem && controls.is(':hidden'))
 			controls.fadeIn('fast');
-		else if ( fitsInView() || !mouseOverElem )
+		else if ( fitsInView() || !mouseOverElem && controls.is(':visible') )
 			controls.fadeOut('fast');
 	}
 
@@ -98,19 +98,18 @@ function innerScroll(){
 			mouseOverElem = true;
 			updateControls();
 		},function(event){
-			if ( hoverElem.find(jQuery(event.relatedTarget)).length == 0 ){
-				mouseOverElem = false;
-				updateControls();
-			}
+			mouseOverElem = false;
+			// delay update
+			setTimeout(function(){updateControls();},10);
 		});
 		hoverElem.hover(function(){
+			console.log('scrolldiv:mouse-in');
 			mouseOverElem = true;
 			updateControls();
 		},function(event){
-			if ( jQuery(event.relatedTarget).attr('id') != container.attr('id') ){
-				mouseOverElem = false;
-				updateControls();
-			}
+			mouseOverElem = false;
+			// delay update
+			setTimeout(function(){updateControls();},10);
 		});
 
 		jQuery('#scrollUp,#scrollDown').mousedown(function(){
