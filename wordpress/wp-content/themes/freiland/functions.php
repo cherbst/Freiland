@@ -24,6 +24,7 @@ add_filter( 'embed_oembed_html', 'freiland_add_video_wmode_transparent', 10, 3);
 add_filter( 'post_class', 'freiland_post_class_filter');
 add_filter( 'query_vars', 'freiland_add_query_vars');
 add_filter( 'category_template', 'freiland_get_category_template' );
+add_filter( 'post_class', 'freiland_post_class');
 add_action( 'init', 'freiland_init_method');
 add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
 
@@ -60,6 +61,13 @@ function freiland_enqueue_scripts() {
 	if ( in_category('images') )
 		wp_enqueue_script('freiland-gallery');
 }
+
+function freiland_post_class($classes){
+  global $wp_query;
+  if(($wp_query->current_post+1) == $wp_query->post_count) $classes[] = 'last';
+  return $classes;
+}
+
 
 /* add the query param for bare event listing */
 function freiland_add_query_vars($aVars) {

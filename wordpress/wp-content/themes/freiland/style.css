@@ -518,7 +518,8 @@ div.post {
 	padding: 0 0 45px 0;
 }
 
-.single .hentry{
+.single .hentry,
+.hentry.last{
 	padding: 0;
 }
 
