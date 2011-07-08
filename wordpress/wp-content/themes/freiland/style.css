@@ -109,6 +109,10 @@ body, input, textarea, .page-title span, .pingback a.url {
 	position: relative;
 }
 
+.single #content embed {
+	max-width: 530px;
+}
+
 /* newsletter page */
 .newsletter #newsletter_box {
 	padding-top: 30px;
