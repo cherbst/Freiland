@@ -32,8 +32,8 @@
 				    </tr>
 				</table>
 			</form>
-			<p>Sorry, der Newsletter ist zur Zeit noch nicht verfügbar. </p>
 		</div>
+		<p>Sorry, der Newsletter ist zur Zeit noch nicht verfügbar. </p>
 	</div><!-- #post-## -->
 
 <?php endwhile; // end of the loop. ?>
