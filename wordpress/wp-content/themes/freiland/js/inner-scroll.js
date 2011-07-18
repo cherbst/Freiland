@@ -103,7 +103,6 @@ function innerScroll(){
 			setTimeout(function(){updateControls();},10);
 		});
 		hoverElem.hover(function(){
-			console.log('scrolldiv:mouse-in');
 			mouseOverElem = true;
 			updateControls();
 		},function(event){
