@@ -618,10 +618,14 @@ function event_listing(){
 	updateCurPost = function(){
 		if ( curPost.length != 0 ) {
 			var newPost = curPost;
-			while ( newPost.offset().top-(topmargin-newPost.height()) < 0 ){
+			while ( newPost.offset().top-topmargin < 0 ){
 				var nextPost = newPost.nextAll(':visible').first();
 				if ( nextPost.length == 0 ){
-					nextPost = newPost.parent().next().children(':visible').first();
+					var curparent = newPost.parent();
+					do{
+						curparent = curparent.next();
+					}while(curparent.next().length > 0 && curparent.children(':visible').length == 0);
+					nextPost = curparent.children(':visible').first();
 					if ( nextPost.length == 0 )					
 						break;
 				}
@@ -629,10 +633,14 @@ function event_listing(){
 			}
 
 			// only go to prev month if there was no reload before
-			while ( newPost.offset().top-(topmargin+newPost.height()) > 0 ) {
+			while ( newPost.offset().top-topmargin > 0 ) {
 				var prevPost = newPost.prevAll(':visible').first();
 				if ( prevPost.length == 0 ){
-					prevPost = newPost.parent().prev().children(':visible').last();
+					var curparent = newPost.parent();
+					do{
+						curparent = curparent.prev();
+					}while(curparent.prev().length > 0 && curparent.children(':visible').length == 0);
+					prevPost = curparent.children(':visible').last();
 					if ( prevPost.length == 0 )
 						break;
 				}
