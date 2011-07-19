@@ -129,7 +129,7 @@ function event_listing(){
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var curMonthPosts = jQuery(monthId).children();
 		var other, toShow;
-		var duration = 'slow';
+		var duration = 2000;// 'slow';
 
 		if ( curCat != topCat && curMonthPosts.filter(filter).length == 0 ){
 			// keep only posts of current month
@@ -146,9 +146,127 @@ function event_listing(){
 		var postsToShow = ( allPosts.length != other.length );
 		var notfound = jQuery('.error404');
 
-		toHide.fadeOut(duration);
+
+		var groups = {};
+		// compute show/hide groups
+		toHide.add(toShow).each(function(){
+			var upper_id = "begin"; 
+			var lower_id = "end"; // find next post from this not in toShow/toHide
+
+//			console.log('cur post:'+jQuery(this).attr('id'));
+			var upper = jQuery(this);
+			while ( upper.length > 0 &&
+				( toShow.index(upper) != -1 ||
+				  toHide.index(upper) != -1 )) {
+//				console.log('cur upper:'+upper.attr('id'));
+				var prev = upper.prev();
+//				console.log('cur prev:'+prev.attr('id'));
+				if ( prev.length == 0 ){
+					var curparent = upper.parent();
+//					console.log('cur parent:'+curparent.attr('id'));
+					do{
+						curparent = curparent.prev();
+					//	console.log('cur parent:'+curparent.attr('id'));
+					}while(curparent.prev().length > 0 && curparent.children().length == 0);
+					prev = curparent.children().last();
+				}
+				upper = prev;
+//				console.log('cur upper:'+upper.attr('id'));
+			}
+			if ( upper.length > 0 )
+				upper_id = upper.attr('id'); 
+
+			var lower = jQuery(this);
+			while ( lower.length > 0 &&
+				( toShow.index(lower) != -1 ||
+				  toHide.index(lower) != -1 ) ){
+				var next = lower.next();
+				if ( next.length == 0 ){
+					var curparent = lower.parent();
+					do{
+						curparent = curparent.next();
+					}while(curparent.next().length > 0 && curparent.children().length == 0);
+					next = curparent.children().first();
+				}
+				lower = next;
+			}
+			if ( lower.length > 0 )
+				lower_id = lower.attr('id'); 
+
+/*			jQuery(this).prevAll().each(function(){
+				 // find prev post from this not in toShow/toHide
+				if ( toShow.index(jQuery(this)) == -1 &&
+				     toHide.index(jQuery(this)) == -1 ){
+					upper_id = jQuery(this).attr('id');
+					return false;
+				}
+			});
+			jQuery(this).nextAll().each(function(){
+				 // find next post from this not in toShow/toHide
+				if ( toShow.index(jQuery(this)) == -1 &&
+				     toHide.index(jQuery(this)) == -1 ){
+					lower_id = jQuery(this).attr('id');
+					return false;
+				}
+			});*/
+
+			var id = upper_id+'_'+lower_id;
+			var group;
+			if ( id in groups )
+				group = groups[id];
+			else{
+				group = {
+					toHide : [],
+					toShow : [],
+					hideHeight: 0,
+					showHeight : 0
+				};
+				groups[id] = group;
+			}
+			if ( toShow.index(jQuery(this)) != -1 ){
+				group.toShow.push(jQuery(this));
+				group.showHeight += jQuery(this).height();
+			}else{
+				group.toHide.push(jQuery(this));
+				group.hideHeight += jQuery(this).height();
+			}
+		});
+		
+		for(key in groups) {
+			var group = groups[key];
+			var diff = group.hideHeight - group.showHeight;
+			console.log("key is "+[key]+", show height is "+groups[key].showHeight+
+				", hide height is "+groups[key].hideHeight );
+			if ( group.showHeight > group.hideHeight ){
+				for (var i = 0; i < group.toShow.length; i++) {
+					var post = group.toShow[i];
+					post.data('height',post.height());
+					var newHeight = post.height() + (post.height() / group.showHeight)*diff;
+					console.log("Expanding "+ post.attr('id') +" from:"+newHeight+" to:"+post.height());
+					post.height(newHeight);
+				}
+			}else{
+				for (var i = 0; i < group.toHide.length; i++) {
+					var post = group.toHide[i];
+					var newHeight = post.height() - (post.height() / group.hideHeight)*diff;
+					post.data('newheight',newHeight);
+					post.data('height',post.height());
+					//post.animate({height:newHeight},duration);
+					console.log("Shrinking "+ post.attr('id') +" from:"+post.height()+" to:"+newHeight);
+				}
+			}
+		}
+//		toHide.fadeOut(duration);
+//		toHide.animate({opacity: 0},duration);
+		toHide.each(function(){
+			jQuery(this).animate({opacity: 0, height: parseInt(jQuery(this).data('newheight'),10)},duration);
+		});
 
 		toHide.promise().done(function(){
+			toHide.hide();
+			toHide.each(function(){
+				jQuery(this).height(parseInt(jQuery(this).data('height'),10));
+			});
 			if ( !postsToShow ){
 				if ( notfound.length == 0 ){
 					requests.push(function(){ get404(); });
@@ -179,7 +297,10 @@ function event_listing(){
 				innerScroll.setRelativeTop( diff );
 			}
 
-			toShow.fadeTo(duration,1);
+//			toShow.fadeTo(duration,1);
+			toShow.each(function(){
+				jQuery(this).animate({opacity: 1,height: parseInt(jQuery(this).data('height'),10)},duration);
+			});
 			toShow.promise().done(function(){
 				innerScroll.updateDimensions();
 				// not set scrollable when showing single posts
