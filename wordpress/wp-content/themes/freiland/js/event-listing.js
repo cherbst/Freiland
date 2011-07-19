@@ -156,7 +156,7 @@ function event_listing(){
 			var upper = jQuery(this);
 			while ( upper.length > 0 &&
 				( toShow.index(upper) != -1 ||
-				  toHide.index(upper) != -1 )) {
+				  other.index(upper) != -1 )) {
 				var prev = upper.prev();
 				if ( prev.length == 0 ){
 					var curparent = upper.parent();
@@ -173,7 +173,7 @@ function event_listing(){
 			var lower = jQuery(this);
 			while ( lower.length > 0 &&
 				( toShow.index(lower) != -1 ||
-				  toHide.index(lower) != -1 ) ){
+				  other.index(lower) != -1 ) ){
 				var next = lower.next();
 				if ( next.length == 0 ){
 					var curparent = lower.parent();
@@ -208,7 +208,8 @@ function event_listing(){
 				group.hideHeight += jQuery(this).height();
 			}
 		});
-		
+	
+		console.log("=============BEGIN============");	
 		for(key in groups) {
 			var group = groups[key];
 			var diff = group.hideHeight - group.showHeight;
@@ -218,14 +219,18 @@ function event_listing(){
 				for (var i = 0; i < group.toShow.length; i++) {
 					var post = group.toShow[i];
 					post.data('height',post.height());
-					var newHeight = post.height() + (post.height() / group.showHeight)*diff;
+					var newHeight = Math.abs(post.height() + (post.height() / group.showHeight)*diff);
 					console.log("Expanding "+ post.attr('id') +" from:"+newHeight+" to:"+post.height());
 					post.height(newHeight);
+				}
+				for (var i = 0; i < group.toHide.length; i++) {
+					var post = group.toHide[i];
+					post.data('newheight',post.height());
 				}
 			}else{
 				for (var i = 0; i < group.toHide.length; i++) {
 					var post = group.toHide[i];
-					var newHeight = post.height() - (post.height() / group.hideHeight)*diff;
+					var newHeight = Math.abs(post.height() - (post.height() / group.hideHeight)*diff);
 					post.data('newheight',newHeight);
 					post.data('height',post.height());
 					//post.animate({height:newHeight},duration);
