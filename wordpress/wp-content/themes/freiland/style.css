@@ -397,8 +397,11 @@ body.single-format-gallery .entry-content > p,
 }
 
 #event-listing .category-events {
+	padding: 0px;
+}
+
+#event-listing .category-events .entry-content {
 	padding-bottom: 15px;
-	padding-top: 0px;
 }
 
 .event-type {

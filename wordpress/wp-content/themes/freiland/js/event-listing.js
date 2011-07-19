@@ -153,25 +153,19 @@ function event_listing(){
 			var upper_id = "begin"; 
 			var lower_id = "end"; // find next post from this not in toShow/toHide
 
-//			console.log('cur post:'+jQuery(this).attr('id'));
 			var upper = jQuery(this);
 			while ( upper.length > 0 &&
 				( toShow.index(upper) != -1 ||
 				  toHide.index(upper) != -1 )) {
-//				console.log('cur upper:'+upper.attr('id'));
 				var prev = upper.prev();
-//				console.log('cur prev:'+prev.attr('id'));
 				if ( prev.length == 0 ){
 					var curparent = upper.parent();
-//					console.log('cur parent:'+curparent.attr('id'));
 					do{
 						curparent = curparent.prev();
-					//	console.log('cur parent:'+curparent.attr('id'));
 					}while(curparent.prev().length > 0 && curparent.children().length == 0);
 					prev = curparent.children().last();
 				}
 				upper = prev;
-//				console.log('cur upper:'+upper.attr('id'));
 			}
 			if ( upper.length > 0 )
 				upper_id = upper.attr('id'); 
@@ -192,23 +186,6 @@ function event_listing(){
 			}
 			if ( lower.length > 0 )
 				lower_id = lower.attr('id'); 
-
-/*			jQuery(this).prevAll().each(function(){
-				 // find prev post from this not in toShow/toHide
-				if ( toShow.index(jQuery(this)) == -1 &&
-				     toHide.index(jQuery(this)) == -1 ){
-					upper_id = jQuery(this).attr('id');
-					return false;
-				}
-			});
-			jQuery(this).nextAll().each(function(){
-				 // find next post from this not in toShow/toHide
-				if ( toShow.index(jQuery(this)) == -1 &&
-				     toHide.index(jQuery(this)) == -1 ){
-					lower_id = jQuery(this).attr('id');
-					return false;
-				}
-			});*/
 
 			var id = upper_id+'_'+lower_id;
 			var group;
@@ -540,8 +517,8 @@ function event_listing(){
 		filterPosts(curCat,function(){
 			if ( !curPost.is(':visible') || curCat != topCat ||
 				getCurMonth() != getPostMonth(curPost) ){
-				scrollToMonth(getCurCalendar(),true,0);
-			}else scrollToPost(curPost,0);
+				scrollToMonth(getCurCalendar(),true);
+			}else scrollToPost(curPost);
 		});
 	}
 
