@@ -258,13 +258,7 @@ function event_listing(){
 
 	// filter posts for given category
 	// show 404 if no posts found
-	function filterPosts(cat,callback,animateHeight){
-		// wait until animations are finished
-		if ( innerScroll.isAnimating() ) {
-			setTimeout(function(){filterPosts(cat,callback,animateHeight);},100);
-			return;
-		}
-
+	function filterPosts(cat,callback){
 		var monthId = '#month_'+getCurMonth();
 		var filter = '.cat-id-'+cat;
 		var allPosts = jQuery('#event-listing > div > div.post');
@@ -272,25 +266,19 @@ function event_listing(){
 		var hidden,shown, toShow;
 		var duration = 1000;
 
-		if ( animateHeight && firstCall )
+		if ( firstCall )
 			duration = 0;
-/*		if ( curCat != topCat && curMonthPosts.filter(filter).length == 0 ){
-			// keep only posts of current month
-			hidden = jQuery('.month_container').not(monthId)
-				.children().add(curMonthPosts.not(filter));
-			shown = curMonthPosts.filter(filter);
-		}else{*/
-			// keep all posts matching filter
-			hidden = allPosts.not(filter);
-			shown = allPosts.filter(filter);
-//		}
+
+		// keep all posts matching filter
+		hidden = allPosts.not(filter);
+		shown = allPosts.filter(filter);
 
 		var toShow = shown.not(':visible');
 		var toHide = hidden.filter(':visible');
 		var postsToShow = ( allPosts.length != hidden.length );
 		var notfound = jQuery('.error404');
 
-		if ( animateHeight && postsToShow ){
+		if ( postsToShow ){
 			if ( firstCall )
 				firstCall = false;
 			else
@@ -308,12 +296,10 @@ function event_listing(){
 
 		toHide.promise().done(function(){
 
-			if ( animateHeight ){
-				toHide.hide();
-				toHide.each(function(){
-					jQuery(this).height(parseInt(jQuery(this).data('height'),10));
-				});
-			}
+			toHide.hide();
+			toHide.each(function(){
+				jQuery(this).height(parseInt(jQuery(this).data('height'),10));
+			});
 
 			if ( !postsToShow ){
 				if ( notfound.length == 0 ){
@@ -328,30 +314,15 @@ function event_listing(){
 			}
 			notfound.hide();
 
-			if ( !animateHeight ){
-				var firstPost = curPost.is(':visible')?curPost:allPosts.filter(':visible').first();
-				var diff;
-				if ( firstPost.length > 0 )
-					diff = firstPost.offset().top;
-			}
-
 			toShow.css('opacity',0);
 			toShow.show();
 
-			if ( !animateHeight && firstPost.length > 0 ){
-				diff = diff - firstPost.offset().top;
-				innerScroll.setRelativeTop( diff );
-			}
-
-			if ( animateHeight ){
-				toShow.each(function(){
-					jQuery(this).animate({opacity: 1,height: parseInt(jQuery(this).data('height'),10)},duration);
-				});
-				var refHeight = parseInt(scrollDiv.data('refHeight'),10);
-				if ( refHeight > 0 )
-					scrollDiv.animate({top: "-="+ refHeight},duration);
-			}else
-				toShow.fadeTo(duration,1);
+			toShow.each(function(){
+				jQuery(this).animate({opacity: 1,height: parseInt(jQuery(this).data('height'),10)},duration);
+			});
+			var refHeight = parseInt(scrollDiv.data('refHeight'),10);
+			if ( refHeight > 0 )
+				scrollDiv.animate({top: "-="+ refHeight},duration);
 
 			toShow.promise().done(function(){
 				innerScroll.updateDimensions();
@@ -436,6 +407,36 @@ function event_listing(){
 	}
 	event_listing.loadEvents = loadEvents;
 
+	function showNewPosts(cat,monthContainer,callback){
+		// wait until animations are finished
+		if ( innerScroll.isAnimating() ) {
+			setTimeout(function(){showNewPosts(cat,monthContainer,callback);},100);
+			return;
+		}
+
+		var filter = '.cat-id-'+cat;
+		var toShow = monthContainer.children().filter(filter).filter(':hidden');
+		var allPosts = jQuery('#event-listing > div > div.post');
+		var duration = 'fast';
+
+		var firstPost = curPost.is(':visible')?curPost:allPosts.filter(':visible').first();
+		var diff = 0;
+
+		if ( firstPost.length > 0 )
+			diff = firstPost.offset().top;
+
+		toShow.css('opacity',0);
+		toShow.show();
+
+		if ( firstPost.length > 0 ){
+			diff = diff - firstPost.offset().top;
+			innerScroll.setRelativeTop( diff );
+		}
+
+		toShow.fadeTo(duration,1);
+		toShow.promise().done(callback);
+	}
+
 	// load new events with ajax
 	// apend/prepend them to the list and filter them
 	function doRequest(append,callback){
@@ -451,7 +452,7 @@ function event_listing(){
 				jQuery('#event-listing').prepend(monthContainer);
 				prev_href = decrementHref(prev_href);
 			}
-			filterPosts(curCat,function(){
+			showNewPosts(curCat,monthContainer,function(){
 				innerScroll.updateDimensions();	
 				if ( callback ) callback();
 				postreq--;
@@ -564,7 +565,8 @@ function event_listing(){
 		var id = elem.attr('id');
 		var requestNextMonth = ( id == 'ec3_next' );
 		var fun = null;
-		var reload = !hrefLoaded(elem.attr('href'));
+		var href = elem.attr('href');
+		var reload = !hrefLoaded(href);
 		if ( requestNextMonth ){
 			fun = ec3.go_next;
 		}else{
@@ -585,13 +587,13 @@ function event_listing(){
 			if ( reload ) 
 				loadNewEvents(requestNextMonth,callback(curCal));
 			else
-				filterPosts(curCat,callback(curCal));
+				showNewPosts(curCat,jQuery('#month_'+getMonthIdFromHref(href)), callback(curCal));
 		});
 	};
 	event_listing.nextPrevClicked = nextPrevClicked;
 
 	function onCategoryChanged(){
-		filterPosts(curCat,null,true);
+		filterPosts(curCat,null);
 	}
 
 	function getFirstMatchingPost(cat,id){
