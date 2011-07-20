@@ -236,9 +236,9 @@ function event_listing(){
 				for (var i = 0; i < group.toShow.length; i++) {
 					var post = group.toShow[i];
 					post.data('height',post.height());
-					var newHeight = Math.abs(post.height() + (post.height() / group.showHeight)*diff);
+					var newHeight = Math.round(Math.abs(
+						post.height() + (post.height() / group.showHeight)*diff));
 					post.height(newHeight);
-					
 				}
 				for (var i = 0; i < group.toHide.length; i++) {
 					var post = group.toHide[i];
@@ -247,7 +247,8 @@ function event_listing(){
 			}else{
 				for (var i = 0; i < group.toHide.length; i++) {
 					var post = group.toHide[i];
-					var newHeight = Math.abs(post.height() - (post.height() / group.hideHeight)*diff);
+					var newHeight = Math.round(Math.abs(
+						post.height() - (post.height() / group.hideHeight)*diff));
 					post.data('newheight',newHeight);
 					post.data('height',post.height());
 				}
