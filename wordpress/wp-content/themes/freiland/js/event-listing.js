@@ -24,6 +24,7 @@ function event_listing(){
 	var baseURL;
 	// the div that is scrolled
 	var scrollDiv;
+	var firstCall = true;
 
 
 //	jQuery('#topright').css('z-index',300);
@@ -70,9 +71,8 @@ function event_listing(){
 		// preload prev and next month
 		event_listing.loadEvents(prev_href);
 		event_listing.loadEvents(next_href);
-		scrollToPost(curPost);
 		// pretend we are on top to show previous month
-		event_listing.checkForUpdate(true,false);
+		event_listing.checkForUpdate(true,true);
 	};
 	event_listing.init = init;
 
@@ -145,10 +145,8 @@ function event_listing(){
 
 		var upper = curPost.prevAll(':visible').first();
 
-		if ( upper.length > 0 ){
-			console.log('Upper:'+upper.text());
+		if ( upper.length > 0 )
 			return upper.offset().top + upper.height() - topmargin;
-		}
 
 		return curPost.parent().offset().top - topmargin;
 	}
@@ -160,11 +158,6 @@ function event_listing(){
 
 		var refHeight = 0;
 		var curIndex = allPosts.index(curPost);
-
-		if ( curPost.length>0 )
-			console.log('Refpost:'+curPost.text());
-		else
-			console.log('No refpost!');
 
 		toHide.add(toShow).each(function(){
 			var upper_id = "begin"; 
@@ -236,12 +229,9 @@ function event_listing(){
 		refHeight += getHeightCorrection(toShow);	
 		scrollDiv.data('refHeight',refHeight);
 
-		console.log("=============BEGIN============");	
 		for(key in groups) {
 			var group = groups[key];
 			var diff = group.hideHeight - group.showHeight;
-			console.log("key is "+[key]+", show height is "+groups[key].showHeight+
-				", hide height is "+groups[key].hideHeight );
 			if ( group.showHeight > group.hideHeight ){
 				for (var i = 0; i < group.toShow.length; i++) {
 					var post = group.toShow[i];
@@ -281,6 +271,8 @@ function event_listing(){
 		var hidden,shown, toShow;
 		var duration = 1000;
 
+		if ( animateHeight && firstCall )
+			duration = 0;
 /*		if ( curCat != topCat && curMonthPosts.filter(filter).length == 0 ){
 			// keep only posts of current month
 			hidden = jQuery('.month_container').not(monthId)
@@ -298,14 +290,18 @@ function event_listing(){
 		var notfound = jQuery('.error404');
 
 		if ( animateHeight && postsToShow ){
-			curPost = getNewCurPost(filter,curPost);
+			if ( firstCall )
+				firstCall = false;
+			else
+				curPost = getNewCurPost(filter,curPost);
 			computeNewHeights(allPosts,toHide,toShow,hidden,shown);
 
 			toHide.each(function(){
 				jQuery(this).animate({opacity: 0, height: parseInt(jQuery(this).data('newheight'),10)},duration);
 			});
 			var refHeight = parseInt(scrollDiv.data('refHeight'),10);
-			scrollDiv.animate({top: "-="+ refHeight},duration);
+			if ( refHeight < 0 )
+				scrollDiv.animate({top: "-="+ refHeight},duration);
 		}else
 			toHide.fadeOut(duration);
 
@@ -350,16 +346,9 @@ function event_listing(){
 				toShow.each(function(){
 					jQuery(this).animate({opacity: 1,height: parseInt(jQuery(this).data('height'),10)},duration);
 				});
-/*				if ( curPost.length > 0 && toShow.index(curPost) != -1 ){
-					var refHeight = parseInt(scrollDiv.data('refHeight'),10);
-					console.log("RefTop:"+curPost.offset().top);	
-					var diff = ( curPost.offset().top - topmargin );
-					refHeight -= diff;
-					console.log("RefHeight:"+refHeight);
+				var refHeight = parseInt(scrollDiv.data('refHeight'),10);
+				if ( refHeight > 0 )
 					scrollDiv.animate({top: "-="+ refHeight},duration);
-					scrollDiv.promise().done(function(){scrollToPost(curPost,duration);});
-				}*/
-
 			}else
 				toShow.fadeTo(duration,1);
 
@@ -368,6 +357,8 @@ function event_listing(){
 				// not set scrollable when showing single posts
 				if ( jQuery('#single-post').length == 0 )
 					innerScroll.setScrollableToTop(true,getLastPostHeight());
+				if ( updateCal )
+					updateCalendar(getCurCalendar());
 				if ( callback ) callback();
 			});
 		});
