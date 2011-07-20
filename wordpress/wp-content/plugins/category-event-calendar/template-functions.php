@@ -138,6 +138,8 @@ function ec3_util_get_month($order,$cat = null){
 	 INNER JOIN wp_ec3_schedule ec3_sch 
 		ON ec3_sch.post_id=id 
 	 WHERE tt.term_id IN ($cat) 
+ 		AND post_status='publish'
+       		AND post_type='post'
 	 ORDER BY ec3_sch.$field $order LIMIT 1";
 	$res = $wpdb->get_results($sql);
 	if ( $res && isset($res[0]) ){
