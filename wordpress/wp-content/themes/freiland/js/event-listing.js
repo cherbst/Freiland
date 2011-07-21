@@ -51,7 +51,7 @@ function event_listing(){
 		var monthContainer = event_listing.getMonthContainer(getCurMonth());
 		monthContainer.append(jQuery('#event-listing').contents());
 		jQuery('#event-listing').append(monthContainer);
-		event_listing.savePostHeights(monthContainer);
+		event_listing.savePostHeights(monthContainer.children());
 		initHrefs();
 
 		// initialize current cat from 'events' menu item
@@ -123,8 +123,8 @@ function event_listing(){
 
 	// saves the heights of containing posts as 
 	// data for later filtering
-	function savePostHeights(monthContainer){
-		monthContainer.children().each(function(){	
+	function savePostHeights(posts){
+		posts.each(function(){
 			jQuery(this).data('height',jQuery(this).height());
 		});
 	}
@@ -191,6 +191,14 @@ function event_listing(){
 		return upper_id+'_'+lower_id;
 	}
 
+	// gets the height of the post from its data field if possible
+	// this is done because getting the height of a hidden element
+	// takes a long time
+	function getPostHeight(post){
+		var dataHeight = post.data('height');
+		return (dataHeight?parseInt(dataHeight,10):post.height());
+	}
+
 	function computeNewHeights(allPosts,toHide,toShow,hidden,shown){
 		var groups = {};
 		// compute show/hide groups
@@ -219,17 +227,18 @@ function event_listing(){
 				groups[group_id] = group;
 			}
 
+			var height = getPostHeight(jQuery(this));
 			if ( toShow.index(jQuery(this)) != -1 ){
 				if ( curPost.length > 0 && allPosts.index(jQuery(this)) < curIndex )
-					refHeight += jQuery(this).height();
+					refHeight += height;
 				group.toShow.push(jQuery(this));
-				group.showHeight += jQuery(this).height();
+				group.showHeight += height;
 			}else{
 				if ( curPost.length > 0 && allPosts.index(jQuery(this)) < curIndex )
-					refHeight -= jQuery(this).height();
-				jQuery(this).data('newheight',jQuery(this).height());
+					refHeight -= height;
+				jQuery(this).data('newheight',height);
 				group.toHide.push(jQuery(this));
-				group.hideHeight += jQuery(this).height();
+				group.hideHeight += height;
 			}
 			oldPost = jQuery(this);
 		});
@@ -243,15 +252,18 @@ function event_listing(){
 			if ( group.showHeight > group.hideHeight ){
 				for (var i = 0,j = group.toShow.length; i < j; i++) {
 					var post = group.toShow[i];
+					var height = getPostHeight(post);
+					post.data('height',height);
 					var newHeight = Math.round(Math.abs(
-						post.height() + (post.height() / group.showHeight)*diff));
+						height + (height / group.showHeight)*diff));
 					post.height(newHeight);
 				}
 			}else{
 				for (var i = 0,j = group.toHide.length; i < j; i++) {
 					var post = group.toHide[i];
+					var height = getPostHeight(post);
 					var newHeight = Math.round(Math.abs(
-						post.height() - (post.height() / group.hideHeight)*diff));
+						height - (height / group.hideHeight)*diff));
 					post.data('newheight',newHeight);
 				}
 			}
@@ -293,9 +305,7 @@ function event_listing(){
 		toHide.promise().done(function(){
 
 			toHide.hide();
-			toHide.each(function(){
-				jQuery(this).height(parseInt(jQuery(this).data('height'),10));
-			});
+			toHide.css('height','auto');
 
 			if ( !postsToShow ){
 				if ( notfound.length == 0 ){
@@ -373,7 +383,7 @@ function event_listing(){
 		var monthContainer = jQuery('#event-listing').data('month_'+month);
 		// the events have already been loaded
 		if ( monthContainer ){
-			if ( callback ) callback(monthContainer,month,false);
+			if ( callback ) callback(monthContainer,month);
 			return;
 		}
 		var request = jQuery('#event-listing').data('request_'+month);
@@ -381,7 +391,7 @@ function event_listing(){
 		if ( request ){
 			request.done(function(){
 				// request is done, get the events again
-				loadEvents(href,callback);	
+				loadEvents(href,callback);
 			});
 			return;
 		}
@@ -394,7 +404,7 @@ function event_listing(){
 			monthContainer.append(content);
 			jQuery('#event-listing').data('month_'+month,monthContainer);
 			ec3.set_spinner(0);
-			if ( callback ) callback(monthContainer,month,true);
+			if ( callback ) callback(monthContainer,month);
 		});
 		jQuery('#event-listing').data('request_'+month,request);
 	}
@@ -425,6 +435,7 @@ function event_listing(){
 		// show posts invisible to get top of scrollDiv
 		toShow.css('opacity',0);
 		toShow.show();
+		savePostHeights(toShow);
 
 		if ( firstPost.length > 0 ){
 			diff = diff - firstPost.offset().top;
@@ -441,7 +452,7 @@ function event_listing(){
 		if ( postreq > 0 ) return;
 		postreq++;
 		var href = (append?next_href:prev_href);
-		loadEvents(href,function(monthContainer,month,loaded){
+		loadEvents(href,function(monthContainer,month){
 			monthContainer.children().hide();
 			if ( append ){
 				jQuery('#event-listing').append(monthContainer);
@@ -450,8 +461,6 @@ function event_listing(){
 				jQuery('#event-listing').prepend(monthContainer);
 				prev_href = decrementHref(prev_href);
 			}
-			if ( loaded )
-				savePostHeights(monthContainer);
 			showNewPosts(curCat,monthContainer,function(){
 				innerScroll.updateDimensions();	
 				if ( callback ) callback();
