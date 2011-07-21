@@ -68,6 +68,8 @@ function event_listing(){
 		if ( curPost.length == 0 )
 			curPost = jQuery('#event-listing > div > div.post').first();
 
+		// set scrollable to top
+		innerScroll.setScrollableToTop(true,event_listing.getLastPostHeight());
 		// preload prev and next month
 		event_listing.loadEvents(prev_href);
 		event_listing.loadEvents(next_href);
@@ -109,12 +111,14 @@ function event_listing(){
 		});
 	}
 
+	// return the height of the last post + padding
 	function getLastPostHeight(){
 		var lastPost = jQuery('#event-listing > div > div.post').filter(':visible').last();
 		var padding = (parseInt(lastPost.css('padding-top'),10) || 0)
 			    + (parseInt(lastPost.css('padding-bottom'),10) || 0);
 		return lastPost.height() + padding;
 	};
+	event_listing.getLastPostHeight = getLastPostHeight;
 
 	function getNewCurPost(filter,oldCur){
 		var newCur = oldCur;
