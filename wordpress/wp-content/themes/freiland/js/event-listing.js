@@ -169,37 +169,29 @@ function event_listing(){
 
 			// find prev post from this not in toShow/toHide
 			var upper = jQuery(this);
-			while ( upper.length > 0 &&
-				( toShow.index(upper) != -1 ||
-				  hidden.index(upper) != -1 )) {
-				var prev = upper.prev();
-				if ( prev.length == 0 ){
-					var curparent = upper.parent();
-					do{
-						curparent = curparent.prev();
-					}while(curparent.prev().length > 0 && curparent.children().length == 0);
-					prev = curparent.children().last();
+			findPrevPost(jQuery(this),function(prevPost){
+				if ( prevPost.length == 0 ){
+					upper = prevPost;
+					return false;
 				}
-				upper = prev;
-			}
+				return toShow.index(prevPost) != -1 ||
+				       hidden.index(prevPost) != -1;
+			});
+
 			if ( upper.length > 0 )
 				upper_id = upper.attr('id'); 
 
 			// find next post from this not in toShow/toHide
 			var lower = jQuery(this);
-			while ( lower.length > 0 &&
-				( toShow.index(lower) != -1 ||
-				  hidden.index(lower) != -1 ) ){
-				var next = lower.next();
-				if ( next.length == 0 ){
-					var curparent = lower.parent();
-					do{
-						curparent = curparent.next();
-					}while(curparent.next().length > 0 && curparent.children().length == 0);
-					next = curparent.children().first();
+			findNextPost(jQuery(this),function(nextPost){
+				if ( nextPost.length == 0 ){
+					lower = nextPost;
+					return false;
 				}
-				lower = next;
-			}
+				return toShow.index(nextPost) != -1 ||
+				       hidden.index(nextPost) != -1;
+			});
+
 			if ( lower.length > 0 )
 				lower_id = lower.attr('id'); 
 
@@ -781,39 +773,51 @@ function event_listing(){
 		else if (callback) callback();
 	}
 
+	// iterate over all posts 
+	// startPost: start iteration from this post
+	// callback: function called with current post as argument
+	//	if called returns false, iteration is stopped
+	// filter: jQuery filter to pre-filter iterated posts
+	// prev: if true iterate previous posts instead of next posts
+	function eachPost(startPost,callback,filter,prev){
+		var newPost = startPost;
+		while ( callback(newPost) ){
+			var nextPost = (prev?newPost.prevAll(filter):newPost.nextAll(filter)).first();
+			if ( nextPost.length == 0 ){
+				var curparent = newPost.parent();
+				do{
+					curparent = (prev?curparent.prev():curparent.next());
+				}while((prev?curparent.prev().length:curparent.next().length) > 0 && 
+					curparent.children(filter).length == 0);
+				nextPost = (prev?curparent.children(filter).last():curparent.children(filter).first());
+				if ( nextPost.length == 0 )
+					break;
+			}
+			newPost = nextPost;
+		}
+		return newPost;
+	}
+
+	function findNextPost(startPost,callback,filter){
+		return eachPost(startPost,callback,filter);
+	}
+
+	function findPrevPost(startPost,callback,filter){
+		return eachPost(startPost,callback,filter,true);
+	}
+
 	// update the current post to the first one shown
 	// call updateCalendar
 	updateCurPost = function(){
 		if ( curPost.length != 0 ) {
-			var newPost = curPost;
-			while ( newPost.offset().top-topmargin < 0 ){
-				var nextPost = newPost.nextAll(':visible').first();
-				if ( nextPost.length == 0 ){
-					var curparent = newPost.parent();
-					do{
-						curparent = curparent.next();
-					}while(curparent.next().length > 0 && curparent.children(':visible').length == 0);
-					nextPost = curparent.children(':visible').first();
-					if ( nextPost.length == 0 )					
-						break;
-				}
-				newPost = nextPost;
-			}
+			var newPost = findNextPost(curPost,function(nextPost){
+				return nextPost.offset().top-topmargin < 0;
+			},':visible');
 
-			// only go to prev month if there was no reload before
-			while ( newPost.offset().top-topmargin > 0 ) {
-				var prevPost = newPost.prevAll(':visible').first();
-				if ( prevPost.length == 0 ){
-					var curparent = newPost.parent();
-					do{
-						curparent = curparent.prev();
-					}while(curparent.prev().length > 0 && curparent.children(':visible').length == 0);
-					prevPost = curparent.children(':visible').last();
-					if ( prevPost.length == 0 )
-						break;
-				}
-				newPost = prevPost;
-			}
+			newPost = findPrevPost(newPost,function(prevPost){
+				return prevPost.offset().top-topmargin > 0;
+			},':visible');
+
 //			curPost.css('background','white');
 			if ( newPost != curPost ){
 				curPost = newPost;
