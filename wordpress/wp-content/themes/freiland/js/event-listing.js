@@ -266,9 +266,6 @@ function event_listing(){
 		var hidden,shown, toShow;
 		var duration = 1000;
 
-		if ( firstCall )
-			duration = 0;
-
 		// keep all posts matching filter
 		hidden = allPosts.not(filter);
 		shown = allPosts.filter(filter);
@@ -279,10 +276,7 @@ function event_listing(){
 		var notfound = jQuery('.error404');
 
 		if ( postsToShow ){
-			if ( firstCall )
-				firstCall = false;
-			else
-				curPost = getNewCurPost(filter,curPost);
+			curPost = getNewCurPost(filter,curPost);
 			computeNewHeights(allPosts,toHide,toShow,hidden,shown);
 
 			toHide.each(function(){
@@ -691,7 +685,11 @@ function event_listing(){
 
 		// load event listing
 		if ( orgvalue == '' ){
-			subcatClicked(topCat);
+			if ( firstCall ){
+				scrollToPost(curPost,0);
+				firstCall = false;
+			}else
+				subcatClicked(topCat);
 			return;
 		}
 
