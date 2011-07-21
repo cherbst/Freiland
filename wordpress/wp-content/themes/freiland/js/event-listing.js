@@ -303,7 +303,6 @@ function event_listing(){
 			}
 			notfound.hide();
 
-			toShow.css('opacity',0);
 			toShow.show();
 
 			toShow.each(function(){
@@ -417,6 +416,7 @@ function event_listing(){
 		if ( firstPost.length > 0 )
 			diff = firstPost.offset().top;
 
+		// show posts invisible to get top of scrollDiv
 		toShow.css('opacity',0);
 		toShow.show();
 
