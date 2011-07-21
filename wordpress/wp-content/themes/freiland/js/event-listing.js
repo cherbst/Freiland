@@ -256,11 +256,11 @@ function event_listing(){
 		}
 	}
 
-	// filter posts for given category
+	// filter posts for current category
 	// show 404 if no posts found
-	function filterPosts(cat,callback){
+	function filterPosts(){
 		var monthId = '#month_'+getCurMonth();
-		var filter = '.cat-id-'+cat;
+		var filter = '.cat-id-'+curCat;
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var curMonthPosts = jQuery(monthId).children();
 		var hidden,shown, toShow;
@@ -303,7 +303,6 @@ function event_listing(){
 				} else notfound.show();
 				innerScroll.setTop(0);
 				innerScroll.setScrollableToTop(false);
-				if ( callback ) callback();
 				return;
 			}
 			notfound.hide();
@@ -325,7 +324,6 @@ function event_listing(){
 					innerScroll.setScrollableToTop(true,getLastPostHeight());
 				if ( updateCal )
 					updateCalendar(getCurCalendar());
-				if ( callback ) callback();
 			});
 		});
 	};
@@ -586,10 +584,6 @@ function event_listing(){
 	};
 	event_listing.nextPrevClicked = nextPrevClicked;
 
-	function onCategoryChanged(){
-		filterPosts(curCat,null);
-	}
-
 	function getFirstMatchingPost(cat,id){
 		var post = jQuery('#'+id);
 		var newPost = post.prevAll('.cat-id-'+cat).last();
@@ -639,13 +633,13 @@ function event_listing(){
 						curPost = getFirstMatchingPost(curCat,singlePostId);
 						updateCalendar(getCurCalendar(),function(){
 							initHrefs();
-							onCategoryChanged();
+							filterPosts();
 						});
 					});
 				else
-					updateCalendar(getCurCalendar(),onCategoryChanged);
+					updateCalendar(getCurCalendar(),filterPosts);
 			}else
-				onCategoryChanged();
+				filterPosts();
 		});
 	};
 
