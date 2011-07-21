@@ -404,6 +404,10 @@ function event_listing(){
 
 		var filter = '.cat-id-'+cat;
 		var toShow = monthContainer.children().filter(filter).filter(':hidden');
+
+		if ( toShow.length > 0 ) 
+			jQuery('.error404').hide();
+
 		var allPosts = jQuery('#event-listing > div > div.post');
 		var duration = 'fast';
 
