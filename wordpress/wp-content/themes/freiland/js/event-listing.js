@@ -640,23 +640,24 @@ function event_listing(){
 		curCat = newCat;
 		jQuery('#eventtypes > ul > li,.children > li').removeClass('current-cat'); 
 		jQuery('.cat-item-'+curCat).addClass('current-cat');
+	
+		if ( !updateNeeded )
+			filterPosts();
 
 		ec3.set_cur_cat(curCat, function() {
-			if ( updateNeeded ){
-				if ( reloadHref )
-					loadEvents(reloadHref,function(monthContainer){
-						jQuery('#event-listing > div.month_container').remove();
-						jQuery('#event-listing').append(monthContainer);
-						curPost = getFirstMatchingPost(curCat,singlePostId);
-						updateCalendar(getCurCalendar(),function(){
-							initHrefs();
-							filterPosts();
-						});
+			if ( !updateNeeded ) return;
+			if ( reloadHref )
+				loadEvents(reloadHref,function(monthContainer){
+					jQuery('#event-listing > div.month_container').remove();
+					jQuery('#event-listing').append(monthContainer);
+					curPost = getFirstMatchingPost(curCat,singlePostId);
+					updateCalendar(getCurCalendar(),function(){
+						initHrefs();
+						filterPosts();
 					});
-				else
-					updateCalendar(getCurCalendar(),filterPosts);
-			}else
-				filterPosts();
+				});
+			else
+				updateCalendar(getCurCalendar(),filterPosts);
 		});
 	};
 
