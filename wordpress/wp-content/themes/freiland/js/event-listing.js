@@ -48,7 +48,7 @@ function event_listing(){
 		});
 
 		// create initial month container
-		var monthContainer = event_listing.getMonthContainer(getCurMonth());
+		var monthContainer = event_listing.getNewMonthContainer(getCurMonth());
 		monthContainer.append(jQuery('#event-listing').contents());
 		jQuery('#event-listing').append(monthContainer);
 		event_listing.savePostHeights(monthContainer.children());
@@ -79,10 +79,14 @@ function event_listing(){
 	};
 	event_listing.init = init;
 
-	function getMonthContainer(month){
+	function getNewMonthContainer(month){
 		return jQuery('<div id="month_'+month+'" class="month_container"></div>');
 	};
-	event_listing.getMonthContainer = getMonthContainer;
+	event_listing.getNewMonthContainer = getNewMonthContainer;
+
+	function getMonthContainer(month){
+		return jQuery('#month_'+month);
+	}
 
 	getPostMonth = function(post){
 		if ( post.length == 0 ) return;
@@ -131,6 +135,9 @@ function event_listing(){
 	event_listing.savePostHeights = savePostHeights;
 
 	function getNewCurPost(filter,oldCur){
+		var curMonthPosts = getMonthContainer(getCurMonth()).children();
+		if ( curMonthPosts.length > 0 )
+			oldCur = curMonthPosts.first();
 		var newCur = oldCur;
 		var curparent = newCur.parent();
 
@@ -273,10 +280,9 @@ function event_listing(){
 	// filter posts for current category
 	// show 404 if no posts found
 	function filterPosts(){
-		var monthId = '#month_'+getCurMonth();
 		var filter = '.cat-id-'+curCat;
 		var allPosts = jQuery('#event-listing > div > div.post');
-		var curMonthPosts = jQuery(monthId).children();
+		var curMonthPosts = getMonthContainer(getCurMonth()).children();
 		var hidden,shown, toShow;
 		var duration = 1000;
 
@@ -400,7 +406,7 @@ function event_listing(){
 		request = jQuery.get(href, function(data){
 			jQuery('#event-listing').data('request_'+month,null);
 			var content = jQuery(data).contents();
-			monthContainer = getMonthContainer(month);
+			monthContainer = getNewMonthContainer(month);
 			monthContainer.append(content);
 			jQuery('#event-listing').data('month_'+month,monthContainer);
 			ec3.set_spinner(0);
@@ -596,7 +602,8 @@ function event_listing(){
 			if ( reload ) 
 				loadNewEvents(requestNextMonth,callback(curCal));
 			else
-				showNewPosts(curCat,jQuery('#month_'+getMonthIdFromHref(href)), callback(curCal));
+				showNewPosts(curCat,getMonthContainer(getMonthIdFromHref(href)), 
+					callback(curCal));
 		});
 	};
 	event_listing.nextPrevClicked = nextPrevClicked;
@@ -622,7 +629,7 @@ function event_listing(){
 			innerScroll.resetTopmargin();
 			singlePostId = post.attr('id');
 			var pDate = getPostMonth(post);
-			if ( jQuery('#month_' + pDate).length == 0 ){
+			if ( getMonthContainer(pDate).length == 0 ){
 				var href = parseHref(next_href);
 				var date = pDate.split('_');
 				reloadHref = buildHref(href,date[0],date[1]);
