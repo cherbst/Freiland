@@ -323,8 +323,6 @@ body.single-format-gallery .entry-content > p,
         float: right;
         width: 470px;
         padding: 0;
-	position: relative;
-	top: 7px;
 }
 
 #event-listing .entry-title > a {
@@ -401,7 +399,8 @@ body.single-format-gallery .entry-content > p,
 }
 
 #event-listing .category-events .entry-content {
-	padding-bottom: 15px;
+	padding-bottom: 8px;
+	padding-top: 7px;
 }
 
 .event-type {
