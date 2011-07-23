@@ -360,19 +360,6 @@ function ec3()
   }
   ec3.set_spinner = set_spinner;
 
-  var get_current_month_link = function(cat){
-	var calendars=get_calendars();
-	var date_array = null;
-	if(calendars)
-		date_array = get_current_year_month(calendars[0]);
-	if ( date_array == null )
-		date_array = [ec3.today_year_num,ec3.today_month_num];
-
-	cat = '&cat=' + cat;
-	return ec3.home+'/?m='+date_array[1]+get_padded_monthnum(date_array[0])+cat;
-  }
-  ec3.get_current_month_link=get_current_month_link;
-
   function get_current_year_month(cal){
     // calculate date of new calendar
     var id_array=cal.id.split('_');
@@ -382,30 +369,6 @@ function ec3()
     var month_num=parseInt(id_array[2]);
     return [year_num,month_num];
   }
-
-  function get_prev_cal()
-  {
-    var calendars=get_calendars();
-    if(!calendars)
-      return;
-    var pn=calendars[0].parentNode;
-
-    // calculate date of new calendar
-    var date_array=get_current_year_month(calendars[0]);
-    if(date_array == null)
-      return;
-    var year_num=date_array[0];
-    var month_num=date_array[1]-1;
-    if(month_num==0)
-    {
-      month_num=12;
-      year_num--;
-    }
-    // Get new calendar
-    var newcal=document.getElementById('ec3_'+year_num+'_'+month_num);
-    return newcal;
-  }
-  ec3.get_prev_cal=get_prev_cal;
 
   /** Called when the user clicks the 'previous month' button. */
   function go_prev(callback)
@@ -458,31 +421,6 @@ function ec3()
     return newcal;
   }
   ec3.go_prev=go_prev;
-
-  function get_next_cal()
-  {
-    var calendars=get_calendars();
-    if(!calendars)
-      return;
-    var pn=calendars[0].parentNode;
-    var last_cal=calendars[calendars.length-1];
-
-    // calculate date of new calendar
-    var date_array=get_current_year_month(last_cal);
-    if(date_array == null)
-      return;
-    var year_num=date_array[0];
-    var month_num=1+date_array[1];
-    if(month_num==13)
-    {
-      month_num=1;
-      year_num++;
-    }
-    // Get new calendar
-    var newcal=document.getElementById('ec3_'+year_num+'_'+month_num);
-    return newcal;
-  }
-  ec3.get_next_cal=get_next_cal;
 
   /** Called when the user clicks the 'next month' button. */
   function go_next(callback)
