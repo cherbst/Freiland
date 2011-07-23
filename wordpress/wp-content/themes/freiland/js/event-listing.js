@@ -328,7 +328,11 @@ function event_listing(){
 			toShow.show();
 
 			toShow.each(function(){
-				jQuery(this).animate({opacity: 1,height: parseInt(jQuery(this).data('height'),10)},duration);
+				jQuery(this).animate({opacity: 1,height: getPostHeight(jQuery(this))},
+					duration,function(){
+					if ( this.style && this.style.removeAttribute)
+						this.style.removeAttribute("filter");
+				});
 			});
 			var refHeight = parseInt(scrollDiv.data('refHeight'),10);
 			if ( refHeight > 0 )
@@ -448,7 +452,10 @@ function event_listing(){
 			innerScroll.setRelativeTop( diff );
 		}
 
-		toShow.fadeTo(duration,1);
+		toShow.fadeTo(duration,1,function(){
+			if ( this.style && this.style.removeAttribute)
+				this.style.removeAttribute("filter");
+		});
 		toShow.promise().done(callback);
 	}
 
