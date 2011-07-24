@@ -391,31 +391,34 @@ body.single-format-gallery .entry-content > p,
 }
 
 #event-listing .category-events .entry-content {
-	padding-bottom: 8px;
-	padding-top: 7px;
+	padding-bottom: 12px;
+	padding-top: 10px;
+}
+
+#event-listing .entry-title {
+	line-height:1;
 }
 
 .event-type {
-	float: left;
 	font-size : 8pt;
 	width: 70px;
 	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
-	line-height: 22px;
+	line-height: 1.4;
 }
 
 .event-genre{
 	clear: both;
-	float: left;
 	margin-left: 80px;
 	font-size : 10pt;
+	min-height: 8px;
 	width: 100%;
-	position: relative;
-	top: -6px;
+	line-height: 1;
 }
 
 .event-type, .event-genre {
+	float: left;
 	color : rgb(196,81,157);
 	text-transform:uppercase;	
 }
