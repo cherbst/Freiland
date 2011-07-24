@@ -73,10 +73,8 @@ body, input, textarea, .page-title span, .pingback a.url {
 #main { 
 	clear: both;
 	width: 970px;
-	background: transparent;
 	z-index: 95;
 	position: relative;
-	top: -150px;
 	height: 100%;
 	overflow: hidden;
 	padding: 0 0 0 200px;
@@ -246,30 +244,30 @@ body.single-format-gallery .entry-content > p,
 	display: none;
 }
 
-#mainpost-banner {
+#mainpost-banner, #empty-banner {
 	display: block;
-	width: 785px!important;
-	max-height: 240px!important;
 	z-index: 99;
+	position: relative;
+	width: 785px;
+	padding-top: 145px;
+}
+
+#mainpost-banner {
+	max-height: 240px;
 	overflow: hidden;
 	padding-bottom: 0;
-	position: relative;
 }
 
 #banner-container {
 	position: relative;
         margin: 0;
         z-index: 97;
-        max-height: 180px!important;
+        max-height: 180px;
 	background: #FFFFFF;
 }
 
 #empty-banner {
-	position: relative;
-	display: block;
 	max-height: 50px;
-	width: 785px;
-        z-index: 99;
 }
 
 #upper-transparency {
@@ -284,8 +282,8 @@ body.single-format-gallery .entry-content > p,
         position: relative;
         margin: 0;
         z-index: 97;
-        max-width: 785px!important;
-        height: 140px!important;
+        max-width: 775px;
+        height: 140px;
 	padding-top: 40px;
 }
 
@@ -530,7 +528,7 @@ div.post {
 
 #primary {
 	width: 180px;
-	padding-top: 180px;
+	padding-top: 380px;
 }
 
 #primary a {
@@ -845,6 +843,7 @@ li#eventtypes li{
 }
 
 #header {
+	position: absolute;
 	padding: 0px;
 	width: 1170px;
 	height: 145px;
@@ -1112,7 +1111,7 @@ img.tooltip {
 }
 
 #post-images.other {
-	top: 90px;
+	top: 235px;
 }
 
 #post-images div.image_big,
