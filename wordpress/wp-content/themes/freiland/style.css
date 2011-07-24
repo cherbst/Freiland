@@ -648,6 +648,7 @@ li#eventtypes li{
 	left: 500px;
 	text-align: center;
 	display: none;
+	width: 60px;
 }
 
 #scrollNav > a, #scrollNav > a:hover {
