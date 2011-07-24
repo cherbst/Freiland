@@ -435,6 +435,10 @@ body.page #content div.page h1 {
 	display : none;
 }
 
+body.page #content div.page .entry-content h1 {
+	display : block;
+}
+
 /* email images */
 span#officemail {
 	background: url(images/officemail.jpg) no-repeat;
