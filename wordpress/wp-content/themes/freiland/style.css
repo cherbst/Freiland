@@ -67,6 +67,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 	width: 230px;
 	margin-left: 20px;
 	height: auto;
+	float: none;
 }
 
 #main { 
@@ -1106,6 +1107,7 @@ img.tooltip {
 
 #post-images div.image_big,
 #post-images div.image {
+	float: right;
 	width: 100%;
 	margin: 0 auto;
 	overflow: hidden;
@@ -1115,8 +1117,9 @@ img.tooltip {
 #post-images div.image img {
         width: 230px;
 	height: auto;
-	margin-left: 20px;
+	margin-left: 0px;
 	margin-bottom:0;
+	float: none;
 }
 
 #post-images div.sponsor {
@@ -1140,8 +1143,8 @@ img.tooltip {
 }
 
 #summary-text {
-	display: block;
-	width: 550px;
+	float: left;
+	width: 530px;
         font-size: 11pt!important;
         font-family: Verdana;
 	color: #000000;
