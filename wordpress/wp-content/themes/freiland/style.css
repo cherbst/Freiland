@@ -65,7 +65,7 @@ body, input, textarea, .page-title span, .pingback a.url {
 
 #content .entry-summary img{
 	width: 230px;
-	margin-left: 20px;
+	margin-left: 0;
 	height: auto;
 	float: none;
 }
@@ -73,9 +73,10 @@ body, input, textarea, .page-title span, .pingback a.url {
 #main { 
 	clear: both;
 	width: 970px;
-	background: #FFFFFF;
+	background: transparent;
 	z-index: 95;
 	position: relative;
+	top: -150px;
 	height: 100%;
 	overflow: hidden;
 	padding: 0 0 0 200px;
@@ -253,7 +254,6 @@ body.single-format-gallery .entry-content > p,
 	overflow: hidden;
 	padding-bottom: 0;
 	position: relative;
-	padding-top: 145px;
 }
 
 #banner-container {
@@ -270,7 +270,6 @@ body.single-format-gallery .entry-content > p,
 	max-height: 50px;
 	width: 785px;
         z-index: 99;
-	padding-top: 145px;
 }
 
 #upper-transparency {
@@ -318,7 +317,7 @@ body.single-format-gallery .entry-content > p,
         padding: 0;
 }
 
-#event-listing .entry-title > a {
+#event-listing .entry-title a {
 	padding-top: 0;
 }
 
@@ -350,7 +349,7 @@ body.single-format-gallery .entry-content > p,
 	text-decoration:underline;
 }
 
-.homepage > a {
+.homepage a {
 	color : rgb(196,81,157);
 	font-family:arial;
 }
@@ -389,6 +388,8 @@ body.single-format-gallery .entry-content > p,
 
 #event-listing .category-events {
 	padding: 0px;
+	clear: both;
+	width: 100%;
 }
 
 #event-listing .category-events .entry-content {
@@ -411,10 +412,10 @@ body.single-format-gallery .entry-content > p,
 
 .event-genre{
 	clear: both;
-	margin-left: 80px;
+	padding-left: 80px;
 	font-size : 10pt;
 	min-height: 8px;
-	width: 100%;
+	width: 300px;
 	line-height: 1;
 }
 
@@ -430,7 +431,7 @@ body.single-format-gallery .entry-content > p,
 	margin-top: 5px;
 }
 
-body.page #content > div.page > h1 {
+body.page #content div.page h1 {
 	display : none;
 }
 
@@ -507,24 +508,25 @@ div.post {
 
 #content #event-listing div.category-events .entry-title {
         clear: none;
-        max-width: 80%;
+        width: 375px;
 }
 
-.hentry{
-	margin-bottom : 0;
+.hentry,
+#single-post .hentry {
+	margin-bottom : 45px;
 	overflow : hidden;
-	padding: 0 0 45px 0;
 }
 
-.single .hentry,
-.hentry.last{
+#event-listing .hentry,
+.page .hentry,
+.archive .hentry.last{
 	padding: 0;
+	margin: 0;
 }
 
 #primary {
-	position: relative;
 	width: 180px;
-	top: 380px;
+	padding-top: 180px;
 }
 
 #primary a {
@@ -652,29 +654,29 @@ li#eventtypes li{
 	width: 60px;
 }
 
-#scrollNav > a, #scrollNav > a:hover {
+#scrollNav a, #scrollNav a:hover {
 	line-height: 0;
 	font-size: 0;
 	color: black;
 	text-decoration: none;
 }
 
-#scrollNav > a:hover {
+#scrollNav a:hover {
 	text-decoration: underline;
 }
 
-#scrollUp > div, #scrollDown > div {
+#scrollUp div, #scrollDown div {
 	width: 30px;
 	height: 20px;
 }
 
-#scrollUp > div {
+#scrollUp div {
 	background: url(images/upnav.png) no-repeat;
 	background-position: left center;
 	float: left;
 }
 
-#scrollDown > div {
+#scrollDown div {
 	background: url(images/downnav.png) no-repeat;
 	background-position: right center;
 	float: right;
@@ -724,11 +726,11 @@ li#eventtypes li{
 	padding-right: 50px;
 }
 
-#footer li.flexipages_widget > ul {
+#footer li.flexipages_widget  ul {
 	padding-bottom: 5px;
 }
 
-#footer li.flexipages_widget > h3 {
+#footer li.flexipages_widget h3 {
 	display: none;
 }
 
@@ -811,6 +813,7 @@ li#eventtypes li{
 #site-title {
 	font-size: 1pt;
 	color: #FFFFFF;
+	width: 200px;
 }
 
 #site-title a {
@@ -831,18 +834,14 @@ li#eventtypes li{
 }
 
 #masthead {
-	position: absolute;
 	z-index: 99;
-	top : 0;
-	left : 0;
 	width: 985px;
 	height: 100%;
+	float: left;
 }
 
 #header {
-	position: absolute;
 	padding: 0px;
-	top: 0;
 	width: 1170px;
 	height: 145px;
 	z-index: 100;
@@ -878,8 +877,9 @@ li#eventtypes li{
 	width: 100%;
 }
 
-#access li > a, #access ul ul > a {
-        color: #000000;
+#access a {
+        color: black;
+        padding: 0;
 }
 
 #access li:hover > a {
@@ -944,9 +944,8 @@ li#eventtypes li{
 }
 
 #topright {
-	position: absolute;
-	top : 30px;
-	right: 0;
+	margin-top : 30px;
+	float: right;;
 	height: 280px;
 	width: 185px;
 	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;
@@ -959,10 +958,6 @@ li#eventtypes li{
 	font-size : 14pt;
 }
 
-#access a {
-        padding: 0;
-}
-
 #access ul li {
         padding-right: 55px;
 }
@@ -971,8 +966,19 @@ li#eventtypes li{
 	padding-right: 5px;
 }
 
-#access ul li.current_page_item > a, #access ul li.current-menu-ancestor > a, #access ul li.current-menu-item > a, #access ul li.current-menu-parent > a {
+#access ul li.current_page_item > a, 
+#access ul li.current-menu-ancestor > a, 
+#access ul li.current-menu-item > a, 
+#access ul li.current-menu-parent > a {
 	color: black;
+}
+
+* html #access ul li.current_page_item a,
+* html #access ul li.current-menu-ancestor a,
+* html #access ul li.current-menu-item a,
+* html #access ul li.current-menu-parent a,
+* html #access ul li a:hover {
+    color: black;
 }
 
 #access #submenu ul.menu {
@@ -1102,7 +1108,7 @@ img.tooltip {
 }
 
 #post-images.other {
-	top: 235px;
+	top: 90px;
 }
 
 #post-images div.image_big,
@@ -1266,10 +1272,11 @@ ul.event-subcat li {
 	float: left;
 }
 
-ul.event-subcat {
+#content ul.event-subcat {
 	float: left;
 	clear: both;
 	padding-left: 362px;
+	margin-bottom: 0;
 }
 
 
