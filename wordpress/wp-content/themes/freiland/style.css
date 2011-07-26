@@ -845,7 +845,6 @@ li#eventtypes li{
 #header {
 	position: absolute;
 	padding: 0px;
-	width: 1170px;
 	height: 145px;
 	z-index: 100;
 	background: #FFFFFF;
@@ -948,7 +947,8 @@ li#eventtypes li{
 
 #topright {
 	margin-top : 30px;
-	float: right;;
+	position: absolute;
+	left: 985px;
 	height: 280px;
 	width: 185px;
 	background: url(images/nav_right.png) left 84px no-repeat #FFFFFF;

@@ -83,13 +83,12 @@
 				<?php wp_nav_menu( array( 'container_class' => 'menu-header event-categories', 'theme_location' => 'primary' ) ); ?>
 			</div><!-- #access -->
 		</div><!-- #masthead -->
-		<div id="topright">
-			<span>
-				<!-- IMAGE -->
-			</span>
-		</div> <!-- #topright-->
 	</div><!-- #header -->
-
+	<div id="topright">
+		<span>
+			<!-- IMAGE -->
+		</span>
+	</div> <!-- #topright-->
 	<div id="main">
 	<?php if ( is_single() ) { ?>
 	<div id="post-images" class="<?php if ( in_category('events') ) echo "events"; else echo "other"; ?>">
