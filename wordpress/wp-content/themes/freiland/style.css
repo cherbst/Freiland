@@ -449,31 +449,34 @@ span#officemail {
 
 
 /* land pages */
-body.page-child #content > div.page {
+body.page-child #content div.page {
 	min-height: 620px;
 }
 
-body.page-child #content > div.page > h1,
-body.page-child #content > div.page > .entry-content {
+body.page-child #content div.page h1,
+body.page-child #content div.page .entry-content {
 	display : block;
-	float: left;
-	padding-left: 530px;
 	width: 255px;
 }
 
-body.page-child #content > div.page > h1 {
+body.page-child #content div.page h1 {
+	padding-left: 20px;
+	width: 235px;
 	padding-bottom: 15px;
-	padding-left: 550px;
 	background: url(images/feil_rechts_kl.png) no-repeat;
-	background-position: 525px 5px;
+	background-position: 0px 5px;
 	background-color: rgb(255, 255, 255);
 }
 
-.page-child #content > div.page > img {
+.page-child #content div.page img {
 	width: 500px;
 	height: auto;
+}
+
+body.page-child .page-content {
 	position: absolute;
-	left:0;
+	right: 0;
+	top: 0;
 }
 
 .category-news #banner-container {
