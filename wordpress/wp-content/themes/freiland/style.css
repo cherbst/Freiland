@@ -690,7 +690,7 @@ li#eventtypes li{
 
 #footer-widget-area {
 	float : right;
-	width: 60%;
+	width: 750px;
 }
 
 #footer-widget-area div#first {
@@ -700,7 +700,7 @@ li#eventtypes li{
 
 #footer-widget-area div#first li.flexipages_widget li {
 	display : inline;
-	padding-right: 2%;
+	padding-left: 12px;
 }
 
 #footer-widget-area #first ul{
@@ -710,7 +710,7 @@ li#eventtypes li{
 #footer {
 	position: absolute;
 	bottom: 0px;
-	width: 1200px;
+	width: 1170px;
 	margin: 0;
 	left : 0;
 	z-index: 99;
@@ -730,9 +730,9 @@ li#eventtypes li{
 
 #footer li.flexipages_widget {
 	float: right;
-	width:380px;
+	width:400px;
 	padding-top: 10px;
-	padding-right: 50px;
+	text-align: right;
 }
 
 #footer li.flexipages_widget  ul {
@@ -745,7 +745,7 @@ li#eventtypes li{
 
 #footer li.widget_nav_menu {
 	float: right;
-	padding-right: 10px;
+	width: 180px;
 }
 
 #footer li a {
@@ -784,9 +784,13 @@ li#eventtypes li{
 	padding-right: 4px;
 }
 
+#footer .menu-extern-container {
+	float: right;
+}
+
 #footer #menu-extern li{
 	float : left;
-	margin-right: 20px;
+	margin-left: 20px;
 }
 
 #footer #menu-extern span{
