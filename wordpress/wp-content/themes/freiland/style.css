@@ -709,13 +709,16 @@ li#eventtypes li{
 #footer {
 	position: absolute;
 	bottom: 0px;
-	padding-bottom: 15px;
 	width: 1200px;
 	margin: 0;
 	left : 0;
+	z-index: 99;
+}
+
+#lower-transparency {
+	height:50px;
 	background: url(images/bgTransDT.png) repeat-x;
 	background-position: left bottom;
-	z-index: 99;
 }
 
 #footer li {
@@ -806,9 +809,9 @@ li#eventtypes li{
 
 #colophon {
 	border-top: none;
-	margin-top:40px;
-	padding:0; 
+	padding: 0 0 15px 0;
 	height: 35px;
+	background: white;
 }
 
 #site-description {

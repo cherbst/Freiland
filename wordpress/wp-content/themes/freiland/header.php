@@ -52,7 +52,9 @@
 	wp_head();
 	
 ?>
-
+<!--[if lte IE 6]>
+	<script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url')) . '/js/supersleight.plugin.js';?>"></script>
+<![endif]-->
 </head>
 
 <body <?php body_class(); ?>>
