@@ -538,7 +538,7 @@ div.post {
 	color : black;
 }
 
-#primary li > a {
+#primary .event-categories li a {
 	font-family: Arial;
 	font-size : 8pt;
 	text-transform:uppercase;	
@@ -753,16 +753,16 @@ li#eventtypes li{
 	font-family: Helvetica!important;
 }
 
-#footer li:hover > a,
-#footer li:active > a,
-#primary li:hover > a,
-#primary li:active > a{
+#footer .flexipages_widget li a:hover,
+#footer .flexipages_widget li a:active,
+#primary .event-categories li a:hover,
+#primary .event-categories li a:active {
 	border-bottom: 3px solid rgb(196,81,157);
 	text-decoration: none;
 }
 
-#footer li.current_page_item > a,
-#primary li.current-cat > a {
+#footer li.current_page_item a,
+#primary li.current-cat a {
 	border-bottom: 3px solid rgb(196,81,157);
 	text-decoration: none;
 }
