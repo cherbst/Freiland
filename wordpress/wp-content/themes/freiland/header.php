@@ -54,6 +54,7 @@
 ?>
 <!--[if lte IE 6]>
 	<script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url')) . '/js/supersleight.plugin.js';?>"></script>
+	<script type="text/javascript" src="<?php echo dirname(get_bloginfo('stylesheet_url')) . '/js/submenu-ie6.js';?>"></script>
 <![endif]-->
 </head>
 
