@@ -1297,8 +1297,9 @@ ul.event-subcat li {
 #content ul.event-subcat {
 	float: left;
 	clear: both;
-	padding-left: 362px;
+	padding-left: 386px;
 	margin-bottom: 0;
+	margin-left: 0;
 }
 
 
