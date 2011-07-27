@@ -15,4 +15,24 @@ jQuery(document).ready(function(){
 	jQuery('#menu-extern li a').each(function(){
 		jQuery(this).addClass(jQuery(this).attr('title'));
 	});
+	// set thumbnail size on hover in gallery pages
+	jQuery('.category-images #content div img,' +
+	       '.single-format-gallery #content div img').hover(
+		function(){
+			jQuery(this).css( {'width' : '80',
+					   'height': '75',
+					   'padding-left'  : '-=5',
+					   'padding-right' : '-=5',
+					   'padding-top'   : '-=5',
+					   'padding-bottom': '-=5'});
+		},
+		function(){
+			jQuery(this).css( {'width' : '70',
+					   'height': '65',
+					   'padding-left'  : '+=5',
+					   'padding-right' : '+=5',
+					   'padding-top'   : '+=5',
+					   'padding-bottom': '+=5'});
+		}
+	);
 });
