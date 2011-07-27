@@ -212,11 +212,9 @@
 
 				while ( height > maxHeight || width > maxWidth ){
 					if ( height > maxHeight ){
-						console.log('HEIGH:'+width+':'+objImagePreloader.width);
 						height = maxHeight;
 						width = oldWidth*height/oldHeight;
 					}else if ( width > maxWidth ){
-						console.log('WIDTH:'+width+':'+objImagePreloader.width);
 						width = maxWidth;
 						height = oldHeight*width/oldWidth;
 					}
