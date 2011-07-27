@@ -580,6 +580,7 @@ div.post {
 }
 
 #event-calendar #wp-calendar table td:hover,
+#event-calendar #wp-calendar table td a:hover,
 #event-calendar #wp-calendar table #today {
  font-size: 12pt;
  border:none;
