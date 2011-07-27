@@ -795,14 +795,23 @@ li#eventtypes li{
 	width:  25px;
 }
 
+#footer #menu-extern a.twitter span{
+	background: url(images/twitter-icon.png) center no-repeat #FFFFFF;
+}
 #footer #menu-extern a[title="twitter"] span{
 	background: url(images/twitter-icon.png) center no-repeat #FFFFFF;
 }
 
+#footer #menu-extern a.facebook span{
+	background: url(images/facebook_icon.png) center no-repeat #FFFFFF;
+}
 #footer #menu-extern a[title="facebook"] span{
 	background: url(images/facebook_icon.png) center no-repeat #FFFFFF;
 }
 
+#footer #menu-extern a.diaspora span{
+	background: url(images/diaspora_icon.png) center no-repeat #FFFFFF;
+}
 #footer #menu-extern a[title="diaspora"] span{
 	background: url(images/diaspora_icon.png) center no-repeat #FFFFFF;
 }

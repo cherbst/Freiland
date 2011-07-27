@@ -40,7 +40,3 @@ jQuery.fn.supersleight = function(settings) {
 	});
 };
 
-jQuery(document).ready(function(){
-	jQuery('#upper-transparency').supersleight();
-	jQuery('#lower-transparency').supersleight();
-});
