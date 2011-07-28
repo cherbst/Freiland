@@ -1194,8 +1194,8 @@ img.tooltip {
 
 #prev a:hover,
 #next a:hover {
-        font-size: 8pt;
-	line-height: 8pt;
+        font-size: 8pt!important;
+	line-height: 8pt!important;
 	text-decoration: none;
 	text-transform: uppercase;
 }
