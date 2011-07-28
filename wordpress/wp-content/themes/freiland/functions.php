@@ -338,7 +338,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$begin_date = strtotime($begin_date);
 	$end_date = strtotime($end_date);
 	$has_end_date = ($has_end_date && ($end_date != $begin_date));
-	echo '<div class="begin_date" id="';
+	echo '<div class="begin_date ';
 	echo date("Y_n",$begin_date);
 	echo '">';
 	echo '<div class="event_day">';

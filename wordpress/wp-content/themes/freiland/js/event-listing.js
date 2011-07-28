@@ -90,7 +90,7 @@ function event_listing(){
 
 	getPostMonth = function(post){
 		if ( post.length == 0 ) return;
-		return post.find('.begin_date').attr('id');
+		return post.find('.begin_date').attr('class').split(" ")[1];
 	}
 
 	getCurCalendar = function(){
