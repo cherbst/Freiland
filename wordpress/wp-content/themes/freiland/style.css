@@ -95,11 +95,11 @@ body, input, textarea, .page-title span, .pingback a.url {
 	margin: 0;
 	width: 785px;
 	height: 90%;
+	position: relative;
 }
 
 .single #content{
 	width: 530px;
-	position: relative;
 }
 
 .single #content embed {
