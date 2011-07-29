@@ -43,8 +43,10 @@ function freiland_init_method() {
 		array('jquery'));
 	wp_register_script('inner-scroll', $jsurl . '/inner-scroll.js',
 		array('jquery-mousewheel','jquery-ui'));
+	wp_register_script('filterlist', $jsurl . '/filterlist.js',
+		array('jquery'));
 	wp_register_script('event-listing', $jsurl . '/event-listing.js',
-		array('jquery-address','inner-scroll'));
+		array('jquery-address','inner-scroll','filterlist'));
 	wp_register_script('freiland-gallery', $jsurl . '/freiland-gallery.js',
 		array('jquery'));
 	wp_register_script('link-targets', $jsurl . '/link-targets.js',

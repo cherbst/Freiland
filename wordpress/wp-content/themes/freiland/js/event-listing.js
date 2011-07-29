@@ -69,6 +69,7 @@ function event_listing(){
 		if ( curPost.length == 0 )
 			curPost = jQuery('#event-listing > div > div.post').first();
 
+		scrollDiv.filterlist(curPost);
 		// set scrollable to top
 		innerScroll.setScrollableToTop(true,event_listing.getLastPostHeight());
 		// preload prev and next month
@@ -157,195 +158,34 @@ function event_listing(){
 		return newCur.length > 0?newCur:oldCur;
 	}
 
-	function getHeightCorrection(toShow){
-		if ( curPost.length == 0)
-			return 0;
-		
-		if ( toShow.index(curPost) == -1 )
-			return curPost.offset().top - topmargin;
-
-		var upper = curPost.prevAll(':visible').first();
-
-		if ( upper.length > 0 )
-			return upper.offset().top + upper.height() - topmargin;
-
-		return curPost.parent().offset().top - topmargin;
-	}
-
-	// returns the group id of the given post
-	function getGroupId(post,toShow,hidden){
-		var upper_id = "begin"; 
-		var lower_id = "end";
-
-		// find prev post from this not in toShow/toHide
-		var upper = findPrevPost(post,function(prevPost){
-			return toShow.index(prevPost) != -1 ||
-			       hidden.index(prevPost) != -1;
-		});
-
-		if ( upper.length > 0 )
-			upper_id = upper.attr('id'); 
-
-		// find next post from this not in toShow/toHide
-		var lower = findNextPost(post,function(nextPost){
-			return toShow.index(nextPost) != -1 ||
-			       hidden.index(nextPost) != -1;
-		});
-
-		if ( lower.length > 0 )
-			lower_id = lower.attr('id'); 
-
-		return upper_id+'_'+lower_id;
-	}
-
-	// gets the height of the post from its data field if possible
-	// this is done because getting the height of a hidden element
-	// takes a long time
-	function getPostHeight(post){
-		var dataHeight = post.data('height');
-		return (dataHeight?parseInt(dataHeight,10):post.height());
-	}
-
-	function computeNewHeights(allPosts,toHide,toShow,hidden,shown){
-		var groups = {};
-		// compute show/hide groups
-
-		var refHeight = 0;
-		var curIndex = allPosts.index(curPost);
-		var group_id;
-		var oldPost;
-
-		toHide.add(toShow).each(function(){
-			// get new group id if this is not the next of the old post	
-			if ( !oldPost || jQuery(this).prev().length == 0 ||
-				oldPost.attr('id') != jQuery(this).prev().attr('id') )
-				group_id = getGroupId(jQuery(this),toShow,hidden);
-
-			var group;
-			if ( group_id in groups )
-				group = groups[group_id];
-			else{
-				group = {
-					toHide : [],
-					toShow : [],
-					hideHeight: 0,
-					showHeight : 0
-				};
-				groups[group_id] = group;
-			}
-
-			var height = getPostHeight(jQuery(this));
-			if ( toShow.index(jQuery(this)) != -1 ){
-				if ( curPost.length > 0 && allPosts.index(jQuery(this)) < curIndex )
-					refHeight += height;
-				group.toShow.push(jQuery(this));
-				group.showHeight += height;
-			}else{
-				if ( curPost.length > 0 && allPosts.index(jQuery(this)) < curIndex )
-					refHeight -= height;
-				jQuery(this).data('newheight',height);
-				group.toHide.push(jQuery(this));
-				group.hideHeight += height;
-			}
-			oldPost = jQuery(this);
-		});
-
-		refHeight += getHeightCorrection(toShow);	
-		scrollDiv.data('refHeight',refHeight);
-
-		for(key in groups) {
-			var group = groups[key];
-			var diff = group.hideHeight - group.showHeight;
-			if ( group.showHeight > group.hideHeight ){
-				for (var i = 0,j = group.toShow.length; i < j; i++) {
-					var post = group.toShow[i];
-					var height = getPostHeight(post);
-					post.data('height',height);
-					var newHeight = Math.round(Math.abs(
-						height + (height / group.showHeight)*diff));
-					post.height(newHeight);
-				}
-			}else{
-				for (var i = 0,j = group.toHide.length; i < j; i++) {
-					var post = group.toHide[i];
-					var height = getPostHeight(post);
-					var newHeight = Math.round(Math.abs(
-						height - (height / group.hideHeight)*diff));
-					post.data('newheight',newHeight);
-				}
-			}
-		}
-	}
-
 	// filter posts for current category
 	// show 404 if no posts found
 	function filterPosts(){
-		var filter = '.cat-id-'+curCat;
-		var allPosts = jQuery('#event-listing > div > div.post');
-		var curMonthPosts = getMonthContainer(getCurMonth()).children();
-		var hidden,shown, toShow;
-		var duration = 1000;
-
-		// keep all posts matching filter
-		hidden = allPosts.not(filter);
-		shown = allPosts.filter(filter);
-
-		var toShow = shown.not(':visible');
-		var toHide = hidden.filter(':visible');
-		var postsToShow = ( allPosts.length != hidden.length );
-		var notfound = jQuery('.error404');
-
-		if ( postsToShow ){
-			curPost = getNewCurPost(filter,curPost);
-			computeNewHeights(allPosts,toHide,toShow,hidden,shown);
-
-			toHide.each(function(){
-				jQuery(this).animate({opacity: 0, height: parseInt(jQuery(this).data('newheight'),10)},duration);
-			});
-			var refHeight = parseInt(scrollDiv.data('refHeight'),10);
-			if ( refHeight < 0 )
-				scrollDiv.animate({top: "-="+ refHeight},duration);
-		}else
-			toHide.fadeOut(duration);
-
-		toHide.promise().done(function(){
-
-			toHide.hide();
-			toHide.css('height','auto');
-
-			if ( !postsToShow ){
-				if ( notfound.length == 0 ){
-					requests.push(function(){ get404(); });
-					if ( postreq == 0 )
-						runRequestQueue();
-				} else notfound.show();
-				innerScroll.setTop(0);
-				innerScroll.setScrollableToTop(false);
-				return;
-			}
-			notfound.hide();
-
-			toShow.show();
-
-			toShow.each(function(){
-				jQuery(this).animate({opacity: 1,height: getPostHeight(jQuery(this))},
-					duration,function(){
-					if ( this.style && this.style.removeAttribute)
-						this.style.removeAttribute("filter");
-				});
-			});
-			var refHeight = parseInt(scrollDiv.data('refHeight'),10);
-			if ( refHeight > 0 )
-				scrollDiv.animate({top: "-="+ refHeight},duration);
-
-			toShow.promise().done(function(){
-				innerScroll.updateDimensions();
-				// not set scrollable when showing single posts
-				if ( jQuery('#single-post').length == 0 )
-					innerScroll.setScrollableToTop(true,getLastPostHeight());
-				if ( updateCal )
-					updateCalendar(getCurCalendar());
-			});
+		curPost = jQuery('#event-listing > div > div.post').filterlist('filter',{
+			'filter' : '.cat-id-'+curCat,
+			'beforeShow' : function(postsToShow){
+				var notfound = jQuery('.error404');
+				if ( !postsToShow ){
+					if ( notfound.length == 0 ){
+						requests.push(function(){ get404(); });
+						if ( postreq == 0 )
+							runRequestQueue();
+					} else notfound.show();
+					innerScroll.setTop(0);
+					innerScroll.setScrollableToTop(false);
+					return;
+				}
+				notfound.hide();
+			},
+			'afterShow' : function(){
+					innerScroll.updateDimensions();
+					// not set scrollable when showing single posts
+					if ( jQuery('#single-post').length == 0 )
+						innerScroll.setScrollableToTop(true,getLastPostHeight());
+					if ( updateCal )
+						updateCalendar(getCurCalendar());
+			},
+			'getNewCurElement' : getNewCurPost
 		});
 	};
 
