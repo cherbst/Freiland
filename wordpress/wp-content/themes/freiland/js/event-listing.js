@@ -901,7 +901,7 @@ jQuery(document).ready(function(){
 	// get the events of next/prev month
 	// and add them to the event listing
 	jQuery('#wp-calendar #next > a,' + 
-	       '#wp-calendar #prev > a,').live('click',function(){
+	       '#wp-calendar #prev > a').live('click',function(){
 		event_listing.nextPrevClicked(jQuery(this));
 		return false;
 	}); 
