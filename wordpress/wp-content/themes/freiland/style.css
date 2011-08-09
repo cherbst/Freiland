@@ -313,7 +313,7 @@ body.single-format-gallery .entry-content p,
 #event-listing .category-events .entry-content, #event-listing .category-events .entry-summary {
         clear: none;
         float: right;
-        width: 470px;
+        width: 520px;
         padding: 0;
 }
 
@@ -403,7 +403,7 @@ body.single-format-gallery .entry-content p,
 
 .event-type {
 	font-size : 8pt;
-	width: 70px;
+	width: 120px;
 	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
@@ -412,11 +412,14 @@ body.single-format-gallery .entry-content p,
 
 .event-genre{
 	clear: both;
-	padding-left: 80px;
 	font-size : 10pt;
 	min-height: 8px;
-	width: 300px;
 	line-height: 1;
+}
+
+.event-title {
+        width: 375px;
+	float: left;
 }
 
 .event-type, .event-genre {
@@ -515,7 +518,7 @@ div.post {
 
 #content #event-listing div.category-events .entry-title {
         clear: none;
-        width: 375px;
+        width: 100%;
 }
 
 .hentry,

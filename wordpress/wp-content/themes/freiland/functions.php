@@ -395,11 +395,11 @@ function freiland_filter_the_title( $post_title, $id ) {
 	return $return;
   }
 
-  function freiland_the_event_meta($meta){
+  function freiland_the_event_meta($meta,$sep=" "){
 	global $post;
 	$value = get_post_meta($post->ID,$meta,true);
 	if ( is_array($value) )
-		$value = implode(" ",$value);
+		$value = implode($sep,$value);
 	echo $value;
   }
 
