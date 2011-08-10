@@ -1,21 +1,38 @@
+/*
+ * jQuery Filter list Plugin v0.1
+ * http://www.github.com/filterlist
+ *
+ * Copyright (c) 2009-2010 Christoph Herbst
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Date: 2011-08-10
+ */
+
 (function( $ ){
 
 	var filterOptions = {
 		'duration' : 1000,
 		beforeShow : function(){},
 		afterShow : function(){},
-		getNewCurElement : function(){ return curElement; }
+		getNewCurElement : function(filter,oldCur,shown){ 
+			return (shown.index(oldCur)==-1?shown.first():oldCur); 
+		}
 	};
 
 	var container;
 	var curElement;
 	var topmargin;
+	var stickToCurrentElement = false;
 
 	var methods = {
 		init : function( cur ) { 
 			container = this;
 			curElement = cur;
-			topmargin = container.offset().top;
+			if ( !$.isFunction(this) ){
+				topmargin = container.offset().top;
+				stickToCurrentElement = true;
+			}
 			return this;
 		},
 		filter : function(options){
@@ -64,6 +81,15 @@
 		return findElement(element,allElements,toShow,hidden,false);
 	}
 
+	function getElementId(element,allElements){
+		var element_id = element.attr('id'); 
+		if ( !element_id ){
+			element_id = 'element_'+allElements.index(element);
+			element.attr('id',element_id);
+		}
+		return element_id;
+	}
+
 	// returns the group id of the given element
 	function getGroupId(element,allElements,toShow,hidden){
 		var upper_id = "begin"; 
@@ -73,13 +99,13 @@
 		var upper = findPrevElement(element,allElements,toShow,hidden);
 
 		if ( upper.length > 0 )
-			upper_id = upper.attr('id'); 
+			upper_id = getElementId(upper,allElements);
 
 		// find next element from this not in toShow/toHide
 		var lower = findNextElement(element,allElements,toShow,hidden);
 
 		if ( lower.length > 0 )
-			lower_id = lower.attr('id'); 
+			lower_id = getElementId(lower,allElements); 
 
 		return upper_id+'_'+lower_id;
 	}
@@ -106,7 +132,7 @@
 		toHide.add(toShow).each(function(){
 			// get new group id if this is not the next of the old element	
 			if ( !oldElement || $(this).prev().length == 0 ||
-				oldElement.attr('id') != $(this).prev().attr('id') )
+				getElementId(oldElement,allElements) != getElementId($(this).prev(),allElements) )
 				group_id = getGroupId($(this),allElements,toShow,hidden);
 
 			var group;
@@ -124,12 +150,12 @@
 
 			var height = getElementHeight($(this));
 			if ( toShow.index($(this)) != -1 ){
-				if ( curElement.length > 0 && allElements.index($(this)) < curIndex )
+				if ( stickToCurrentElement && curElement.length > 0 && allElements.index($(this)) < curIndex )
 					refHeight += height;
 				group.toShow.push($(this));
 				group.showHeight += height;
 			}else{
-				if ( curElement.length > 0 && allElements.index($(this)) < curIndex )
+				if ( stickToCurrentElement && curElement.length > 0 && allElements.index($(this)) < curIndex )
 					refHeight -= height;
 				$(this).data('newheight',height);
 				group.toHide.push($(this));
@@ -138,10 +164,13 @@
 			oldElement = $(this);
 		});
 
-		refHeight += getHeightCorrection(toShow);	
-		container.data('refHeight',refHeight);
+		if ( stickToCurrentElement ){
+			refHeight += getHeightCorrection(toShow);	
+			container.data('refHeight',refHeight);
+		}
 
 		for(key in groups) {
+			console.log('Group:'+key);
 			var group = groups[key];
 			var diff = group.hideHeight - group.showHeight;
 			if ( group.showHeight > group.hideHeight ){
@@ -179,23 +208,27 @@
 		var elementsToShow = ( allElements.length != hidden.length );
 
 		if ( elementsToShow ){
-			curElement = options.getNewCurElement(options.filter,curElement);
+			curElement = options.getNewCurElement(options.filter,curElement,shown);
 			computeNewHeights(allElements,toHide,toShow,hidden,shown);
 
 			toHide.each(function(){
 				$(this).animate({opacity: 0, height: parseInt($(this).data('newheight'),10)},
 					options.duration);
 			});
-			var refHeight = parseInt(container.data('refHeight'),10);
-			if ( refHeight < 0 )
-				container.animate({top: "-="+ refHeight},options.duration);
+			if ( stickToCurrentElement ){
+				var refHeight = parseInt(container.data('refHeight'),10);
+				if ( refHeight < 0 )
+					container.animate({top: "-="+ refHeight},options.duration);
+			}
 		}else
 			toHide.fadeOut(options.duration);
 
 		toHide.promise().done(function(){
 
 			toHide.hide();
-			toHide.css('height','auto');
+			toHide.each(function(){
+				$(this).css('height',getElementHeight($(this)));
+			});
 
 			options.beforeShow(elementsToShow);
 			if ( !elementsToShow )
@@ -210,9 +243,12 @@
 						this.style.removeAttribute("filter");
 				});
 			});
-			var refHeight = parseInt(container.data('refHeight'),10);
-			if ( refHeight > 0 )
-				container.animate({top: "-="+ refHeight},options.duration);
+
+			if ( stickToCurrentElement ){
+				var refHeight = parseInt(container.data('refHeight'),10);
+				if ( refHeight > 0 )
+					container.animate({top: "-="+ refHeight},options.duration);
+			}
 
 			toShow.promise().done(options.afterShow);
 		});
@@ -220,7 +256,7 @@
 		return curElement;
 	};
 
-	$.fn.filterlist = function( method ) {
+	$.filterlist = $.fn.filterlist = function( method ) {
     
 		// Method calling logic
 		if ( methods[method] ) {
