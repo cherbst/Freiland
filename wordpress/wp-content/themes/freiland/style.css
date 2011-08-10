@@ -313,7 +313,7 @@ body.single-format-gallery .entry-content p,
 #event-listing .category-events .entry-content, #event-listing .category-events .entry-summary {
         clear: none;
         float: right;
-        width: 520px;
+        width: 530px;
         padding: 0;
 }
 
@@ -403,7 +403,7 @@ body.single-format-gallery .entry-content p,
 
 .event-type {
 	font-size : 8pt;
-	width: 120px;
+	width: 130px;
 	min-height: 1px;
 	margin-right: 10px;
 	text-align: right;
@@ -415,6 +415,7 @@ body.single-format-gallery .entry-content p,
 	font-size : 10pt;
 	min-height: 8px;
 	line-height: 1;
+	width: 100%;
 }
 
 .event-title {
