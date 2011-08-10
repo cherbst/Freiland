@@ -43,7 +43,7 @@ function freiland_init_method() {
 		array('jquery'));
 	wp_register_script('inner-scroll', $jsurl . '/inner-scroll.js',
 		array('jquery-mousewheel','jquery-ui'));
-	wp_register_script('filterlist', $jsurl . '/filterlist.js',
+	wp_register_script('filterlist', $jsurl . '/jquery.filterlist.js',
 		array('jquery'));
 	wp_register_script('event-listing', $jsurl . '/event-listing.js',
 		array('jquery-address','inner-scroll','filterlist'));
