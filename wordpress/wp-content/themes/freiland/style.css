@@ -94,8 +94,11 @@ body, input, textarea, .page-title span, .pingback a.url {
 	overflow-y: auto;
 	margin: 0;
 	width: 785px;
-	height: 90%;
-	position: relative;
+	position: absolute;
+	top:0;
+	bottom:0;
+	padding-top: 200px;
+	padding-bottom: 100px;
 }
 
 .single #content{
@@ -533,6 +536,7 @@ div.post {
 .archive .hentry.last{
 	padding: 0;
 	margin: 0;
+	position: relative;
 }
 
 #primary {

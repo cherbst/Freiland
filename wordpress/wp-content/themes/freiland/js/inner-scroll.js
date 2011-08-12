@@ -23,9 +23,11 @@ function innerScroll(){
 
 	function init(e){
 		elem = e;
-		elem.css('position','relative');
-		elem.css('top',0);
-		elem.css('overflow-y','hidden');
+		elem.css({'position' : 'relative',
+			  'top':0,
+			  'padding-top':0,
+			  'padding-bottom':0,
+			  'overflow-y': 'hidden'});
 		elem.height('auto');
  		topmargin = elem.offset().top;
 		originalTopmargin = topmargin;
