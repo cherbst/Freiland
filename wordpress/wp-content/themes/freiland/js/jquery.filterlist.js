@@ -170,7 +170,6 @@
 		}
 
 		for(key in groups) {
-			console.log('Group:'+key);
 			var group = groups[key];
 			var diff = group.hideHeight - group.showHeight;
 			if ( group.showHeight > group.hideHeight ){
