@@ -181,7 +181,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 			}else{
 				if ( $label )
 					$return .= '<p>'.$label.'</p>';
-				else $return .= '</br>';
+				else $return .= '<br />';
 				$return .= $res;
 			}
 		}
