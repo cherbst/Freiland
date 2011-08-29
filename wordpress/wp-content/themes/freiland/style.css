@@ -1210,7 +1210,7 @@ img.tooltip {
 }
 
 #prev a{
-	background: url(images/feil_links_kl.png) 10px no-repeat;
+	background: url(images/feil_links_kl.png) no-repeat;
 	background-position: left top;
 }
 
@@ -1223,7 +1223,7 @@ img.tooltip {
 }
 
 #next a {
-	background: url(images/feil_rechts_kl.png) 10px no-repeat;
+	background: url(images/feil_rechts_kl.png) no-repeat;
 	background-position: right top;
 }
 
@@ -1256,12 +1256,11 @@ img.tooltip {
 .nav-previous a,
 .nav-next a {
         width: 170px;
-        height: 28px;
 	color: #000000!important;
 	background-color: rgb(255, 255, 255);
         font-size: 0;
 	line-height: 0;
-        padding-top: 20px;
+        min-height: 20px;
         display: block;
 }
 
@@ -1275,8 +1274,8 @@ img.tooltip {
 
 .nav-previous a {
 	padding-left: 20px;
-	background: url(images/feil_links_kl.png) left 10px no-repeat;
-	background-position: left center;
+	background: url(images/feil_links_kl.png) no-repeat;
+	background-position: left top;
 }
 
 .nav-previous a:hover {
@@ -1285,8 +1284,8 @@ img.tooltip {
 
 .nav-next a {
 	padding-right: 20px;
-	background: url(images/feil_rechts_kl.png) right 10px no-repeat;
-	background-position: right center;
+	background: url(images/feil_rechts_kl.png) no-repeat;
+	background-position: right top;
 }
 
 .nav-next a:hover {
