@@ -586,8 +586,10 @@ div.post {
 }
 
 #event-calendar #wp-calendar table.nav tr td {
+ padding: 0px;
  min-width: 44px;
  min-height: 32px;
+ vertical-align: top;
 }
 
 #event-calendar #wp-calendar table td:hover,
@@ -601,11 +603,6 @@ div.post {
 #event-calendar #wp-calendar table td.pad:hover {
  border:none;
  padding:1;
-}
-
-#ec3_spinner {
-	position: relative;
-	top: -15px;
 }
 
 #wp-calendar tbody tr {
