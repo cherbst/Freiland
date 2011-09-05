@@ -1234,13 +1234,14 @@ img.tooltip {
 /* spinner */
 #freiland_spinner {
 	width: 20px;
-	padding-top: 15px;
 	float: left;
 	display: none;
+	height: 20px;
 }
 
 #nav-below {
 	width:400px;
+	overflow: visible;
 }
 
 #nav-below .meta-nav {
@@ -1249,8 +1250,7 @@ img.tooltip {
 
 .nav-previous, .nav-next {
         width: 190px;
-        min-width: 190px;
-        min-height: 20px;
+        height: 20px;
 }
 
 .nav-previous a,
