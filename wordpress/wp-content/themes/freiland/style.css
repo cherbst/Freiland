@@ -44,6 +44,21 @@ body, input, textarea, .page-title span, .pingback a.url {
 	font-size: 11pt;
 }
 
+/* Welcome page */
+.home #content {
+	height: 100%;
+	width: 100%;
+}
+
+#start_box {
+	margin: 20px;
+}
+
+#start_box #welcome_img {
+	margin: 0px auto;
+}
+
+/* all pages */
 #content .entry-content, #content .entry-summary{
 	color: black;
 	font-size: 11pt;
@@ -1106,15 +1121,6 @@ img.tooltip {
 
 #legende_box > img{
 	height: 200px;
-}
-
-#start_box {
-	width: 100%;
-	margin: 20px;
-}
-
-#start_box #welcome_img {
-	margin: 0px auto;
 }
 
 /* Lightbox fixes */
