@@ -761,13 +761,13 @@ li#eventtypes li{
 #footer .flexipages_widget li a:active,
 #primary .event-categories li a:hover,
 #primary .event-categories li a:active {
-	border-bottom: 3px solid rgb(196,81,157);
+	border-bottom: 1px solid rgb(196,81,157);
 	text-decoration: none;
 }
 
 #footer li.current_page_item a,
 #primary li.current-cat a {
-	border-bottom: 3px solid rgb(196,81,157);
+	border-bottom: 1px solid rgb(196,81,157);
 	text-decoration: none;
 }
 
