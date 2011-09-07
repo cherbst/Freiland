@@ -1232,7 +1232,7 @@ img.tooltip {
 }
 
 #nav-below {
-	width:400px;
+	width:390px;
 	overflow: visible;
 }
 
@@ -1241,7 +1241,7 @@ img.tooltip {
 }
 
 .nav-previous, .nav-next {
-        width: 190px;
+        width: 185px;
         height: 20px;
 }
 
@@ -1297,7 +1297,7 @@ ul.event-subcat li {
 #content ul.event-subcat {
 	float: left;
 	clear: both;
-	padding-left: 386px;
+	padding-left: 381px;
 	margin-bottom: 0;
 	margin-left: 0;
 }
