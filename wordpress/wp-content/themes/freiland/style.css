@@ -141,10 +141,9 @@ body, input, textarea, .page-title span, .pingback a.url {
 
 #content .newsletter #submit {
 	background: url(images/feil_oben_rechts.png) no-repeat;
-	background-position: bottom right;
+	background-position: center right;
 	width: 80px;
 	height: 30px;
-	padding-top: 15px;
 	border: none;
 	line-height: 0px;
 	font-size: 0px;
