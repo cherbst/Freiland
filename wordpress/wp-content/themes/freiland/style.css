@@ -489,6 +489,7 @@ body.page-child #content div.page h1 {
 .page-child #content div.page img {
 	width: 500px;
 	height: auto;
+	display: block;
 }
 
 body.page-child .page-content {
