@@ -25,8 +25,10 @@ add_filter( 'post_class', 'freiland_post_class_filter');
 add_filter( 'query_vars', 'freiland_add_query_vars');
 add_filter( 'category_template', 'freiland_get_category_template' );
 add_filter( 'post_class', 'freiland_post_class');
+add_filter( 'wp_list_categories', 'freiland_remove_title_attributes');
 add_action( 'init', 'freiland_init_method');
 add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
+
 
 // hook add_query_vars function into query_vars
 function freiland_init_method() {
@@ -70,6 +72,11 @@ function freiland_post_class($classes){
   return $classes;
 }
 
+/* remove title attribute from category links */
+function freiland_remove_title_attributes($output) {
+    $output = preg_replace('` title="(.+)"`', '', $output);
+    return $output;
+}
 
 /* add the query param for bare event listing */
 function freiland_add_query_vars($aVars) {
@@ -386,7 +393,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 		$title =  __('Zeige alle','freiland');
 		$link = get_category_link( $cat->term_id );
 		$show_all  = '<li class="cat-item cat-item-'.$cat->term_id.'">';
-		$show_all .= '<a href="'.$link.'" title="'.$title.'">';
+		$show_all .= '<a href="'.$link.'" >';
 		$show_all .=  $title.'</a></li>';
 		$return = $show_all . $return;
 	}
