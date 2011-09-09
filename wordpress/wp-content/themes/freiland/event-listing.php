@@ -27,7 +27,7 @@ query_posts($args);
 				<?php freiland_the_event_meta('eventtype','<br />'); ?>
 			</div>
 			<div class="event-title">
-				<h2 class="entry-title"><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
+				<h2 class="entry-title"><a href="<?php the_permalink(); ?>" rel="bookmark"><?php the_title(); ?></a></h2>
 				<div class="event-genre">
 					<?php freiland_the_event_meta('subtitle'); ?>
 				</div>
