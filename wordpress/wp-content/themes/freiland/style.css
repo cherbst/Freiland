@@ -955,8 +955,6 @@ li#eventtypes li{
 #access #menu-main-menu li ul.children li a:hover ,
 #access #menu-main-menu li ul.children li.current-cat a {
 	border-bottom: 0px;
-	background: url(images/bgTrans.png) left 0 repeat;
-	background-color: transparent;
 	color : black;
 }
 
