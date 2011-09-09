@@ -1,11 +1,15 @@
 /* Welcome page */
+body{
+	margin:0;
+}
+
 #content {
 	width: 100%;
 	padding:0;
 }
 
 #start_box{
-	margin:20px;
+	margin:0;
 	text-align: center;
 }
 
