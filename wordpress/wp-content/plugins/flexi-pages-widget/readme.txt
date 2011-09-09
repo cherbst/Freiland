@@ -3,7 +3,7 @@ Contributors: SriniG
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8110402
 Tags: pages, subpages, menu, hierarchy, sidebar, widget, navigation
 Requires at least: 2.7
-Tested up to: 3.2-RC1
+Tested up to: 3.2.1
 Stable tag: trunk
 
 A highly configurable WordPress sidebar widget to list pages and sub-pages. User friendly widget control comes with various options. 
@@ -61,7 +61,7 @@ The built-in WP function `get_pages()` doesn't list private pages and doesn't ha
 
 = Where do I ask a question about the plugin? =
 
-Leave your questions, suggestions, bug reports, etc., as a comment at the [plugin page](http://srinig.com/wordpress-plugins/flexi-pages/ "Flexi Pages Widget") or through [contact form](http://srinig.com/contact/) at the author's website. Questions frequently asked will be incorporated into the FAQ section in future versions of the plugin.
+Leave your questions, suggestions, bug reports, etc., as a comment at the [plugin page](http://srinig.com/wordpress/plugins/flexi-pages/ "Flexi Pages Widget") or through [contact form](http://srinig.com/wordpress/contact/) at the author's website. Questions frequently asked will be incorporated into the FAQ section in future versions of the plugin.
 
 == Screenshots ==
 
@@ -73,14 +73,16 @@ Versions 1.5.5 and above supports localization. The localization template file (
 
 An application like [poEdit](http://www.poedit.net/) can be used to translate the plugin, or just translate the strings in the flexipages.pot file and send it to the plugin author. All translations sent to the author will be bundled with the next version of the plugin.
 
-As of version 1.6.6, Flexi Pages Widget is translated into the following languages:
+As of the current version, Flexi Pages Widget is translated into the following languages:
 
 * Catalan (`ca`) by Robert Buj Gelonch
 * Czech (`cs_CZ`) by Tomáš Hubka
 * German (`de_DE`) by [Frank W. Hempel](http://frank-hempel.de/)
 * French (`fr_FR`) by Pierre Sudarovich
-* Hindi (`hi_IN`) by [Ashish Jha](http://outshinesolutions.com/)
+* Hindi (`hi_IN`) by Ashish Jha, [Outshine Solutions](http://outshinesolutions.com/)
+* Bahasa Indonesia (`id_ID`) by [Bejana](http://bejana.com)
 * Italian (`it_IT`) by [Gianni Diurno](http://gidibao.net/)
+* Lithuanian (`lt_LT`) by [Nata Strazda](www.designcontest.com/)
 * Norwegian Bokmål (`nb_NO) by [Tore Johnny Bråtveit](http://www.punktlig-ikt.no/)
 * Dutch (`nl_NL`) by [Rene](http://wordpresspluginguide.com/)
 * Polish (`pl_PL`) by Mariusz Jackiewicz
@@ -187,12 +189,15 @@ Instead of using the widget, the function flexipages() can be called from anywhe
 
 == Changelog ==
 
-= v1.6.6 (2011-06-17) =
+= v1.6.10 (2011-08-30) =
+* 'Go' button for the dropdown display is removed. Selecting a page automatically takes the user to the page.
+* Added localization in Bahasa Indonesia and Lithuanian language.
+* Minor fixes.
 
+= v1.6.6 (2011-06-17) =
 * Hindi localization added.
 
 = v1.6.5 (2011-06-14) =
-
 * Localization in Romanian language added.
 
 = v1.6.4 (2011-06-09) =
