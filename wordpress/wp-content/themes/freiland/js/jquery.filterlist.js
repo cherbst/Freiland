@@ -54,9 +54,20 @@
 	function getExtentCorrection(toShow,options){
 		if ( options.curElement.length == 0)
 			return 0;
-		
-		return (options.horizontal?
-			options.curElement.offset().left:options.curElement.offset().top) - options.margin;
+
+		if ( options.curElement.is(':visible') )
+			return (options.horizontal?
+				options.curElement.offset().left:
+				options.curElement.offset().top) - options.margin;
+
+		var upper = options.curElement.prevAll(':visible').first();
+
+		if ( upper.length > 0 )
+			return (options.horizontal?upper.offset().left:upper.offset().top) + 
+				(options.horizontal?upper.width():upper.height()) - options.margin;
+
+		var closest = options.curElement.closest(':visible');
+		return (options.horizontal?closest.offset().left:closest.offset().top) - options.margin;
 	}
 
 	// gets the extent of the element from its data field if possible
@@ -99,11 +110,11 @@
 	}
 
 	function isVisible(){
-		return parseFloat($(this).css('opacity'),10) != 0.0;
+		return parseFloat($(this).css('opacity'),10) != 0.0 || $(this).is(':visible');
 	}
 
 	function isHidden(){
-		return parseFloat($(this).css('opacity'),10) != 1.0;
+		return parseFloat($(this).css('opacity'),10) != 1.0 || $(this).is(':hidden');
 	}
 
 	// filter elements for according to given filter selector
@@ -122,6 +133,13 @@
 
 		var toShow = shown.filter(isHidden);
 		var toHide = hidden.filter(isVisible);
+
+		// initialize elements
+		allElements.filter(':hidden').each(function(){
+			getElementExtent($(this),options.horizontal);
+			setElementExtent($(this),0,options.horizontal);
+			$(this).css('opacity',0);
+		});
 
 		var elementsToShow = ( allElements.length != hidden.length );
 		var allHidden = ( allElements.filter(isVisible).length == 0 );
@@ -145,9 +163,11 @@
 
 			$(this).animate(obj,options.duration,function(){
 				setElementExtent($(this),0,options.horizontal);
+				$(this).hide();
 			});
 		});
 
+		toShow.show();
 		toShow.each(function(){
 			obj = {opacity: 1 };
 			extent = getElementExtent($(this),options.horizontal);
