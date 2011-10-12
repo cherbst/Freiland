@@ -20,7 +20,8 @@ if ( typeof hs == "undefined" ) {
 //	showImg(i);
 
 		jQuery('a[rel*=lightbox]').lightBox();
-		jQuery('.gallery a').tooltip({track:true, delay:0, showURL: false});
+//		jQuery('.gallery a').tooltip({track:true, delay:0, showURL: false});
+		jQuery('.gallery a').removeAttr("title");
 		jQuery('.gallery1 a').lightBox({captionPosition:'gallery'});
 
 // Add these lines if you want to handle multiple galleries in one page.
