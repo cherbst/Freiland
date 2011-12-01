@@ -439,6 +439,7 @@ function freiland_filter_the_title( $post_title, $id ) {
 	$next_id = false;
 	$today = strtotime(date('Y-m-d'));
 	$next_time = null;
+	$post = null;
 	foreach ( $ids as $id ){
 		$attachment = get_post($id);
 		if ( !$attachment ) continue;
@@ -453,8 +454,9 @@ function freiland_filter_the_title( $post_title, $id ) {
 		}
 	}
 	if ( !$next_id) return;
-	return wp_get_attachment_image( $next_id,
+	$image = wp_get_attachment_image( $next_id,
 		'full',false,array('class' => 'aligncenter' ) );
+	return '<a href="'. get_permalink( $post->ID) .'">' . $image . '</a>';
   }
 
   function freiland_get_news_banner(){

@@ -15,7 +15,7 @@ function event_listing(){
 	// all elements that need to be shown/hidden when loading one event
 	var listingElements = '#banner-container,#wp-calendar,#eventtypes';
 	// all event title links
-	var eventSelector = '#event-listing h2.entry-title > a';
+	var eventSelector = '#event-listing h2.entry-title > a, #mainpost-banner a';
 	// all subcategory links
 	var subcatSelector = '#eventtypes > ul > li > a,ul.children > li > a,ul.event-subcat > li > a';
 	// next/prev post
