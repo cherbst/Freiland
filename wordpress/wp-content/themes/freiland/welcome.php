@@ -7,6 +7,9 @@ Template Name: Welcome
 <html <?php language_attributes(); ?>>
 <head>
 <meta charset="<?php bloginfo( 'charset' ); ?>" />
+<meta name="title" content="<?php wp_title( '|', true, 'right' ); ?>" />
+<meta name="description" content="<?php echo get_bloginfo( 'description', 'display' ); ?>" />
+<link rel="image_src" href="http://localhost/freiland/wp-content/uploads/2011/09/logo_digital.png" />
 <title><?php
 	/*
 	 * Print the <title> tag based on what is being viewed.
