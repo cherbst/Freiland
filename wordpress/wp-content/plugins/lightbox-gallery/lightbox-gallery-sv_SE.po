@@ -2,23 +2,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Lightbox Gallery\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-12 01:21+0900\n"
-"PO-Revision-Date: 2012-01-12 01:23+0900\n"
+"POT-Creation-Date: 2012-01-12 01:35+0900\n"
+"PO-Revision-Date: 2012-01-13 22:50+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: Japanese\n"
-"X-Poedit-Country: JAPAN\n"
-"X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-KeywordsList: __;_e;_c\n"
 "X-Poedit-Basepath: ../\n"
 "X-Poedit-SearchPath-0: lightbox-gallery\n"
 
 #: lightbox-gallery/lightbox-gallery.php:209
 msgid "Settings"
-msgstr "設定"
+msgstr "Inställningar"
 
 #: lightbox-gallery/lightbox-gallery.php:224
 #: lightbox-gallery/lightbox-gallery.php:257
@@ -27,26 +24,26 @@ msgstr "Lightbox Gallery"
 
 #: lightbox-gallery/lightbox-gallery.php:240
 msgid "Options updated."
-msgstr "オプションは更新されました。"
+msgstr "Inställningar uppdaterade"
 
 #: lightbox-gallery/lightbox-gallery.php:244
 msgid "Options deleted."
-msgstr "オプションは削除されました。"
+msgstr "Inställningar borttagna."
 
 #: lightbox-gallery/lightbox-gallery.php:264
 #: lightbox-gallery/lightbox-gallery.php:333
 #: lightbox-gallery/lightbox-gallery.php:351
 #: lightbox-gallery/lightbox-gallery.php:367
 msgid "Click to toggle"
-msgstr "クリックで切替"
+msgstr "Klicka för att växla"
 
 #: lightbox-gallery/lightbox-gallery.php:265
 msgid "Lightbox Gallery Options"
-msgstr "Lightbox Gallery オプション"
+msgstr "Lightbox Gallery inställningar"
 
 #: lightbox-gallery/lightbox-gallery.php:274
 msgid "Choose the gallery loading type"
-msgstr "ギャラリー読込タイプを選択してください"
+msgstr "Välj laddningstyp för gallerier"
 
 #: lightbox-gallery/lightbox-gallery.php:275
 msgid "Lightbox"
@@ -59,131 +56,131 @@ msgstr "Highslide JS"
 #: lightbox-gallery/lightbox-gallery.php:277
 #, php-format
 msgid "Caution: Highslide JS is licensed under a Creative Commons Attribution-NonCommercial 2.5 License. You need the author's permission to use Highslide JS on commercial websites. <a href=\"%s\" target=\"_blank\">Please look at the author's website.</a>"
-msgstr "注意： Highslide JSは、Creative Commons 表示-非営利 2.5 一般のライセンスです。Highslide JSを商用ウェブサイトで使用するには著作者の許可が必要です。<a href=\"%s\" target=\"_blank\">著作者のウェブサイトをご覧ください。</a>"
+msgstr "Varning: Highslide JS använder Creative Commons Erkännande-IckeKommersiell 2.5 som licens. Du behöver författarens tillåtelse för att använda Highslide JS på kommersiella hemsidor. <a href=\"%s\" target=\"_blank\">Var god besök författarens hemsida.</a>"
 
 #: lightbox-gallery/lightbox-gallery.php:280
 msgid "In case that you would like to use the lightbox in certain categories (comma-deliminated)"
-msgstr "特定のカテゴリーでLightboxを使用したい場合（カンマ区切り）"
+msgstr "Om du skulle vilja använda lightboxen på specifika kategorier (kommaseparerade)"
 
 #: lightbox-gallery/lightbox-gallery.php:284
 msgid "In case that you would like to use the lightbox in certain pages (comma-deliminated)"
-msgstr "特定のページでLightboxを使用したい場合（カンマ区切り）"
+msgstr "Om du skulle vilja använda lightboxen på specifika sidor (kommaseparerade)"
 
 #: lightbox-gallery/lightbox-gallery.php:288
 msgid "Enforce loading the lightbox gallery scripts"
-msgstr "lightbox galleryスクリプトの読み込みを強制する"
+msgstr "Tvinga laddning av lightbox-skripten"
 
 #: lightbox-gallery/lightbox-gallery.php:289
 msgid "The lightbox gallery scripts are loaded in every page"
-msgstr "lightbox galleryスクリプトはすべてのページで読み込まれます"
+msgstr "Lightbox-skripten laddas på varje sida"
 
 #: lightbox-gallery/lightbox-gallery.php:292
 msgid "Add rel=&quot;lightbox&quot; automatically in the post insert"
-msgstr "投稿挿入時に自動的に rel=&quot;lightbox&quot; を追加する"
+msgstr "Lägg till rel=&quot;lightbox&quot; automatiskt i inlägg"
 
 #: lightbox-gallery/lightbox-gallery.php:293
 msgid "Do not forget to check the script enforcement option above with this"
-msgstr "上記のスクリプト強制読込オプションも忘れずにチェックしてください"
+msgstr "Glöm inte att sätta på laddningstvånget ovan om du aktiverar detta"
 
 #: lightbox-gallery/lightbox-gallery.php:296
 msgid "In case that you would like to disable to load the lightbox-gallery.css"
-msgstr "lightbox-gallery.cssの読み込みを禁止する場合"
+msgstr "Om du skulle vilja stänga av laddningen av lightbox-gallery.css"
 
 #: lightbox-gallery/lightbox-gallery.php:297
 msgid "Do not use the lightbox-gallery.css"
-msgstr "lightbox-gallery.cssを使用しない"
+msgstr "Använd inte lightbox-gallery.css"
 
 #: lightbox-gallery/lightbox-gallery.php:300
 msgid "In case that you would like to disable to load the column inline css"
-msgstr "カラムのインラインcssの読み込みを禁止する場合"
+msgstr "Om du skulle vilja stänga av laddningen av inline-CSS i kolumner"
 
 #: lightbox-gallery/lightbox-gallery.php:301
 msgid "Do not use the column inline css"
-msgstr "カラムのインラインcssを使用しない"
+msgstr "Använd inte inline-CSS i kolumner"
 
 #: lightbox-gallery/lightbox-gallery.php:304
 msgid "In case that you would like to set the default number of columns"
-msgstr "デフォルトのカラム数をセットする場合"
+msgstr "Om du skulle vilja ställa in standardantal av kolumner"
 
 #: lightbox-gallery/lightbox-gallery.php:308
 msgid "In case that you would like to set the default thumbnail size"
-msgstr "デフォルトのサムネイルサイズをセットする場合"
+msgstr "Om du skulle vilja ställa in standardstorlek på miniatyrer"
 
 #: lightbox-gallery/lightbox-gallery.php:312
 msgid "In case that you would like to set the default lightbox size"
-msgstr "デフォルトのlightboxサイズをセットする場合"
+msgstr "Om du skulle vilja ställa in standardstorlek på lightboxen"
 
 #: lightbox-gallery/lightbox-gallery.php:319
 msgid "Choose the script loading point"
-msgstr "スクリプトの読込ポイントを選択してください"
+msgstr "Välj var skripten ska laddas"
 
 #: lightbox-gallery/lightbox-gallery.php:320
 msgid "Header"
-msgstr "ヘッダー"
+msgstr "Sidhuvud"
 
 #: lightbox-gallery/lightbox-gallery.php:321
 msgid "Footer"
-msgstr "フッター"
+msgstr "Sidfot"
 
 #: lightbox-gallery/lightbox-gallery.php:324
 msgid "Update Options &raquo;"
-msgstr "オプションを更新する &raquo;"
+msgstr "Uppdatera inställningar &raquo;"
 
 #: lightbox-gallery/lightbox-gallery.php:334
 msgid "Delete Options"
-msgstr "オプションを削除する"
+msgstr "Ta bort inställningar"
 
 #: lightbox-gallery/lightbox-gallery.php:336
 msgid "Are you sure to delete options? Options you set will be deleted."
-msgstr "本当にオプションを削除しますか？設定したオプションは削除されます。"
+msgstr "Är du säker på att du vill ta bort inställningar? Alla inställningar du har ställt in tas bort."
 
 #: lightbox-gallery/lightbox-gallery.php:340
 msgid "Delete Options &raquo;"
-msgstr "オプションを削除する &raquo;"
+msgstr "Ta bort inställningar &raquo;"
 
 #: lightbox-gallery/lightbox-gallery.php:352
 msgid "Donation"
-msgstr "寄付"
+msgstr "Donera"
 
 #: lightbox-gallery/lightbox-gallery.php:354
 msgid "If you liked this plugin, please make a donation via paypal! Any amount is welcome. Your support is much appreciated."
-msgstr "このプラグインをお気に召しましたら、Paypalよりご寄付をよろしくお願いいたします。"
+msgstr "Om du gillade det här tillägget, donera gärna via PayPal! Alla belopp är välkomna. Ert stöd uppskattas."
 
 #: lightbox-gallery/lightbox-gallery.php:368
 msgid "CMS x WP"
-msgstr "CMS×WP"
+msgstr "CMS x WP"
 
 #: lightbox-gallery/lightbox-gallery.php:370
 msgid "There are much more plugins which are useful for developing business websites such as membership sites or ec sites. You could totally treat WordPress as CMS by use of CMS x WP plugins."
-msgstr "会員制サイトやECサイトなどのビジネスサイト構築に役立つプラグインが盛りだくさん。CMS×WPのプラグインで WordPress が CMS として大いに活躍します。"
+msgstr "Det finns många fler tillägg som är användbara för att utveckla företagshemsidor såsom medlemssidor eller EC-sidor. Du kan fullkomligt behandla WordPress som ett CMS genom att använda CMS x WP-tillägg."
 
 #: lightbox-gallery/lightbox-gallery.php:371
 msgid "WordPress plugin sales site: CMS x WP"
-msgstr "WordPress のプラグイン販売サイト CMS×WP"
+msgstr "Säljsida för WordPress-plugin: CMS x WP"
 
 #: lightbox-gallery/lightbox-gallery.php:445
 msgid "Pages:"
-msgstr "ページ："
+msgstr "Sidor: "
 
 #: lightbox-gallery/lightbox-gallery.php:447
 msgid "Next page"
-msgstr "次のページ"
+msgstr "Nästa sida"
 
 #: lightbox-gallery/lightbox-gallery.php:448
 msgid "Previous page"
-msgstr "前のページ"
+msgstr "Föregående sida"
 
 #: lightbox-gallery/lightbox-gallery.php:531
 msgid "camera"
-msgstr "機種"
+msgstr "kamera"
 
 #: lightbox-gallery/lightbox-gallery.php:533
 msgid "aperture"
-msgstr "絞り値"
+msgstr "bländare"
 
 #: lightbox-gallery/lightbox-gallery.php:535
 msgid "focal_length"
-msgstr "焦点距離"
+msgstr "brännvidd"
 
 #: lightbox-gallery/lightbox-gallery.php:537
 msgid "ISO"
@@ -191,22 +188,9 @@ msgstr "ISO"
 
 #: lightbox-gallery/lightbox-gallery.php:541
 msgid "shutter_speed"
-msgstr "シャッタースピード"
+msgstr "slutartid"
 
 #: lightbox-gallery/lightbox-gallery.php:544
 msgid "created_timestamp"
-msgstr "撮影日時"
+msgstr "skapad_tiddstämpel"
 
-#~ msgid ""
-#~ "In case that you would like to disable to load the jquery.lightbox.css"
-#~ msgstr "jquery.lightbox.cssの読み込みを禁止する場合"
-
-#~ msgid "Do not use the jquery.lightbox.css"
-#~ msgstr "jquery.lightbox.cssを使用しない"
-
-#~ msgid ""
-#~ "In case that you would like to disable to load the jquery.tooltip.css"
-#~ msgstr "jquery.tooltip.cssの読み込みを禁止する場合"
-
-#~ msgid "Do not use the jquery.tooltip.css"
-#~ msgstr "jquery.tooltip.cssを使用しない"
