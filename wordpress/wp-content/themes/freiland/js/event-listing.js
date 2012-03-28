@@ -296,10 +296,12 @@ function event_listing(){
 			innerScroll.setRelativeTop( diff );
 		}
 
-		toShow.fadeTo(duration,1,function(){
-			if ( this.style && this.style.removeAttribute)
-				this.style.removeAttribute("filter");
-		});
+		// do not show posts if we are already showing a single post
+		if ( !jQuery('body').hasClass('single') )
+			toShow.fadeTo(duration,1,function(){
+				if ( this.style && this.style.removeAttribute)
+					this.style.removeAttribute("filter");
+			});
 		toShow.promise().done(callback);
 	}
 
