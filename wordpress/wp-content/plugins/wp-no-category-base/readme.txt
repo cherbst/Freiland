@@ -1,9 +1,9 @@
 === WP No Category Base ===
 Contributors: iDope
-Donate link: http://wordpresssupplies.com/
+Donate link: http://efextra.com/
 Tags: categories, category base, category, permalinks, permastruct, links, seo, cms
 Requires at least: 3.1
-Tested up to: 3.1
+Tested up to: 3.4.1
 Stable tag: trunk
 
 This plugin removes the mandatory 'Category Base' from your category permalinks (e.g. `/category/my-category/` to `/my-category/`).
@@ -23,13 +23,14 @@ The plugin requires no setup or modifying core wordpress files and will not brea
 5. Doesn't require other plugins to work.
 6. Compatible with sitemap plugins.
 7. Works with multiple sub-categories.
-8. Redirects old category permalinks to the new ones (301 redirect, good for SEO).
+8. Works with WordPress Multisite.
+9. Redirects old category permalinks to the new ones (301 redirect, good for SEO).
 
 == Installation ==
 
 1. Upload `no-category-base.php` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
-3. That's it! You sould now be able to access your categories via http://myblog.com/my-category/
+3. That's it! You should now be able to access your categories via http://myblog.com/my-category/
 
 Note: If you have Wordpress 2.7 or above you can simply go to 'Plugins' &gt; 'Add New' in the Wordpress admin and search for "No Category Base" and install it from there.
 
@@ -57,6 +58,9 @@ Depends, if its useful enough and I have time for it.
 1. Look Ma, No Category Base!
 
 == Changelog ==
+
+= 1.1 =
+* Support for WordPress 3.4.
 
 = 1.0 =
 * Support for WordPress 3.1 (no longer supports older version).

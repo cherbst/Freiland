@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Widget Context
-Plugin URI: http://konstruktors.com/blog/
+Plugin URI: http://konstruktors.com/
 Description: Display widgets in context.
-Version: 0.7
+Version: 0.7.1
 Author: Kaspars Dambis
-Author URI: http://konstruktors.com/blog/
+Author URI: http://konstruktors.com/
 
 For changelog see readme.txt
 ----------------------------
@@ -44,17 +44,11 @@ class widget_context {
 		// Enable widget context check only when viewed publicly,
 		add_action('wp_head', array($this, 'replace_widget_output_callback'));
 		// Add admin menu for config
-		// add_action('admin_menu', array($this, 'addAdminOptions'));
 		add_action('admin_enqueue_scripts', array($this, 'adminCSS'));
 		// Save widget context settings, when in admin area
 		add_filter('sidebars_widgets', array($this, 'filter_widgets'), 50);
 		// Check the number of words on page
 		add_action('wp_print_scripts', array($this, 'count_words_on_page'), 750);
-	}	
-	
-	
-	function addAdminOptions() {
-		// add_options_page('Widget Context', 'Widget Context', 10, basename(__FILE__), array($this, 'printAdminOptions'));
 	}
 		
 	
