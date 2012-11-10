@@ -102,6 +102,9 @@
 			}
 			// Call the function that prepares image exibition
 			_set_image_to_view();
+			
+			// Enable keyboard navigation
+			_enable_keyboard_navigation();
 		}
 		/**
 		 * Create the jQuery lightBox plugin interface
@@ -342,7 +345,7 @@
 				}
 			}
 			// Enable keyboard navigation
-			_enable_keyboard_navigation();
+			//_enable_keyboard_navigation();
 		}
 		/**
 		 * Enable a support to keyboard navigation
@@ -358,7 +361,7 @@
 		 *
 		 */
 		function _disable_keyboard_navigation() {
-			$(document).unbind();
+			$(document).unbind('keydown');
 		}
 		/**
 		 * Perform the keyboard actions
@@ -386,7 +389,7 @@
 				if ( settings.activeImage != 0 ) {
 					settings.activeImage = settings.activeImage - 1;
 					_set_image_to_view();
-					_disable_keyboard_navigation();
+					//_disable_keyboard_navigation();
 				}
 			}
 			// Verify the key to show the next image
@@ -395,7 +398,7 @@
 				if ( settings.activeImage != ( settings.imageArray.length - 1 ) ) {
 					settings.activeImage = settings.activeImage + 1;
 					_set_image_to_view();
-					_disable_keyboard_navigation();
+					//_disable_keyboard_navigation();
 				}
 			}
 		}
@@ -422,6 +425,7 @@
 			$('#jquery-overlay').fadeOut(function() { $('#jquery-overlay').remove(); });
 			// Show some elements to avoid conflict with overlay in IE. These elements appear above the overlay.
 			$('embed, object, select').css({ 'visibility' : 'visible' });
+			_disable_keyboard_navigation();
 		}
 		/**
 		 / THIRD FUNCTION
