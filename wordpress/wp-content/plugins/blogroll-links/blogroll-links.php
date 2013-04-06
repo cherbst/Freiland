@@ -4,7 +4,7 @@
    Plugin URI: http://www.rajiv.com/blog/2008/02/10/blogroll-links/
    Description: Displays blogroll links on a Page or Post. Insert <code>[blogroll-links categoryslug="blogroll"]</code> to a Page or Post and it will display your blogroll links there.
    Author: Rajiv Pant
-   Version: 2.2
+   Version: 2.3
    Author URI: http://www.rajiv.com/
    */
   
@@ -15,12 +15,13 @@
    
    Version 1.1 includes modifications made to the admin panel layout to make it
    better compliant with the WordPress guidelines. Thanks to @federicobond.
-   
+
    Version 2 switches over the tag format to WordPress shortcodes.
    The old format is still supported for backwards compatibility.
 
    Copyright (C) 2008-2010 Rajiv Pant
-   
+   Thanks to Dave Grega, Adam E. Falk (xenograg) for their contributions to this code.
+      
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License
    as published by the Free Software Foundation; either version 2
@@ -37,28 +38,61 @@
       
    Examples of use:
    
-   New WordPress shortcode format:
+   WordPress shortcode syntax:
    
    [blogroll-links categoryslug="rajiv-web" sortby="link_title"]
    [blogroll-links categoryslug="people" sortby="link_title" sortorder="desc"]
-
-   Old format (now deprecated) from version 1.0 and 1.1:
-   
-   <!--blogroll-links category-slug="rajiv-web" sort-by="link_title"><!--/blogroll-links-->
-   <!--blogroll-links category-slug="people" sort-by="link_title" sort-order="desc"--><!--/blogroll-links-->
    
    */
 
 
 
-  function blogroll_links_handler($atts) {
-  
-//    $attributes = ''; // for debugging
-//    foreach ($atts as $key=>$value) { // for debugging
-//        $attributes .= "$key: $value\n"; // for debugging
-//   } // for debugging
-//    return "Attributes: $attributes<br/>Content: $content"; // for debugging
+function blogroll_links_html($category_id, $sort_by, $sort_order) 
+{
+	$bm = get_bookmarks( array(
+            'orderby'        => $sort_by, 
+            'order'          => $sort_order,
+            'limit'          => -1, 
+            'category'       => "$category_id",
+            'category_name'  => null, 
+            'hide_invisible' => 1,
+            'show_updated'   => 0, 
+            'include'        => null,
+            'exclude'        => null,
+            'search'         => '.'));
 
+      $links .= '<ul>';
+      foreach ($bm as $bookmark) {
+
+		$rel_string = $bookmark->link_rel;
+		$rel_tag_part = (strlen($rel_string) > 0) ? ' rel="' . $rel_string . '"' : '';
+
+		$target_string = $bookmark->link_target;
+		$target_tag_part = (strlen($target_string) > 0) ? ' target="' . $target_string . '"' : '';
+
+		$description_string = $bookmark->link_description;
+		$description_tag = (strlen($description_string) > 0) ? ' - ' . $description_string : '';
+
+		$image_string = $bookmark->link_image;
+		$image_tag = (strlen($image_string) > 0) ? '<br />' . '<img src="' . $bookmark->link_image . '" border="0"/>' : '';
+
+	  	$links .= sprintf(
+			'<li><a href="%s"%s%s>%s</a>%s%s</li>',
+			$bookmark->link_url,
+			$rel_tag_part,
+			$target_tag_part,
+			$bookmark->link_name,
+			$description_tag,
+			$image_tag
+		);
+
+      }
+      $links .= '</ul>';
+    
+      return $links;
+}
+
+  function blogroll_links_handler($atts) {
   
     global $wpdb, $table_prefix;
       
@@ -75,58 +109,14 @@
     $sort_order    = $attributes['sortorder'];
     $debug         = $attributes['debug'];
 
-          /*
-           
-           Sample SQL Query:
-           SELECT *
-           FROM wp_links, wp_term_relationships
-           WHERE link_id = object_id
-           AND link_visible = 'Y'
-           AND term_taxonomy_id = (
-           SELECT wp_term_taxonomy.term_taxonomy_id
-           FROM wp_term_taxonomy
-           WHERE term_id = (SELECT DISTINCT term_id
-           FROM wp_terms, wp_term_relationships
-           WHERE slug = 'charity'
-           AND taxonomy = 'link_category'))
-           ORDER BY link_name
-           
-           */
-          
-          $sort_by_str = (strlen($sort_by) > 0) ? "ORDER BY " . $sort_by : '';
-          
-          $sql = "SELECT * " . "FROM $wpdb->links, " . $table_prefix . "term_relationships " .
-          "WHERE link_id = object_id " . "AND link_visible='Y' " . // Skip links marked as not to be visible
-          "AND term_taxonomy_id = ( " . "SELECT " . $table_prefix . "term_taxonomy.term_taxonomy_id " .
-          "FROM " . $table_prefix . "term_taxonomy " . "WHERE term_id = (SELECT DISTINCT term_id " .
-          "FROM " . $table_prefix . "terms, " . $table_prefix . "term_relationships " .
-          "WHERE slug = '" . $category_slug . "' " . "AND taxonomy = 'link_category')) " .
-          $sort_by_str;
+	$sql = sprintf("SELECT term_id FROM wp_terms WHERE slug = '%s' LIMIT 1", $category_slug);
+    $results = $wpdb->get_results($sql);
+	$category_id = $results[0]->term_id;
 
-          if ($debug == 1) {
-			  $links .= "category-slug=". $category_slug . "\n<br />";
-			  $links .= "sort-order=". $sort_order . "\n<br />";
-			  $links .= "sort-by=". $sort_by . "\n<br />";
-			  $links .= "sql=". $sql . "\n<br />";
-          }
-          
-          $alllinks = $wpdb->get_results($sql);
-          
-          $links .= '<ul class="Linklist">';
-          
-          foreach ($alllinks as $link) {
-              $url = $link->link_url;
-              $name = $link->link_name;
-              $description = (strlen($link->link_description) > 0) ? '<span class="link-description"> - ' . $link->link_description . '</span>' : '';
-              $rel = (strlen($link->link_rel) > 0) ? ' rel="' . $link->link_rel . '"' : '';
-              $image = (strlen($link->link_image) > 0) ? '<img src="' . $link->link_image . '" border="0" class="LinkImage"/>' : '';
-              $target = (strlen($link->link_target) > 0) ? ' target="' . $link->link_target . '"' : '';
-              $links .= '<li>'.$image.'<a href="' . $url . '"' . $rel . $target . '>' . $name . '</a>' . $description . '</li>';
-          }
-          
-          $links .= '</ul>';
-                
-      return $links;
+	// error_log(var_export($results, true));
+      
+    $links = blogroll_links_html($category_id, $sort_by, $sort_order);               
+    return $links;
   }
 
 
@@ -142,7 +132,6 @@
       while (preg_match("{<!--blogroll-links\b(.*?)-->.*?<!--/blogroll-links-->}", $text, $matches)) {
           // to contain the XHTML code that contains the links returned
           $links = '';
-          
           
           $tmp = get_option('blogroll_links_default_category_slug');
           $category_slug = (strlen($tmp) > 0) ? $tmp : 'blogroll';
@@ -167,48 +156,15 @@
               $sort_order = $matches[1];
           }
           
-          
-          /*
-           
-           Sample SQL Query:
-           SELECT *
-           FROM wp_links, wp_term_relationships
-           WHERE link_id = object_id
-           AND link_visible = 'Y'
-           AND term_taxonomy_id = (
-           SELECT wp_term_taxonomy.term_taxonomy_id
-           FROM wp_term_taxonomy
-           WHERE term_id = (SELECT DISTINCT term_id
-           FROM wp_terms, wp_term_relationships
-           WHERE slug = 'charity'
-           AND taxonomy = 'link_category'))
-           ORDER BY link_name
-           
-           */
-          
-          $sql = "SELECT * " . "FROM $wpdb->links, " . $table_prefix . "term_relationships " . "WHERE link_id = object_id " . "AND link_visible='Y' " . // Skip links marked as not to be visible
-          "AND term_taxonomy_id = ( " . "SELECT " . $table_prefix . "term_taxonomy.term_taxonomy_id " . "FROM " . $table_prefix . "term_taxonomy " . "WHERE term_id = (SELECT DISTINCT term_id " . "FROM " . $table_prefix . "terms, " . $table_prefix . "term_relationships " . "WHERE slug = '" . $category_slug . "' " . "AND taxonomy = 'link_category')) " . "ORDER BY " . $sort_by;
-          
-          //$links .= "attributes=". $attributes . "\n<br />"; // for debugging
-          //$links .= "category_slug=". $category_slug . "\n<br />"; // for debugging
-          //$links .= "sql=". $sql . "\n<br />"; // for debugging
-          
-          
-          $alllinks = $wpdb->get_results($sql);
-          
-          $links .= '<ul>' . "\n";
-          
-          foreach ($alllinks as $link) {
-              $url = $link->link_url;
-              $name = $link->link_name;
-              $description = (strlen($link->link_description) > 0) ? ' - ' . $link->link_description : '';
-              $rel = (strlen($link->link_rel) > 0) ? ' rel="' . $link->link_rel . '"' : '';
-              $image = (strlen($link->link_image) > 0) ? '<img src="' . $link->link_image . '" border="0"/>' : '';
-              $target = (strlen($link->link_target) > 0) ? ' target="' . $link->link_target . '"' : '';
-              $links .= '<li><a href="' . $url . '"' . $rel . $target . '>' . $name . '</a>' . $description . '<br />' . $image . '</li>' . "\n";
-          }
-          
-          $links .= '</ul>' . "\n";
+
+		$sql = sprintf("SELECT term_id FROM wp_terms WHERE slug = '%s' LIMIT 1", $category_slug);
+	    $results = $wpdb->get_results($sql);
+		$category_id = $results[0]->term_id;
+
+		// error_log(var_export($results, true));
+
+	    $links = blogroll_links_html($category_id, $sort_by, $sort_order);               
+
           
           // by default preg_replace replaces all, so the 4th paramter is set to 1, to only replace once.
           $text = preg_replace("{<!--blogroll-links\b.*?-->.*?<!--/blogroll-links-->}", $links, $text, 1);
