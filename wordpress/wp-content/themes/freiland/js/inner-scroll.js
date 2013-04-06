@@ -4,7 +4,6 @@ function innerScroll(){
 	var topmargin;
 	var originalTopmargin;
 	var oldY;
-	var dragging = false;
 	// if the elem should be allowed to scroll until the top
 	var scrollableToTop = false;
 	var allmost = 50;
@@ -36,7 +35,9 @@ function innerScroll(){
 		elem.mousedown(innerScroll.setContainment);
 		jQuery(document).keydown(innerScroll.onKeyDown);
 		elem.parent().mousewheel(innerScroll.onMousewheel);
-		setDragEvents();
+		elem.kinetic({moved: function(settings){
+			scrollElem(-settings.velocityY,false,1);
+		}});
 	}
 	innerScroll.init = init;
 
@@ -220,32 +221,12 @@ function innerScroll(){
 
 	function setContainment(){
 		var containment = scrollableToTop?
-			[0, - elem.height() + topmargin + topScrollMargin,0,  topmargin]:
-			[0,Math.min(getMinTop() + topmargin,topmargin),0,  topmargin];
+			[0, - elem.height() + topScrollMargin,0,  0]:
+			[0, getMinTop() ,0,  0];
 
-		elem.draggable( "option", "containment", containment );
+		elem.data( "containment", containment );
 	}
 	innerScroll.setContainment = setContainment;
-
-	function setDragEvents(){
-		elem.draggable({
-			start: function(event,ui){
-				dragging = true;
-				oldY = ui.position.top;
-			},
-			stop: function(){
-				dragging = false;
-			}, 
-			drag: function(event,ui) {
-				var delta = ui.position.top - oldY;
-				oldY = ui.position.top;
-				scrollElem(delta,false,1);
-			},
-			axis: "y",
-			cancel: "#summary-text,p,a"
-		});
-	}
-	innerScroll.setDragEvents = setDragEvents;
 
 	function setTopmargin(margin){
 		topmargin = margin;
@@ -265,15 +246,11 @@ function innerScroll(){
 
 	function setRelativeTop(offset){
 		updateDimensions();
-		if ( dragging )
-			elem.data('draggable').offset.click.top -= offset;
 		elem.css({top:getTop()+offset});
 	};
 	innerScroll.setRelativeTop = setRelativeTop;
 
 	function setTop(offset){
-		if ( dragging )
-			elem.data('draggable').offset.click.top = offset;
 		elem.css({top:offset});
 	};
 	innerScroll.setTop = setTop;

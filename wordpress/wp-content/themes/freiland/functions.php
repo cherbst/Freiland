@@ -33,18 +33,12 @@ add_action( 'wp_enqueue_scripts', 'freiland_enqueue_scripts');
 // hook add_query_vars function into query_vars
 function freiland_init_method() {
 	$jsurl = dirname(get_bloginfo('stylesheet_url')) . '/js';
-	if ( !is_admin() ){
-		wp_deregister_script( 'jquery' );
-		wp_register_script('jquery', $jsurl . '/jquery-1.6.1.min.js');
-	}
-	wp_register_script('jquery-mousewheel', $jsurl . '/jquery.mousewheel.min.js',
+	wp_register_script('jquery-mousewheel', $jsurl . '/jquery.mousewheel.js',
 		array('jquery'));
 	wp_register_script('jquery-address', $jsurl . '/jquery.address-1.4.min.js',
 		array('jquery'));
 	wp_register_script('jquery-ui', $jsurl . '/jquery-ui-1.8.13.custom.min.js',
 		array('jquery'));
-	wp_register_script('inner-scroll', $jsurl . '/inner-scroll.js',
-		array('jquery-mousewheel','jquery-ui'));
 	wp_register_script('filterlist', $jsurl . '/jquery.filterlist.js',
 		array('jquery'));
 	wp_register_script('event-listing', $jsurl . '/event-listing.js',
@@ -53,6 +47,10 @@ function freiland_init_method() {
 		array('jquery'));
 	wp_register_script('link-targets', $jsurl . '/link-targets.js',
 		array('jquery'));
+	wp_register_script('jquery-kinetic', $jsurl . '/jquery.kinetic.js',
+		array('jquery-mousewheel'));
+	wp_register_script('inner-scroll', $jsurl . '/inner-scroll.js',
+		array('jquery-kinetic','jquery-ui'));
 }
 
 function freiland_enqueue_scripts() {
