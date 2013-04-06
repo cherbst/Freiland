@@ -3,7 +3,7 @@ Contributors: SriniG
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8110402
 Tags: pages, subpages, menu, hierarchy, sidebar, widget, navigation
 Requires at least: 2.7
-Tested up to: 3.2.1
+Tested up to: 3.5
 Stable tag: trunk
 
 A highly configurable WordPress sidebar widget to list pages and sub-pages. User friendly widget control comes with various options. 
@@ -75,10 +75,13 @@ An application like [poEdit](http://www.poedit.net/) can be used to translate th
 
 As of the current version, Flexi Pages Widget is translated into the following languages:
 
+* Bulgarian (`bg_BG`) by [Team Ajoft](http://www.ajoft.com/)
+* Belorussian (`be_BY`) by [Alexander Ovsov](http://webhostinggeeks.com/)
 * Catalan (`ca`) by Robert Buj Gelonch
 * Czech (`cs_CZ`) by Tomáš Hubka
 * German (`de_DE`) by [Frank W. Hempel](http://frank-hempel.de/)
 * French (`fr_FR`) by Pierre Sudarovich
+* Irish (`ga_IE`) by [Ajeet](http://www.apoto.com/)
 * Hindi (`hi_IN`) by Ashish Jha, [Outshine Solutions](http://outshinesolutions.com/)
 * Bahasa Indonesia (`id_ID`) by [Bejana](http://bejana.com)
 * Italian (`it_IT`) by [Gianni Diurno](http://gidibao.net/)
@@ -89,9 +92,11 @@ As of the current version, Flexi Pages Widget is translated into the following l
 * Brazilian Portugese (`pt_BR`) by Tzor More
 * Romanian (`ro_RO`) by [Michail Bogdanov](http://www.webhostinghub.com/)
 * Russian (`ru_RU`) by [Fat Cow](http://www.fatcow.com)
+* Serbian (`sr_RS`) by [Mike Arias](http://www.inmotionhosting.com/)
 * Swedish (`sv_SE`) by Ove Kaufeldt
 * Turkish (`tr_TR`) by [Hakan Demiray](http://www.dmry.net/)
 * Ukrainian (`uk_UA`) by [wpp.pp.ua](http://wpp.pp.ua/)
+* Chinese (`zh_CN`) by Kaijia Feng
 
 
 ==flexipages() template function==
@@ -188,6 +193,14 @@ Instead of using the widget, the function flexipages() can be called from anywhe
 * `flexipages('sort_column=ID&exclude=2,10,14')` will display the list with items sorted in order of ID. The page IDs 2, 10 and 14 will be excluded.
 
 == Changelog ==
+
+= v1.6.11.1 (2012-12-13) =
+* Re-adding localization files that somehow missed the last update
+* Updating WP compatibility info in readme
+
+= v1.6.11 (2012-11-18) =
+* Added localization in Serbian, Bulgarian, Belorussian, Chinese and Irish languages.
+* Minor fixes.
 
 = v1.6.10 (2011-08-30) =
 * 'Go' button for the dropdown display is removed. Selecting a page automatically takes the user to the page.
