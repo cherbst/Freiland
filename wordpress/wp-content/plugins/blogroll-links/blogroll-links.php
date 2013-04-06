@@ -61,7 +61,7 @@ function blogroll_links_html($category_id, $sort_by, $sort_order)
             'exclude'        => null,
             'search'         => '.'));
 
-      $links .= '<ul>';
+      $links .= '<ul class="Linklist">';
       foreach ($bm as $bookmark) {
 
 		$rel_string = $bookmark->link_rel;
@@ -74,16 +74,16 @@ function blogroll_links_html($category_id, $sort_by, $sort_order)
 		$description_tag = (strlen($description_string) > 0) ? ' - ' . $description_string : '';
 
 		$image_string = $bookmark->link_image;
-		$image_tag = (strlen($image_string) > 0) ? '<br />' . '<img src="' . $bookmark->link_image . '" border="0"/>' : '';
+		$image_tag = (strlen($image_string) > 0) ? '<img src="' . $bookmark->link_image . '" border="0" class="LinkImage" />' : '';
 
 	  	$links .= sprintf(
-			'<li><a href="%s"%s%s>%s</a>%s%s</li>',
+			'<li>%s<a href="%s"%s%s>%s</a>%s</li>',
+			$image_tag,
 			$bookmark->link_url,
 			$rel_tag_part,
 			$target_tag_part,
 			$bookmark->link_name,
-			$description_tag,
-			$image_tag
+			$description_tag
 		);
 
       }
